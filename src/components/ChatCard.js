@@ -24,9 +24,11 @@ import {
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ChatLog from './ChatLog'
+import { useNavigate } from 'react-router-dom'
 
 const ChatCard = ({ title = 'n/a', config = {} }) => {
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   const isUrl = searchParams.get('isUrl') === 'true'
 
@@ -282,9 +284,12 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
           <>
             <Text color="dimmed" size="sm" mb="md">
               {isUrl ? (
-                <Text color="dimmed" size="sm">
-                  Using URL for chat sources.
-                </Text>
+                <>
+                  <Text color="dimmed" size="sm">
+                    Using URL for chat settings.{' '}
+                    <Anchor onClick={() => navigate('/')}>Clear URL</Anchor>
+                  </Text>
+                </>
               ) : (
                 Object.keys(config).map((service, index) => {
                   if (config[service]['enabled'] === false) {

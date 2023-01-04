@@ -27,7 +27,7 @@ const Item = styled.div`
 
   .chat-sender:before,
   .chat-message:before {
-    content: ${({ isBig }) => (isBig ? 'attr(data-outline);' : 'none')}
+    content: ${({ isBig }) => (isBig ? 'attr(data-outline)' : 'none')};
     position: absolute;
     -webkit-text-stroke: 7px #000;
     left: 0;
@@ -50,6 +50,18 @@ const List = styled.div`
 
 const Footer = styled.div`
   padding-top: 18px;
+`
+
+const SenderText = styled(Text)`
+  display: inline;
+  font-weight: 700;
+  vertical-align: middle;
+  margin-left: 8px;
+}`
+
+const MessageText = styled(Text)`
+  display: inline;
+  vertical-align: middle;
 `
 
 const { REACT_APP_API_URL } = process.env
@@ -202,6 +214,7 @@ const ChatLog = ({
       <Virtuoso
         style={{
           minHeight: fullHeight ? '100vh' : height,
+          overflowX: 'hidden',
         }}
         ref={virtuosoRef}
         initialTopMostItemIndex={999}
@@ -218,7 +231,9 @@ const ChatLog = ({
 
           return (
             <Box className="chat-item">
-              <Box style={{ whiteSpace: 'nowrap' }}>
+              <Box style={{ whiteSpace: 'nowrap' }} px="md">
+                {/** This is a special span for
+                     outlining the text in big mode */}
                 <span
                   className="chat-sender"
                   data-outline={`${sender}: ${message}`}
@@ -228,20 +243,35 @@ const ChatLog = ({
                     width: '100%',
                   }}
                 >
-                  {origin === 'twitch' && <SocialIcon network="twitch" />}
-                  {origin === 'tiktok' && <SocialIcon network="tiktok" />}
+                  {origin === 'twitch' && (
+                    <SocialIcon
+                      network="twitch"
+                      style={{
+                        height: 22,
+                        width: 22,
+                      }}
+                    />
+                  )}
+                  {origin === 'tiktok' && (
+                    <SocialIcon
+                      network="tiktok"
+                      style={{
+                        height: 22,
+                        width: 22,
+                      }}
+                    />
+                  )}
                   {origin === 'youtube' && (
                     <SocialIcon
                       network="youtube"
                       style={{
-                        transform: 'scale(0.5)',
+                        height: 22,
+                        width: 22,
                       }}
                     />
                   )}
-                  <Text
-                    style={{ display: 'inline-block', fontWeight: '700' }}
-                  >{`${sender}: `}</Text>
-                  {message}
+                  <SenderText>{`${sender}: `}</SenderText>
+                  <MessageText>{message}</MessageText>
                 </span>
               </Box>
             </Box>
