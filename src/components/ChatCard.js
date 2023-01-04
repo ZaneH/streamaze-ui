@@ -46,6 +46,11 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
     getInitialValueInEffect: true,
   })
 
+  const [, setActiveTheme] = useLocalStorage({
+    key: 'active-theme',
+    getInitialValueInEffect: true,
+  })
+
   let twitchUsername = config['twitch']['handle']
   let tiktokUsername = config['tiktok']['handle']
   let youtubeChannel = config['youtube']['channel']
@@ -239,6 +244,10 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                       channel: form.values['youtube'],
                     },
                   },
+                })
+
+                setActiveTheme({
+                  name: form.values.theme,
                 })
               }}
             >
