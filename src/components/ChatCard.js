@@ -5,12 +5,16 @@ import {
   Button,
   Card,
   CloseButton,
+  Divider,
   Flex,
   Group,
   Input,
   Menu,
+  Select,
   Text,
   TextInput,
+  Tooltip,
+  useMantineTheme,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useLocalStorage } from '@mantine/hooks'
@@ -19,6 +23,7 @@ import {
   IconChevronDown,
   IconChevronUp,
   IconExternalLink,
+  IconHelp,
   IconPlus,
 } from '@tabler/icons'
 import { useState } from 'react'
@@ -28,6 +33,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ChatCard = ({ title = 'n/a', config = {} }) => {
   const [searchParams] = useSearchParams()
+  const { colors } = useMantineTheme()
   const navigate = useNavigate()
 
   const isUrl = searchParams.get('isUrl') === 'true'
@@ -43,6 +49,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
   let twitchUsername = config['twitch']['handle']
   let tiktokUsername = config['tiktok']['handle']
   let youtubeChannel = config['youtube']['channel']
+  let themeName = config['theme']['name']
 
   if (isUrl) {
     twitchUsername = searchParams.get('twitchUsername')
@@ -50,9 +57,12 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
     youtubeChannel = searchParams.get('youtubeChannel')
   }
 
+  const decodedTitle = decodeURIComponent(title)
+
   const form = useForm({
     initialValues: {
-      title: decodeURIComponent(title),
+      title: decodedTitle,
+      theme: themeName,
       twitch: twitchUsername,
       tiktok: tiktokUsername,
       youtube: youtubeChannel,
@@ -63,7 +73,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
     <Card shadow="xs" p="lg" radius="md" h="min-content">
       <Flex direction="column" h="100%">
         <Group mb="xs" position="apart">
-          <Text>{decodeURIComponent(title)}</Text>
+          <Text>{decodedTitle}</Text>
           {!isEditing && !isUrl && (
             <ActionIcon
               onClick={() => {
@@ -77,7 +87,10 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
         </Group>
 
         {isEditing ? (
-          <>
+          <Flex direction="column" gap="md">
+            <Text size="md" weight={500}>
+              Display Settings
+            </Text>
             <Input
               type="text"
               placeholder="Chat name"
@@ -86,7 +99,62 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 form.setFieldValue('title', event.target.value)
               }}
             />
-            <Menu shadow="md" position="right" withArrow my="md">
+            <Flex direction="column">
+              <Select
+                onChange={(value) => form.setFieldValue('theme', value)}
+                value={form.values.theme}
+                label={
+                  <Tooltip
+                    label={
+                      <Box m="sm">
+                        <Text>
+                          Customize the chat font and background
+                          <ul>
+                            <li>
+                              Default theme: Plain chat on white background
+                            </li>
+                            <li>Dark theme: Light text on dark background</li>
+                            <li>
+                              Overlay Impact theme: Larger text with outline.
+                              <br />
+                              Good for overlays.
+                            </li>
+                          </ul>
+                        </Text>
+                      </Box>
+                    }
+                  >
+                    <Text size="sm" mb="6px">
+                      Theme{' '}
+                      <IconHelp
+                        style={{ verticalAlign: 'middle' }}
+                        color={colors.gray[6]}
+                        size={20}
+                      />
+                    </Text>
+                  </Tooltip>
+                }
+                data={[
+                  {
+                    value: 'default',
+                    label: 'Default theme',
+                  },
+                  {
+                    value: 'dark',
+                    label: 'Dark theme',
+                  },
+                  {
+                    value: 'overlay-impact',
+                    label: 'Overlay Impact theme',
+                  },
+                ]}
+              />
+            </Flex>
+            <Divider />
+            <Text size="md" weight={500}>
+              Chat Settings
+            </Text>
+            <Menu shadow="md" position="right" withArrow>
               <Menu.Target>
                 <Button rightIcon={<IconPlus size={18} />} w="min-content">
                   Add Chat
@@ -279,7 +347,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 </Button>
               </Button.Group>
             </form>
-          </>
+          </Flex>
         ) : (
           <>
             <Text color="dimmed" size="sm" mb="md">

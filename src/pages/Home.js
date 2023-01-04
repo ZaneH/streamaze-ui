@@ -26,6 +26,14 @@ const Home = () => {
     },
   })
 
+  const [activeTheme] = useLocalStorage({
+    key: 'active-theme',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      name: 'default',
+    },
+  })
+
   return (
     <Layout>
       <SimpleGrid
@@ -37,7 +45,14 @@ const Home = () => {
         ]}
       >
         {Object.keys(chatSources).map((key, i) => (
-          <ChatCard title={key} config={chatSources[key]} key={i} />
+          <ChatCard
+            title={key}
+            key={i}
+            config={{
+              ...chatSources[key],
+              theme: activeTheme,
+            }}
+          />
         ))}
         <TimestampCard />
       </SimpleGrid>
