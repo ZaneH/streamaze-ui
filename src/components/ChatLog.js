@@ -4,12 +4,7 @@ import {
   useEventSource,
   useEventSourceListener,
 } from '@react-nano/use-event-source'
-import {
-  IconAdjustmentsHorizontal,
-  IconBrandTiktok,
-  IconBrandTwitch,
-  IconBrandYoutube,
-} from '@tabler/icons'
+import { IconAdjustmentsHorizontal } from '@tabler/icons'
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'

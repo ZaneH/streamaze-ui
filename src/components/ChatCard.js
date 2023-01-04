@@ -27,7 +27,8 @@ import ChatLog from './ChatLog'
 
 const ChatCard = ({ title = 'n/a', config = {} }) => {
   const [searchParams] = useSearchParams()
-  const isUrl = searchParams.get('isUrl')
+
+  const isUrl = searchParams.get('isUrl') === 'true'
 
   const [isEditing, setIsEditing] = useState(false)
   const [pendingConfig, setPendingConfig] = useState()
@@ -37,9 +38,15 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
     getInitialValueInEffect: true,
   })
 
-  const twitchUsername = config['twitch']['handle']
-  const tiktokUsername = config['tiktok']['handle']
-  const youtubeChannel = config['youtube']['channel']
+  let twitchUsername = config['twitch']['handle']
+  let tiktokUsername = config['tiktok']['handle']
+  let youtubeChannel = config['youtube']['channel']
+
+  if (isUrl) {
+    twitchUsername = searchParams.get('twitchUsername')
+    tiktokUsername = searchParams.get('tiktokUsername')
+    youtubeChannel = searchParams.get('youtubeChannel')
+  }
 
   const form = useForm({
     initialValues: {
@@ -336,21 +343,40 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               radius="md"
               rightIcon={<IconExternalLink size={18} />}
               onClick={() => {
-                let qs = ''
-                if (config['twitch']['enabled']) {
-                  qs += `twitchUsername=${config['twitch']['handle']}`
-                }
+                const qs = new URLSearchParams()
 
-                if (config['tiktok']['enabled']) {
-                  qs += `&tiktokUsername=${config['tiktok']['handle']}`
-                }
+                // if isUrl = true, use the URL params for the Open Chat box
+                // otherwise, use the config values from the edit menu
+                if (isUrl) {
+                  qs.append('isUrl', 'true')
 
-                if (config['youtube']['enabled']) {
-                  qs += `&youtubeChannel=${config['youtube']['channel']}`
+                  if (twitchUsername) {
+                    qs.append('twitchUsername', twitchUsername)
+                  }
+
+                  if (tiktokUsername) {
+                    qs.append('tiktokUsername', tiktokUsername)
+                  }
+
+                  if (youtubeChannel) {
+                    qs.append('youtubeChannel', youtubeChannel)
+                  }
+                } else {
+                  if (config['twitch']['enabled']) {
+                    qs.append('twitchUsername', twitchUsername)
+                  }
+
+                  if (config['tiktok']['enabled']) {
+                    qs.append('tiktokUsername', tiktokUsername)
+                  }
+
+                  if (config['youtube']['enabled']) {
+                    qs.append('youtubeChannel', youtubeChannel)
+                  }
                 }
 
                 window.open(
-                  `/chat?${qs}`,
+                  `/chat?${qs.toString()}`,
                   'sharer',
                   'toolbar=0,status=0,width=350,height=550'
                 )
@@ -380,7 +406,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
             </Button>
 
             {isChatDropdownOpen && (
-              <Box my="lg">
+              <Box mt="lg">
                 <ChatLog
                   height="300px"
                   twitchUsername={
