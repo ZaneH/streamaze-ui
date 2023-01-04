@@ -398,6 +398,8 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                       ? config['youtube']['channel']
                       : null
                   }
+                  isDark={true}
+                  isBig={false}
                 />
               </Box>
             )}

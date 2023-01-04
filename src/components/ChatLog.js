@@ -12,12 +12,15 @@ import {
 } from '@tabler/icons'
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { SocialIcon } from 'react-social-icons'
 import { Virtuoso } from 'react-virtuoso'
 
 const Item = styled.div`
-  margin: 8px 0;
-  font-size: 2.1em;
-  font-family: 'Impact', sans-serif !important;
+  margin: 0;
+  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
+  line-height: ${({ isBig }) => (isBig ? '2.1em' : '1em')};
+  font-family: ${({ isBig }) => (isBig ? 'Impact' : 'Arial')};
+  color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
 
   .chat-sender,
   .chat-message {
@@ -29,7 +32,7 @@ const Item = styled.div`
 
   .chat-sender:before,
   .chat-message:before {
-    content: attr(data-outline);
+    content: ${({ isBig }) => (isBig ? 'attr(data-outline);' : 'none')}
     position: absolute;
     -webkit-text-stroke: 7px #000;
     left: 0;
@@ -47,7 +50,7 @@ const Item = styled.div`
 `
 
 const List = styled.div`
-  padding: 0 16px;
+  padding: 0;
 `
 
 const Footer = styled.div`
@@ -62,6 +65,8 @@ const ChatLog = ({
   youtubeChannel,
   fullHeight,
   height = '300px',
+  isDark = false,
+  isBig = false,
 }) => {
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
@@ -202,7 +207,6 @@ const ChatLog = ({
       <Virtuoso
         style={{
           minHeight: fullHeight ? '100vh' : height,
-          color: '#efeff1',
         }}
         ref={virtuosoRef}
         initialTopMostItemIndex={999}
@@ -227,43 +231,21 @@ const ChatLog = ({
                     verticalAlign: 'middle',
                     whiteSpace: 'break-spaces',
                     width: '100%',
-                    fontWeight: '700',
                   }}
                 >
-                  {origin === 'twitch' && (
-                    <IconBrandTwitch
-                      color="#6f32be"
-                      display="inline"
-                      size={32}
-                      style={{
-                        verticalAlign: 'middle',
-                        paddingRight: '12px',
-                      }}
-                    />
-                  )}
-                  {origin === 'tiktok' && (
-                    <IconBrandTiktok
-                      color="#fff"
-                      display="inline"
-                      size={32}
-                      style={{
-                        verticalAlign: 'middle',
-                        paddingRight: '12px',
-                      }}
-                    />
-                  )}
+                  {origin === 'twitch' && <SocialIcon network="twitch" />}
+                  {origin === 'tiktok' && <SocialIcon network="tiktok" />}
                   {origin === 'youtube' && (
-                    <IconBrandYoutube
-                      color="#ff0000"
-                      display="inline"
-                      size={32}
+                    <SocialIcon
+                      network="youtube"
                       style={{
-                        verticalAlign: 'middle',
-                        paddingRight: '12px',
+                        transform: 'scale(0.5)',
                       }}
                     />
                   )}
-                  {`${sender}: `}
+                  <Text
+                    style={{ display: 'inline-block', fontWeight: '700' }}
+                  >{`${sender}: `}</Text>
                   {message}
                 </span>
               </Box>
