@@ -60,6 +60,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
     twitchUsername = searchParams.get('twitchUsername')
     tiktokUsername = searchParams.get('tiktokUsername')
     youtubeChannel = searchParams.get('youtubeChannel')
+    themeName = searchParams.get('theme')
   }
 
   const decodedTitle = decodeURIComponent(title)
@@ -142,15 +143,15 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 data={[
                   {
                     value: 'default',
-                    label: 'Default theme',
+                    label: 'Default',
                   },
                   {
                     value: 'dark',
-                    label: 'Dark theme',
+                    label: 'Dark',
                   },
                   {
                     value: 'overlay-impact',
-                    label: 'Overlay Impact theme',
+                    label: 'Overlay Impact',
                   },
                 ]}
               />
@@ -426,12 +427,12 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               rightIcon={<IconExternalLink size={18} />}
               onClick={() => {
                 const qs = new URLSearchParams()
+                qs.append('isUrl', 'true')
 
-                // if isUrl = true, use the URL params for the Open Chat box
-                // otherwise, use the config values from the edit menu
+                // if isUrl = true on the current page, reuse the URL params
+                // for the popout chat window too
+                // otherwise, use the config values from local storage
                 if (isUrl) {
-                  qs.append('isUrl', 'true')
-
                   if (twitchUsername) {
                     qs.append('twitchUsername', twitchUsername)
                   }
@@ -442,6 +443,10 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
 
                   if (youtubeChannel) {
                     qs.append('youtubeChannel', youtubeChannel)
+                  }
+
+                  if (themeName) {
+                    qs.append('theme', themeName)
                   }
                 } else {
                   if (config['twitch']['enabled']) {
@@ -454,6 +459,10 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
 
                   if (config['youtube']['enabled']) {
                     qs.append('youtubeChannel', youtubeChannel)
+                  }
+
+                  if (config['theme']['name']) {
+                    qs.append('theme', config['theme']['name'])
                   }
                 }
 

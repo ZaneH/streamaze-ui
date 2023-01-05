@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Text } from '@mantine/core'
 import {
@@ -12,31 +13,30 @@ import { Virtuoso } from 'react-virtuoso'
 
 const Item = styled.div`
   margin: 0;
+`
+
+const ItemContent = styled.div`
   font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
-  line-height: ${({ isBig }) => (isBig ? '2.1em' : '1em')};
-  font-family: ${({ isBig }) => (isBig ? 'Impact' : 'Arial')};
+  // ${({ isBig }) => (isBig ? 'font-weight: 700;' : '')};
   color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
 
-  .chat-sender,
-  .chat-message {
+  .chat-outline,
     display: inline-block;
     position: relative;
     background: transparent;
     z-index: 0;
   }
 
-  .chat-sender:before,
-  .chat-message:before {
+  .chat-outline:before {
+    line-height: ${({ isBig }) => (isBig ? '1.6em' : '1em')};
+    text-indent: ${({ isBig }) => (isBig ? '36px' : '33pt')};
     content: ${({ isBig }) => (isBig ? 'attr(data-outline)' : 'none')};
     position: absolute;
     -webkit-text-stroke: 7px #000;
-    left: 0;
-    top: 0;
+    left: 16px;
+    right: 16px;
+    top: 5px;
     z-index: -1;
-  }
-
-  .chat-sender:before {
-    text-indent: 33pt;
   }
 
   svg {
@@ -78,6 +78,8 @@ const ChatLog = ({
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
   const virtuosoRef = useRef(null)
+
+  isBig = searchParams.get('theme') === 'overlay-impact'
 
   const isUrl = searchParams.get('isUrl') === 'true'
   let _twitchUsername = twitchUsername
@@ -228,15 +230,12 @@ const ChatLog = ({
         }}
         itemContent={(_, chatEvent) => {
           const { sender, message, origin } = chatEvent
+          const iconSize = isBig ? 28 : 22
 
           return (
-            <Box className="chat-item">
+            <ItemContent isBig={isBig}>
               <Box style={{ whiteSpace: 'nowrap' }} px="md">
-                {/** This is a special span for
-                     outlining the text in big mode */}
                 <span
-                  className="chat-sender"
-                  data-outline={`${sender}: ${message}`}
                   style={{
                     verticalAlign: 'middle',
                     whiteSpace: 'break-spaces',
@@ -247,8 +246,8 @@ const ChatLog = ({
                     <SocialIcon
                       network="twitch"
                       style={{
-                        height: 22,
-                        width: 22,
+                        height: iconSize,
+                        width: iconSize,
                       }}
                     />
                   )}
@@ -256,8 +255,8 @@ const ChatLog = ({
                     <SocialIcon
                       network="tiktok"
                       style={{
-                        height: 22,
-                        width: 22,
+                        height: iconSize,
+                        width: iconSize,
                       }}
                     />
                   )}
@@ -265,16 +264,27 @@ const ChatLog = ({
                     <SocialIcon
                       network="youtube"
                       style={{
-                        height: 22,
-                        width: 22,
+                        height: iconSize,
+                        width: iconSize,
                       }}
                     />
                   )}
-                  <SenderText>{`${sender}: `}</SenderText>
-                  <MessageText>{message}</MessageText>
+                  <SenderText
+                    ff={isBig ? 'Impact' : undefined}
+                    lh={isBig ? '1.6em' : '1em'}
+                    data-outline={`${sender}: ${message}`}
+                    className="chat-outline"
+                  >{`${sender}: `}</SenderText>
+                  <MessageText
+                    ff={isBig ? 'Impact' : undefined}
+                    data-outline={`${sender}: ${message}`}
+                    className="chat-outline"
+                  >
+                    {message}
+                  </MessageText>
                 </span>
               </Box>
-            </Box>
+            </ItemContent>
           )
         }}
       />

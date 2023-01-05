@@ -25,6 +25,9 @@ const TimestampCard = () => {
       discord: {
         channelId: '',
       },
+      youtube: {
+        video_id_or_url: '',
+      },
     },
   })
 
@@ -76,6 +79,18 @@ const TimestampCard = () => {
               />
 
               <TextInput
+                defaultValue={config.youtube.video_id_or_url || ''}
+                onChange={(event) => {
+                  form.setFieldValue(
+                    'youtube.video_id_or_url',
+                    event.currentTarget.value
+                  )
+                }}
+                label="YouTube Video ID or URL"
+                placeholder="rUxyKA_-grg"
+              />
+
+              <TextInput
                 defaultValue={config.buttonText || ''}
                 onChange={(event) => {
                   form.setFieldValue('buttonText', event.currentTarget.value)
@@ -124,7 +139,8 @@ const TimestampCard = () => {
                 wretch(`${process.env.REACT_APP_API_URL}/timestamp/push`)
                   .post({
                     discord_channel: config.discord.channelId,
-                    timestamp: new Date().toString(),
+                    video_id_or_url: 'QO0XcT2-cQU',
+                    timestamp: new Date().toUTCString(),
                   })
                   .res((res) => {
                     if (res.ok) {
