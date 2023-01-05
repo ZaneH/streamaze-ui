@@ -81,6 +81,7 @@ const ChatLog = ({
   const virtuosoRef = useRef(null)
 
   isBig = searchParams.get('theme') === 'overlay-impact'
+  isDark = searchParams.get('theme') === 'dark'
 
   const isUrl = searchParams.get('isUrl') === 'true'
   let _twitchUsername = twitchUsername
@@ -213,7 +214,7 @@ const ChatLog = ({
   }
 
   return (
-    <Box style={{ background: 'transparent' }}>
+    <Box style={{ background: isDark ? '#18181C' : 'transparent' }}>
       <Virtuoso
         style={{
           minHeight: fullHeight ? '100vh' : height,
@@ -241,11 +242,13 @@ const ChatLog = ({
                     verticalAlign: 'middle',
                     whiteSpace: 'break-spaces',
                     width: '100%',
+                    color: isDark ? '#efeff1' : 'inherit',
                   }}
                 >
                   {origin === 'twitch' && (
                     <SocialIcon
                       network="twitch"
+                      fgColor="#fff"
                       style={{
                         height: iconSize,
                         width: iconSize,
@@ -254,6 +257,7 @@ const ChatLog = ({
                   )}
                   {origin === 'tiktok' && (
                     <SocialIcon
+                      fgColor="#fff"
                       network="tiktok"
                       style={{
                         height: iconSize,
@@ -263,6 +267,7 @@ const ChatLog = ({
                   )}
                   {origin === 'youtube' && (
                     <SocialIcon
+                      fgColor="#fff"
                       network="youtube"
                       style={{
                         height: iconSize,
