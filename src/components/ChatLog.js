@@ -1,4 +1,3 @@
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Text } from '@mantine/core'
 import {
@@ -17,7 +16,6 @@ const Item = styled.div`
 
 const ItemContent = styled.div`
   font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
-  // ${({ isBig }) => (isBig ? 'font-weight: 700;' : '')};
   color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
 
   .chat-outline,
@@ -28,15 +26,17 @@ const ItemContent = styled.div`
   }
 
   .chat-outline:before {
-    line-height: ${({ isBig }) => (isBig ? '1.6em' : '1em')};
-    text-indent: ${({ isBig }) => (isBig ? '36px' : '33pt')};
+    line-height: ${({ isBig }) => (isBig ? '1.7em' : 'initial')};
+    text-indent: ${({ isBig }) => (isBig ? '40px' : '33pt')};
     content: ${({ isBig }) => (isBig ? 'attr(data-outline)' : 'none')};
     position: absolute;
     -webkit-text-stroke: 7px #000;
+    word-break: break-all;
     left: 16px;
     right: 16px;
-    top: 5px;
+    top: 1px;
     z-index: -1;
+    vertical-align: middle;
   }
 
   svg {
@@ -54,14 +54,15 @@ const Footer = styled.div`
 
 const SenderText = styled(Text)`
   display: inline;
-  font-weight: 700;
   vertical-align: middle;
-  margin-left: 8px;
+  margin-left: 12px;
+  word-break: break-all;
 }`
 
 const MessageText = styled(Text)`
   display: inline;
   vertical-align: middle;
+  word-break: break-all;
 `
 
 const { REACT_APP_API_URL } = process.env
@@ -234,8 +235,8 @@ const ChatLog = ({
 
           return (
             <ItemContent isBig={isBig}>
-              <Box style={{ whiteSpace: 'nowrap' }} px="md">
-                <span
+              <Box style={{ whiteSpace: 'nowrap' }} px="16px">
+                <div
                   style={{
                     verticalAlign: 'middle',
                     whiteSpace: 'break-spaces',
@@ -271,18 +272,18 @@ const ChatLog = ({
                   )}
                   <SenderText
                     ff={isBig ? 'Impact' : undefined}
-                    lh={isBig ? '1.6em' : '1em'}
+                    fw={isBig ? undefined : '700'}
+                    lh={isBig ? '1.64em' : '1em'}
                     data-outline={`${sender}: ${message}`}
                     className="chat-outline"
                   >{`${sender}: `}</SenderText>
                   <MessageText
                     ff={isBig ? 'Impact' : undefined}
-                    data-outline={`${sender}: ${message}`}
-                    className="chat-outline"
+                    lh={isBig ? '1.64em' : '1em'}
                   >
                     {message}
                   </MessageText>
-                </span>
+                </div>
               </Box>
             </ItemContent>
           )

@@ -71,6 +71,7 @@ const TimestampCard = () => {
           >
             <Flex direction="column" gap="sm">
               <TextInput
+                type="password"
                 defaultValue={config.discord?.channelId || ''}
                 onChange={(event) => {
                   form.setFieldValue(

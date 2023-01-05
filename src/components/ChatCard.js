@@ -8,7 +8,6 @@ import {
   Divider,
   Flex,
   Group,
-  Input,
   Menu,
   Select,
   Text,
@@ -27,9 +26,8 @@ import {
   IconPlus,
 } from '@tabler/icons'
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import ChatLog from './ChatLog'
-import { useNavigate } from 'react-router-dom'
 
 const ChatCard = ({ title = 'n/a', config = {} }) => {
   const [searchParams] = useSearchParams()
@@ -97,8 +95,8 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
             <Text size="md" weight={500}>
               Display Settings
             </Text>
-            <Input
-              type="text"
+            <TextInput
+              label="Chat Name"
               placeholder="Chat name"
               defaultValue={decodeURIComponent(form.values.title)}
               onChange={(event) => {
