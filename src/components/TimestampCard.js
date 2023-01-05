@@ -2,21 +2,25 @@ import {
   ActionIcon,
   Anchor,
   Button,
+  Tooltip,
   Card,
   Flex,
   Group,
   Text,
   TextInput,
+  Box,
+  useMantineTheme,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useLocalStorage } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconAdjustmentsHorizontal } from '@tabler/icons'
+import { IconAdjustmentsHorizontal, IconHelp } from '@tabler/icons'
 import { useEffect, useState } from 'react'
 import wretch from 'wretch'
 
 const TimestampCard = () => {
   const [isEditing, setIsEditing] = useState(false)
+  const { colors } = useMantineTheme()
   const [config, setConfig] = useLocalStorage({
     key: 'timestamp-config',
     getInitialValueInEffect: true,
@@ -74,7 +78,28 @@ const TimestampCard = () => {
                     event.currentTarget.value
                   )
                 }}
-                label="Discord Channel ID"
+                label={
+                  <Tooltip
+                    withinPortal={true}
+                    label={
+                      <Box m="sm">
+                        <Text>
+                          Right click the channel you want to send timestamps to
+                          and click "Copy ID"
+                        </Text>
+                      </Box>
+                    }
+                  >
+                    <Text size="sm" mb="6px">
+                      Discord Channel ID{' '}
+                      <IconHelp
+                        style={{ verticalAlign: 'middle' }}
+                        color={colors.gray[6]}
+                        size={20}
+                      />
+                    </Text>
+                  </Tooltip>
+                }
                 placeholder="1053829869293746"
               />
 
@@ -86,7 +111,25 @@ const TimestampCard = () => {
                     event.currentTarget.value
                   )
                 }}
-                label="YouTube Video ID or URL"
+                label={
+                  <Tooltip
+                    withinPortal={true}
+                    label={
+                      <Box m="sm">
+                        <Text>This can be a livestream or a VOD</Text>
+                      </Box>
+                    }
+                  >
+                    <Text size="sm" mb="6px">
+                      YouTube Video URL or ID{' '}
+                      <IconHelp
+                        style={{ verticalAlign: 'middle' }}
+                        color={colors.gray[6]}
+                        size={20}
+                      />
+                    </Text>
+                  </Tooltip>
+                }
                 placeholder="rUxyKA_-grg"
               />
 
