@@ -106,7 +106,7 @@ const TimestampCard = () => {
                 size={14}
                 target="_blank"
               >
-                Add Streamaze to your Discord server
+                Add Streamaze to your Discord server (Required)
               </Anchor>
 
               <Button.Group>
