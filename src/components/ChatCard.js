@@ -111,6 +111,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 value={form.values.theme}
                 label={
                   <Tooltip
+                    withinPortal={false}
                     label={
                       <Box m="sm">
                         <Text>
@@ -317,7 +318,28 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                       onChange={(event) => {
                         form.setFieldValue('youtube', event.target.value)
                       }}
-                      label="YouTube Channel URL"
+                      label={
+                        <Tooltip
+                          withinPortal={true}
+                          label={
+                            <Box m="sm">
+                              <Text>
+                                The channel's most recent livestream will be
+                                used
+                              </Text>
+                            </Box>
+                          }
+                        >
+                          <Text size="sm" mb="6px">
+                            YouTube Channel URL{' '}
+                            <IconHelp
+                              style={{ verticalAlign: 'middle' }}
+                              color={colors.gray[6]}
+                              size={20}
+                            />
+                          </Text>
+                        </Tooltip>
+                      }
                       placeholder="https://www.youtube.com/@LofiGirl"
                       mb="xs"
                       rightSection={
