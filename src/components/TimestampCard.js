@@ -67,7 +67,7 @@ const TimestampCard = () => {
           >
             <Flex direction="column" gap="sm">
               <TextInput
-                defaultValue={config.discord.channelId || ''}
+                defaultValue={config.discord?.channelId || ''}
                 onChange={(event) => {
                   form.setFieldValue(
                     'discord.channelId',
@@ -79,7 +79,7 @@ const TimestampCard = () => {
               />
 
               <TextInput
-                defaultValue={config.youtube.video_id_or_url || ''}
+                defaultValue={config.youtube?.video_id_or_url || ''}
                 onChange={(event) => {
                   form.setFieldValue(
                     'youtube.video_id_or_url',
