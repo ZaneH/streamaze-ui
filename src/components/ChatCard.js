@@ -23,6 +23,7 @@ import {
   IconChevronUp,
   IconExternalLink,
   IconHelp,
+  IconLink,
   IconPlus,
 } from '@tabler/icons'
 import { useState } from 'react'
@@ -78,16 +79,49 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
       <Flex direction="column" h="100%">
         <Group mb="xs" position="apart">
           <Text>{decodedTitle}</Text>
-          {!isEditing && !isUrl && (
-            <ActionIcon
-              onClick={() => {
-                setIsEditing(true)
-                setPendingConfig(config)
-              }}
-            >
-              <IconAdjustmentsHorizontal size={18} />
-            </ActionIcon>
-          )}
+          <Flex>
+            <Tooltip label="Copy config to clipboard">
+              <ActionIcon
+                onClick={() => {
+                  const qs = new URLSearchParams({
+                    isUrl: 'true',
+                  })
+
+                  if (twitchUsername && config['twitch']['enabled']) {
+                    qs.set('twitchUsername', twitchUsername)
+                  }
+
+                  if (tiktokUsername && config['tiktok']['enabled']) {
+                    qs.set('tiktokUsername', tiktokUsername)
+                  }
+
+                  if (youtubeChannel && config['youtube']['enabled']) {
+                    qs.set('youtubeChannel', youtubeChannel)
+                  }
+
+                  if (themeName) {
+                    qs.set('theme', themeName)
+                  }
+
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/?${qs}`
+                  )
+                }}
+              >
+                <IconLink size={18} />
+              </ActionIcon>
+            </Tooltip>
+            {!isEditing && !isUrl && (
+              <ActionIcon
+                onClick={() => {
+                  setIsEditing(true)
+                  setPendingConfig(config)
+                }}
+              >
+                <IconAdjustmentsHorizontal size={18} />
+              </ActionIcon>
+            )}
+          </Flex>
         </Group>
 
         {isEditing ? (
