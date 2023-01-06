@@ -213,12 +213,7 @@ const ChatLog = ({
     )
   }
 
-  // if nothing is open, show a loader
-  if (
-    twitchStatus !== 'open' &&
-    tiktokStatus !== 'open' &&
-    youtubeStatus !== 'open'
-  ) {
+  if (chatData.length === 0) {
     return (
       <Center mih={fullHeight ? '100vh' : height}>
         <Loader />

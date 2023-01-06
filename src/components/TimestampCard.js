@@ -1,14 +1,14 @@
 import {
   ActionIcon,
   Anchor,
+  Box,
   Button,
-  Tooltip,
   Card,
   Flex,
   Group,
   Text,
   TextInput,
-  Box,
+  Tooltip,
   useMantineTheme,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
@@ -183,7 +183,7 @@ const TimestampCard = () => {
                 wretch(`${process.env.REACT_APP_API_URL}/timestamp/push`)
                   .post({
                     discord_channel: config.discord.channelId,
-                    video_id_or_url: 'QO0XcT2-cQU',
+                    video_id_or_url: config.youtube.video_id_or_url,
                     timestamp: new Date().toUTCString(),
                   })
                   .res((res) => {

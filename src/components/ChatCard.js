@@ -132,7 +132,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 label={
                   <Box m="sm">
                     <Text>
-                      Use this section to combine multiple live stream chats
+                      Use this section to combine multiple livestream chats
                       <br />
                       into one interface. You can also use it as an overlay.
                     </Text>
