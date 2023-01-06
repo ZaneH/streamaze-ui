@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Box, Text } from '@mantine/core'
+import { Box, Center, Loader, Text } from '@mantine/core'
 import {
   useEventSource,
   useEventSourceListener,
@@ -210,6 +210,19 @@ const ChatLog = ({
           menu
         </Text>
       </Text>
+    )
+  }
+
+  // if nothing is open, show a loader
+  if (
+    twitchStatus !== 'open' &&
+    tiktokStatus !== 'open' &&
+    youtubeStatus !== 'open'
+  ) {
+    return (
+      <Center mih={fullHeight ? '100vh' : height}>
+        <Loader />
+      </Center>
     )
   }
 
