@@ -80,7 +80,14 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
         <Group mb="xs" position="apart">
           <Text>{decodedTitle}</Text>
           <Flex>
-            <Tooltip label="Copy config to clipboard">
+            <Tooltip
+              withinPortal
+              label={
+                <Box m="sm">
+                  <Text>Copy config to clipboard</Text>
+                </Box>
+              }
+            >
               <ActionIcon
                 onClick={() => {
                   const qs = new URLSearchParams({
@@ -111,7 +118,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 <IconLink size={18} />
               </ActionIcon>
             </Tooltip>
-            {!isEditing && !isUrl && (
+            {!isEditing && !isUrl ? (
               <ActionIcon
                 onClick={() => {
                   setIsEditing(true)
@@ -120,6 +127,23 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               >
                 <IconAdjustmentsHorizontal size={18} />
               </ActionIcon>
+            ) : (
+              <Tooltip
+                label={
+                  <Box m="sm">
+                    <Text>
+                      Use this section to combine multiple live stream chats
+                      <br />
+                      into one interface. You can also use it as an overlay.
+                    </Text>
+                  </Box>
+                }
+                withinPortal
+              >
+                <ActionIcon>
+                  <IconHelp size={18} />
+                </ActionIcon>
+              </Tooltip>
             )}
           </Flex>
         </Group>
@@ -143,7 +167,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                 value={form.values.theme}
                 label={
                   <Tooltip
-                    withinPortal={false}
+                    withinPortal
                     label={
                       <Box m="sm">
                         <Text>
