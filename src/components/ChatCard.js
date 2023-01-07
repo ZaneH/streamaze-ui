@@ -24,7 +24,7 @@ import {
   IconLink,
   IconPlus,
 } from '@tabler/icons'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { SidebarContext } from './SidebarProvider'
 
@@ -32,22 +32,14 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
   const [searchParams] = useSearchParams()
   const { colors } = useMantineTheme()
   const navigate = useNavigate()
-  const { setChatSidebarOpened, chatSidebarOpened, setChats } =
-    useContext(SidebarContext)
+  const { setChatSidebarOpened, chatSidebarOpened } = useContext(SidebarContext)
 
   const isUrl = searchParams.get('isUrl') === 'true'
 
   const [isEditing, setIsEditing] = useState(false)
   const [pendingConfig, setPendingConfig] = useState()
-  const [, setChatSources] = useLocalStorage({
-    key: 'chat-sources',
-    getInitialValueInEffect: true,
-  })
-
-  const [, setActiveTheme] = useLocalStorage({
-    key: 'active-theme',
-    getInitialValueInEffect: true,
-  })
+  const { setChatConfig, setChatConfigName, setThemeConfig } =
+    useContext(SidebarContext)
 
   let twitchUsername = config['twitch']['handle']
   let tiktokUsername = config['tiktok']['handle']
@@ -72,6 +64,16 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
       youtube: youtubeChannel,
     },
   })
+
+  useEffect(() => {
+    form.setValues({
+      title: decodedTitle,
+      theme: themeName,
+      twitch: twitchUsername,
+      tiktok: tiktokUsername,
+      youtube: youtubeChannel,
+    })
+  }, [decodedTitle, themeName, twitchUsername, tiktokUsername, youtubeChannel])
 
   return (
     <Card shadow="xs" p="lg" radius="md" h="min-content">
@@ -286,7 +288,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
 
                 // copy pendingChatSources to chatSources
                 // and merge with new form values
-                setChatSources({
+                setChatConfig({
                   [encodeURIComponent(form.values.title)]: {
                     twitch: {
                       ...pendingConfig['twitch'],
@@ -303,7 +305,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                   },
                 })
 
-                setActiveTheme({
+                setThemeConfig({
                   name: form.values.theme,
                 })
               }}
@@ -560,10 +562,9 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               mt="md"
               radius="md"
               onClick={() => {
-                // set sidebar chat config
-                setChats(config)
                 // open sidebar
                 setChatSidebarOpened(!chatSidebarOpened)
+                setChatConfigName(title)
               }}
             >
               {chatSidebarOpened ? 'Close Sidebar' : 'Open Sidebar'}

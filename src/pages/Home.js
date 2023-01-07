@@ -1,38 +1,12 @@
 import { SimpleGrid } from '@mantine/core'
-import { useLocalStorage } from '@mantine/hooks'
+import { useContext } from 'react'
 import ChatCard from '../components/ChatCard'
 import Layout from '../components/Layout'
+import { SidebarContext } from '../components/SidebarProvider'
 import TimestampCard from '../components/TimestampCard'
 
 const Home = () => {
-  const [chatSources] = useLocalStorage({
-    key: 'chat-sources',
-    getInitialValueInEffect: false,
-    defaultValue: {
-      example: {
-        twitch: {
-          enabled: false,
-          handle: '',
-        },
-        tiktok: {
-          enabled: false,
-          handle: '',
-        },
-        youtube: {
-          enabled: false,
-          channel: '',
-        },
-      },
-    },
-  })
-
-  const [activeTheme] = useLocalStorage({
-    key: 'active-theme',
-    getInitialValueInEffect: false,
-    defaultValue: {
-      name: 'default',
-    },
-  })
+  const { chatConfig, themeConfig } = useContext(SidebarContext)
 
   return (
     <Layout>
@@ -44,13 +18,13 @@ const Home = () => {
           { maxWidth: 980, cols: 1 },
         ]}
       >
-        {Object.keys(chatSources).map((key, i) => (
+        {Object.keys(chatConfig).map((key, i) => (
           <ChatCard
             title={key}
             key={i}
             config={{
-              ...chatSources[key],
-              theme: activeTheme,
+              ...chatConfig[key],
+              theme: themeConfig,
             }}
           />
         ))}

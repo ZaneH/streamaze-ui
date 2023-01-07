@@ -19,14 +19,26 @@ const Layout = ({ children }) => {
   const theme = useMantineTheme()
   const [navOpened, setNavOpened] = useState(true)
   const {
-    chats,
     width,
     setWidth,
     startDraggingWidth,
     setStartDraggingWidth,
     chatSidebarOpened,
     themeConfig,
+    chatConfig,
+    chatConfigName,
   } = useContext(SidebarContext)
+
+  const selectedChatConfig = chatConfig[chatConfigName]
+  const tiktokUsername = selectedChatConfig?.tiktok?.enabled
+    ? selectedChatConfig?.tiktok?.handle
+    : null
+  const twitchUsername = selectedChatConfig?.twitch?.enabled
+    ? selectedChatConfig?.twitch?.handle
+    : null
+  const youtubeChannel = selectedChatConfig?.youtube?.enabled
+    ? selectedChatConfig?.youtube?.channel
+    : null
 
   return (
     <AppShell
@@ -88,21 +100,9 @@ const Layout = ({ children }) => {
                 fullHeight
                 isDark={themeConfig?.name === 'dark'}
                 isBig={themeConfig?.name === 'overlay-impact'}
-                twitchUsername={
-                  chats?.['twitch']?.['enabled']
-                    ? chats['twitch']['handle']
-                    : null
-                }
-                tiktokUsername={
-                  chats?.['tiktok']?.['enabled']
-                    ? chats['tiktok']['handle']
-                    : null
-                }
-                youtubeChannel={
-                  chats?.['youtube']?.['enabled']
-                    ? chats['youtube']['channel']
-                    : null
-                }
+                twitchUsername={twitchUsername}
+                tiktokUsername={tiktokUsername}
+                youtubeChannel={youtubeChannel}
               />
             </Resizable>
           </Aside>
