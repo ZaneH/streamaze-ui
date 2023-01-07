@@ -14,11 +14,15 @@ import {
 import { useForm } from '@mantine/form'
 import { useLocalStorage } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconAdjustmentsHorizontal, IconHelp } from '@tabler/icons'
+import { IconAdjustmentsHorizontal, IconHelp, IconLink } from '@tabler/icons'
 import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import wretch from 'wretch'
 
 const TimestampCard = () => {
+  const [searchParams] = useSearchParams()
+  const isUrl = searchParams.get('isDiscordUrl') === 'true'
+  const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const { colors } = useMantineTheme()
   const [config, setConfig] = useLocalStorage({
@@ -35,6 +39,14 @@ const TimestampCard = () => {
     },
   })
 
+  let discordChannelId = config.discord?.channelId || ''
+  let youtubeVideoIdOrUrl = config.youtube?.video_id_or_url || ''
+
+  if (isUrl) {
+    discordChannelId = searchParams.get('discordChannelId') || ''
+    youtubeVideoIdOrUrl = searchParams.get('youtubeVideoIdOrUrl') || ''
+  }
+
   const form = useForm({
     initialValues: Object.assign({}, config),
   })
@@ -49,15 +61,40 @@ const TimestampCard = () => {
       <Flex direction="column" h="100%">
         <Group mb="xs" position="apart">
           <Text>Timestamp</Text>
-          {!isEditing && (
-            <ActionIcon
-              onClick={() => {
-                setIsEditing(true)
-              }}
+          <Flex>
+            <Tooltip
+              withinPortal
+              label={
+                <Box m="sm">
+                  <Text>Click to copy the link to your clipboard</Text>
+                </Box>
+              }
             >
-              <IconAdjustmentsHorizontal size={18} />
-            </ActionIcon>
-          )}
+              <ActionIcon
+                onClick={() => {
+                  const qs = new URLSearchParams()
+                  qs.append('isDiscordUrl', 'true')
+                  qs.append('discordChannelId', discordChannelId)
+                  qs.append('youtubeVideoIdOrUrl', youtubeVideoIdOrUrl)
+
+                  window.navigator.clipboard.writeText(
+                    `${window.location.origin}/?${qs.toString()}`
+                  )
+                }}
+              >
+                <IconLink size={18} />
+              </ActionIcon>
+            </Tooltip>
+            {!isEditing && !isUrl && (
+              <ActionIcon
+                onClick={() => {
+                  setIsEditing(true)
+                }}
+              >
+                <IconAdjustmentsHorizontal size={18} />
+              </ActionIcon>
+            )}
+          </Flex>
         </Group>
 
         {isEditing ? (
@@ -72,7 +109,7 @@ const TimestampCard = () => {
             <Flex direction="column" gap="sm">
               <TextInput
                 type="password"
-                defaultValue={config.discord?.channelId || ''}
+                defaultValue={discordChannelId}
                 onChange={(event) => {
                   form.setFieldValue(
                     'discord.channelId',
@@ -105,7 +142,7 @@ const TimestampCard = () => {
               />
 
               <TextInput
-                defaultValue={config.youtube?.video_id_or_url || ''}
+                defaultValue={youtubeVideoIdOrUrl}
                 onChange={(event) => {
                   form.setFieldValue(
                     'youtube.video_id_or_url',
@@ -171,21 +208,27 @@ const TimestampCard = () => {
             </Flex>
           </form>
         ) : (
-          <>
+          <Flex direction="column" gap="sm">
+            {isUrl && (
+              <>
+                <Text color="dimmed" size="sm">
+                  Using URL for Discord settings.{' '}
+                  <Anchor onClick={() => navigate('/')}>Clear URL</Anchor>
+                </Text>
+              </>
+            )}
             <Button
               size="lg"
               fullWidth
               variant="gradient"
               color="green"
               mt="auto"
-              disabled={
-                !config.discord.channelId || !config.youtube.video_id_or_url
-              }
+              disabled={!discordChannelId || !youtubeVideoIdOrUrl}
               onClick={async () => {
                 wretch(`${process.env.REACT_APP_API_URL}/timestamp/push`)
                   .post({
-                    discord_channel: config.discord.channelId,
-                    video_id_or_url: config.youtube.video_id_or_url,
+                    discord_channel: discordChannelId,
+                    video_id_or_url: youtubeVideoIdOrUrl,
                     timestamp: new Date().toUTCString(),
                   })
                   .res((res) => {
@@ -209,7 +252,7 @@ const TimestampCard = () => {
             >
               {config.buttonText || 'Clip It'}
             </Button>
-          </>
+          </Flex>
         )}
       </Flex>
     </Card>

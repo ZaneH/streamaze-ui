@@ -16,7 +16,6 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useLocalStorage } from '@mantine/hooks'
 import {
   IconAdjustmentsHorizontal,
   IconExternalLink,
@@ -34,7 +33,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
   const navigate = useNavigate()
   const { setChatSidebarOpened, chatSidebarOpened } = useContext(SidebarContext)
 
-  const isUrl = searchParams.get('isUrl') === 'true'
+  const isUrl = searchParams.get('isChatUrl') === 'true'
 
   const [isEditing, setIsEditing] = useState(false)
   const [pendingConfig, setPendingConfig] = useState()
@@ -73,6 +72,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
       tiktok: tiktokUsername,
       youtube: youtubeChannel,
     })
+    // eslint-disable-next-line
   }, [decodedTitle, themeName, twitchUsername, tiktokUsername, youtubeChannel])
 
   return (

@@ -19,7 +19,7 @@ const App = () => {
                 element={
                   <Navigate
                     replace
-                    to="/?isUrl=true&youtubeChannel=https://www.youtube.com/c/sam&tiktokUsername=sampepper"
+                    to="/?isChatUrl=true&youtubeChannel=https://www.youtube.com/c/sam&tiktokUsername=sampepper"
                   />
                 }
               />
