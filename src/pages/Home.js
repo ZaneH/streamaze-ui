@@ -39,7 +39,7 @@ const Home = () => {
       <SimpleGrid
         cols={3}
         breakpoints={[
-          { maxWidth: 2000, cols: 3 },
+          { maxWidth: 2000, cols: 2 },
           { maxWidth: 1600, cols: 2 },
           { maxWidth: 980, cols: 1 },
         ]}

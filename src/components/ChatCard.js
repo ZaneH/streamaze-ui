@@ -19,27 +19,26 @@ import { useForm } from '@mantine/form'
 import { useLocalStorage } from '@mantine/hooks'
 import {
   IconAdjustmentsHorizontal,
-  IconChevronDown,
-  IconChevronUp,
   IconExternalLink,
   IconHelp,
   IconLink,
   IconPlus,
 } from '@tabler/icons'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import ChatLog from './ChatLog'
+import { SidebarContext } from './SidebarProvider'
 
 const ChatCard = ({ title = 'n/a', config = {} }) => {
   const [searchParams] = useSearchParams()
   const { colors } = useMantineTheme()
   const navigate = useNavigate()
+  const { setChatSidebarOpened, chatSidebarOpened, setChats } =
+    useContext(SidebarContext)
 
   const isUrl = searchParams.get('isUrl') === 'true'
 
   const [isEditing, setIsEditing] = useState(false)
   const [pendingConfig, setPendingConfig] = useState()
-  const [isChatDropdownOpen, setIsChatDropdownOpen] = useState(false)
   const [, setChatSources] = useLocalStorage({
     key: 'chat-sources',
     getInitialValueInEffect: true,
@@ -560,44 +559,15 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               fullWidth
               mt="md"
               radius="md"
-              rightIcon={
-                isChatDropdownOpen ? (
-                  <IconChevronUp size={18} />
-                ) : (
-                  <IconChevronDown size={18} />
-                )
-              }
               onClick={() => {
-                setIsChatDropdownOpen((prev) => !prev)
+                // set sidebar chat config
+                setChats(config)
+                // open sidebar
+                setChatSidebarOpened(!chatSidebarOpened)
               }}
             >
-              {isChatDropdownOpen ? 'Close' : 'Expand Below'}
+              {chatSidebarOpened ? 'Close Sidebar' : 'Open Sidebar'}
             </Button>
-
-            {isChatDropdownOpen && (
-              <Box mt="lg">
-                <ChatLog
-                  height="300px"
-                  twitchUsername={
-                    config['twitch']['enabled']
-                      ? config['twitch']['handle']
-                      : null
-                  }
-                  tiktokUsername={
-                    config['tiktok']['enabled']
-                      ? config['tiktok']['handle']
-                      : null
-                  }
-                  youtubeChannel={
-                    config['youtube']['enabled']
-                      ? config['youtube']['channel']
-                      : null
-                  }
-                  isDark={true}
-                  isBig={false}
-                />
-              </Box>
-            )}
           </>
         )}
       </Flex>

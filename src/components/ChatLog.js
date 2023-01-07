@@ -73,15 +73,17 @@ const ChatLog = ({
   youtubeChannel,
   fullHeight,
   height = '300px',
-  isDark = false,
-  isBig = false,
+  isDark = undefined,
+  isBig = undefined,
 }) => {
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
   const virtuosoRef = useRef(null)
 
-  isBig = searchParams.get('theme') === 'overlay-impact'
-  isDark = searchParams.get('theme') === 'dark'
+  if (isBig === undefined || isDark === undefined) {
+    isBig = searchParams.get('theme') === 'overlay-impact'
+    isDark = searchParams.get('theme') === 'dark'
+  }
 
   const isUrl = searchParams.get('isUrl') === 'true'
   let _twitchUsername = twitchUsername
@@ -288,7 +290,7 @@ const ChatLog = ({
                     fw={isBig ? undefined : '700'}
                     lh={isBig ? '1.64em' : '1em'}
                     data-outline={`${sender}: ${message}`}
-                    className="chat-outline"
+                    className={isBig ? 'chat-outline' : undefined}
                   >{`${sender}: `}</SenderText>
                   <MessageText
                     ff={isBig ? 'Impact' : undefined}

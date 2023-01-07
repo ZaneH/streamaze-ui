@@ -1,5 +1,6 @@
 import {
   AppShell,
+  Aside,
   Burger,
   Header,
   MediaQuery,
@@ -9,11 +10,23 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconMessage2 as IconMessage } from '@tabler/icons'
-import { useState } from 'react'
+import { Resizable } from 're-resizable'
+import { useContext, useState } from 'react'
+import ChatLog from './ChatLog'
+import { SidebarContext } from './SidebarProvider'
 
 const Layout = ({ children }) => {
   const theme = useMantineTheme()
-  const [opened, setOpened] = useState(false)
+  const [navOpened, setNavOpened] = useState(true)
+  const {
+    chats,
+    width,
+    setWidth,
+    startDraggingWidth,
+    setStartDraggingWidth,
+    chatSidebarOpened,
+    themeConfig,
+  } = useContext(SidebarContext)
 
   return (
     <AppShell
@@ -31,7 +44,7 @@ const Layout = ({ children }) => {
         <Navbar
           p="md"
           hiddenBreakpoint="sm"
-          hidden={!opened}
+          hidden={!chatSidebarOpened}
           width={{ sm: 200, lg: 300 }}
         >
           <NavLink
@@ -45,6 +58,56 @@ const Layout = ({ children }) => {
           />
         </Navbar>
       }
+      aside={
+        chatSidebarOpened && (
+          <Aside
+            width={{ sm: width, lg: width }}
+            hiddenBreakpoint="sm"
+            hidden={true}
+          >
+            <Resizable
+              enable={{
+                left: true,
+              }}
+              size={{
+                width: width,
+                height: '100%',
+              }}
+              defaultSize={{
+                width: 300,
+                height: '100%',
+              }}
+              onResizeStart={(_e, _direction, _ref, _d) => {
+                setStartDraggingWidth(width)
+              }}
+              onResize={(_e, _direction, _ref, d) => {
+                setWidth(startDraggingWidth + d.width)
+              }}
+            >
+              <ChatLog
+                fullHeight
+                isDark={themeConfig?.name === 'dark'}
+                isBig={themeConfig?.name === 'overlay-impact'}
+                twitchUsername={
+                  chats?.['twitch']?.['enabled']
+                    ? chats['twitch']['handle']
+                    : null
+                }
+                tiktokUsername={
+                  chats?.['tiktok']?.['enabled']
+                    ? chats['tiktok']['handle']
+                    : null
+                }
+                youtubeChannel={
+                  chats?.['youtube']?.['enabled']
+                    ? chats['youtube']['channel']
+                    : null
+                }
+              />
+            </Resizable>
+          </Aside>
+        )
+      }
       header={
         <Header height={{ base: 50, md: 70 }} p="md">
           <div
@@ -56,8 +119,8 @@ const Layout = ({ children }) => {
           >
             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
+                opened={navOpened}
+                onClick={() => setNavOpened((o) => !o)}
                 size="sm"
                 color={theme.colors.gray[6]}
                 mr="xl"
