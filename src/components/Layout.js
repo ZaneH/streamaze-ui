@@ -12,6 +12,7 @@ import {
 import { IconMessage2 as IconMessage } from '@tabler/icons'
 import { Resizable } from 're-resizable'
 import { useContext, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import ChatLog from './ChatLog'
 import { SidebarContext } from './SidebarProvider'
 
@@ -30,15 +31,22 @@ const Layout = ({ children }) => {
   } = useContext(SidebarContext)
 
   const selectedChatConfig = chatConfig[chatConfigName]
-  const tiktokUsername = selectedChatConfig?.tiktok?.enabled
+  const [searchParams] = useSearchParams()
+  let tiktokUsername = selectedChatConfig?.tiktok?.enabled
     ? selectedChatConfig?.tiktok?.handle
     : null
-  const twitchUsername = selectedChatConfig?.twitch?.enabled
+  let twitchUsername = selectedChatConfig?.twitch?.enabled
     ? selectedChatConfig?.twitch?.handle
     : null
-  const youtubeChannel = selectedChatConfig?.youtube?.enabled
+  let youtubeChannel = selectedChatConfig?.youtube?.enabled
     ? selectedChatConfig?.youtube?.channel
     : null
+
+  if (searchParams.get('isChatUrl') === 'true') {
+    tiktokUsername = searchParams.get('tiktokUsername')
+    twitchUsername = searchParams.get('twitchUsername')
+    youtubeChannel = searchParams.get('youtubeChannel')
+  }
 
   return (
     <AppShell

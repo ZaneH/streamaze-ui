@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
 import { Virtuoso } from 'react-virtuoso'
+import wretch from 'wretch'
 
 const Item = styled.div`
   margin: 0;
@@ -197,6 +198,15 @@ const ChatLog = ({
       })
     }
   }, [chatData])
+
+  // wretch /heartbeat to keep the connection alive
+  useEffect(() => {
+    const interval = setInterval(() => {
+      wretch(`${REACT_APP_API_URL}/heartbeat`).get().res()
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
