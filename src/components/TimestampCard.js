@@ -178,7 +178,9 @@ const TimestampCard = () => {
               variant="gradient"
               color="green"
               mt="auto"
-              disabled={!config.discord.channelId}
+              disabled={
+                !config.discord.channelId || !config.youtube.video_id_or_url
+              }
               onClick={async () => {
                 wretch(`${process.env.REACT_APP_API_URL}/timestamp/push`)
                   .post({
