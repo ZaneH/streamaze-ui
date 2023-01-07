@@ -199,7 +199,7 @@ const ChatLog = ({
     }
   }, [chatData])
 
-  // wretch a heartbeat to keep the connection alive
+  // wretch a heartbeat to keep each open connection alive
   useEffect(() => {
     const interval = setInterval(() => {
       if (twitchStatus === 'open') {
@@ -209,10 +209,14 @@ const ChatLog = ({
       if (youtubeStatus === 'open') {
         wretch(`${REACT_APP_API_URL}/youtube/chat?heartbeat=1`).get().json()
       }
+
+      if (tiktokStatus === 'open') {
+        wretch(`${REACT_APP_API_URL}/tiktok/chat?heartbeat=1`).get().json()
+      }
     }, 30000)
 
     return () => clearInterval(interval)
-  }, [twitchStatus, youtubeStatus])
+  }, [twitchStatus, youtubeStatus, tiktokStatus])
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
