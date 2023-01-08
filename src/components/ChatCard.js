@@ -92,7 +92,7 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               <ActionIcon
                 onClick={() => {
                   const qs = new URLSearchParams({
-                    isUrl: 'true',
+                    isChatUrl: 'true',
                   })
 
                   if (twitchUsername && config['twitch']['enabled']) {
