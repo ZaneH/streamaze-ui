@@ -506,9 +506,9 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
               rightIcon={<IconExternalLink size={18} />}
               onClick={() => {
                 const qs = new URLSearchParams()
-                qs.append('isUrl', 'true')
+                qs.append('isChatUrl', 'true')
 
-                // if isUrl = true on the current page, reuse the URL params
+                // if isChatUrl = true on the current page, reuse the URL params
                 // for the popout chat window too
                 // otherwise, use the config values from local storage
                 if (isUrl) {
