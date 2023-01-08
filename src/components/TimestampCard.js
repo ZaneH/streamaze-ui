@@ -21,7 +21,7 @@ import wretch from 'wretch'
 
 const TimestampCard = () => {
   const [searchParams] = useSearchParams()
-  const isUrl = searchParams.get('isDiscordUrl') === 'true'
+  const isUrl = searchParams.get('isTimestampUrl') === 'true'
   const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
   const { colors } = useMantineTheme()
@@ -76,7 +76,7 @@ const TimestampCard = () => {
               <ActionIcon
                 onClick={() => {
                   const qs = new URLSearchParams()
-                  qs.append('isDiscordUrl', 'true')
+                  qs.append('isTimestampUrl', 'true')
                   qs.append('discordChannelId', discordChannelId)
                   if (youtubeVideoIdOrUrl)
                     qs.append('youtubeVideoIdOrUrl', youtubeVideoIdOrUrl)
@@ -250,7 +250,7 @@ const TimestampCard = () => {
             {isUrl && (
               <>
                 <Text color="dimmed" size="sm">
-                  Using URL for Discord settings.{' '}
+                  Using URL for timestamp settings.{' '}
                   <Anchor onClick={() => navigate('/')}>Clear URL</Anchor>
                 </Text>
               </>
