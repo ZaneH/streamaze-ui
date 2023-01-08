@@ -191,7 +191,9 @@ const TimestampCard = () => {
                     label={
                       <Box m="sm">
                         <Text>
-                          (Optional) Use the latest livestream from a channel
+                          (Optional) Use the latest livestream from a channel.
+                          <br />
+                          Include the @ symbol if necessary.
                         </Text>
                       </Box>
                     }
