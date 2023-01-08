@@ -35,16 +35,19 @@ const TimestampCard = () => {
       },
       youtube: {
         video_id_or_url: '',
+        channel: '',
       },
     },
   })
 
   let discordChannelId = config.discord?.channelId || ''
   let youtubeVideoIdOrUrl = config.youtube?.video_id_or_url || ''
+  let youtubeChannel = config.youtube?.channel || ''
 
   if (isUrl) {
     discordChannelId = searchParams.get('discordChannelId') || ''
     youtubeVideoIdOrUrl = searchParams.get('youtubeVideoIdOrUrl') || ''
+    youtubeChannel = searchParams.get('youtubeChannel') || ''
   }
 
   const form = useForm({
@@ -75,7 +78,10 @@ const TimestampCard = () => {
                   const qs = new URLSearchParams()
                   qs.append('isDiscordUrl', 'true')
                   qs.append('discordChannelId', discordChannelId)
-                  qs.append('youtubeVideoIdOrUrl', youtubeVideoIdOrUrl)
+                  if (youtubeVideoIdOrUrl)
+                    qs.append('youtubeVideoIdOrUrl', youtubeVideoIdOrUrl)
+                  if (youtubeChannel)
+                    qs.append('youtubeChannel', youtubeChannel)
 
                   window.navigator.clipboard.writeText(
                     `${window.location.origin}/?${qs.toString()}`
@@ -151,7 +157,7 @@ const TimestampCard = () => {
                 }}
                 label={
                   <Tooltip
-                    withinPortal={true}
+                    withinPortal
                     label={
                       <Box m="sm">
                         <Text>This can be a livestream or a VOD</Text>
@@ -169,6 +175,38 @@ const TimestampCard = () => {
                   </Tooltip>
                 }
                 placeholder="rUxyKA_-grg"
+              />
+
+              <TextInput
+                defaultValue={youtubeChannel}
+                onChange={(event) => {
+                  form.setFieldValue(
+                    'youtube.channel',
+                    event.currentTarget.value
+                  )
+                }}
+                label={
+                  <Tooltip
+                    withinPortal
+                    label={
+                      <Box m="sm">
+                        <Text>
+                          (Optional) Use the latest livestream from a channel
+                        </Text>
+                      </Box>
+                    }
+                  >
+                    <Text size="sm" mb="6px">
+                      YouTube Username or Channel URL{' '}
+                      <IconHelp
+                        style={{ verticalAlign: 'middle' }}
+                        color={colors.gray[6]}
+                        size={20}
+                      />
+                    </Text>
+                  </Tooltip>
+                }
+                placeholder="@LofiGirl"
               />
 
               <TextInput
@@ -223,13 +261,22 @@ const TimestampCard = () => {
               variant="gradient"
               color="green"
               mt="auto"
-              disabled={!discordChannelId || !youtubeVideoIdOrUrl}
+              disabled={
+                !discordChannelId || (!youtubeVideoIdOrUrl && !youtubeChannel)
+              }
               onClick={async () => {
+                let params = {}
+                if (youtubeVideoIdOrUrl) {
+                  params.video_id_or_url = youtubeVideoIdOrUrl
+                } else if (youtubeChannel) {
+                  params.youtube_channel = youtubeChannel
+                }
+
                 wretch(`${process.env.REACT_APP_API_URL}/timestamp/push`)
                   .post({
                     discord_channel: discordChannelId,
-                    video_id_or_url: youtubeVideoIdOrUrl,
                     timestamp: new Date().toUTCString(),
+                    ...params,
                   })
                   .res((res) => {
                     if (res.ok) {
