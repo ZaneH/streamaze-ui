@@ -82,7 +82,7 @@ const ChatLog = ({
     isDark = searchParams.get('theme') === 'dark'
   }
 
-  const isUrl = searchParams.get('isUrl') === 'true'
+  const isUrl = searchParams.get('isChatUrl') === 'true'
   let _twitchUsername = twitchUsername
   let _tiktokUsername = tiktokUsername
   let _youtubeChannel = youtubeChannel
