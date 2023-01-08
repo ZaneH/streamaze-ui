@@ -69,6 +69,7 @@ const ChatLog = ({
   tiktokUsername,
   youtubeChannel,
   fullHeight,
+  fullWidth = false,
   height = '300px',
   isDark = undefined,
   isBig = undefined,

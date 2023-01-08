@@ -1,7 +1,9 @@
 import {
+  ActionIcon,
   AppShell,
   Aside,
   Burger,
+  Flex,
   Header,
   MediaQuery,
   Navbar,
@@ -9,7 +11,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { IconMessage2 as IconMessage } from '@tabler/icons'
+import { IconMessage2 as IconMessage, IconX } from '@tabler/icons'
 import { Resizable } from 're-resizable'
 import { useContext, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -18,16 +20,17 @@ import { SidebarContext } from './SidebarProvider'
 
 const Layout = ({ children }) => {
   const theme = useMantineTheme()
-  const [navOpened, setNavOpened] = useState(true)
+  const [navOpened, setNavOpened] = useState(false)
   const {
-    width,
-    setWidth,
+    width: sidebarWidth,
+    setWidth: setSidebarWidth,
     startDraggingWidth,
     setStartDraggingWidth,
     chatSidebarOpened,
     themeConfig,
     chatConfig,
     chatConfigName,
+    setChatSidebarOpened,
   } = useContext(SidebarContext)
 
   const selectedChatConfig = chatConfig[chatConfigName]
@@ -64,7 +67,7 @@ const Layout = ({ children }) => {
         <Navbar
           p="md"
           hiddenBreakpoint="sm"
-          hidden={!chatSidebarOpened}
+          hidden={!navOpened}
           width={{ sm: 200, lg: 300 }}
         >
           <NavLink
@@ -80,17 +83,13 @@ const Layout = ({ children }) => {
       }
       aside={
         chatSidebarOpened && (
-          <Aside
-            width={{ sm: width, lg: width }}
-            hiddenBreakpoint="sm"
-            hidden={true}
-          >
+          <Aside width={{ sm: '100%', lg: sidebarWidth }}>
             <Resizable
               enable={{
                 left: true,
               }}
               size={{
-                width: width,
+                width: '100%',
                 height: '100%',
               }}
               defaultSize={{
@@ -98,14 +97,15 @@ const Layout = ({ children }) => {
                 height: '100%',
               }}
               onResizeStart={(_e, _direction, _ref, _d) => {
-                setStartDraggingWidth(width)
+                setStartDraggingWidth(sidebarWidth)
               }}
               onResize={(_e, _direction, _ref, d) => {
-                setWidth(startDraggingWidth + d.width)
+                setSidebarWidth(startDraggingWidth + d.width)
               }}
             >
               <ChatLog
                 fullHeight
+                fullWidth
                 isDark={themeConfig?.name === 'dark'}
                 isBig={themeConfig?.name === 'overlay-impact'}
                 twitchUsername={twitchUsername}
@@ -125,7 +125,7 @@ const Layout = ({ children }) => {
               height: '100%',
             }}
           >
-            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+            <MediaQuery largerThan="lg" styles={{ display: 'none' }}>
               <Burger
                 opened={navOpened}
                 onClick={() => setNavOpened((o) => !o)}
@@ -135,7 +135,21 @@ const Layout = ({ children }) => {
               />
             </MediaQuery>
 
-            <Title order={2}>Streamaze</Title>
+            <Flex justify="space-between" w="100%" align="center">
+              <Title order={2}>Streamaze</Title>
+
+              {chatSidebarOpened && (
+                <MediaQuery largerThan="lg" styles={{ display: 'none' }}>
+                  <ActionIcon
+                    onClick={() => {
+                      setChatSidebarOpened(false)
+                    }}
+                  >
+                    <IconX />
+                  </ActionIcon>
+                </MediaQuery>
+              )}
+            </Flex>
           </div>
         </Header>
       }
