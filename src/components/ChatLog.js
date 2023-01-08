@@ -120,6 +120,7 @@ const ChatLog = ({
           message: payload.message,
           sender: payload.sender,
           origin: payload.origin,
+          emotes: [],
         },
       ])
     }
@@ -132,6 +133,7 @@ const ChatLog = ({
           message: payload.message,
           sender: payload.sender,
           origin: payload.origin,
+          emotes: [],
         },
       ])
     }
@@ -144,6 +146,7 @@ const ChatLog = ({
           message: payload.message,
           sender: payload.sender,
           origin: payload.origin,
+          emotes: payload.emotes,
         },
       ])
     }
@@ -226,8 +229,22 @@ const ChatLog = ({
           Footer,
         }}
         itemContent={(_, chatEvent) => {
-          const { sender, message, origin } = chatEvent
+          const { sender, message, origin, emotes = [] } = chatEvent
           const iconSize = isBig ? 28 : 22
+
+          let newMessageString = message
+          emotes.forEach((emote) => {
+            const keys = emote?.keys // shortcodes for emote
+            const url = emote?.url // svg url
+            keys.forEach((key) => {
+              newMessageString = newMessageString.replace(
+                key,
+                isBig
+                  ? ''
+                  : `<img src="${url}" style="height: 22px; vertical-align: middle;" referrerpolicy="no-referrer" />`
+              )
+            })
+          })
 
           return (
             <ItemContent isBig={isBig}>
@@ -274,14 +291,16 @@ const ChatLog = ({
                     ff={isBig ? 'Impact' : undefined}
                     fw={isBig ? undefined : '700'}
                     lh={isBig ? '1.64em' : '1em'}
-                    data-outline={`${sender}: ${message}`}
+                    data-outline={`${sender}: ${newMessageString}`}
                     className={isBig ? 'chat-outline' : undefined}
                   >{`${sender}: `}</SenderText>
                   <MessageText
                     ff={isBig ? 'Impact' : undefined}
                     lh={isBig ? '1.64em' : '1em'}
                   >
-                    {message}
+                    <span
+                      dangerouslySetInnerHTML={{ __html: newMessageString }}
+                    />
                   </MessageText>
                 </div>
               </Box>

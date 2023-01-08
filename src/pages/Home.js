@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import ChatCard from '../components/ChatCard'
 import Layout from '../components/Layout'
 import { SidebarContext } from '../components/SidebarProvider'
+import TagSEO from '../components/TagSEO'
 import TimestampCard from '../components/TimestampCard'
 
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
 
   return (
     <Layout>
+      <TagSEO />
       <SimpleGrid
         cols={3}
         breakpoints={[
