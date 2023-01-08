@@ -93,15 +93,20 @@ const ChatLog = ({
     _youtubeChannel = searchParams.get('youtubeChannel')
   }
 
-  const { lastMessage: twitchWSLastMessage } = useWebSocket(
-    `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
-  )
+  const { lastMessage: twitchWSLastMessage, sendMessage: twitchWSSendMessage } =
+    useWebSocket(
+      `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
+    )
 
-  const { lastMessage: tiktokWSLastMessage } = useWebSocket(
-    `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`
-  )
+  const { lastMessage: tiktokWSLastMessage, sendMessage: tiktokWSSendMessage } =
+    useWebSocket(
+      `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`
+    )
 
-  const { lastMessage: youtubeWSLastMessage } = useWebSocket(
+  const {
+    lastMessage: youtubeWSLastMessage,
+    sendMessage: youtubeWSSendMessage,
+  } = useWebSocket(
     `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`
   )
 
@@ -142,6 +147,32 @@ const ChatLog = ({
       ])
     }
   }, [twitchWSLastMessage, tiktokWSLastMessage, youtubeWSLastMessage])
+
+  // send message to websocket every 20s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (_twitchUsername) {
+        twitchWSSendMessage('ping')
+      }
+
+      if (_tiktokUsername) {
+        tiktokWSSendMessage('ping')
+      }
+
+      if (_youtubeChannel) {
+        youtubeWSSendMessage('ping')
+      }
+    }, 20000)
+
+    return () => clearInterval(interval)
+  }, [
+    _twitchUsername,
+    _tiktokUsername,
+    _youtubeChannel,
+    twitchWSSendMessage,
+    tiktokWSSendMessage,
+    youtubeWSSendMessage,
+  ])
 
   useEffect(() => {
     if (virtuosoRef.current) {
