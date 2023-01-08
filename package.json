@@ -9,7 +9,6 @@
     "@mantine/form": "^5.9.5",
     "@mantine/hooks": "^5.9.5",
     "@mantine/notifications": "^5.9.5",
-    "@react-nano/use-event-source": "^0.12.0",
     "@tabler/icons": "^1.118.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -20,6 +19,7 @@
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "react-social-icons": "^5.15.0",
+    "react-use-websocket": "^4.2.0",
     "react-virtuoso": "^3.1.5",
     "web-vitals": "^2.1.4",
     "wretch": "^2.3.0"

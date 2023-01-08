@@ -1,15 +1,11 @@
 import styled from '@emotion/styled'
 import { Box, Center, Loader, Text } from '@mantine/core'
-import {
-  useEventSource,
-  useEventSourceListener,
-} from '@react-nano/use-event-source'
 import { IconAdjustmentsHorizontal } from '@tabler/icons'
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
+import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
-import wretch from 'wretch'
 
 const Item = styled.div`
   margin: 0;
@@ -66,7 +62,7 @@ const MessageText = styled(Text)`
   word-break: break-all;
 `
 
-const { REACT_APP_API_URL } = process.env
+const { REACT_APP_API_WS_URL } = process.env
 
 const ChatLog = ({
   twitchUsername,
@@ -97,45 +93,21 @@ const ChatLog = ({
     _youtubeChannel = searchParams.get('youtubeChannel')
   }
 
-  const [twitchEventSource, twitchStatus] = useEventSource(
-    `${REACT_APP_API_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
+  const { lastMessage: twitchWSLastMessage } = useWebSocket(
+    `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
   )
 
-  const [tiktokEventSource, tiktokStatus] = useEventSource(
-    `${REACT_APP_API_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`
+  const { lastMessage: tiktokWSLastMessage } = useWebSocket(
+    `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`
   )
 
-  const [youtubeEventSource, youtubeStatus] = useEventSource(
-    `${REACT_APP_API_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`
+  const { lastMessage: youtubeWSLastMessage } = useWebSocket(
+    `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`
   )
 
   useEffect(() => {
-    let isError = false
-    if (twitchStatus === 'error' && _twitchUsername) {
-      isError = true
-    } else if (tiktokStatus === 'error' && _tiktokUsername) {
-      isError = true
-    } else if (youtubeStatus === 'error' && _youtubeChannel) {
-      isError = true
-    }
-
-    if (isError) {
-      setTimeout(() => {
-        window.location.reload()
-      }, 5000)
-    }
-  }, [
-    twitchStatus,
-    tiktokStatus,
-    youtubeStatus,
-    _twitchUsername,
-    _tiktokUsername,
-    _youtubeChannel,
-  ])
-
-  useEventSourceListener(twitchEventSource, ['twitch'], (evt) => {
-    if (evt.data) {
-      const payload = JSON.parse(evt.data)
+    if (twitchWSLastMessage !== null) {
+      const payload = JSON.parse(twitchWSLastMessage.data)
       setChatData((prev) => [
         ...prev,
         {
@@ -145,11 +117,9 @@ const ChatLog = ({
         },
       ])
     }
-  })
 
-  useEventSourceListener(tiktokEventSource, ['tiktok'], (evt) => {
-    if (evt.data) {
-      const payload = JSON.parse(evt.data)
+    if (tiktokWSLastMessage !== null) {
+      const payload = JSON.parse(tiktokWSLastMessage.data)
       setChatData((prev) => [
         ...prev,
         {
@@ -159,11 +129,9 @@ const ChatLog = ({
         },
       ])
     }
-  })
 
-  useEventSourceListener(youtubeEventSource, ['youtube'], (evt) => {
-    if (evt.data) {
-      const payload = JSON.parse(evt.data)
+    if (youtubeWSLastMessage !== null) {
+      const payload = JSON.parse(youtubeWSLastMessage.data)
       setChatData((prev) => [
         ...prev,
         {
@@ -173,23 +141,7 @@ const ChatLog = ({
         },
       ])
     }
-  })
-
-  useEffect(() => {
-    return () => {
-      if (twitchEventSource) {
-        twitchEventSource.close()
-      }
-
-      if (tiktokEventSource) {
-        tiktokEventSource.close()
-      }
-
-      if (youtubeEventSource) {
-        youtubeEventSource.close()
-      }
-    }
-  }, [twitchEventSource, tiktokEventSource, youtubeEventSource])
+  }, [twitchWSLastMessage, tiktokWSLastMessage, youtubeWSLastMessage])
 
   useEffect(() => {
     if (virtuosoRef.current) {
@@ -198,25 +150,6 @@ const ChatLog = ({
       })
     }
   }, [chatData])
-
-  // wretch a heartbeat to keep each open connection alive
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (twitchStatus === 'open') {
-        wretch(`${REACT_APP_API_URL}/twitch/chat?heartbeat=1`).get().json()
-      }
-
-      if (youtubeStatus === 'open') {
-        wretch(`${REACT_APP_API_URL}/youtube/chat?heartbeat=1`).get().json()
-      }
-
-      if (tiktokStatus === 'open') {
-        wretch(`${REACT_APP_API_URL}/tiktok/chat?heartbeat=1`).get().json()
-      }
-    }, 30000)
-
-    return () => clearInterval(interval)
-  }, [twitchStatus, youtubeStatus, tiktokStatus])
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
