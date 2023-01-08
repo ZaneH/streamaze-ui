@@ -47,7 +47,7 @@ const TimestampCard = () => {
   if (isUrl) {
     discordChannelId = searchParams.get('discordChannelId') || ''
     youtubeVideoIdOrUrl = searchParams.get('youtubeVideoIdOrUrl') || ''
-    youtubeChannel = searchParams.get('youtubeChannel') || ''
+    youtubeChannel = searchParams.get('tsYoutubeChannel') || ''
   }
 
   const form = useForm({
@@ -81,7 +81,7 @@ const TimestampCard = () => {
                   if (youtubeVideoIdOrUrl)
                     qs.append('youtubeVideoIdOrUrl', youtubeVideoIdOrUrl)
                   if (youtubeChannel)
-                    qs.append('youtubeChannel', youtubeChannel)
+                    qs.append('tsYoutubeChannel', youtubeChannel)
 
                   window.navigator.clipboard.writeText(
                     `${window.location.origin}/?${qs.toString()}`
