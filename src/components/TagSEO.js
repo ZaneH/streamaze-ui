@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet'
 
 const TagSEO = ({
-  title = 'Streamaze | Your streaming buddy',
+  title = 'Streamaze | Stream Companion',
   description = 'Streamaze is a tool to enhance your livestreaming experience.',
 }) => {
   return (

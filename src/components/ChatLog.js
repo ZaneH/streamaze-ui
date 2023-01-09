@@ -236,14 +236,18 @@ const ChatLog = ({
           const { sender, message, origin, emotes = [] } = chatEvent
           const iconSize = isBig ? 28 : 22
 
-          let newMessageString = message
+          // escape any html tags (<>) in message
+          let newMessageString =
+            message?.replaceAll('<', '&lt;')?.replaceAll('>', '&gt;') || ''
+
+          // replace emotes with img tag using url
           emotes.forEach((emote) => {
             const keys = emote?.keys // shortcodes for emote
             const url = emote?.url // svg url
             keys.forEach((key) => {
               newMessageString = newMessageString.replaceAll(
                 key,
-                isBig
+                isBig // if big, don't show emotes
                   ? ''
                   : `<img src="${url}" style="height: 22px; vertical-align: middle;" referrerpolicy="no-referrer" />`
               )
