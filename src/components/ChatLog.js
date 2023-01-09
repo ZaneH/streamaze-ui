@@ -124,7 +124,9 @@ const ChatLog = ({
         },
       ])
     }
+  }, [twitchWSLastMessage])
 
+  useEffect(() => {
     if (tiktokWSLastMessage !== null) {
       const payload = JSON.parse(tiktokWSLastMessage.data)
       setChatData((prev) => [
@@ -137,7 +139,9 @@ const ChatLog = ({
         },
       ])
     }
+  }, [tiktokWSLastMessage])
 
+  useEffect(() => {
     if (youtubeWSLastMessage !== null) {
       const payload = JSON.parse(youtubeWSLastMessage.data)
       setChatData((prev) => [
@@ -150,7 +154,7 @@ const ChatLog = ({
         },
       ])
     }
-  }, [twitchWSLastMessage, tiktokWSLastMessage, youtubeWSLastMessage])
+  }, [youtubeWSLastMessage])
 
   // send message to websocket every 20s
   useEffect(() => {
