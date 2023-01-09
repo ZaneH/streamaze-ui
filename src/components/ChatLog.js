@@ -69,7 +69,6 @@ const ChatLog = ({
   tiktokUsername,
   youtubeChannel,
   fullHeight,
-  fullWidth = false,
   height = '300px',
   isDark = undefined,
   isBig = undefined,
@@ -216,10 +215,15 @@ const ChatLog = ({
   }
 
   return (
-    <Box style={{ background: isDark ? '#18181C' : 'transparent' }}>
+    <Box
+      style={{
+        background: isDark ? '#18181C' : 'transparent',
+        height: fullHeight ? '100%' : height,
+      }}
+    >
       <Virtuoso
         style={{
-          minHeight: fullHeight ? '100vh' : height,
+          minHeight: fullHeight ? '100%' : height,
           overflowX: 'hidden',
         }}
         ref={virtuosoRef}

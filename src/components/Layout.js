@@ -105,7 +105,6 @@ const Layout = ({ children }) => {
             >
               <ChatLog
                 fullHeight
-                fullWidth
                 isDark={themeConfig?.name === 'dark'}
                 isBig={themeConfig?.name === 'overlay-impact'}
                 twitchUsername={twitchUsername}

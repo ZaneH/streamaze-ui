@@ -13,7 +13,7 @@ const App = () => {
           <SidebarProvider>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/chat" element={<ChatLog fullHeight />} />
+              <Route path="/chat" element={<ChatLog height="100vh" />} />
               <Route
                 path="/sam"
                 element={
