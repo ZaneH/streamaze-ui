@@ -205,7 +205,7 @@ const ChatLog = ({
 
   if (chatData.length === 0) {
     return (
-      <Center mih={fullHeight ? '100vh' : height}>
+      <Center mih={fullHeight ? '100%' : height}>
         <Loader />
       </Center>
     )
@@ -237,7 +237,7 @@ const ChatLog = ({
             const keys = emote?.keys // shortcodes for emote
             const url = emote?.url // svg url
             keys.forEach((key) => {
-              newMessageString = newMessageString.replace(
+              newMessageString = newMessageString.replaceAll(
                 key,
                 isBig
                   ? ''
