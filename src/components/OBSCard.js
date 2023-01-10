@@ -10,11 +10,11 @@ import {
 import { useForm } from '@mantine/form'
 import { useReadChannelState } from '@onehop/react'
 import { IconAdjustmentsHorizontal } from '@tabler/icons'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import SceneSwitcher from './SceneSwitcher'
 import { SidebarContext } from './SidebarProvider'
 
-const OBSPanel = () => {
+const OBSCard = () => {
   const { obsConfig, setObsConfig } = useContext(SidebarContext)
   const { state, error } = useReadChannelState(obsConfig?.connectionId)
   const [isEditing, setIsEditing] = useState(false)
@@ -31,7 +31,9 @@ const OBSPanel = () => {
   return (
     <Card shadow="xs" p="lg" radius="md" h="min-content">
       <Flex align="center" justify="space-between" mb="md">
-        <Text>OBS Panel</Text>
+        <Text>
+          OBS Dashboard <b>(Not Finished)</b>
+        </Text>
         <Flex gap="xs" align="center">
           {!isEditing && (
             <>
@@ -91,7 +93,7 @@ const OBSPanel = () => {
       {!isEditing && !isError && (
         <SceneSwitcher scenes={scenes} activeScene={activeScene} />
       )}
-      {!isEditing && isError && (
+      {!isEditing && isError && !state && (
         <Text size="sm" color="red">
           There was an issue connecting to OBS. Check your connection ID and
           reload the page.
@@ -101,4 +103,4 @@ const OBSPanel = () => {
   )
 }
 
-export default OBSPanel
+export default OBSCard

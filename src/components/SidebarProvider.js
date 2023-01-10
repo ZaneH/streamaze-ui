@@ -62,6 +62,17 @@ const SidebarProvider = ({ children }) => {
     },
   })
 
+  // StatCard config
+  const [statsConfig, setStatsConfig] = useLocalStorage({
+    key: 'stats-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      tiktokUsername: '',
+      twitchUsername: '',
+      youtubeChannel: '',
+    },
+  })
+
   return (
     <SidebarContext.Provider
       value={{
@@ -80,6 +91,8 @@ const SidebarProvider = ({ children }) => {
         setThemeConfig,
         obsConfig,
         setObsConfig,
+        statsConfig,
+        setStatsConfig,
       }}
     >
       {children}
