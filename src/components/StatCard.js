@@ -178,13 +178,15 @@ const StatCard = () => {
     <Card shadow="xs" p="lg" radius="md" h="min-content">
       <Group position="apart">
         <Text>Stream Viewers</Text>
-        <ActionIcon
-          onClick={() => {
-            setIsEditing(true)
-          }}
-        >
-          <IconAdjustmentsHorizontal size={18} />
-        </ActionIcon>
+        {!isEditing && (
+          <ActionIcon
+            onClick={() => {
+              setIsEditing(true)
+            }}
+          >
+            <IconAdjustmentsHorizontal size={18} />
+          </ActionIcon>
+        )}
       </Group>
       <Flex direction="column" gap="md" py="md" px="sm">
         {!isEditing ? (
