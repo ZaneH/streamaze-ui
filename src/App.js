@@ -25,6 +25,15 @@ const App = () => {
                     />
                   }
                 />
+                <Route
+                  path="/testme"
+                  element={
+                    <Navigate
+                      replace
+                      to="/?isChatUrl=true&youtubeChannel=https://www.youtube.com/@LofiGirl"
+                    />
+                  }
+                />
               </Routes>
             </SidebarProvider>
           </BrowserRouter>
