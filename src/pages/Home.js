@@ -1,5 +1,7 @@
-import { Container, SimpleGrid } from '@mantine/core'
+import { Container } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { useContext } from 'react'
+import Masonry from 'react-responsive-masonry'
 import ChatCard from '../components/ChatCard'
 import Layout from '../components/Layout'
 import OBSCard from '../components/OBSCard'
@@ -10,12 +12,16 @@ import TimestampCard from '../components/TimestampCard'
 
 const Home = () => {
   const { chatConfig, themeConfig } = useContext(SidebarContext)
+  const maxWidthMq = useMediaQuery('(max-width: 960px)')
 
   return (
     <Layout>
       <TagSEO />
       <Container maw="1200px">
-        <SimpleGrid cols={2} breakpoints={[{ maxWidth: 960, cols: 1 }]}>
+        <Masonry
+          columnsCount={maxWidthMq ? 1 : 2}
+          gutter={maxWidthMq ? '14px' : '18px'}
+        >
           {Object.keys(chatConfig).map((key, i) => (
             <ChatCard
               title={key}
@@ -29,7 +35,7 @@ const Home = () => {
           <TimestampCard />
           <OBSCard />
           <StatCard />
-        </SimpleGrid>
+        </Masonry>
       </Container>
     </Layout>
   )

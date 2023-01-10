@@ -48,7 +48,6 @@ const StatCard = () => {
         if (res?.viewers) {
           setYtViewers(res.viewers)
         } else if (res?.error) {
-          setYtViewers()
           showNotification({
             color: 'red',
             title: 'YouTube Viewers Error',
@@ -143,7 +142,7 @@ const StatCard = () => {
         count: tiktokViewers,
         name: statsConfig?.tiktokUsername,
       },
-    ].filter((o) => o?.count)
+    ].filter((o) => o?.count && o?.name)
 
     const elements = data.map((o, i) => (
       <SocialStat key={i}>
