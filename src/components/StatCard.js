@@ -40,12 +40,6 @@ const StatCard = () => {
   })
 
   const ytInterval = useInterval(() => {
-    if (!statsConfig?.youtubeChannel) {
-      setIsYTLoading(false)
-      setYtViewers()
-      return
-    }
-
     wretch(
       `${REACT_APP_API_URL}/youtube/viewers?channelUrl=${statsConfig?.youtubeChannel}`
     )
@@ -67,12 +61,6 @@ const StatCard = () => {
   }, 12 * 1000)
 
   const tiktokInterval = useInterval(() => {
-    if (!statsConfig?.tiktokUsername) {
-      setIsTikTokLoading(false)
-      setTiktokViewers()
-      return
-    }
-
     wretch(
       `${REACT_APP_API_URL}/tiktok/viewers?username=${statsConfig?.tiktokUsername}`
     )
@@ -81,7 +69,6 @@ const StatCard = () => {
         if (res?.viewers) {
           setTiktokViewers(res.viewers)
         } else if (res?.error) {
-          setTiktokViewers()
           showNotification({
             color: 'red',
             title: 'TikTok Viewers Error',
@@ -97,16 +84,31 @@ const StatCard = () => {
     setIsYTLoading(true)
     setIsTikTokLoading(true)
 
-    // refresh the intervals
+    // reset the viewers
+    setYtViewers()
+    setTiktokViewers()
+
+    // refresh the intervals (after config change)
     ytInterval.stop()
     tiktokInterval.stop()
-    ytInterval.start()
-    tiktokInterval.start()
+
+    if (statsConfig?.youtubeChannel) {
+      ytInterval.start()
+    } else {
+      setIsYTLoading(false)
+    }
+
+    if (statsConfig?.tiktokUsername) {
+      tiktokInterval.start()
+    } else {
+      setIsTikTokLoading(false)
+    }
 
     // eslint-disable-next-line
   }, [statsConfig])
 
   useEffect(() => {
+    // kick off intervals (first time)
     if (statsConfig?.youtubeChannel) {
       ytInterval.start()
     } else {
