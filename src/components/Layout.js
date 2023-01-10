@@ -124,7 +124,7 @@ const Layout = ({ children }) => {
               height: '100%',
             }}
           >
-            <MediaQuery largerThan="lg" styles={{ display: 'none' }}>
+            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger
                 opened={navOpened}
                 onClick={() => setNavOpened((o) => !o)}
