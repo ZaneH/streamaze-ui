@@ -53,6 +53,15 @@ const SidebarProvider = ({ children }) => {
     defaultValue: 'example',
   })
 
+  // OBS config
+  const [obsConfig, setObsConfig] = useLocalStorage({
+    key: 'obs-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      connectionId: '',
+    },
+  })
+
   return (
     <SidebarContext.Provider
       value={{
@@ -69,6 +78,8 @@ const SidebarProvider = ({ children }) => {
         setChatConfigName,
         themeConfig,
         setThemeConfig,
+        obsConfig,
+        setObsConfig,
       }}
     >
       {children}

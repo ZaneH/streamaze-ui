@@ -236,6 +236,7 @@ const TimestampCard = () => {
                   color="red"
                   variant="outline"
                   onClick={() => {
+                    form.setValues(Object.assign({}, config))
                     setIsEditing(false)
                   }}
                 >

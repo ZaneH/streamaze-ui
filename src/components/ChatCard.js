@@ -425,8 +425,8 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                   color="red"
                   variant="outline"
                   onClick={() => {
-                    setIsEditing(false)
                     setPendingConfig()
+                    setIsEditing(false)
                   }}
                 >
                   Cancel
