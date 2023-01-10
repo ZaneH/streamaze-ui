@@ -30,7 +30,7 @@ const App = () => {
                   element={
                     <Navigate
                       replace
-                      to="/?isChatUrl=true&youtubeChannel=https://www.youtube.com/@LofiGirl"
+                      to="/?isChatUrl=true&youtubeChannel=https://www.youtube.com/@LofiGirl&isTimestampUrl=true&discordChannelId=1061689422455767141&tsYoutubeChannel=https://www.youtube.com/@LofiGirl"
                     />
                   }
                 />
