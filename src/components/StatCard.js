@@ -11,6 +11,7 @@ import {
   Loader,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { useInterval } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconAdjustmentsHorizontal } from '@tabler/icons'
 import { useCallback, useContext, useEffect, useState } from 'react'
@@ -30,76 +31,103 @@ const StatCard = () => {
   const [tiktokViewers, setTiktokViewers] = useState()
   const [isEditing, setIsEditing] = useState(false)
   const { statsConfig, setStatsConfig } = useContext(SidebarContext)
-  const [isLoading, setIsLoading] = useState(true)
+
+  const [isYTLoading, setIsYTLoading] = useState(true)
+  const [isTikTokLoading, setIsTikTokLoading] = useState(true)
 
   const form = useForm({
     initialValues: Object.assign({}, statsConfig),
   })
 
+  const ytInterval = useInterval(() => {
+    if (!statsConfig?.youtubeChannel) {
+      setIsYTLoading(false)
+      setYtViewers()
+      return
+    }
+
+    wretch(
+      `${REACT_APP_API_URL}/youtube/viewers?channelUrl=${statsConfig?.youtubeChannel}`
+    )
+      .get()
+      .json((res) => {
+        if (res?.viewers) {
+          setYtViewers(res.viewers)
+        } else if (res?.error) {
+          setYtViewers()
+          showNotification({
+            color: 'red',
+            title: 'YouTube Viewers Error',
+            message: res.error,
+          })
+        }
+
+        setIsYTLoading(false)
+      })
+  }, 12 * 1000)
+
+  const tiktokInterval = useInterval(() => {
+    if (!statsConfig?.tiktokUsername) {
+      setIsTikTokLoading(false)
+      setTiktokViewers()
+      return
+    }
+
+    wretch(
+      `${REACT_APP_API_URL}/tiktok/viewers?username=${statsConfig?.tiktokUsername}`
+    )
+      .get()
+      .json((res) => {
+        if (res?.viewers) {
+          setTiktokViewers(res.viewers)
+        } else if (res?.error) {
+          setTiktokViewers()
+          showNotification({
+            color: 'red',
+            title: 'TikTok Viewers Error',
+            message: res.error,
+          })
+        }
+
+        setIsTikTokLoading(false)
+      })
+  }, 12 * 1000)
+
   useEffect(() => {
-    const ytInterval = setInterval(async () => {
-      if (!statsConfig?.youtubeChannel) {
-        setIsLoading(false)
-        return
-      }
+    setIsYTLoading(true)
+    setIsTikTokLoading(true)
 
-      const res = await wretch(
-        `${REACT_APP_API_URL}/youtube/viewers?channelUrl=${statsConfig?.youtubeChannel}`
-      )
-        .get()
-        .json()
+    // refresh the intervals
+    ytInterval.stop()
+    tiktokInterval.stop()
+    ytInterval.start()
+    tiktokInterval.start()
 
-      if (res?.viewers) {
-        setYtViewers(res.viewers)
-      } else if (res?.error) {
-        clearInterval(ytInterval)
-        setYtViewers()
-        showNotification({
-          color: 'red',
-          title: 'YouTube Viewers Error',
-          message: res.error,
-        })
-      }
+    // eslint-disable-next-line
+  }, [statsConfig])
 
-      setIsLoading(false)
-    }, 12 * 1000)
+  useEffect(() => {
+    if (statsConfig?.youtubeChannel) {
+      ytInterval.start()
+    } else {
+      ytInterval.stop()
+      setIsYTLoading(false)
+    }
 
-    const tiktokInterval = setInterval(async () => {
-      if (!statsConfig?.tiktokUsername) {
-        setIsLoading(false)
-        return
-      }
-
-      const res = await wretch(
-        `${REACT_APP_API_URL}/tiktok/viewers?username=${statsConfig?.tiktokUsername}`
-      )
-        .get()
-        .json()
-
-      if (res?.viewers) {
-        setTiktokViewers(res.viewers)
-      } else if (res?.error) {
-        clearInterval(tiktokInterval)
-        setTiktokViewers()
-        showNotification({
-          color: 'red',
-          title: 'TikTok Viewers Error',
-          message: res.error,
-        })
-      }
-
-      setIsLoading(false)
-    }, 12 * 1000)
+    if (statsConfig?.tiktokUsername) {
+      tiktokInterval.start()
+    } else {
+      tiktokInterval.stop()
+      setIsTikTokLoading(false)
+    }
 
     return () => {
-      clearInterval(ytInterval)
-      clearInterval(tiktokInterval)
+      ytInterval.stop()
+      tiktokInterval.stop()
     }
-  }, [statsConfig])
 
-  useEffect(() => {
-    setIsLoading(true)
-  }, [statsConfig])
+    // eslint-disable-next-line
+  }, [])
 
   const socialStats = useCallback(() => {
     const data = [
@@ -160,7 +188,7 @@ const StatCard = () => {
       </Group>
       <Flex direction="column" gap="md" py="md" px="sm">
         {!isEditing ? (
-          isLoading ? (
+          isYTLoading || isTikTokLoading ? (
             <Center>
               <Loader />
             </Center>
