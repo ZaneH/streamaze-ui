@@ -12,7 +12,7 @@ import { SidebarContext } from '../Providers/SidebarProvider'
 import { StatPanel } from '../StreamStats'
 import Sidebar from './Sidebar'
 
-const SplitHeader = () => {
+const SplitHeader = ({ showStats }) => {
   const { colors } = useMantineTheme()
   const { setIsSidebarOpen } = useContext(SidebarContext)
 
@@ -22,9 +22,10 @@ const SplitHeader = () => {
         <Flex
           align="center"
           px="20px"
-          w="50%"
+          w={showStats ? '50%' : '100%'}
           bg={colors.dark[7]}
           style={{ alignSelf: 'stretch' }}
+          py="md"
         >
           <Burger
             mr="xl"
@@ -36,19 +37,21 @@ const SplitHeader = () => {
             <Title>Streamaze</Title>
           </MediaQuery>
         </Flex>
-        <Flex w="50%" bg={colors.dark[9]} px="lg" py="md">
-          <StatPanel />
-        </Flex>
+        {showStats && (
+          <Flex w="50%" bg={colors.dark[9]} px="lg" py="md">
+            <StatPanel />
+          </Flex>
+        )}
       </Flex>
     </Box>
   )
 }
 
-const Layout = ({ children }) => {
+const Layout = ({ children, showStats = false }) => {
   return (
     <AppShell
       padding="16px"
-      header={<SplitHeader />}
+      header={<SplitHeader showStats={showStats} />}
       navbar={<Sidebar />}
       styles={{
         root: {

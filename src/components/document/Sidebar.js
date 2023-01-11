@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
 import { Box, CloseButton, Navbar, NavLink } from '@mantine/core'
 import { IconHome2, IconSettings } from '@tabler/icons'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
 
 const StyledNavLink = styled(NavLink)`
@@ -11,6 +12,12 @@ const StyledNavLink = styled(NavLink)`
 
 const Sidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    setIsSidebarOpen(false)
+  }, [pathname])
 
   return (
     <Navbar
@@ -21,11 +28,22 @@ const Sidebar = () => {
       <Box mb="sm">
         <CloseButton onClick={() => setIsSidebarOpen((o) => !o)} size="xl" />
       </Box>
-      <StyledNavLink label="Home" href="/" active icon={<IconHome2 />} />
+      <StyledNavLink
+        label="Home"
+        href="/"
+        active={pathname === '/'}
+        icon={<IconHome2 />}
+        onClick={() => {
+          navigate('/')
+        }}
+      />
       <StyledNavLink
         label="Settings"
-        href="/settings"
+        active={pathname === '/settings'}
         icon={<IconSettings />}
+        onClick={() => {
+          navigate('/settings')
+        }}
       />
     </Navbar>
   )

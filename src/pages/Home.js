@@ -7,7 +7,7 @@ import TagSEO from '../components/TagSEO'
 
 const Home = () => {
   return (
-    <Layout>
+    <Layout showStats>
       <TagSEO />
       <Flex gap="xs" h="100%">
         <Flex direction="column" w="50%">

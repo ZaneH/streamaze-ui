@@ -7,6 +7,7 @@ import { ConfigProvider, HopProvider } from './components/Providers'
 import SidebarProvider from './components/Providers/SidebarProvider'
 import StatProvider from './components/Providers/StatProvider'
 import Home from './pages/Home'
+import Settings from './pages/Settings'
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
                   <SidebarProvider>
                     <Routes>
                       <Route path="/" element={<Home />} />
+                      <Route path="/settings" element={<Settings />} />
                       <Route
                         path="/chat"
                         element={<ChatLog height="100vh" />}
