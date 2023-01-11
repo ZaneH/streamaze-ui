@@ -1,16 +1,28 @@
-import { Flex, useMantineTheme } from '@mantine/core'
-import StatInfo from './StatInfo'
+import { Flex } from '@mantine/core'
+import { useContext } from 'react'
 import { ReactComponent as BitRateIcon } from '../../bit-rate-icon.svg'
+import { StatContext } from '../Providers/StatProvider'
+import StatInfo from './StatInfo'
 
 const StatPanel = () => {
-  const { colors } = useMantineTheme()
-
+  const { ytViewers, tiktokViewers } = useContext(StatContext)
   return (
     <Flex direction="column" gap="xs">
       <Flex gap="md" style={{ flexWrap: 'wrap' }}>
-        <StatInfo network="youtube" label="1,044" />
-        <StatInfo network="twitch" label="661" />
-        <StatInfo network="tiktok" label="760" />
+        {ytViewers && (
+          <StatInfo
+            network="youtube"
+            label={parseInt(ytViewers).toLocaleString()}
+          />
+        )}
+        {/* TODO: Implement Twitch /viewers endpoint */}
+        {/* <StatInfo network="twitch" label="661" /> */}
+        {tiktokViewers && (
+          <StatInfo
+            network="tiktok"
+            label={parseInt(tiktokViewers).toLocaleString()}
+          />
+        )}
       </Flex>
       <Flex gap="md">
         <StatInfo

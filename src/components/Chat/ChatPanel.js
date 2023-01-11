@@ -13,12 +13,7 @@ const ChatPanel = () => {
         Chat
       </PanelHead>
       <Box style={{ flex: '1 1 auto' }}>
-        <ChatLog
-          youtubeChannel="https://youtube.com/@LofiGirl"
-          fullHeight
-          isDark
-          mx="md"
-        />
+        <ChatLog fullHeight isDark mx="md" />
       </Box>
       <Box style={{ flex: '0 1 0px' }} />
     </Flex>
