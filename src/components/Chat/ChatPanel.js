@@ -1,8 +1,28 @@
-import { Box, Title, useMantineTheme } from '@mantine/core'
+import { Box, Flex, Title, useMantineTheme } from '@mantine/core'
 import { PanelHead } from '../document'
+import ChatLog from '../ChatLog'
 
 const ChatPanel = () => {
-  return <PanelHead>Chat</PanelHead>
+  return (
+    <Flex direction="column" h="100%">
+      <PanelHead
+        style={{
+          flex: '0 1 auto',
+        }}
+      >
+        Chat
+      </PanelHead>
+      <Box style={{ flex: '1 1 auto' }}>
+        <ChatLog
+          youtubeChannel="https://youtube.com/@LofiGirl"
+          fullHeight
+          isDark
+          mx="md"
+        />
+      </Box>
+      <Box style={{ flex: '0 1 0px' }} />
+    </Flex>
+  )
 }
 
 export default ChatPanel

@@ -7,7 +7,7 @@ const StatPanel = () => {
 
   return (
     <Flex direction="column" gap="xs">
-      <Flex gap="md">
+      <Flex gap="md" style={{ flexWrap: 'wrap' }}>
         <StatInfo network="youtube" label="1,044" />
         <StatInfo network="twitch" label="661" />
         <StatInfo network="tiktok" label="760" />
@@ -15,7 +15,7 @@ const StatPanel = () => {
       <Flex gap="md">
         <StatInfo
           image={<BitRateIcon style={{ width: 26, height: 26 }} />}
-          label="12,345 kbps"
+          label="12,345 Kbps"
         />
       </Flex>
     </Flex>

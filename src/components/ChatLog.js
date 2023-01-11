@@ -9,10 +9,11 @@ import { Virtuoso } from 'react-virtuoso'
 
 const Item = styled.div`
   margin: 0;
+  padding: 3px 0;
 `
 
 const ItemContent = styled.div`
-  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
+  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.25em')};
   color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
 
   .chat-outline,
@@ -72,13 +73,17 @@ const ChatLog = ({
   height = '300px',
   isDark = undefined,
   isBig = undefined,
+  ...props
 }) => {
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
   const virtuosoRef = useRef(null)
 
-  if (isBig === undefined || isDark === undefined) {
+  if (isBig === undefined) {
     isBig = searchParams.get('theme') === 'overlay-impact'
+  }
+
+  if (isDark === undefined) {
     isDark = searchParams.get('theme') === 'dark'
   }
 
@@ -191,24 +196,26 @@ const ChatLog = ({
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
-      <Text align="center" my="xl">
-        No chat specified
-        <br />
-        <Text size={14} color="dimmed">
-          Add one using the{' '}
-          <IconAdjustmentsHorizontal
-            size={18}
-            style={{ verticalAlign: 'sub' }}
-          />{' '}
-          menu
+      <Box {...props}>
+        <Text align="center" my="xl">
+          No chat specified
+          <br />
+          <Text size={14} color="dimmed">
+            Add one using the{' '}
+            <IconAdjustmentsHorizontal
+              size={18}
+              style={{ verticalAlign: 'sub' }}
+            />{' '}
+            menu
+          </Text>
         </Text>
-      </Text>
+      </Box>
     )
   }
 
   if (chatData.length === 0) {
     return (
-      <Center mih={fullHeight ? '100%' : height}>
+      <Center mih={fullHeight ? '100%' : height} {...props}>
         <Loader />
       </Center>
     )
@@ -238,7 +245,7 @@ const ChatLog = ({
         }}
         itemContent={(_, chatEvent) => {
           const { sender, message, origin, emotes = [] } = chatEvent
-          const iconSize = isBig ? 28 : 22
+          const iconSize = isBig ? 28 : 26
 
           // escape any html tags (<>) in message
           let newMessageString =
@@ -260,7 +267,7 @@ const ChatLog = ({
 
           return (
             <ItemContent isBig={isBig}>
-              <Box style={{ whiteSpace: 'nowrap' }} px="16px">
+              <Box style={{ whiteSpace: 'nowrap' }} px="16px" {...props}>
                 <div
                   style={{
                     verticalAlign: 'middle',

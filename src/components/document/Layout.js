@@ -2,7 +2,9 @@ import {
   AppShell,
   Box,
   Burger,
+  Container,
   Flex,
+  MediaQuery,
   Title,
   useMantineTheme,
 } from '@mantine/core'
@@ -22,7 +24,9 @@ const SplitHeader = () => {
           style={{ alignSelf: 'stretch' }}
         >
           <Burger mr="lg" />
-          <Title>Streamaze</Title>
+          <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+            <Title>Streamaze</Title>
+          </MediaQuery>
         </Flex>
         <Flex w="50%" bg={colors.dark[9]} px="lg" py="md">
           <StatPanel />
@@ -42,6 +46,8 @@ const Layout = ({ children }) => {
           background: '#141518',
           color: 'white',
           minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
         },
         main: {
           paddingLeft: '28px',
@@ -50,6 +56,7 @@ const Layout = ({ children }) => {
         },
         body: {
           alignItems: 'stretch',
+          flex: '1 1 auto',
         },
       }}
     >
