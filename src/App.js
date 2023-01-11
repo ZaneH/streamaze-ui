@@ -1,18 +1,22 @@
 import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import { HelmetProvider } from 'react-helmet-async'
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import ChatLog from './components/ChatLog'
-import SidebarProvider from './components/SidebarProvider'
+import { ConfigProvider } from './components/Providers'
 import Home from './pages/Home'
 
 const App = () => {
   return (
-    <MantineProvider withNormalizeCSS withGlobalStyles>
+    <MantineProvider
+      withNormalizeCSS
+      withGlobalStyles
+      theme={{ colorScheme: 'dark' }}
+    >
       <HelmetProvider>
         <NotificationsProvider>
           <BrowserRouter>
-            <SidebarProvider>
+            <ConfigProvider>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/chat" element={<ChatLog height="100vh" />} />
@@ -35,7 +39,7 @@ const App = () => {
                   }
                 />
               </Routes>
-            </SidebarProvider>
+            </ConfigProvider>
           </BrowserRouter>
         </NotificationsProvider>
       </HelmetProvider>
