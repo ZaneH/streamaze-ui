@@ -7,22 +7,31 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { useContext } from 'react'
+import { SidebarContext } from '../Providers/SidebarProvider'
 import { StatPanel } from '../StreamStats'
+import Sidebar from './Sidebar'
 
 const SplitHeader = () => {
   const { colors } = useMantineTheme()
+  const { setIsSidebarOpen } = useContext(SidebarContext)
 
   return (
     <Box height={78}>
       <Flex align="center" gap="sm">
         <Flex
           align="center"
-          px="32px"
+          px="20px"
           w="50%"
           bg={colors.dark[7]}
           style={{ alignSelf: 'stretch' }}
         >
-          <Burger mr="lg" />
+          <Burger
+            mr="xl"
+            onClick={() => {
+              setIsSidebarOpen(true)
+            }}
+          />
           <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
             <Title>Streamaze</Title>
           </MediaQuery>
@@ -40,6 +49,7 @@ const Layout = ({ children }) => {
     <AppShell
       padding="16px"
       header={<SplitHeader />}
+      navbar={<Sidebar />}
       styles={{
         root: {
           background: '#141518',
