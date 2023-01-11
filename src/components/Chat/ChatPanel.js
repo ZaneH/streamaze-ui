@@ -1,6 +1,6 @@
-import { Box, Flex, Title, useMantineTheme } from '@mantine/core'
-import { PanelHead } from '../document'
+import { Box, Flex } from '@mantine/core'
 import ChatLog from '../ChatLog'
+import { PanelHead } from '../document'
 
 const ChatPanel = () => {
   return (

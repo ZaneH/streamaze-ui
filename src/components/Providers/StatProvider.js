@@ -33,6 +33,10 @@ const StatProvider = ({ children }) => {
 
         setIsYTLoading(false)
       })
+      .catch(() => {
+        setIsYTLoading(false)
+        ytInterval.stop()
+      })
   }, 12 * 1000)
 
   const tiktokInterval = useInterval(() => {
@@ -52,6 +56,10 @@ const StatProvider = ({ children }) => {
         }
 
         setIsTikTokLoading(false)
+      })
+      .catch(() => {
+        setIsTikTokLoading(false)
+        tiktokInterval.stop()
       })
   }, 12 * 1000)
 

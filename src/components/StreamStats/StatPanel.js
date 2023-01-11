@@ -5,22 +5,29 @@ import { StatContext } from '../Providers/StatProvider'
 import StatInfo from './StatInfo'
 
 const StatPanel = () => {
-  const { ytViewers, tiktokViewers } = useContext(StatContext)
+  const { ytViewers, tiktokViewers, isYTLoading, isTikTokLoading } =
+    useContext(StatContext)
   return (
     <Flex direction="column" gap="xs">
       <Flex gap="md" style={{ flexWrap: 'wrap' }}>
-        {ytViewers && (
+        {(ytViewers || isYTLoading) && (
           <StatInfo
             network="youtube"
-            label={parseInt(ytViewers).toLocaleString()}
+            label={
+              isYTLoading ? 'Loading' : parseInt(ytViewers).toLocaleString()
+            }
           />
         )}
         {/* TODO: Implement Twitch /viewers endpoint */}
         {/* <StatInfo network="twitch" label="661" /> */}
-        {tiktokViewers && (
+        {(tiktokViewers || isTikTokLoading) && (
           <StatInfo
             network="tiktok"
-            label={parseInt(tiktokViewers).toLocaleString()}
+            label={
+              isTikTokLoading
+                ? 'Loading'
+                : parseInt(tiktokViewers).toLocaleString()
+            }
           />
         )}
       </Flex>
