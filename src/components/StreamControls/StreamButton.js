@@ -1,13 +1,6 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import {
-  Box,
-  Container,
-  Flex,
-  Text,
-  Title,
-  UnstyledButton,
-} from '@mantine/core'
-import { useCallback } from 'react'
+import { Flex, Title, UnstyledButton } from '@mantine/core'
 
 const getBackgroundGradient = (color) => {
   if (color === 'red') {
@@ -27,11 +20,29 @@ const LargeButton = styled(UnstyledButton)`
   width: 100%;
   padding: 28px 0;
   text-transform: uppercase;
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          filter: brightness(30%);
+          cursor: not-allowed;
+        `
+      : ''}
 `
 
-const StreamButton = ({ color = 'red', label, icon, children }) => {
+const StreamButton = ({
+  color = 'red',
+  label,
+  icon,
+  disabled = false,
+  onClick,
+  children,
+}) => {
   return (
-    <LargeButton bg={getBackgroundGradient(color)}>
+    <LargeButton
+      bg={getBackgroundGradient(color)}
+      disabled={disabled}
+      onClick={onClick}
+    >
       {!icon && (
         <Title size={32} weight={800} color="white" align="center">
           {label ?? children}

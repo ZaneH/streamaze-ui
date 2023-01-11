@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@mantine/hooks'
 import { createContext } from 'react'
-export const SidebarContext = createContext()
+export const ConfigContext = createContext()
 
 const ConfigProvider = ({ children }) => {
   // Chat config
@@ -29,7 +29,7 @@ const ConfigProvider = ({ children }) => {
     key: 'obs-config',
     getInitialValueInEffect: false,
     defaultValue: {
-      connectionId: '',
+      streamChannelId: '',
     },
   })
 
@@ -45,7 +45,7 @@ const ConfigProvider = ({ children }) => {
   })
 
   return (
-    <SidebarContext.Provider
+    <ConfigContext.Provider
       value={{
         chatConfig,
         setChatConfig,
@@ -56,7 +56,7 @@ const ConfigProvider = ({ children }) => {
       }}
     >
       {children}
-    </SidebarContext.Provider>
+    </ConfigContext.Provider>
   )
 }
 
