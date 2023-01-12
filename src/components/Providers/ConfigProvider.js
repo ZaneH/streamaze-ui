@@ -1,21 +1,22 @@
 import { useLocalStorage } from '@mantine/hooks'
 import { createContext } from 'react'
+import { useSearchParams } from 'react-router-dom'
 export const ConfigContext = createContext()
 
 const ConfigProvider = ({ children }) => {
   // Chat config
   const [chatConfig, setChatConfig] = useLocalStorage({
     key: 'chat-sources',
-    getInitialValueInEffect: true,
+    getInitialValueInEffect: false,
     defaultValue: {
       configName: 'example',
       twitch: {
         enabled: false,
-        handle: '',
+        username: '',
       },
       tiktok: {
         enabled: false,
-        handle: '',
+        username: '',
       },
       youtube: {
         enabled: false,
@@ -44,15 +45,126 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Timestamp config
+  const [timestampConfig, setTimestampConfig] = useLocalStorage({
+    key: 'timestamp-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      discordChannelId: '',
+      youtubeChannel: '',
+    },
+  })
+
+  const [searchParams] = useSearchParams()
+  const isChat = searchParams.get('isChat') === 'true'
+  const isOBS = searchParams.get('isObs') === 'true'
+  const isStats = searchParams.get('isStats') === 'true'
+  const isClip = searchParams.get('isClip') === 'true'
+
+  // Load chat config from URLs
+  let tiktokChat = ''
+  let youtubeChat = ''
+  let twitchChat = ''
+  if (isChat) {
+    if (searchParams.get('tiktokChat')) {
+      tiktokChat = searchParams.get('tiktokChat')
+    }
+
+    if (searchParams.get('youtubeChat')) {
+      youtubeChat = searchParams.get('youtubeChat')
+    }
+
+    if (searchParams.get('twitchChat')) {
+      twitchChat = searchParams.get('twitchChat')
+    }
+  }
+
+  // Load OBS config from URLs
+  let obsChannel = ''
+  if (isOBS) {
+    if (searchParams.get('obsChannel')) {
+      obsChannel = searchParams.get('obsChannel')
+    }
+  }
+
+  // Load stats config from URLs
+  let tiktokStats = ''
+  let youtubeStats = ''
+  // let twitchStats = ''
+  if (isStats) {
+    if (searchParams.get('tiktokStats')) {
+      tiktokStats = searchParams.get('tiktokStats')
+    }
+
+    if (searchParams.get('youtubeStats')) {
+      youtubeStats = searchParams.get('youtubeStats')
+    }
+
+    // TODO: Add Twitch viewer count
+    // if (searchParams.get('twitchStats')) {
+    //   twitchStats = searchParams.get('twitchStats')
+    // }
+  }
+
+  // Load timestamp config from URLs
+  let discordTimestamp = ''
+  let youtubeTimestamp = ''
+  if (isClip) {
+    if (searchParams.get('clipDiscord')) {
+      discordTimestamp = searchParams.get('clipDiscord')
+    }
+
+    if (searchParams.get('clipYT')) {
+      youtubeTimestamp = searchParams.get('clipYT')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
-        chatConfig,
+        chatConfig: {
+          ...chatConfig,
+          tiktok: {
+            ...chatConfig.tiktok,
+            username: tiktokChat ? tiktokChat : chatConfig.tiktok.username,
+          },
+          youtube: {
+            ...chatConfig.youtube,
+            channel: youtubeChat ? youtubeChat : chatConfig.youtube.channel,
+          },
+          twitch: {
+            ...chatConfig.twitch,
+            username: twitchChat ? twitchChat : chatConfig.twitch.username,
+          },
+        },
         setChatConfig,
-        obsConfig,
+        obsConfig: {
+          ...obsConfig,
+          streamChannelId: obsChannel ? obsChannel : obsConfig.streamChannelId,
+        },
         setObsConfig,
-        statsConfig,
+        statsConfig: {
+          ...statsConfig,
+          tiktokUsername: tiktokStats
+            ? tiktokStats
+            : statsConfig.tiktokUsername,
+          youtubeChannel: youtubeStats
+            ? youtubeStats
+            : statsConfig.youtubeChannel,
+          // twitchUsername: twitchStats
+          //   ? twitchStats : statsConfig.twitchUsername,
+        },
         setStatsConfig,
+        timestampConfig: {
+          ...timestampConfig,
+          discordChannelId: discordTimestamp
+            ? discordTimestamp
+            : timestampConfig.discordChannelId,
+          youtubeChannel: youtubeTimestamp
+            ? youtubeTimestamp
+            : timestampConfig.youtubeChannel,
+        },
+        setTimestampConfig,
       }}
     >
       {children}

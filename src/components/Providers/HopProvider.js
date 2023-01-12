@@ -5,7 +5,8 @@ export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
   const { obsConfig } = useContext(ConfigContext)
-  const { state, error } = useReadChannelState(obsConfig?.streamChannelId)
+
+  const { state, error } = useReadChannelState(obsConfig.streamChannelId)
 
   const serverState = state?.server?.state ?? 'error'
   const isLive = state?.stream_live === true
