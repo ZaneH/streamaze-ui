@@ -57,7 +57,7 @@ const ConfigProvider = ({ children }) => {
 
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
-  const isOBS = searchParams.get('isObs') === 'true'
+  const isObs = searchParams.get('isObs') === 'true'
   const isStats = searchParams.get('isStats') === 'true'
   const isClip = searchParams.get('isClip') === 'true'
 
@@ -81,7 +81,7 @@ const ConfigProvider = ({ children }) => {
 
   // Load OBS config from URLs
   let obsChannel = ''
-  if (isOBS) {
+  if (isObs) {
     if (searchParams.get('obsChannel')) {
       obsChannel = searchParams.get('obsChannel')
     }

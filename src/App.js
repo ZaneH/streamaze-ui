@@ -35,7 +35,7 @@ const App = () => {
                         element={
                           <Navigate
                             replace
-                            to="/?isChatUrl=true&youtubeChannel=https://www.youtube.com/c/sam&tiktokUsername=sampepper&isTimestampUrl=true&discordChannelId=1061689422455767141&tsYoutubeChannel=https://www.youtube.com/c/sam"
+                            to="/?isChat=true&youtubeChat=https://youtube.com/c/sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam"
                           />
                         }
                       />
@@ -44,7 +44,7 @@ const App = () => {
                         element={
                           <Navigate
                             replace
-                            to="/?isChatUrl=true&youtubeChannel=https://www.youtube.com/@LofiGirl&isTimestampUrl=true&discordChannelId=1061689422455767141&tsYoutubeChannel=https://www.youtube.com/@LofiGirl"
+                            to="/?isChat=true&youtubeChat=https://www.youtube.com/@LofiGirl&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/@LofiGirl"
                           />
                         }
                       />
