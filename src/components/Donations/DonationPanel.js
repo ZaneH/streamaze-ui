@@ -4,7 +4,7 @@ import { DonationLog } from '.'
 
 const DonationPanel = () => {
   return (
-    <Flex direction="column" h="100%">
+    <Flex direction="column" h="100%" style={{ alignSelf: 'stretch' }}>
       <PanelHead
         style={{
           flex: '0 1 auto',
@@ -12,7 +12,12 @@ const DonationPanel = () => {
       >
         Donations
       </PanelHead>
-      <Box style={{ flex: '1 1 auto' }}>
+      <Box
+        style={{
+          flex: '1 1 auto',
+          marginBottom: '32px',
+        }}
+      >
         <DonationLog />
       </Box>
       <Box style={{ flex: '0 1 0px' }} />

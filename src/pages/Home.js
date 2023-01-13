@@ -10,9 +10,9 @@ const Home = () => {
     <Layout showStats>
       <TagSEO />
       <Flex gap="xs" h="100%">
-        <Flex direction="column" w="50%">
+        <Flex direction="column" w="50%" align="center">
           <DonationPanel />
-          <Box pos="absolute" bottom={0} w="50%" maw="550px">
+          <Box w="100%" maw="725px">
             <ControlPanel />
           </Box>
         </Flex>

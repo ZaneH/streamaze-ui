@@ -22,6 +22,10 @@ const List = styled.div`
   & > div:first-of-type {
     margin-top: 32px;
   }
+
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 const Scroller = styled.div`
@@ -29,6 +33,10 @@ const Scroller = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`
+
+const Footer = styled.div`
+  height: 24px;
 `
 
 const AnimatedDiv = styled.div`
@@ -102,6 +110,7 @@ const DonationLog = () => {
         Item,
         List,
         Scroller,
+        Footer,
       }}
       itemContent={(i, donation) => {
         const { data, type } = donation
