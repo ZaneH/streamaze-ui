@@ -15,8 +15,15 @@ const { REACT_APP_API_URL } = process.env
 const ControlPanel = () => {
   const { hopError } = useContext(HopContext)
   const { timestampConfig } = useContext(ConfigContext)
-  const { donations, isAutoplay, setIsAutoplay, ttsQueue, setTTSQueue } =
-    useContext(DonationContext)
+  const {
+    donations,
+    isAutoplay,
+    setIsAutoplay,
+    ttsQueue,
+    setTTSQueue,
+    ttsAudio,
+    setIsPlaying,
+  } = useContext(DonationContext)
 
   return (
     <Flex direction="column">
@@ -34,6 +41,12 @@ const ControlPanel = () => {
           icon={<SkipIcon />}
           disabled={ttsQueue.length === 0}
           onClick={() => {
+            if (ttsAudio) {
+              ttsAudio.pause()
+              ttsAudio.currentTime = 0
+              setIsPlaying(false)
+            }
+
             setTTSQueue((prev) => prev.slice(1))
           }}
         />
@@ -50,11 +63,22 @@ const ControlPanel = () => {
             .post({
               scene_name: 'Hidden',
             })
-            .res()
-            .catch((err) => {
+            .json((res) => {
+              if (res?.error) {
+                throw new Error(res.error)
+              }
+
+              showNotification({
+                title: 'Success',
+                message: res?.message,
+                color: 'teal',
+              })
+            })
+            .catch(({ message }) => {
               showNotification({
                 title: 'OBS Error',
-                message: err.message,
+                color: 'red',
+                message,
               })
             })
         }}
@@ -69,11 +93,22 @@ const ControlPanel = () => {
             .post({
               scene_name: 'Main',
             })
-            .res()
-            .catch((err) => {
+            .json((res) => {
+              if (res?.error) {
+                throw new Error(res.error)
+              }
+
+              showNotification({
+                title: 'Success',
+                message: res?.message,
+                color: 'teal',
+              })
+            })
+            .catch(({ message }) => {
               showNotification({
                 title: 'OBS Error',
-                message: err.message,
+                color: 'red',
+                message,
               })
             })
         }}

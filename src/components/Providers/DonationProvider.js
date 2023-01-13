@@ -9,22 +9,30 @@ const DonationProvider = ({ children }) => {
   const [isAutoplay, setIsAutoplay] = useState(false)
 
   const [isPlaying, setIsPlaying] = useState(false)
+  const [ttsAudio, setTTSAudio] = useState(null)
 
   const ttsInterval = useInterval(() => {
     if (ttsQueue.length > 0 && isAutoplay && !isPlaying) {
-      const audio = new Audio(ttsQueue[0])
-      audio.play().then(() => {
-        setIsPlaying(true)
+      setIsPlaying(true)
+
+      const _audio = new Audio(ttsQueue[0])
+
+      _audio.play()
+
+      _audio.addEventListener('ended', () => {
+        setIsPlaying(false)
+        setTTSQueue((prev) => prev.slice(1))
       })
 
-      audio.addEventListener('ended', () => {
-        setIsPlaying(false)
-        if (isAutoplay) {
-          setTTSQueue((prev) => prev.slice(1))
-        }
-      })
+      setTTSAudio(_audio)
     }
   }, 500)
+
+  // restart loops when data changes
+  useEffect(() => {
+    ttsInterval.stop()
+    ttsInterval.start()
+  }, [isAutoplay, ttsInterval])
 
   useEffect(() => {
     ttsInterval.start()
@@ -32,7 +40,8 @@ const DonationProvider = ({ children }) => {
     return () => {
       ttsInterval.stop()
     }
-  }, [ttsInterval])
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <DonationContext.Provider
@@ -43,6 +52,10 @@ const DonationProvider = ({ children }) => {
         setIsAutoplay,
         ttsQueue,
         setTTSQueue,
+        ttsAudio,
+        setTTSAudio,
+        isPlaying,
+        setIsPlaying,
       }}
     >
       {children}

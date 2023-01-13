@@ -2,12 +2,15 @@ import {
   AppShell,
   Box,
   Burger,
+  ColorSwatch,
   Flex,
   MediaQuery,
+  Space,
   Title,
   useMantineTheme,
 } from '@mantine/core'
 import { useContext } from 'react'
+import { HopContext } from '../Providers/HopProvider'
 import { SidebarContext } from '../Providers/SidebarProvider'
 import { StatPanel } from '../StreamStats'
 import Sidebar from './Sidebar'
@@ -15,6 +18,7 @@ import Sidebar from './Sidebar'
 const SplitHeader = ({ showStats }) => {
   const { colors } = useMantineTheme()
   const { setIsSidebarOpen } = useContext(SidebarContext)
+  const { isLive } = useContext(HopContext)
 
   return (
     <Box height={78}>
@@ -34,7 +38,15 @@ const SplitHeader = ({ showStats }) => {
             }}
           />
           <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-            <Title>Streamaze</Title>
+            <Flex align="center">
+              {isLive && (
+                <>
+                  <ColorSwatch color={colors.red[7]} />
+                  <Space w="md" />
+                </>
+              )}
+              <Title>Streamaze</Title>
+            </Flex>
           </MediaQuery>
         </Flex>
         {showStats && (
