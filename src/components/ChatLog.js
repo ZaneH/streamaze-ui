@@ -1,6 +1,13 @@
 import styled from '@emotion/styled'
-import { Box, Center, Loader, Text } from '@mantine/core'
-import { IconAdjustmentsHorizontal } from '@tabler/icons'
+import {
+  Box,
+  Burger,
+  Center,
+  Loader,
+  Text,
+  useMantineTheme,
+} from '@mantine/core'
+import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
@@ -9,10 +16,11 @@ import { Virtuoso } from 'react-virtuoso'
 
 const Item = styled.div`
   margin: 0;
+  padding: 3px 0;
 `
 
 const ItemContent = styled.div`
-  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
+  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.25em')};
   color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
 
   .chat-outline,
@@ -72,13 +80,18 @@ const ChatLog = ({
   height = '300px',
   isDark = undefined,
   isBig = undefined,
+  ...props
 }) => {
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
   const virtuosoRef = useRef(null)
+  const { colors } = useMantineTheme()
 
-  if (isBig === undefined || isDark === undefined) {
+  if (isBig === undefined) {
     isBig = searchParams.get('theme') === 'overlay-impact'
+  }
+
+  if (isDark === undefined) {
     isDark = searchParams.get('theme') === 'dark'
   }
 
@@ -191,24 +204,37 @@ const ChatLog = ({
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
-      <Text align="center" my="xl">
-        No chat specified
-        <br />
-        <Text size={14} color="dimmed">
-          Add one using the{' '}
-          <IconAdjustmentsHorizontal
-            size={18}
-            style={{ verticalAlign: 'sub' }}
-          />{' '}
-          menu
+      <Box {...props}>
+        <Text align="center" my="xl">
+          No chat specified
+          <br />
+          <Text size={14} color="dimmed">
+            Add one by going to your settings
+            <br />
+            <Burger
+              size={18}
+              style={{ verticalAlign: 'middle', cursor: 'default' }}
+              color={colors.gray[6]}
+            />
+            <IconArrowRight
+              size={18}
+              style={{ verticalAlign: 'middle', margin: '0 4px' }}
+              color={colors.gray[6]}
+            />
+            <IconSettings
+              size={24}
+              style={{ verticalAlign: 'middle' }}
+              color={colors.gray[6]}
+            />
+          </Text>
         </Text>
-      </Text>
+      </Box>
     )
   }
 
   if (chatData.length === 0) {
     return (
-      <Center mih={fullHeight ? '100%' : height}>
+      <Center mih={fullHeight ? '100%' : height} {...props}>
         <Loader />
       </Center>
     )
@@ -238,7 +264,7 @@ const ChatLog = ({
         }}
         itemContent={(_, chatEvent) => {
           const { sender, message, origin, emotes = [] } = chatEvent
-          const iconSize = isBig ? 28 : 22
+          const iconSize = isBig ? 28 : 26
 
           // escape any html tags (<>) in message
           let newMessageString =
@@ -260,7 +286,7 @@ const ChatLog = ({
 
           return (
             <ItemContent isBig={isBig}>
-              <Box style={{ whiteSpace: 'nowrap' }} px="16px">
+              <Box style={{ whiteSpace: 'nowrap' }} px="16px" {...props}>
                 <div
                   style={{
                     verticalAlign: 'middle',

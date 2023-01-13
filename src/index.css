@@ -1,5 +1,9 @@
 html,
 body {
   margin: 0;
-  background: transparent;
+  background: #141518;
+}
+
+#root {
+  min-height: 100vh;
 }
