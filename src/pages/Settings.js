@@ -17,6 +17,8 @@ const Settings = () => {
     setObsConfig,
     statsConfig,
     setStatsConfig,
+    slobsConfig,
+    setSlobsConfig,
   } = useContext(ConfigContext)
 
   const chatForm = useForm({
@@ -47,7 +49,11 @@ const Settings = () => {
     },
   })
 
-  console.log(chatConfig)
+  const slobsForm = useForm({
+    initialValues: {
+      streamToken: slobsConfig.streamToken,
+    },
+  })
 
   return (
     <Layout>
@@ -209,6 +215,36 @@ const Settings = () => {
               defaultValue={statsForm.values.youtube}
               onChange={(e) => {
                 statsForm.setFieldValue('youtube', e.target.value)
+              }}
+            />
+          </FormSection>
+        </form>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            setSlobsConfig((prev) => ({
+              ...prev,
+              streamToken: slobsForm.values.streamToken,
+            }))
+
+            showNotification({
+              title: 'Streamlabs OBS Settings saved!',
+              color: 'teal',
+            })
+          }}
+        >
+          <FormSection
+            title="Streamlabs OBS Settings"
+            subtitle="See your YouTube and Twitch donations live!"
+          >
+            <TextInput
+              label={<FieldLabel>Stream Token</FieldLabel>}
+              placeholder="eykdjbnn2mnzb.bemMNjgknwliugi..."
+              type="password"
+              defaultValue={slobsForm.values.streamToken}
+              onChange={(e) => {
+                slobsForm.setFieldValue('streamToken', e.target.value)
               }}
             />
           </FormSection>

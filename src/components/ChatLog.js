@@ -1,6 +1,13 @@
 import styled from '@emotion/styled'
-import { Box, Center, Loader, Text } from '@mantine/core'
-import { IconAdjustmentsHorizontal } from '@tabler/icons'
+import {
+  Box,
+  Burger,
+  Center,
+  Loader,
+  Text,
+  useMantineTheme,
+} from '@mantine/core'
+import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
@@ -78,6 +85,7 @@ const ChatLog = ({
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
   const virtuosoRef = useRef(null)
+  const { colors } = useMantineTheme()
 
   if (isBig === undefined) {
     isBig = searchParams.get('theme') === 'overlay-impact'
@@ -201,12 +209,23 @@ const ChatLog = ({
           No chat specified
           <br />
           <Text size={14} color="dimmed">
-            Add one using the{' '}
-            <IconAdjustmentsHorizontal
+            Add one by going to your settings
+            <br />
+            <Burger
               size={18}
-              style={{ verticalAlign: 'sub' }}
-            />{' '}
-            menu
+              style={{ verticalAlign: 'middle', cursor: 'default' }}
+              color={colors.gray[6]}
+            />
+            <IconArrowRight
+              size={18}
+              style={{ verticalAlign: 'middle', margin: '0 4px' }}
+              color={colors.gray[6]}
+            />
+            <IconSettings
+              size={24}
+              style={{ verticalAlign: 'middle' }}
+              color={colors.gray[6]}
+            />
           </Text>
         </Text>
       </Box>

@@ -55,11 +55,21 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Streamlabs config
+  const [slobsConfig, setSlobsConfig] = useLocalStorage({
+    key: 'streamlabs-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      streamToken: '',
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
   const isStats = searchParams.get('isStats') === 'true'
   const isClip = searchParams.get('isClip') === 'true'
+  const isSlobs = searchParams.get('isSlobs') === 'true'
 
   // Load chat config from URLs
   let tiktokChat = ''
@@ -119,6 +129,14 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
+  // Load Streamlabs config from URLs
+  let streamToken = ''
+  if (isSlobs) {
+    if (searchParams.get('streamToken')) {
+      streamToken = searchParams.get('streamToken')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
@@ -165,6 +183,11 @@ const ConfigProvider = ({ children }) => {
             : timestampConfig.youtubeChannel,
         },
         setTimestampConfig,
+        slobsConfig: {
+          ...slobsConfig,
+          streamToken: streamToken ? streamToken : slobsConfig.streamToken,
+        },
+        setSlobsConfig,
       }}
     >
       {children}

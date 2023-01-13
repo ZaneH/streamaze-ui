@@ -7,25 +7,36 @@ import StreamButton from './StreamButton'
 import wretch from 'wretch'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import { DonationContext } from '../Providers/DonationProvider'
+import { ReactComponent as IconPause } from '../../pause-icon.svg'
 
 const { REACT_APP_API_URL } = process.env
 
 const ControlPanel = () => {
   const { hopError } = useContext(HopContext)
   const { timestampConfig } = useContext(ConfigContext)
+  const { donations, isAutoplay, setIsAutoplay, ttsQueue, setTTSQueue } =
+    useContext(DonationContext)
 
   return (
     <Flex direction="column">
       <Flex>
         <StreamButton
-          color="green"
-          icon={<PlayIcon />}
-          disabled={hopError}
+          color={isAutoplay ? 'red' : 'green'}
+          icon={isAutoplay ? <IconPause /> : <PlayIcon />}
+          disabled={donations.length === 0}
           onClick={() => {
-            console.log('TTS Play')
+            setIsAutoplay((prev) => !prev)
           }}
         />
-        <StreamButton color="blue" icon={<SkipIcon />} disabled={hopError} />
+        <StreamButton
+          color="blue"
+          icon={<SkipIcon />}
+          disabled={ttsQueue.length === 0}
+          onClick={() => {
+            setTTSQueue((prev) => prev.slice(1))
+          }}
+        />
       </Flex>
 
       <Space h="sm" />

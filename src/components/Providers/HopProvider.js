@@ -13,6 +13,7 @@ const HopProvider = ({ children }) => {
   const isError = error || serverState === 'error'
   const streamScenes = state?.server?.scenes ?? []
   const streamActiveScene = state?.server?.active_scene ?? ''
+  const bitrate = state?.rtmp?.bitrate ?? 0
 
   return (
     <HopContext.Provider
@@ -22,6 +23,7 @@ const HopProvider = ({ children }) => {
         isStreamLive: isLive,
         streamScenes,
         streamActiveScene,
+        bitrate,
       }}
     >
       {children}
