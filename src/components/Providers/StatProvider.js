@@ -57,6 +57,12 @@ const StatProvider = ({ children }) => {
     )
       .get()
       .json((res) => {
+        if (parseInt(res?.viewers) === 0) {
+          throw new Error(
+            'Stopping live updates while viewers are at 0. Sorry!'
+          )
+        }
+
         if (res?.viewers) {
           setTiktokViewers(res.viewers)
         } else if (res?.error) {

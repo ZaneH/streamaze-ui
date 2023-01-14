@@ -67,7 +67,6 @@ const DonationLog = () => {
 
   const qs = new URLSearchParams()
   qs.append('token', slobsConfig?.streamToken)
-  console.log(slobsConfig)
   if (slobsConfig?.ttsVoice) {
     qs.append('voice', slobsConfig?.ttsVoice)
   }
