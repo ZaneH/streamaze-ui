@@ -36,7 +36,7 @@ const { REACT_APP_API_URL } = process.env
 
 const ServerControl = () => {
   const { colors } = useMantineTheme()
-  const { serverState, hopError } = useContext(HopContext)
+  const { serverState, hopError, streamActiveScene } = useContext(HopContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
 
   const isStopped = serverState === 'stopped'
@@ -81,6 +81,8 @@ const ServerControl = () => {
 
               <Text size="lg">
                 Your server is <b>{capitalizeFirstLetter(serverState)}</b>
+                <br />
+                Active scene: <b>{streamActiveScene}</b>
               </Text>
             </Flex>
           </LiveContainer>
