@@ -8,11 +8,12 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconArrowRight, IconSettings } from '@tabler/icons'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SocialIcon } from 'react-social-icons'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
+import { ConfigContext } from './Providers/ConfigProvider'
 
 const Item = styled.div`
   margin: 0;
@@ -86,6 +87,11 @@ const ChatLog = ({
   const [chatData, setChatData] = useState([])
   const virtuosoRef = useRef(null)
   const { colors } = useMantineTheme()
+  const { chatConfig } = useContext(ConfigContext)
+
+  const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
+  const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
+  const _twitchUsername = twitchUsername || chatConfig?.twitch?.username
 
   if (isBig === undefined) {
     isBig = searchParams.get('theme') === 'overlay-impact'
@@ -94,22 +100,6 @@ const ChatLog = ({
   if (isDark === undefined) {
     isDark = searchParams.get('theme') === 'dark'
   }
-
-  const isUrl = searchParams.get('isChatUrl') === 'true'
-  let _twitchUsername = twitchUsername
-  let _tiktokUsername = tiktokUsername
-  let _youtubeChannel = youtubeChannel
-
-  if (isUrl) {
-    _twitchUsername = searchParams.get('twitchUsername')
-    _tiktokUsername = searchParams.get('tiktokUsername')
-    _youtubeChannel = searchParams.get('youtubeChannel')
-  }
-
-  const { lastMessage: twitchWSLastMessage, sendMessage: twitchWSSendMessage } =
-    useWebSocket(
-      `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
-    )
 
   const { lastMessage: tiktokWSLastMessage, sendMessage: tiktokWSSendMessage } =
     useWebSocket(
@@ -122,6 +112,11 @@ const ChatLog = ({
   } = useWebSocket(
     `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`
   )
+
+  const { lastMessage: twitchWSLastMessage, sendMessage: twitchWSSendMessage } =
+    useWebSocket(
+      `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
+    )
 
   useEffect(() => {
     if (twitchWSLastMessage !== null) {
@@ -204,8 +199,8 @@ const ChatLog = ({
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
-      <Box {...props}>
-        <Text align="center" my="xl">
+      <Box {...props} py="xl">
+        <Text align="center">
           No chat specified
           <br />
           <Text size={14} color="dimmed">

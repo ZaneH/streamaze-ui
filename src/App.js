@@ -2,6 +2,7 @@ import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import ChatLog from './components/ChatLog'
 import {
   ConfigProvider,
   DonationProvider,
@@ -71,6 +72,12 @@ const App = () => {
                         />
                         <Route path="/go-live" element={<GoLive />} />
                         <Route path="/server" element={<ServerControl />} />
+                        <Route
+                          path="/popout"
+                          element={<ChatLog height="100vh" />}
+                        />
+
+                        <Route path="*" element={<Navigate to="/home" />} />
                       </Routes>
                     </SidebarProvider>
                   </StatProvider>
