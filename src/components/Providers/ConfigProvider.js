@@ -61,6 +61,7 @@ const ConfigProvider = ({ children }) => {
     getInitialValueInEffect: false,
     defaultValue: {
       streamToken: '',
+      ttsVoice: 'Nicole',
     },
   })
 
@@ -131,9 +132,14 @@ const ConfigProvider = ({ children }) => {
 
   // Load Streamlabs config from URLs
   let streamToken = ''
+  let ttsVoice = ''
   if (isSlobs) {
     if (searchParams.get('streamToken')) {
       streamToken = searchParams.get('streamToken')
+    }
+
+    if (searchParams.get('ttsVoice')) {
+      ttsVoice = searchParams.get('ttsVoice')
     }
   }
 
@@ -186,6 +192,7 @@ const ConfigProvider = ({ children }) => {
         slobsConfig: {
           ...slobsConfig,
           streamToken: streamToken ? streamToken : slobsConfig.streamToken,
+          ttsVoice: ttsVoice ? ttsVoice : slobsConfig.ttsVoice,
         },
         setSlobsConfig,
       }}

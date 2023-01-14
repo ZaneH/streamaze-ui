@@ -64,8 +64,16 @@ const AnimatedDiv = styled.div`
 const DonationLog = () => {
   const { slobsConfig } = useContext(ConfigContext)
   const { donations, setDonations, setTTSQueue } = useContext(DonationContext)
+
+  const qs = new URLSearchParams()
+  qs.append('token', slobsConfig?.streamToken)
+  console.log(slobsConfig)
+  if (slobsConfig?.ttsVoice) {
+    qs.append('voice', slobsConfig?.ttsVoice)
+  }
+
   const donationsWS = useWebSocket(
-    `${REACT_APP_API_WS_URL}/streamlabs/donations?token=${slobsConfig?.streamToken}`
+    `${REACT_APP_API_WS_URL}/streamlabs/donations?${qs.toString()}`
   )
   const { lastMessage, readyState } = donationsWS
 

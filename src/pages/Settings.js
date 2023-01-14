@@ -1,4 +1,4 @@
-import { Button, Container, Flex, TextInput } from '@mantine/core'
+import { Button, Container, Flex, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { useContext } from 'react'
@@ -52,6 +52,7 @@ const Settings = () => {
   const slobsForm = useForm({
     initialValues: {
       streamToken: slobsConfig.streamToken,
+      ttsVoice: slobsConfig?.ttsVoice,
     },
   })
 
@@ -226,6 +227,7 @@ const Settings = () => {
             setSlobsConfig((prev) => ({
               ...prev,
               streamToken: slobsForm.values.streamToken,
+              ttsVoice: slobsForm.values.ttsVoice,
             }))
 
             showNotification({
@@ -245,6 +247,76 @@ const Settings = () => {
               defaultValue={slobsForm.values.streamToken}
               onChange={(e) => {
                 slobsForm.setFieldValue('streamToken', e.target.value)
+              }}
+            />
+            <Select
+              label={<FieldLabel>TTS Voice</FieldLabel>}
+              defaultValue={slobsForm.values.ttsVoice}
+              value={slobsForm.values.ttsVoice}
+              data={[
+                // https://gist.github.com/idealwebsolutions/84dcb061baa427050672b9b41f900ce8?permalink_comment_id=3014186#gistcomment-3014186
+                { value: 'Nicole', label: 'Nicole' },
+                { value: 'Enrique', label: 'Enrique' },
+                { value: 'Tatyana', label: 'Tatyana' },
+                { value: 'Russell', label: 'Russell' },
+                { value: 'Lotte', label: 'Lotte' },
+                { value: 'Geraint', label: 'Geraint' },
+                { value: 'Carmen', label: 'Carmen' },
+                { value: 'Mads', label: 'Mads' },
+                { value: 'Penelope', label: 'Penelope' },
+                { value: 'Mia', label: 'Mia' },
+                { value: 'Joanna', label: 'Joanna' },
+                { value: 'Matthew', label: 'Matthew' },
+                { value: 'Brian', label: 'Brian' },
+                { value: 'Seoyeon', label: 'Seoyeon' },
+                { value: 'Ruben', label: 'Ruben' },
+                { value: 'Ricardo', label: 'Ricardo' },
+                { value: 'Maxim', label: 'Maxim' },
+                { value: 'Lea', label: 'Lea' },
+                { value: 'Giorgio', label: 'Giorgio' },
+                { value: 'Carla', label: 'Carla' },
+                { value: 'Naja', label: 'Naja' },
+                { value: 'Maja', label: 'Maja' },
+                { value: 'Astrid', label: 'Astrid' },
+                { value: 'Ivy', label: 'Ivy' },
+                { value: 'Kimberly', label: 'Kimberly' },
+                { value: 'Chantal', label: 'Chantal' },
+                { value: 'Amy', label: 'Amy' },
+                { value: 'Vicki', label: 'Vicki' },
+                { value: 'Marlene', label: 'Marlene' },
+                { value: 'Ewa', label: 'Ewa' },
+                { value: 'Conchita', label: 'Conchita' },
+                { value: 'Karl', label: 'Karl' },
+                { value: 'Zeina', label: 'Zeina' },
+                { value: 'Miguel', label: 'Miguel' },
+                { value: 'Mathieu', label: 'Mathieu' },
+                { value: 'Justin', label: 'Justin' },
+                { value: 'Lucia', label: 'Lucia' },
+                { value: 'Jacek', label: 'Jacek' },
+                { value: 'Bianca', label: 'Bianca' },
+                { value: 'Takumi', label: 'Takumi' },
+                { value: 'Ines', label: 'Ines' },
+                { value: 'Gwyneth', label: 'Gwyneth' },
+                { value: 'Cristiano', label: 'Cristiano' },
+                { value: 'Mizuki', label: 'Mizuki' },
+                { value: 'Celine', label: 'Celine' },
+                { value: 'Zhiyu', label: 'Zhiyu' },
+                { value: 'Jan', label: 'Jan' },
+                { value: 'Liv', label: 'Liv' },
+                { value: 'Joey', label: 'Joey' },
+                { value: 'Raveena', label: 'Raveena' },
+                { value: 'Filiz', label: 'Filiz' },
+                { value: 'Dora', label: 'Dora' },
+                { value: 'Salli', label: 'Salli' },
+                { value: 'Aditi', label: 'Aditi' },
+                { value: 'Vitoria', label: 'Vitoria' },
+                { value: 'Emma', label: 'Emma' },
+                { value: 'Hans', label: 'Hans' },
+                { value: 'Kendra', label: 'Kendra' },
+              ]}
+              onChange={(e) => {
+                console.log(e)
+                slobsForm.setFieldValue('ttsVoice', e)
               }}
             />
           </FormSection>
