@@ -61,7 +61,7 @@ const ConfigProvider = ({ children }) => {
     getInitialValueInEffect: false,
     defaultValue: {
       streamToken: '',
-      ttsVoice: 'Nicole',
+      ttsVoice: 'Ivy',
     },
   })
 

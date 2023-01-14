@@ -10,6 +10,7 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { HopContext } from '../Providers/HopProvider'
 import { SidebarContext } from '../Providers/SidebarProvider'
 import { StatPanel } from '../StreamStats'
@@ -19,6 +20,7 @@ const SplitHeader = ({ showStats }) => {
   const { colors } = useMantineTheme()
   const { setIsSidebarOpen } = useContext(SidebarContext)
   const { isLive } = useContext(HopContext)
+  const navigate = useNavigate()
 
   return (
     <Box height={78}>
@@ -45,7 +47,14 @@ const SplitHeader = ({ showStats }) => {
                   <Space w="md" />
                 </>
               )}
-              <Title>Streamaze</Title>
+              <Title
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  navigate('/')
+                }}
+              >
+                Streamaze
+              </Title>
             </Flex>
           </MediaQuery>
         </Flex>
