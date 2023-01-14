@@ -12,7 +12,13 @@ import {
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconCloudComputing, IconHelp } from '@tabler/icons'
+import {
+  IconCircleX,
+  IconHelp,
+  IconLoader,
+  IconMoodSmile,
+  IconOctagonOff,
+} from '@tabler/icons'
 import { useContext } from 'react'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
@@ -30,8 +36,12 @@ const { REACT_APP_API_URL } = process.env
 
 const ServerControl = () => {
   const { colors } = useMantineTheme()
-  const { serverState } = useContext(HopContext)
+  const { serverState, hopError } = useContext(HopContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
+
+  const isStopped = serverState === 'stopped'
+  const isStarting = serverState === 'starting'
+  const isReady = serverState === 'ready'
 
   return (
     <Layout>
@@ -64,7 +74,10 @@ const ServerControl = () => {
           </Flex>
           <LiveContainer>
             <Flex align="center" gap="lg">
-              <IconCloudComputing size={28} />
+              {hopError ? <IconCircleX color={colors.red[6]} /> : null}
+              {isStopped ? <IconOctagonOff color={colors.red[6]} /> : null}
+              {isStarting ? <IconLoader size={28} /> : null}
+              {isReady ? <IconMoodSmile size={28} /> : null}
 
               <Text size="lg">
                 Your server is <b>{capitalizeFirstLetter(serverState)}</b>
@@ -73,10 +86,9 @@ const ServerControl = () => {
           </LiveContainer>
           <Button.Group mt="lg">
             <Button
-              loading={serverState === 'pending'}
               fullWidth
               color="red"
-              disabled={serverState === 'stopped'}
+              disabled={isStopped}
               onClick={() => {
                 wretch(`${REACT_APP_API_URL}/obs/stop-server`)
                   .post()
@@ -101,7 +113,8 @@ const ServerControl = () => {
               Turn Off
             </Button>
             <Button
-              loading={serverState === 'pending'}
+              loading={isStarting}
+              disabled={isReady}
               fullWidth
               color="green"
               onClick={() => {
