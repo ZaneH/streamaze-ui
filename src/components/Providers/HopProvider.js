@@ -18,9 +18,9 @@ const HopProvider = ({ children }) => {
   return (
     <HopContext.Provider
       value={{
-        hopState: state,
+        serverState,
         hopError: isError,
-        isStreamLive: isLive,
+        isLive,
         streamScenes,
         streamActiveScene,
         bitrate,

@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import { ConfigContext } from './ConfigProvider'
 import wretch from 'wretch'
 import { useInterval } from '@mantine/hooks'
+import { useLocation } from 'react-router-dom'
 
 export const StatContext = createContext()
 
@@ -14,8 +15,13 @@ const StatProvider = ({ children }) => {
   const [tiktokViewers, setTiktokViewers] = useState()
   const [isYTLoading, setIsYTLoading] = useState(true)
   const [isTikTokLoading, setIsTikTokLoading] = useState(true)
+  const { pathname } = useLocation()
 
   const ytInterval = useInterval(() => {
+    if (pathname !== '/home') {
+      return
+    }
+
     wretch(
       `${REACT_APP_API_URL}/youtube/viewers?channelUrl=${statsConfig?.youtubeChannel}`
     )
@@ -40,6 +46,10 @@ const StatProvider = ({ children }) => {
   }, 12 * 1000)
 
   const tiktokInterval = useInterval(() => {
+    if (pathname !== '/home') {
+      return
+    }
+
     wretch(
       `${REACT_APP_API_URL}/tiktok/viewers?username=${statsConfig?.tiktokUsername}`
     )

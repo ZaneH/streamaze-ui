@@ -1,6 +1,11 @@
 import styled from '@emotion/styled'
-import { Box, CloseButton, Navbar, NavLink } from '@mantine/core'
-import { IconHome2, IconSettings } from '@tabler/icons'
+import { Box, CloseButton, Divider, Navbar, NavLink } from '@mantine/core'
+import {
+  IconDashboard,
+  IconPower,
+  IconSettings,
+  IconVideo,
+} from '@tabler/icons'
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
@@ -17,6 +22,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     setIsSidebarOpen(false)
+    // eslint-disable-next-line
   }, [pathname])
 
   return (
@@ -29,10 +35,9 @@ const Sidebar = () => {
         <CloseButton onClick={() => setIsSidebarOpen((o) => !o)} size="xl" />
       </Box>
       <StyledNavLink
-        label="Home"
-        href="/"
+        label="Dashboard"
         active={pathname === '/'}
-        icon={<IconHome2 />}
+        icon={<IconDashboard />}
         onClick={() => {
           navigate('/')
         }}
@@ -43,6 +48,23 @@ const Sidebar = () => {
         icon={<IconSettings />}
         onClick={() => {
           navigate('/settings')
+        }}
+      />
+      <Divider my="sm" />
+      <StyledNavLink
+        label="Go Live"
+        active={pathname === '/go-live'}
+        icon={<IconVideo />}
+        onClick={() => {
+          navigate('/go-live')
+        }}
+      />
+      <StyledNavLink
+        label="Server Control"
+        active={pathname === '/server'}
+        icon={<IconPower />}
+        onClick={() => {
+          navigate('/server')
         }}
       />
     </Navbar>
