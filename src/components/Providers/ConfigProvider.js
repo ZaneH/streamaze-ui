@@ -30,7 +30,7 @@ const ConfigProvider = ({ children }) => {
     key: 'obs-config',
     getInitialValueInEffect: false,
     defaultValue: {
-      streamChannelId: '',
+      streamChannelId: 'bondctrl:sam',
     },
   })
 
