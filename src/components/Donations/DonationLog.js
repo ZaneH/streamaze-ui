@@ -95,7 +95,7 @@ const DonationLog = () => {
     return (
       <Box my="lg" mx="36px">
         <Text color="dimmed" size="lg">
-          No events to show.
+          No donations yet...
         </Text>
       </Box>
     )
