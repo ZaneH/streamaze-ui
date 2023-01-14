@@ -30,18 +30,20 @@ const StatProvider = ({ children }) => {
         if (res?.viewers) {
           setYtViewers(res.viewers)
         } else if (res?.error) {
-          showNotification({
-            color: 'red',
-            title: 'YouTube Viewers Error',
-            message: res.error,
-          })
+          throw new Error(res.error)
         }
 
         setIsYTLoading(false)
       })
-      .catch(() => {
+      .catch((err) => {
         setIsYTLoading(false)
         ytInterval.stop()
+
+        showNotification({
+          color: 'red',
+          title: 'YouTube Viewers Error',
+          message: err?.message,
+        })
       })
   }, 12 * 1000)
 
@@ -58,18 +60,20 @@ const StatProvider = ({ children }) => {
         if (res?.viewers) {
           setTiktokViewers(res.viewers)
         } else if (res?.error) {
-          showNotification({
-            color: 'red',
-            title: 'TikTok Viewers Error',
-            message: res.error,
-          })
+          throw new Error(res.error)
         }
 
         setIsTikTokLoading(false)
       })
-      .catch(() => {
+      .catch((err) => {
         setIsTikTokLoading(false)
         tiktokInterval.stop()
+
+        showNotification({
+          color: 'red',
+          title: 'TikTok Viewers Error',
+          message: err?.message,
+        })
       })
   }, 12 * 1000)
 
