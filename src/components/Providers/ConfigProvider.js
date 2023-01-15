@@ -80,6 +80,7 @@ const ConfigProvider = ({ children }) => {
   const isStats = searchParams.get('isStats') === 'true'
   const isClip = searchParams.get('isClip') === 'true'
   const isSlobs = searchParams.get('isSlobs') === 'true'
+  const isKeypad = searchParams.get('isKeypad') === 'true'
 
   // Load chat config from URLs
   let tiktokChat = ''
@@ -152,6 +153,14 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
+  // Load Keypad config from URL
+  let keypadCode = ''
+  if (isKeypad) {
+    if (searchParams.get('keypadCode')) {
+      keypadCode = searchParams.get('keypadCode')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
@@ -204,7 +213,10 @@ const ConfigProvider = ({ children }) => {
           ttsVoice: ttsVoice ? ttsVoice : slobsConfig.ttsVoice,
         },
         setSlobsConfig,
-        keypadConfig,
+        keypadConfig: {
+          ...keypadConfig,
+          code: keypadCode ? keypadCode : keypadConfig.code,
+        },
         setKeypadConfig,
       }}
     >
