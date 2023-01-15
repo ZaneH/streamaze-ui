@@ -13,7 +13,7 @@ import { ReactComponent as IconPause } from '../../pause-icon.svg'
 const { REACT_APP_API_URL } = process.env
 
 const ControlPanel = () => {
-  const { hopError } = useContext(HopContext)
+  const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
   const { timestampConfig } = useContext(ConfigContext)
   const {
     donations,
@@ -60,67 +60,43 @@ const ControlPanel = () => {
 
       <Space h="sm" />
 
-      {/* TODO: Dynamically load available scenes as buttons */}
-      <StreamButton
-        color="red"
-        disabled={hopError}
-        onClick={() => {
-          wretch(`${REACT_APP_API_URL}/obs/switch-scene`)
-            .post({
-              scene_name: 'Hidden',
-            })
-            .json((res) => {
-              if (res?.error) {
-                throw new Error(res.error)
-              }
+      {streamScenes.map((scene, i) => {
+        const isActive = streamActiveScene === scene
+        return (
+          <StreamButton
+            key={scene}
+            disabled={hopError || isActive}
+            color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
+            onClick={() => {
+              wretch(`${REACT_APP_API_URL}/obs/switch-scene`)
+                .post({
+                  scene_name: scene,
+                })
+                .json((res) => {
+                  if (res?.error) {
+                    throw new Error(res.error)
+                  }
 
-              showNotification({
-                title: 'Success',
-                message: res?.message,
-                color: 'teal',
-              })
-            })
-            .catch(({ message }) => {
-              showNotification({
-                title: 'OBS Error',
-                color: 'red',
-                message,
-              })
-            })
-        }}
-      >
-        BRB
-      </StreamButton>
-      <StreamButton
-        color="purple"
-        disabled={hopError}
-        onClick={() => {
-          wretch(`${REACT_APP_API_URL}/obs/switch-scene`)
-            .post({
-              scene_name: 'Main',
-            })
-            .json((res) => {
-              if (res?.error) {
-                throw new Error(res.error)
-              }
-
-              showNotification({
-                title: 'Success',
-                message: res?.message,
-                color: 'teal',
-              })
-            })
-            .catch(({ message }) => {
-              showNotification({
-                title: 'OBS Error',
-                color: 'red',
-                message,
-              })
-            })
-        }}
-      >
-        Main
-      </StreamButton>
+                  showNotification({
+                    title: 'Success',
+                    message: res?.message,
+                    color: 'teal',
+                  })
+                })
+                .catch(({ message }) => {
+                  showNotification({
+                    title: 'OBS Error',
+                    color: 'red',
+                    message,
+                  })
+                })
+            }}
+          >
+            {scene}
+            {isActive && ' (active)'}
+          </StreamButton>
+        )
+      })}
 
       <Space h="sm" />
 

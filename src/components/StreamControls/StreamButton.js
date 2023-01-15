@@ -13,6 +13,9 @@ const getBackgroundGradient = (color) => {
     return 'linear-gradient(180deg, #2F9E44 0%, #2B8A3E 100%);'
   } else if (color === 'blue') {
     return 'linear-gradient(180deg, #1C7ED6 0%, #1864AB 100%);'
+  } else {
+    // dark gray gradient
+    return 'linear-gradient(180deg, #2D2D2D 0%, #1F1F1F 100%);'
   }
 }
 
