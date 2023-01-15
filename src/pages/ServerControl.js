@@ -82,7 +82,7 @@ const ServerControl = () => {
               <Text size="lg">
                 Your server is <b>{capitalizeFirstLetter(serverState)}</b>
                 <br />
-                Active scene: <b>{streamActiveScene}</b>
+                Active scene <b>{streamActiveScene}</b>
               </Text>
             </Flex>
           </LiveContainer>

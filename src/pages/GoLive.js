@@ -11,6 +11,7 @@ import {
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
+import { IconVideoOff } from '@tabler/icons'
 import { useContext } from 'react'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
@@ -53,6 +54,7 @@ const GoLive = () => {
             gap="18px"
             justify={isSmall ? 'center' : 'inherit'}
           >
+            {!isLive && <IconVideoOff size={32} />}
             <Title>{statusMessage}</Title>
             {isLive ? (
               <BlinkingDiv>

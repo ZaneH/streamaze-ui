@@ -65,6 +65,15 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Keypad config
+  const [keypadConfig, setKeypadConfig] = useLocalStorage({
+    key: 'keypad-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      code: '',
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
@@ -195,6 +204,8 @@ const ConfigProvider = ({ children }) => {
           ttsVoice: ttsVoice ? ttsVoice : slobsConfig.ttsVoice,
         },
         setSlobsConfig,
+        keypadConfig,
+        setKeypadConfig,
       }}
     >
       {children}
