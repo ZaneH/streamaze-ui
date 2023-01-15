@@ -53,6 +53,7 @@ const Settings = () => {
     initialValues: {
       streamToken: slobsConfig.streamToken,
       ttsVoice: slobsConfig?.ttsVoice,
+      tiktokUsername: slobsConfig?.tiktokUsername,
     },
   })
 
@@ -228,16 +229,17 @@ const Settings = () => {
               ...prev,
               streamToken: slobsForm.values.streamToken,
               ttsVoice: slobsForm.values.ttsVoice,
+              tiktokUsername: slobsForm.values.tiktokUsername,
             }))
 
             showNotification({
-              title: 'Streamlabs OBS Settings saved!',
+              title: 'Donation Settings saved!',
               color: 'teal',
             })
           }}
         >
           <FormSection
-            title="Streamlabs OBS Settings"
+            title="Donation Settings"
             subtitle="See your YouTube and Twitch donations live!"
           >
             <TextInput
@@ -317,6 +319,14 @@ const Settings = () => {
               onChange={(e) => {
                 console.log(e)
                 slobsForm.setFieldValue('ttsVoice', e)
+              }}
+            />
+            <TextInput
+              label={<FieldLabel>TikTok Username</FieldLabel>}
+              placeholder="sampepper"
+              defaultValue={slobsForm.values.tiktokUsername}
+              onChange={(e) => {
+                slobsForm.setFieldValue('tiktokUsername', e.target.value)
               }}
             />
           </FormSection>

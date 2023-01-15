@@ -42,7 +42,7 @@ const App = () => {
                             element={
                               <Navigate
                                 replace
-                                to={`/home?isChat=true&youtubeChat=https://youtube.com/c/sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}`}
+                                to={`/home?isChat=true&youtubeChat=https://youtube.com/c/sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}&tiktokDonos=sampepper`}
                               />
                             }
                           />
@@ -51,7 +51,7 @@ const App = () => {
                             element={
                               <Navigate
                                 replace
-                                to={`/settings?isChat=true&youtubeChat=https://youtube.com/c/sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}`}
+                                to={`/settings?isChat=true&youtubeChat=https://youtube.com/c/sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}&tiktokDonos=sampepper`}
                               />
                             }
                           />
