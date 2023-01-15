@@ -122,7 +122,7 @@ const DonationLog = () => {
     return (
       <Box my="lg" mx="36px">
         <Text color="dimmed" size="lg">
-          Press the play button! You have <b>new donations!</b>
+          You have <b>new</b> donations! Press the Play button to see them.
         </Text>
       </Box>
     )
@@ -179,7 +179,7 @@ const DonationLog = () => {
                 )}
                 {isCurrency && (
                   <Text size="lg" weight={700}>
-                    {currency}
+                    {currency.replace(/\.00$/, '')}
                   </Text>
                 )}
                 {isFollow && (
