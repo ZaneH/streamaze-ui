@@ -73,7 +73,7 @@ const App = () => {
                         <Route path="/go-live" element={<GoLive />} />
                         <Route path="/server" element={<ServerControl />} />
                         <Route
-                          path="/popout"
+                          path="/chat"
                           element={<ChatLog height="100vh" />}
                         />
 

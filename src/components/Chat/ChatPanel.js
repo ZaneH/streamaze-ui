@@ -42,7 +42,7 @@ const ChatPanel = () => {
                 }
 
                 window.open(
-                  `/popout?${qs.toString()}`,
+                  `/chat?${qs.toString()}`,
                   'sharer',
                   'toolbar=0,status=0,width=350,height=550'
                 )

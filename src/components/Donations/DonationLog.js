@@ -64,17 +64,30 @@ const AnimatedDiv = styled.div`
 const DonationLog = () => {
   const { slobsConfig } = useContext(ConfigContext)
   const { donations, setDonations, setTTSQueue } = useContext(DonationContext)
+  const streamToken = slobsConfig?.streamToken
+  const ttsVoice = slobsConfig?.ttsVoice
 
   const qs = new URLSearchParams()
-  qs.append('token', slobsConfig?.streamToken)
-  if (slobsConfig?.ttsVoice) {
-    qs.append('voice', slobsConfig?.ttsVoice)
+  qs.append('token', streamToken)
+  if (ttsVoice) {
+    qs.append('voice', ttsVoice)
   }
 
   const donationsWS = useWebSocket(
     `${REACT_APP_API_WS_URL}/streamlabs/donations?${qs.toString()}`
   )
   const { lastMessage, readyState } = donationsWS
+
+  // send message to websocket every 20s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (streamToken) {
+        donationsWS.sendMessage('ping')
+      }
+    }, 20000)
+
+    return () => clearInterval(interval)
+  }, [donationsWS, streamToken])
 
   useEffect(() => {
     if (lastMessage) {
