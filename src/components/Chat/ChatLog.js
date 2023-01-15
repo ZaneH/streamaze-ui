@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import {
+  Avatar,
   Box,
   Burger,
   Center,
+  Flex,
   Loader,
   Text,
   useMantineTheme,
@@ -20,8 +22,8 @@ const Item = styled.div`
 `
 
 const ItemContent = styled.div`
-  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
-  color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
+  font-size: ${({ isbig }) => (isbig ? '2.1em' : '1.12em')};
+  color: ${({ isbig }) => (isbig ? '#efeff1' : '#000')};
 
   .chat-outline,
     display: inline-block;
@@ -31,8 +33,8 @@ const ItemContent = styled.div`
   }
 
   .chat-outline:before {
-    line-height: ${({ isBig }) => (isBig ? '1.7em' : 'initial')};
-    content: ${({ isBig }) => (isBig ? 'attr(data-outline)' : 'none')};
+    line-height: ${({ isbig }) => (isbig ? '1.7em' : 'initial')};
+    content: ${({ isbig }) => (isbig ? 'attr(data-outline)' : 'none')};
     position: absolute;
     -webkit-text-stroke: 7px #000;
     word-break: break-all;
@@ -62,7 +64,7 @@ const SenderText = styled(Text)`
   display: inline;
   vertical-align: middle;
   word-break: break-all;
-  color: ${({ isBig }) => (isBig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
+  color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
 }`
 
 const MessageText = styled(Text)`
@@ -81,6 +83,7 @@ const ChatLog = ({
   fullHeight,
   compact = false,
   fluid = false,
+  showProfilePicture = true,
   height = '300px',
   isDark = undefined,
   isBig = undefined,
@@ -155,6 +158,7 @@ const ChatLog = ({
           sender: payload.sender,
           origin: payload.origin,
           emotes: [],
+          pfp: payload.pfp,
         },
       ])
     }
@@ -170,6 +174,7 @@ const ChatLog = ({
           sender: payload.sender,
           origin: payload.origin,
           emotes: payload.emotes,
+          pfp: payload.pfp,
         },
       ])
     }
@@ -270,7 +275,7 @@ const ChatLog = ({
           Footer,
         }}
         itemContent={(_, chatEvent) => {
-          const { sender, message, emotes = [] } = chatEvent
+          const { sender, message, emotes = [], pfp } = chatEvent
 
           // escape any html tags (<>) in message
           let newMessageString = message || ''
@@ -290,53 +295,37 @@ const ChatLog = ({
           })
 
           return (
-            <ItemContent isBig={isBig} compact={compact} fluid={fluid}>
-              <Box style={{ whiteSpace: 'nowrap' }} {...props}>
+            <ItemContent isbig={isBig} compact={compact} fluid={fluid}>
+              <Flex gap="16px" style={{ whiteSpace: 'nowrap' }} {...props}>
+                {showProfilePicture && !isBig && (
+                  <Avatar
+                    size="32px"
+                    style={{
+                      display: 'inline-block',
+                    }}
+                    radius="xl"
+                    src={pfp}
+                    color="blue"
+                  >
+                    {pfp ? null : sender[0]}
+                  </Avatar>
+                )}
                 <div
                   style={{
+                    display: 'inline-block',
                     verticalAlign: 'middle',
                     whiteSpace: 'break-spaces',
                     width: '100%',
                     color: isDark ? '#efeff1' : 'inherit',
                   }}
                 >
-                  {/* {origin === 'twitch' && (
-                    <SocialIcon
-                      network="twitch"
-                      fgColor="#fff"
-                      style={{
-                        height: iconSize,
-                        width: iconSize,
-                      }}
-                    />
-                  )}
-                  {origin === 'tiktok' && (
-                    <SocialIcon
-                      fgColor="#fff"
-                      network="tiktok"
-                      style={{
-                        height: iconSize,
-                        width: iconSize,
-                      }}
-                    />
-                  )}
-                  {origin === 'youtube' && (
-                    <SocialIcon
-                      fgColor="#fff"
-                      network="youtube"
-                      style={{
-                        height: iconSize,
-                        width: iconSize,
-                      }}
-                    />
-                  )} */}
                   <SenderText
                     ff={isBig ? 'Impact' : 'Roboto'}
                     fw={isBig ? undefined : '700'}
                     lh={isBig ? '1.64em' : '1em'}
                     data-outline={`${sender}:  ${newMessageString}`}
                     className={isBig ? 'chat-outline' : undefined}
-                    isBig={isBig}
+                    isbig={isBig}
                   >{`${sender}${isBig ? ':' : ''}  `}</SenderText>
                   <MessageText
                     ff={isBig ? 'Impact' : 'Roboto'}
@@ -347,7 +336,7 @@ const ChatLog = ({
                     />
                   </MessageText>
                 </div>
-              </Box>
+              </Flex>
             </ItemContent>
           )
         }}

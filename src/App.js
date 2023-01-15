@@ -77,7 +77,13 @@ const App = () => {
                           <Route path="/server" element={<ServerControl />} />
                           <Route
                             path="/chat"
-                            element={<ChatLog height="100vh" fluid />}
+                            element={
+                              <ChatLog
+                                height="100vh"
+                                fluid
+                                showProfilePicture={false}
+                              />
+                            }
                           />
 
                           <Route path="/keypad" element={<Keypad />} />
