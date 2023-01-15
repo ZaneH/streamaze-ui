@@ -32,7 +32,6 @@ const ControlPanel = () => {
         <StreamButton
           color={isAutoplay ? 'red' : 'green'}
           icon={isAutoplay ? <IconPause /> : <PlayIcon />}
-          disabled={donations.length === 0}
           onClick={() => {
             setIsAutoplay((prev) => !prev)
             if (donationIndex === -1) {

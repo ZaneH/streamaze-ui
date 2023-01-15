@@ -66,50 +66,79 @@ const DonationLog = () => {
   const streamToken = slobsConfig?.streamToken
   const ttsVoice = slobsConfig?.ttsVoice
 
-  const qs = new URLSearchParams()
-  qs.append('token', streamToken)
+  const slQS = new URLSearchParams()
+  slQS.append('token', streamToken)
   if (ttsVoice) {
-    qs.append('voice', ttsVoice)
+    slQS.append('voice', ttsVoice)
   }
 
-  const donationsWS = useWebSocket(
-    `${REACT_APP_API_WS_URL}/streamlabs/donations?${qs.toString()}`,
+  const ttQS = new URLSearchParams()
+  if (slobsConfig?.tiktokUsername) {
+    ttQS.append('username', slobsConfig.tiktokUsername)
+  }
+
+  // Streamlabs donations websocket
+  const slDonationsWS = useWebSocket(
+    `${REACT_APP_API_WS_URL}/streamlabs/donations?${slQS.toString()}`,
     {
       retryOnError: true,
     }
   )
 
-  const { lastMessage, readyState } = donationsWS
+  // TikTok donations websocket
+  const ttDonationsWS = useWebSocket(
+    `${REACT_APP_API_WS_URL}/tiktok/donations?${ttQS.toString()}`,
+    {
+      retryOnError: true,
+    }
+  )
+
+  const { lastMessage: slLastMessage, readyState: slReadyState } = slDonationsWS
+  const { lastMessage: ttLastMessage, readyState: ttReadyState } = ttDonationsWS
 
   // send message to websocket every 20s
   useEffect(() => {
     const interval = setInterval(() => {
       if (streamToken) {
-        donationsWS.sendMessage('ping')
+        slDonationsWS.sendMessage('ping')
       }
     }, 20000)
 
     return () => clearInterval(interval)
-  }, [donationsWS, streamToken])
+  }, [slDonationsWS, streamToken])
 
   useEffect(() => {
-    if (lastMessage) {
+    if (slLastMessage) {
       try {
-        const newEvent = JSON.parse(lastMessage.data)
+        const newEvent = JSON.parse(slLastMessage.data)
         setDonations((prev) => [...prev, newEvent])
       } catch {
-        console.log('Error parsing donation message', lastMessage.data)
+        console.log('Error parsing donation message', slLastMessage.data)
       }
     }
-  }, [lastMessage, setDonations])
+  }, [slLastMessage, setDonations])
 
-  if (donations.length === 0 && readyState !== 1) {
+  useEffect(() => {
+    if (ttLastMessage) {
+      try {
+        const newEvent = JSON.parse(ttLastMessage.data)
+        setDonations((prev) => [...prev, newEvent])
+      } catch {
+        console.log('Error parsing donation message', ttLastMessage.data)
+      }
+    }
+  }, [ttLastMessage, setDonations])
+
+  if (donations.length === 0 && slReadyState !== 1 && ttReadyState !== 1) {
     return (
       <Center my="lg">
         <Loader />
       </Center>
     )
-  } else if (donations.length === 0 && readyState === 1) {
+  } else if (
+    donations.length === 0 &&
+    (slReadyState === 1 || ttReadyState === 1)
+  ) {
     return (
       <Box my="lg" mx="36px">
         <Text color="dimmed" size="lg">
@@ -140,9 +169,34 @@ const DonationLog = () => {
         Footer,
       }}
       itemContent={(i, donation) => {
-        const { data, type } = donation
-        const { name, message, amount, event_id } = data
+        const { data = {}, type } = donation
+        const { event_id: eventId } = data
+        const isTikTokGift = type === 'tiktok_gift'
 
+        if (isTikTokGift) {
+          const {
+            gift_name: giftName,
+            gift_cost: giftCost,
+            gift_repeat_count: giftRepeatCount,
+            name: senderName,
+          } = data
+
+          return (
+            <AnimatedDiv key={eventId} isAnimated={i === 0}>
+              <Flex direction="column" gap="4px">
+                <Flex align="center" justify="space-between">
+                  <Title size="h3">{senderName}</Title>
+                  <Text size="lg" weight={700}>
+                    {giftRepeatCount ?? 1}x {giftName}
+                    {giftRepeatCount > 0}
+                  </Text>
+                </Flex>
+              </Flex>
+            </AnimatedDiv>
+          )
+        }
+
+        const { name, message, amount } = data
         const bits = amount?.bits
         const months = amount?.months
         const currency = amount
@@ -162,7 +216,7 @@ const DonationLog = () => {
         }
 
         return (
-          <AnimatedDiv key={event_id} isAnimated={i === 0}>
+          <AnimatedDiv key={eventId} isAnimated={i === 0}>
             <Flex direction="column" gap="4px">
               <Flex align="center" justify="space-between">
                 <Title size="h3">{name}</Title>

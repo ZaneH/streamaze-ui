@@ -55,13 +55,14 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
-  // Streamlabs config
+  // Donations config
   const [slobsConfig, setSlobsConfig] = useLocalStorage({
     key: 'streamlabs-config',
     getInitialValueInEffect: false,
     defaultValue: {
       streamToken: '',
       ttsVoice: 'Ivy',
+      tiktokUsername: '',
     },
   })
 
@@ -143,6 +144,7 @@ const ConfigProvider = ({ children }) => {
   // Load Streamlabs config from URLs
   let streamToken = ''
   let ttsVoice = ''
+  let tiktokDonos = ''
   if (isSlobs) {
     if (searchParams.get('streamToken')) {
       streamToken = searchParams.get('streamToken')
@@ -150,6 +152,10 @@ const ConfigProvider = ({ children }) => {
 
     if (searchParams.get('ttsVoice')) {
       ttsVoice = searchParams.get('ttsVoice')
+    }
+
+    if (searchParams.get('tiktokDonos')) {
+      tiktokDonos = searchParams.get('tiktokDonos')
     }
   }
 
@@ -211,6 +217,9 @@ const ConfigProvider = ({ children }) => {
           ...slobsConfig,
           streamToken: streamToken ? streamToken : slobsConfig.streamToken,
           ttsVoice: ttsVoice ? ttsVoice : slobsConfig.ttsVoice,
+          tiktokUsername: tiktokDonos
+            ? tiktokDonos
+            : slobsConfig.tiktokUsername,
         },
         setSlobsConfig,
         keypadConfig: {
