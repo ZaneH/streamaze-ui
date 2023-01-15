@@ -11,6 +11,8 @@ import {
 } from '@mantine/core'
 import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { useContext, useEffect, useRef, useState } from 'react'
+import { ReactComponent as ModChatIcon } from '../../mod-chat-icon.svg'
+import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg'
 import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
@@ -65,6 +67,8 @@ const SenderText = styled(Text)`
   vertical-align: middle;
   word-break: break-all;
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
+  ${({ ismember }) => ismember && 'color: #2ba640;'}
+  ${({ ismod }) => ismod && 'color: #5e84f1;'}
 }`
 
 const MessageText = styled(Text)`
@@ -175,6 +179,10 @@ const ChatLog = ({
           origin: payload.origin,
           emotes: payload.emotes,
           pfp: payload.pfp,
+          isMod: payload.is_mod,
+          isVerified: payload.is_verified,
+          isMember: payload.is_member,
+          memberBadge: payload.member_badge,
         },
       ])
     }
@@ -275,7 +283,16 @@ const ChatLog = ({
           Footer,
         }}
         itemContent={(_, chatEvent) => {
-          const { sender, message, emotes = [], pfp } = chatEvent
+          const {
+            sender,
+            message,
+            emotes = [],
+            pfp,
+            isMod,
+            isVerified,
+            isMember,
+            memberBadge,
+          } = chatEvent
 
           // escape any html tags (<>) in message
           let newMessageString = message || ''
@@ -326,7 +343,46 @@ const ChatLog = ({
                     data-outline={`${sender}:  ${newMessageString}`}
                     className={isBig ? 'chat-outline' : undefined}
                     isbig={isBig}
-                  >{`${sender}${isBig ? ':' : ''}  `}</SenderText>
+                    ismod={isMod}
+                    ismember={isMember}
+                  >
+                    {`${sender}${isBig ? ':' : ''}`}
+                    {isMod && !isBig && (
+                      <ModChatIcon
+                        fill="#5e84f1"
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {isMember && !isBig && (
+                      <img
+                        alt="Member Badge"
+                        src={memberBadge}
+                        style={{
+                          height: '16px',
+                          width: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {isVerified && !isBig && (
+                      <VerifiedChatIcon
+                        fill="#999"
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {`  `}
+                  </SenderText>
                   <MessageText
                     ff={isBig ? 'Impact' : 'Roboto'}
                     lh={isBig ? '1.64em' : '1em'}
