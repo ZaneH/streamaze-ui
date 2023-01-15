@@ -11,11 +11,6 @@ const { REACT_APP_API_WS_URL } = process.env
 
 const Item = styled.div`
   margin: 12px 32px;
-  padding: 18px 24px;
-
-  border-radius: 3px;
-  border: 5px solid #dee2e6;
-  color: white;
 `
 
 const List = styled.div`
@@ -41,6 +36,10 @@ const Footer = styled.div`
 
 const AnimatedDiv = styled.div`
   opacity: 1;
+  border-radius: 3px;
+  border: 5px solid #dee2e6;
+  padding: 18px 24px;
+  color: white;
 
   ${({ isAnimated }) =>
     isAnimated &&
