@@ -63,7 +63,7 @@ const AnimatedDiv = styled.div`
 
 const DonationLog = () => {
   const { slobsConfig } = useContext(ConfigContext)
-  const { donations, setDonations, setTTSQueue } = useContext(DonationContext)
+  const { donations, setDonations, donationIndex } = useContext(DonationContext)
   const streamToken = slobsConfig?.streamToken
   const ttsVoice = slobsConfig?.ttsVoice
 
@@ -93,17 +93,12 @@ const DonationLog = () => {
     if (lastMessage) {
       try {
         const newEvent = JSON.parse(lastMessage.data)
-        setDonations((donations) => [newEvent, ...donations])
-
-        // Add donation to TTS queue if tts_url is in data
-        if (newEvent?.data?.tts_url) {
-          setTTSQueue((ttsQueue) => [...ttsQueue, newEvent.data.tts_url])
-        }
+        setDonations((prev) => [...prev, newEvent])
       } catch {
         console.log('Error parsing donation message', lastMessage.data)
       }
     }
-  }, [lastMessage, setTTSQueue, setDonations])
+  }, [lastMessage, setDonations])
 
   if (donations.length === 0 && readyState !== 1) {
     return (
@@ -119,13 +114,22 @@ const DonationLog = () => {
         </Text>
       </Box>
     )
+  } else if (donations.length > 0 && donationIndex === -1) {
+    return (
+      <Box my="lg" mx="36px">
+        <Text color="dimmed" size="lg">
+          Press the play button! You have <b>new donations!</b>
+        </Text>
+      </Box>
+    )
   }
 
   return (
     <Virtuoso
       style={{ height: '100%' }}
-      data={donations}
-      totalCount={donations.length}
+      // data is reversed, and only up to the donationIndex
+      data={donations.slice(0, donationIndex).reverse()}
+      totalCount={donations.slice(0, donationIndex).reverse().length}
       components={{
         Item,
         List,

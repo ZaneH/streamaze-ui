@@ -19,10 +19,11 @@ const ControlPanel = () => {
     donations,
     isAutoplay,
     setIsAutoplay,
-    ttsQueue,
-    setTTSQueue,
     ttsAudio,
     setIsPlaying,
+    donationIndex,
+    setDonationIndex,
+    isPlaying,
   } = useContext(DonationContext)
 
   return (
@@ -34,20 +35,25 @@ const ControlPanel = () => {
           disabled={donations.length === 0}
           onClick={() => {
             setIsAutoplay((prev) => !prev)
+            if (donationIndex === -1) {
+              setDonationIndex(0)
+            }
           }}
         />
         <StreamButton
           color="blue"
           icon={<SkipIcon />}
-          disabled={ttsQueue.length === 0}
+          disabled={
+            // skip button should only show when there are donations playing
+            donationIndex === -1 ||
+            (donationIndex === donations.length && !isPlaying)
+          }
           onClick={() => {
             if (ttsAudio) {
               ttsAudio.pause()
               ttsAudio.currentTime = 0
               setIsPlaying(false)
             }
-
-            setTTSQueue((prev) => prev.slice(1))
           }}
         />
       </Flex>
