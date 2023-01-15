@@ -74,8 +74,12 @@ const DonationLog = () => {
   }
 
   const donationsWS = useWebSocket(
-    `${REACT_APP_API_WS_URL}/streamlabs/donations?${qs.toString()}`
+    `${REACT_APP_API_WS_URL}/streamlabs/donations?${qs.toString()}`,
+    {
+      retryOnError: true,
+    }
   )
+
   const { lastMessage, readyState } = donationsWS
 
   // send message to websocket every 20s

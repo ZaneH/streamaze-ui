@@ -103,19 +103,28 @@ const ChatLog = ({
 
   const { lastMessage: tiktokWSLastMessage, sendMessage: tiktokWSSendMessage } =
     useWebSocket(
-      `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`
+      `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`,
+      {
+        retryOnError: true,
+      }
     )
 
   const {
     lastMessage: youtubeWSLastMessage,
     sendMessage: youtubeWSSendMessage,
   } = useWebSocket(
-    `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`
+    `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`,
+    {
+      retryOnError: true,
+    }
   )
 
   const { lastMessage: twitchWSLastMessage, sendMessage: twitchWSSendMessage } =
     useWebSocket(
-      `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`
+      `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`,
+      {
+        retryOnError: true,
+      }
     )
 
   useEffect(() => {
