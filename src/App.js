@@ -2,7 +2,7 @@ import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import ChatLog from './components/ChatLog'
+import { ChatLog } from './components/Chat'
 import {
   ConfigProvider,
   DonationProvider,
@@ -77,7 +77,7 @@ const App = () => {
                           <Route path="/server" element={<ServerControl />} />
                           <Route
                             path="/chat"
-                            element={<ChatLog height="100vh" />}
+                            element={<ChatLog height="100vh" fluid />}
                           />
 
                           <Route path="/keypad" element={<Keypad />} />

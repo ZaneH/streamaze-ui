@@ -10,18 +10,17 @@ import {
 import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { SocialIcon } from 'react-social-icons'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
-import { ConfigContext } from './Providers/ConfigProvider'
+import { ConfigContext } from '../Providers/ConfigProvider'
 
 const Item = styled.div`
-  margin: 0;
+  margin: 4px 0;
   padding: 3px 0;
 `
 
 const ItemContent = styled.div`
-  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.25em')};
+  font-size: ${({ isBig }) => (isBig ? '2.1em' : '1.12em')};
   color: ${({ isBig }) => (isBig ? '#efeff1' : '#000')};
 
   .chat-outline,
@@ -33,15 +32,16 @@ const ItemContent = styled.div`
 
   .chat-outline:before {
     line-height: ${({ isBig }) => (isBig ? '1.7em' : 'initial')};
-    text-indent: ${({ isBig }) => (isBig ? '40px' : '33pt')};
     content: ${({ isBig }) => (isBig ? 'attr(data-outline)' : 'none')};
     position: absolute;
     -webkit-text-stroke: 7px #000;
     word-break: break-all;
-    left: 16px;
-    right: 16px;
     top: 1px;
     z-index: -1;
+    left: ${({ compact }) => (compact ? `24px` : `32px`)};
+    right: ${({ compact }) => (compact ? `24px` : `32px`)};
+    ${({ fluid }) => fluid && 'left: 0; right: 0;'}
+
     vertical-align: middle;
   }
 
@@ -61,14 +61,15 @@ const Footer = styled.div`
 const SenderText = styled(Text)`
   display: inline;
   vertical-align: middle;
-  margin-left: 12px;
   word-break: break-all;
+  color: ${({ isBig }) => (isBig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
 }`
 
 const MessageText = styled(Text)`
   display: inline;
   vertical-align: middle;
   word-break: break-all;
+  color: white;
 `
 
 const { REACT_APP_API_WS_URL } = process.env
@@ -78,6 +79,8 @@ const ChatLog = ({
   tiktokUsername,
   youtubeChannel,
   fullHeight,
+  compact = false,
+  fluid = false,
   height = '300px',
   isDark = undefined,
   isBig = undefined,
@@ -204,7 +207,7 @@ const ChatLog = ({
         index: chatData.length - 1,
       })
     }
-  }, [chatData])
+  }, [chatData.length])
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
@@ -259,7 +262,7 @@ const ChatLog = ({
         ref={virtuosoRef}
         initialTopMostItemIndex={999}
         data={chatData}
-        followOutput={true}
+        followOutput="smooth"
         totalCount={chatData.length}
         components={{
           Item,
@@ -267,12 +270,10 @@ const ChatLog = ({
           Footer,
         }}
         itemContent={(_, chatEvent) => {
-          const { sender, message, origin, emotes = [] } = chatEvent
-          const iconSize = isBig ? 28 : 26
+          const { sender, message, emotes = [] } = chatEvent
 
           // escape any html tags (<>) in message
-          let newMessageString =
-            message?.replaceAll('<', '&lt;')?.replaceAll('>', '&gt;') || ''
+          let newMessageString = message || ''
 
           // replace emotes with img tag using url
           emotes.forEach((emote) => {
@@ -289,8 +290,8 @@ const ChatLog = ({
           })
 
           return (
-            <ItemContent isBig={isBig}>
-              <Box style={{ whiteSpace: 'nowrap' }} px="16px" {...props}>
+            <ItemContent isBig={isBig} compact={compact} fluid={fluid}>
+              <Box style={{ whiteSpace: 'nowrap' }} {...props}>
                 <div
                   style={{
                     verticalAlign: 'middle',
@@ -299,7 +300,7 @@ const ChatLog = ({
                     color: isDark ? '#efeff1' : 'inherit',
                   }}
                 >
-                  {origin === 'twitch' && (
+                  {/* {origin === 'twitch' && (
                     <SocialIcon
                       network="twitch"
                       fgColor="#fff"
@@ -328,16 +329,17 @@ const ChatLog = ({
                         width: iconSize,
                       }}
                     />
-                  )}
+                  )} */}
                   <SenderText
-                    ff={isBig ? 'Impact' : undefined}
+                    ff={isBig ? 'Impact' : 'Roboto'}
                     fw={isBig ? undefined : '700'}
                     lh={isBig ? '1.64em' : '1em'}
-                    data-outline={`${sender}: ${newMessageString}`}
+                    data-outline={`${sender}:  ${newMessageString}`}
                     className={isBig ? 'chat-outline' : undefined}
-                  >{`${sender}: `}</SenderText>
+                    isBig={isBig}
+                  >{`${sender}${isBig ? ':' : ''}  `}</SenderText>
                   <MessageText
-                    ff={isBig ? 'Impact' : undefined}
+                    ff={isBig ? 'Impact' : 'Roboto'}
                     lh={isBig ? '1.64em' : '1em'}
                   >
                     <span

@@ -1,12 +1,17 @@
 import { ActionIcon, Box, Flex, Text, Tooltip } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconExternalLink } from '@tabler/icons'
 import { useContext } from 'react'
-import ChatLog from '../ChatLog'
+import { useSearchParams } from 'react-router-dom'
 import { PanelHead } from '../document'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import ChatLog from './ChatLog'
 
 const ChatPanel = () => {
   const { chatConfig } = useContext(ConfigContext)
+  const isMedium = useMediaQuery('(max-width: 768px)')
+  const [searchParams] = useSearchParams()
+
   return (
     <Flex direction="column" h="100%">
       <PanelHead
@@ -27,7 +32,7 @@ const ChatPanel = () => {
               onClick={() => {
                 const qs = new URLSearchParams()
                 qs.append('isChat', 'true')
-                qs.append('theme', 'dark')
+                qs.append('theme', searchParams.get('theme') || 'dark')
 
                 if (chatConfig?.tiktok?.username) {
                   qs.append('tiktokChat', chatConfig.tiktok.username)
@@ -57,7 +62,8 @@ const ChatPanel = () => {
         <ChatLog
           fullHeight
           isDark
-          mx="md"
+          compact={isMedium ? true : false}
+          mx={isMedium ? '24px' : '32px'}
           tiktokUsername={chatConfig.tiktok.username}
           youtubeChannel={chatConfig.youtube.channel}
           twitchUsername={chatConfig.twitch.username}
