@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Box, CloseButton, Divider, Navbar, NavLink } from '@mantine/core'
+import { Box, CloseButton, Divider, Navbar, NavLink, Text } from '@mantine/core'
 import {
   IconDashboard,
   IconPower,
@@ -13,7 +13,10 @@ import { SidebarContext } from '../Providers/SidebarProvider'
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;
   margin-bottom: 6px;
+  padding: 16px 12px;
 `
+
+const NavLinkLabel = ({ children }) => <Text size="md">{children}</Text>
 
 const Sidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)
@@ -35,34 +38,34 @@ const Sidebar = () => {
         <CloseButton onClick={() => setIsSidebarOpen((o) => !o)} size="xl" />
       </Box>
       <StyledNavLink
-        label="Dashboard"
+        label={<NavLinkLabel>Dashboard</NavLinkLabel>}
         active={pathname === '/'}
-        icon={<IconDashboard />}
+        icon={<IconDashboard size={28} />}
         onClick={() => {
           navigate('/')
         }}
       />
       <StyledNavLink
-        label="Settings"
+        label={<NavLinkLabel>Settings</NavLinkLabel>}
         active={pathname === '/settings'}
-        icon={<IconSettings />}
+        icon={<IconSettings size={28} />}
         onClick={() => {
           navigate('/settings')
         }}
       />
       <Divider my="sm" />
       <StyledNavLink
-        label="Go Live"
+        label={<NavLinkLabel>Go Live</NavLinkLabel>}
         active={pathname === '/go-live'}
-        icon={<IconVideo />}
+        icon={<IconVideo size={28} />}
         onClick={() => {
           navigate('/go-live')
         }}
       />
       <StyledNavLink
-        label="Server Control"
+        label={<NavLinkLabel>Server Control</NavLinkLabel>}
         active={pathname === '/server'}
-        icon={<IconPower />}
+        icon={<IconPower size={28} />}
         onClick={() => {
           navigate('/server')
         }}
