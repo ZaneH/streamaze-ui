@@ -116,7 +116,8 @@ const ChatLog = ({
       `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`,
       {
         retryOnError: true,
-      }
+      },
+      !!_tiktokUsername
     )
 
   const {
@@ -126,7 +127,8 @@ const ChatLog = ({
     `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`,
     {
       retryOnError: true,
-    }
+    },
+    !!_youtubeChannel
   )
 
   const { lastMessage: twitchWSLastMessage, sendMessage: twitchWSSendMessage } =
@@ -134,7 +136,8 @@ const ChatLog = ({
       `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`,
       {
         retryOnError: true,
-      }
+      },
+      !!_twitchUsername
     )
 
   useEffect(() => {
@@ -312,7 +315,11 @@ const ChatLog = ({
           })
 
           return (
-            <ItemContent isbig={isBig} compact={compact} fluid={fluid}>
+            <ItemContent
+              isbig={isBig ? 'true' : undefined}
+              compact={compact}
+              fluid={fluid}
+            >
               <Flex gap="16px" style={{ whiteSpace: 'nowrap' }} {...props}>
                 {showProfilePicture && !isBig && (
                   <Avatar
@@ -342,9 +349,9 @@ const ChatLog = ({
                     lh={isBig ? '1.64em' : '1em'}
                     data-outline={`${sender}:  ${newMessageString}`}
                     className={isBig ? 'chat-outline' : undefined}
-                    isbig={isBig}
-                    ismod={isMod}
-                    ismember={isMember}
+                    isbig={isBig ? 'true' : undefined}
+                    ismod={isMod ? 'true' : undefined}
+                    ismember={isMember ? 'true' : undefined}
                   >
                     {`${sender}${isBig ? ':' : ''}`}
                     {isMod && !isBig && (

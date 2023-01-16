@@ -82,7 +82,8 @@ const DonationLog = () => {
     `${REACT_APP_API_WS_URL}/streamlabs/donations?${slQS.toString()}`,
     {
       retryOnError: true,
-    }
+    },
+    !!streamToken
   )
 
   // TikTok donations websocket
@@ -90,7 +91,8 @@ const DonationLog = () => {
     `${REACT_APP_API_WS_URL}/tiktok/donations?${ttQS.toString()}`,
     {
       retryOnError: true,
-    }
+    },
+    !!slobsConfig?.tiktokUsername
   )
 
   const { lastMessage: slLastMessage, readyState: slReadyState } = slDonationsWS
