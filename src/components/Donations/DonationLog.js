@@ -117,14 +117,23 @@ const DonationLog = () => {
 
   // send message to websocket every 20s
   useEffect(() => {
-    const interval = setInterval(() => {
+    const slInterval = setInterval(() => {
       if (streamToken) {
         slDonationsWS.sendMessage('ping')
       }
     }, 20000)
 
-    return () => clearInterval(interval)
-  }, [slDonationsWS, streamToken])
+    const ttInterval = setInterval(() => {
+      if (slobsConfig?.tiktokUsername) {
+        ttDonationsWS.sendMessage('ping')
+      }
+    }, 20000)
+
+    return () => {
+      clearInterval(slInterval)
+      clearInterval(ttInterval)
+    }
+  }, [slDonationsWS, ttDonationsWS, streamToken, slobsConfig?.tiktokUsername])
 
   useEffect(() => {
     if (slLastMessage) {
