@@ -356,7 +356,7 @@ const ChatLog = ({
                     src={pfp}
                     color="blue"
                   >
-                    {sender[0]}
+                    {sender?.[0] || '?'}
                   </Avatar>
                 )}
                 <div
