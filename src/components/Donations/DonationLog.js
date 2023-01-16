@@ -205,7 +205,7 @@ const DonationLog = () => {
               <Flex direction="column" gap="4px">
                 <Flex align="center" justify="space-between">
                   <Title size="h3">{senderName}</Title>
-                  <Text size="lg" weight={700}>
+                  <Text size="lg" weight={700} align="right">
                     {giftRepeatCount ?? 1}x {giftName}
                     {giftRepeatCount > 0}
                   </Text>
