@@ -17,6 +17,7 @@ import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import { showNotification } from '@mantine/notifications'
 
 const Item = styled.div`
   margin: 4px 0;
@@ -116,6 +117,14 @@ const ChatLog = ({
       `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`,
       {
         retryOnError: true,
+        reconnectInterval: 10000,
+        onError: () => {
+          showNotification({
+            title: 'TikTok Chat Error',
+            message: "Couldn't connect to the TikTok chat.",
+            color: 'red',
+          })
+        },
       },
       !!_tiktokUsername
     )
@@ -127,6 +136,14 @@ const ChatLog = ({
     `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`,
     {
       retryOnError: true,
+      reconnectInterval: 10000,
+      onError: () => {
+        showNotification({
+          title: 'YouTube Chat Error',
+          message: "Couldn't connect to the YouTube chat.",
+          color: 'red',
+        })
+      },
     },
     !!_youtubeChannel
   )
@@ -136,6 +153,14 @@ const ChatLog = ({
       `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`,
       {
         retryOnError: true,
+        reconnectInterval: 10000,
+        onError: () => {
+          showNotification({
+            title: 'Twitch Chat Error',
+            message: "Couldn't connect to the Twitch chat.",
+            color: 'red',
+          })
+        },
       },
       !!_twitchUsername
     )

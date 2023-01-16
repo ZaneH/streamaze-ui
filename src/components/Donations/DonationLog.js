@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Center, Flex, Loader, Text, Title } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import { useContext, useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
@@ -82,6 +83,14 @@ const DonationLog = () => {
     `${REACT_APP_API_WS_URL}/streamlabs/donations?${slQS.toString()}`,
     {
       retryOnError: true,
+      reconnectInterval: 10000,
+      onError: () => {
+        showNotification({
+          title: 'StreamLabs Donations Error',
+          message: "Couldn't connect to StreamLabs for donations.",
+          color: 'red',
+        })
+      },
     },
     !!streamToken
   )
@@ -91,6 +100,14 @@ const DonationLog = () => {
     `${REACT_APP_API_WS_URL}/tiktok/donations?${ttQS.toString()}`,
     {
       retryOnError: true,
+      reconnectInterval: 10000,
+      onError: () => {
+        showNotification({
+          title: 'TikTok Gifts Error',
+          message: "Couldn't connect to TikTok for gifts.",
+          color: 'red',
+        })
+      },
     },
     !!slobsConfig?.tiktokUsername
   )
