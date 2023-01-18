@@ -109,7 +109,7 @@ const DonationLog = () => {
         })
       },
     },
-    !!slobsConfig?.tiktokUsername
+    false
   )
 
   const { lastMessage: slLastMessage, readyState: slReadyState } = slDonationsWS
