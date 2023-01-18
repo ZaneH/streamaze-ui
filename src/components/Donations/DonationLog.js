@@ -8,7 +8,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
 
-const { REACT_APP_API_WS_URL } = process.env
+const { REACT_APP_API_2_WS_URL } = process.env
 
 const Item = styled.div`
   margin: 12px 32px;
@@ -65,108 +65,70 @@ const DonationLog = () => {
   const { slobsConfig } = useContext(ConfigContext)
   const { donations, setDonations, donationIndex } = useContext(DonationContext)
   const streamToken = slobsConfig?.streamToken
-  const ttsVoice = slobsConfig?.ttsVoice
+  // TODO: Add voice back
+  // const ttsVoice = slobsConfig?.ttsVoice
 
-  const slQS = new URLSearchParams()
-  slQS.append('token', streamToken)
-  if (ttsVoice) {
-    slQS.append('voice', ttsVoice)
-  }
-
-  const ttQS = new URLSearchParams()
-  if (slobsConfig?.tiktokUsername) {
-    ttQS.append('username', slobsConfig.tiktokUsername)
-  }
-
-  // Streamlabs donations websocket
-  const slDonationsWS = useWebSocket(
-    `${REACT_APP_API_WS_URL}/streamlabs/donations?${slQS.toString()}`,
-    {
-      retryOnError: true,
-      reconnectInterval: 10000,
-      onError: () => {
-        showNotification({
-          title: 'StreamLabs Donations Error',
-          message: "Couldn't connect to StreamLabs for donations.",
-          color: 'red',
-        })
-      },
+  // Donations websocket
+  const donationsWS = useWebSocket(`${REACT_APP_API_2_WS_URL}`, {
+    retryOnError: true,
+    reconnectInterval: 10000,
+    onError: () => {
+      showNotification({
+        title: 'Donations Error',
+        message: "Couldn't connect to donations server.",
+        color: 'red',
+      })
     },
-    !!streamToken
-  )
+    onOpen: () => {
+      const params = {}
+      if (streamToken) {
+        params['streamToken'] = streamToken
+      }
 
-  // TikTok donations websocket
-  const ttDonationsWS = useWebSocket(
-    `${REACT_APP_API_WS_URL}/tiktok/donations?${ttQS.toString()}`,
-    {
-      retryOnError: true,
-      reconnectInterval: 10000,
-      onError: () => {
-        showNotification({
-          title: 'TikTok Gifts Error',
-          message: "Couldn't connect to TikTok for gifts.",
-          color: 'red',
-        })
-      },
+      if (slobsConfig?.tiktokUsername) {
+        params['tiktokUsername'] = slobsConfig?.tiktokUsername
+      }
+
+      donationsWS.sendMessage(JSON.stringify(params))
     },
-    false
-  )
+  })
 
-  const { lastMessage: slLastMessage, readyState: slReadyState } = slDonationsWS
-  const { lastMessage: ttLastMessage, readyState: ttReadyState } = ttDonationsWS
+  const {
+    lastJsonMessage: lastDonationJsonMessage,
+    readyState: donationsReadyState,
+  } = donationsWS
 
   // send message to websocket every 20s
   useEffect(() => {
-    const slInterval = setInterval(() => {
-      if (streamToken) {
-        slDonationsWS.sendMessage('ping')
-      }
-    }, 20000)
-
-    const ttInterval = setInterval(() => {
-      if (slobsConfig?.tiktokUsername) {
-        ttDonationsWS.sendMessage('ping')
+    const donationInterval = setInterval(() => {
+      if (streamToken || slobsConfig?.tiktokUsername) {
+        donationsWS.sendMessage('ping')
       }
     }, 20000)
 
     return () => {
-      clearInterval(slInterval)
-      clearInterval(ttInterval)
+      clearInterval(donationInterval)
     }
-  }, [slDonationsWS, ttDonationsWS, streamToken, slobsConfig?.tiktokUsername])
+  }, [donationsWS, streamToken, slobsConfig?.tiktokUsername])
 
   useEffect(() => {
-    if (slLastMessage) {
+    if (lastDonationJsonMessage) {
+      console.log('lastDonationJsonMessage', lastDonationJsonMessage)
       try {
-        const newEvent = JSON.parse(slLastMessage.data)
-        setDonations((prev) => [...prev, newEvent])
+        setDonations((prev) => [...prev, lastDonationJsonMessage])
       } catch {
-        console.log('Error parsing donation message', slLastMessage.data)
+        console.log('Error parsing donation message', lastDonationJsonMessage)
       }
     }
-  }, [slLastMessage, setDonations])
+  }, [lastDonationJsonMessage, setDonations])
 
-  useEffect(() => {
-    if (ttLastMessage) {
-      try {
-        const newEvent = JSON.parse(ttLastMessage.data)
-        setDonations((prev) => [...prev, newEvent])
-      } catch {
-        console.log('Error parsing donation message', ttLastMessage.data)
-      }
-    }
-  }, [ttLastMessage, setDonations])
-
-  if (donations.length === 0 && slReadyState !== 1 && ttReadyState !== 1) {
+  if (donations.length === 0 && donationsReadyState !== 1) {
     return (
       <Center my="lg">
         <Loader />
       </Center>
     )
-  } else if (
-    donations.length === 0 &&
-    (slReadyState === 1 || ttReadyState === 1)
-  ) {
+  } else if (donations.length === 0 && donationsReadyState === 1) {
     return (
       <Box my="lg" mx="36px">
         <Text color="dimmed" size="lg">
@@ -198,7 +160,7 @@ const DonationLog = () => {
       }}
       itemContent={(i, donation) => {
         const { data = {}, type } = donation
-        const { event_id: eventId } = data
+        const { id: eventId } = data
         const isTikTokGift = type === 'tiktok_gift'
 
         if (isTikTokGift) {
