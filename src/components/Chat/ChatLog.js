@@ -118,6 +118,7 @@ const ChatLog = ({
       {
         retryOnError: true,
         reconnectInterval: 10000,
+        shouldReconnect: () => true,
         onError: () => {
           showNotification({
             title: 'TikTok Chat Error',
@@ -137,6 +138,7 @@ const ChatLog = ({
     {
       retryOnError: true,
       reconnectInterval: 10000,
+      shouldReconnect: () => true,
       onError: () => {
         showNotification({
           title: 'YouTube Chat Error',
@@ -154,6 +156,7 @@ const ChatLog = ({
       {
         retryOnError: true,
         reconnectInterval: 10000,
+        shouldReconnect: () => true,
         onError: () => {
           showNotification({
             title: 'Twitch Chat Error',

@@ -72,6 +72,7 @@ const DonationLog = () => {
   const donationsWS = useWebSocket(`${REACT_APP_API_2_WS_URL}`, {
     retryOnError: true,
     reconnectInterval: 10000,
+    shouldReconnect: () => true,
     onError: () => {
       showNotification({
         title: 'Donations Error',
@@ -113,7 +114,6 @@ const DonationLog = () => {
 
   useEffect(() => {
     if (lastDonationJsonMessage) {
-      console.log('lastDonationJsonMessage', lastDonationJsonMessage)
       try {
         setDonations((prev) => [...prev, lastDonationJsonMessage])
       } catch {
