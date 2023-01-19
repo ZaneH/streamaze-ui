@@ -79,7 +79,7 @@ const MessageText = styled(Text)`
   color: white;
 `
 
-const { REACT_APP_API_WS_URL } = process.env
+const { REACT_APP_API_2_WS_URL } = process.env
 
 const ChatLog = ({
   twitchUsername,
@@ -112,138 +112,94 @@ const ChatLog = ({
     isDark = searchParams.get('theme') === 'dark'
   }
 
-  const { lastMessage: tiktokWSLastMessage, sendMessage: tiktokWSSendMessage } =
+  const { lastMessage: lastChatJsonMessage, sendMessage: chatWSSendMessage } =
     useWebSocket(
-      `${REACT_APP_API_WS_URL}/tiktok/chat?username=${_tiktokUsername || 'L'}`,
+      `${REACT_APP_API_2_WS_URL}`,
       {
         retryOnError: true,
         reconnectInterval: 10000,
         shouldReconnect: () => true,
         onError: () => {
           showNotification({
-            title: 'TikTok Chat Error',
-            message: "Couldn't connect to the TikTok chat.",
+            title: 'Chat Error',
+            message: "Couldn't connect to the chat.",
             color: 'red',
           })
         },
-      },
-      !!_tiktokUsername
-    )
+        onOpen: () => {
+          const params = {}
+          if (_tiktokUsername) {
+            params['tiktokChat'] = _tiktokUsername
+          }
 
-  const {
-    lastMessage: youtubeWSLastMessage,
-    sendMessage: youtubeWSSendMessage,
-  } = useWebSocket(
-    `${REACT_APP_API_WS_URL}/youtube/chat?channelUrl=${_youtubeChannel || 'L'}`,
-    {
-      retryOnError: true,
-      reconnectInterval: 10000,
-      shouldReconnect: () => true,
-      onError: () => {
-        showNotification({
-          title: 'YouTube Chat Error',
-          message: "Couldn't connect to the YouTube chat.",
-          color: 'red',
-        })
-      },
-    },
-    !!_youtubeChannel
-  )
+          if (_youtubeChannel) {
+            params['youtubeChat'] = _youtubeChannel
+          }
 
-  const { lastMessage: twitchWSLastMessage, sendMessage: twitchWSSendMessage } =
-    useWebSocket(
-      `${REACT_APP_API_WS_URL}/twitch/chat?channel=${_twitchUsername || 'L'}`,
-      {
-        retryOnError: true,
-        reconnectInterval: 10000,
-        shouldReconnect: () => true,
-        onError: () => {
-          showNotification({
-            title: 'Twitch Chat Error',
-            message: "Couldn't connect to the Twitch chat.",
-            color: 'red',
-          })
+          // TODO: Not implemented in the new API yet
+          // if (_twitchUsername) {
+          //   params['twitchChat'] = _twitchUsername
+          // }
+
+          chatWSSendMessage(JSON.stringify(params))
         },
       },
-      !!_twitchUsername
+      !!_tiktokUsername || !!_youtubeChannel || !!_twitchUsername
     )
 
   useEffect(() => {
-    if (twitchWSLastMessage !== null) {
-      const payload = JSON.parse(twitchWSLastMessage.data)
-      setChatData((prev) => [
-        ...prev,
-        {
-          message: payload.message,
-          sender: payload.sender,
-          origin: payload.origin,
-          emotes: [],
-        },
-      ])
+    if (lastChatJsonMessage !== null) {
+      const payload = JSON.parse(lastChatJsonMessage.data)
+      if (payload?.origin === 'tiktok') {
+        setChatData((prev) => [
+          ...prev,
+          {
+            message: payload.message,
+            sender: payload.sender,
+            origin: payload.origin,
+            emotes: [],
+            pfp: payload.pfp,
+          },
+        ])
+      } else if (payload?.origin === 'youtube') {
+        setChatData((prev) => [
+          ...prev,
+          {
+            message: payload.message,
+            sender: payload.sender,
+            origin: payload.origin,
+            emotes: payload.emotes,
+            pfp: payload.pfp,
+            isMod: payload.is_mod,
+            isVerified: payload.is_verified,
+            isMember: payload.is_member,
+            memberBadge: payload.member_badge,
+          },
+        ])
+      } else if (payload?.origin === 'twitch') {
+        setChatData((prev) => [
+          ...prev,
+          {
+            message: payload.message,
+            sender: payload.sender,
+            origin: payload.origin,
+            emotes: [],
+          },
+        ])
+      }
     }
-  }, [twitchWSLastMessage])
-
-  useEffect(() => {
-    if (tiktokWSLastMessage !== null) {
-      const payload = JSON.parse(tiktokWSLastMessage.data)
-      setChatData((prev) => [
-        ...prev,
-        {
-          message: payload.message,
-          sender: payload.sender,
-          origin: payload.origin,
-          emotes: [],
-          pfp: payload.pfp,
-        },
-      ])
-    }
-  }, [tiktokWSLastMessage])
-
-  useEffect(() => {
-    if (youtubeWSLastMessage !== null) {
-      const payload = JSON.parse(youtubeWSLastMessage.data)
-      setChatData((prev) => [
-        ...prev,
-        {
-          message: payload.message,
-          sender: payload.sender,
-          origin: payload.origin,
-          emotes: payload.emotes,
-          pfp: payload.pfp,
-          isMod: payload.is_mod,
-          isVerified: payload.is_verified,
-          isMember: payload.is_member,
-          memberBadge: payload.member_badge,
-        },
-      ])
-    }
-  }, [youtubeWSLastMessage])
+  }, [lastChatJsonMessage])
 
   // send message to websocket every 20s
   useEffect(() => {
     const interval = setInterval(() => {
-      if (_twitchUsername) {
-        twitchWSSendMessage('ping')
-      }
-
-      if (_tiktokUsername) {
-        tiktokWSSendMessage('ping')
-      }
-
-      if (_youtubeChannel) {
-        youtubeWSSendMessage('ping')
+      if (_twitchUsername || _tiktokUsername || _youtubeChannel) {
+        chatWSSendMessage('ping')
       }
     }, 20000)
 
     return () => clearInterval(interval)
-  }, [
-    _twitchUsername,
-    _tiktokUsername,
-    _youtubeChannel,
-    twitchWSSendMessage,
-    tiktokWSSendMessage,
-    youtubeWSSendMessage,
-  ])
+  }, [_twitchUsername, _tiktokUsername, _youtubeChannel, chatWSSendMessage])
 
   useEffect(() => {
     if (virtuosoRef.current) {
@@ -317,7 +273,7 @@ const ChatLog = ({
           const {
             sender,
             message,
-            emotes = [],
+            emotes,
             pfp,
             isMod,
             isVerified,
@@ -325,21 +281,22 @@ const ChatLog = ({
             memberBadge,
           } = chatEvent
 
-          // escape any html tags (<>) in message
           let newMessageString = message || ''
 
           // replace emotes with img tag using url
-          emotes.forEach((emote) => {
-            const keys = emote?.keys // shortcodes for emote
+          emotes?.forEach((emote) => {
+            const key = emote?.keys // shortcode for emote
             const url = emote?.url // svg url
-            keys.forEach((key) => {
-              newMessageString = newMessageString.replaceAll(
-                key,
-                isBig // if big, don't show emotes
-                  ? ''
-                  : `<img src="${url}" style="height: 22px; vertical-align: middle;" referrerpolicy="no-referrer" />`
-              )
-            })
+
+            newMessageString = newMessageString.replaceAll(
+              key,
+              isBig // if big, don't show emotes
+                ? ''
+                : `<img src="${url}" alt="${key.replaceAll(
+                    ':',
+                    ''
+                  )}" style="height: 22px; vertical-align: middle;" referrerpolicy="no-referrer" />`
+            )
           })
 
           return (

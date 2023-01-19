@@ -87,7 +87,7 @@ const DonationLog = () => {
       }
 
       if (slobsConfig?.tiktokUsername) {
-        params['tiktokUsername'] = slobsConfig?.tiktokUsername
+        params['tiktokDonos'] = slobsConfig?.tiktokUsername
       }
 
       donationsWS.sendMessage(JSON.stringify(params))
