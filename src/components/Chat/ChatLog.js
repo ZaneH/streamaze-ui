@@ -288,6 +288,10 @@ const ChatLog = ({
             const key = emote?.keys // shortcode for emote
             const url = emote?.url // svg url
 
+            if (!key || !url) {
+              return
+            }
+
             newMessageString = newMessageString.replaceAll(
               key,
               isBig // if big, don't show emotes
