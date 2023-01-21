@@ -99,19 +99,6 @@ const DonationLog = () => {
     readyState: donationsReadyState,
   } = donationsWS
 
-  // send message to websocket every 20s
-  useEffect(() => {
-    const donationInterval = setInterval(() => {
-      if (streamToken || slobsConfig?.tiktokUsername) {
-        donationsWS.sendMessage('ping')
-      }
-    }, 20000)
-
-    return () => {
-      clearInterval(donationInterval)
-    }
-  }, [donationsWS, streamToken, slobsConfig?.tiktokUsername])
-
   useEffect(() => {
     if (lastDonationJsonMessage) {
       try {

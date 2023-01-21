@@ -190,17 +190,6 @@ const ChatLog = ({
     }
   }, [lastChatJsonMessage])
 
-  // send message to websocket every 20s
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (_twitchUsername || _tiktokUsername || _youtubeChannel) {
-        chatWSSendMessage('ping')
-      }
-    }, 20000)
-
-    return () => clearInterval(interval)
-  }, [_twitchUsername, _tiktokUsername, _youtubeChannel, chatWSSendMessage])
-
   useEffect(() => {
     if (virtuosoRef.current) {
       virtuosoRef.current.scrollToIndex({
