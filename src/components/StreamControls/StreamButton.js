@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Flex, Title, UnstyledButton } from '@mantine/core'
+import { Button, Flex, Modal, Text, Title, UnstyledButton } from '@mantine/core'
+import { useState } from 'react'
 
 const getBackgroundGradient = (color) => {
   if (color === 'red') {
@@ -39,20 +40,60 @@ const StreamButton = ({
   disabled = false,
   onClick,
   children,
+  requireConfirmation,
 }) => {
+  const [isConfirmationOpened, setIsConfirmationOpened] = useState(false)
+
   return (
-    <LargeButton
-      bg={getBackgroundGradient(color)}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {!icon && (
-        <Title size={32} weight={800} color="white" align="center">
-          {label ?? children}
-        </Title>
-      )}
-      {icon && <Flex justify="center">{icon}</Flex>}
-    </LargeButton>
+    <>
+      {requireConfirmation ? (
+        <Modal
+          centered
+          opened={isConfirmationOpened}
+          onClose={() => setIsConfirmationOpened(false)}
+          title="Confirm Action"
+        >
+          <Flex direction="column" gap="md">
+            <Text>Tap "Confirm" to switch scenes.</Text>
+            <Button.Group>
+              <Button
+                fullWidth
+                h="48px"
+                variant="filled"
+                color="red"
+                onClick={() => setIsConfirmationOpened(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                fullWidth
+                h="48px"
+                onClick={onClick}
+                variant="filled"
+                color="green"
+              >
+                Confirm
+              </Button>
+            </Button.Group>
+          </Flex>
+        </Modal>
+      ) : null}
+
+      <LargeButton
+        bg={getBackgroundGradient(color)}
+        disabled={disabled}
+        onClick={
+          requireConfirmation ? () => setIsConfirmationOpened(true) : onClick
+        }
+      >
+        {!icon && (
+          <Title size={32} weight={800} color="white" align="center">
+            {label ?? children}
+          </Title>
+        )}
+        {icon && <Flex justify="center">{icon}</Flex>}
+      </LargeButton>
+    </>
   )
 }
 

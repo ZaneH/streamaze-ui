@@ -65,6 +65,7 @@ const ControlPanel = () => {
           <StreamButton
             key={scene}
             disabled={hopError || isActive}
+            requireConfirmation
             color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
             onClick={() => {
               wretch(`${REACT_APP_API_URL}/obs/switch-scene`)
