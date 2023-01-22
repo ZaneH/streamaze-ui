@@ -74,15 +74,15 @@ const ServerControl = () => {
           </Flex>
           <LiveContainer>
             <Flex align="center" gap="lg">
-              {hopError ? <IconCircleX color={colors.red[6]} /> : null}
-              {isStopped ? <IconOctagonOff color={colors.red[6]} /> : null}
+              {hopError ? <IconCircleX color={colors.red[7]} /> : null}
+              {isStopped ? <IconOctagonOff color={colors.red[7]} /> : null}
               {isStarting ? <IconLoader size={28} /> : null}
-              {isReady ? <IconMoodSmile size={28} /> : null}
+              {isReady ? (
+                <IconMoodSmile size={28} color={colors.green[6]} />
+              ) : null}
 
               <Text size="lg">
-                Your server is <b>{capitalizeFirstLetter(serverState)}</b>
-                <br />
-                Active scene <b>{streamActiveScene}</b>
+                Livebond is <b>{capitalizeFirstLetter(serverState)}</b>
               </Text>
             </Flex>
           </LiveContainer>

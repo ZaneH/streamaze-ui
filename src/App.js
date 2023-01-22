@@ -14,6 +14,7 @@ import SidebarProvider from './components/Providers/SidebarProvider'
 import GoLive from './pages/GoLive'
 import Home from './pages/Home'
 import Keypad from './pages/Keypad'
+import RaspberryPi from './pages/RaspberryPi'
 import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
 
@@ -87,6 +88,10 @@ const App = () => {
                           />
 
                           <Route path="/keypad" element={<Keypad />} />
+                          <Route
+                            path="/raspberrypi"
+                            element={<RaspberryPi />}
+                          />
 
                           <Route path="*" element={<Navigate to="/home" />} />
                         </Routes>

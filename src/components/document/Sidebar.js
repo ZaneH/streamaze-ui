@@ -1,5 +1,13 @@
 import styled from '@emotion/styled'
-import { Box, CloseButton, Divider, Navbar, NavLink, Text } from '@mantine/core'
+import {
+  Box,
+  CloseButton,
+  Divider,
+  Navbar,
+  NavLink,
+  Text,
+  useMantineTheme,
+} from '@mantine/core'
 import {
   IconDashboard,
   IconPower,
@@ -9,6 +17,7 @@ import {
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
+import { ReactComponent as IconRaspberryPi } from '../../raspberry-pi.svg'
 
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;
@@ -22,6 +31,7 @@ const Sidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { colors } = useMantineTheme()
 
   useEffect(() => {
     setIsSidebarOpen(false)
@@ -55,19 +65,34 @@ const Sidebar = () => {
       />
       <Divider my="sm" />
       <StyledNavLink
+        label={<NavLinkLabel>Raspberry Pi</NavLinkLabel>}
+        active={pathname === '/raspberrypi'}
+        icon={
+          <IconRaspberryPi
+            style={{
+              width: 28,
+              height: 28,
+            }}
+          />
+        }
+        onClick={() => {
+          navigate('/raspberrypi')
+        }}
+      />
+      <StyledNavLink
+        label={<NavLinkLabel>Livebond Controls</NavLinkLabel>}
+        active={pathname === '/server'}
+        icon={<IconPower size={28} />}
+        onClick={() => {
+          navigate('/server')
+        }}
+      />
+      <StyledNavLink
         label={<NavLinkLabel>Go Live</NavLinkLabel>}
         active={pathname === '/go-live'}
         icon={<IconVideo size={28} />}
         onClick={() => {
           navigate('/go-live')
-        }}
-      />
-      <StyledNavLink
-        label={<NavLinkLabel>Server Control</NavLinkLabel>}
-        active={pathname === '/server'}
-        icon={<IconPower size={28} />}
-        onClick={() => {
-          navigate('/server')
         }}
       />
     </Navbar>
