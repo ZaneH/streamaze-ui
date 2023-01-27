@@ -116,7 +116,7 @@ const ServerControl = () => {
             </Button>
             <Button
               loading={isStarting}
-              disabled={isReady}
+              disabled={!isReady}
               fullWidth
               color="green"
               onClick={() => {
