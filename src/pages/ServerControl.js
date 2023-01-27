@@ -32,7 +32,7 @@ const LiveContainer = styled(Paper)`
   margin-top: 16px;
 `
 
-const { REACT_APP_API_URL } = process.env
+const { REACT_APP_API_2_URL } = process.env
 
 const ServerControl = () => {
   const { colors } = useMantineTheme()
@@ -90,9 +90,8 @@ const ServerControl = () => {
             <Button
               fullWidth
               color="red"
-              disabled={isStopped}
               onClick={() => {
-                wretch(`${REACT_APP_API_URL}/obs/stop-server`)
+                wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
                   .post()
                   .json((res) => {
                     if (res?.error) {
@@ -115,12 +114,10 @@ const ServerControl = () => {
               Turn Off
             </Button>
             <Button
-              loading={isStarting}
-              disabled={!isReady}
               fullWidth
               color="green"
               onClick={() => {
-                wretch(`${REACT_APP_API_URL}/obs/start-server`)
+                wretch(`${REACT_APP_API_2_URL}/obs/start-server`)
                   .post()
                   .json((res) => {
                     if (res?.error) {

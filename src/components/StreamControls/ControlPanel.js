@@ -10,7 +10,7 @@ import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
 import { ReactComponent as IconPause } from '../../pause-icon.svg'
 
-const { REACT_APP_API_URL } = process.env
+const { REACT_APP_API_2_URL } = process.env
 
 const ControlPanel = () => {
   const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
@@ -68,9 +68,9 @@ const ControlPanel = () => {
             requireConfirmation
             color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
             onClick={() => {
-              wretch(`${REACT_APP_API_URL}/obs/switch-scene`)
+              wretch(`${REACT_APP_API_2_URL}/obs/switch-scene`)
                 .post({
-                  scene_name: scene,
+                  sceneName: scene,
                 })
                 .json((res) => {
                   if (res?.error) {
@@ -83,12 +83,18 @@ const ControlPanel = () => {
                     color: 'teal',
                   })
                 })
-                .catch(({ message }) => {
-                  showNotification({
-                    title: 'OBS Error',
-                    color: 'red',
-                    message,
-                  })
+                .catch((e) => {
+                  try {
+                    const err = JSON.parse(e.message)
+                    const message = err?.error
+                    showNotification({
+                      title: 'OBS Error',
+                      color: 'red',
+                      message,
+                    })
+                  } catch (e) {
+                    console.error('Error parsing OBS error', e)
+                  }
                 })
             }}
           >

@@ -33,7 +33,7 @@ const BlinkingDiv = styled.div`
   }
 `
 
-const { REACT_APP_API_URL } = process.env
+const { REACT_APP_API_2_URL } = process.env
 
 const RaspberryPi = () => {
   const { colors } = useMantineTheme()
@@ -65,7 +65,7 @@ const RaspberryPi = () => {
                 color="green"
                 disabled={isLive}
                 onClick={() => {
-                  wretch(`${REACT_APP_API_URL}/obs/start-broadcast`)
+                  wretch(`${REACT_APP_API_2_URL}/obs/start-broadcast`)
                     .post()
                     .json((res) => {
                       if (res?.error) {
@@ -94,7 +94,7 @@ const RaspberryPi = () => {
                 color="red"
                 disabled={!isLive}
                 onClick={() => {
-                  wretch(`${REACT_APP_API_URL}/obs/stop-broadcast`)
+                  wretch(`${REACT_APP_API_2_URL}/obs/stop-broadcast`)
                     .post()
                     .json((res) => {
                       if (res?.error) {

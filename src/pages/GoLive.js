@@ -33,7 +33,7 @@ const BlinkingDiv = styled.div`
   }
 `
 
-const { REACT_APP_API_URL } = process.env
+const { REACT_APP_API_2_URL } = process.env
 
 const GoLive = () => {
   const { colors } = useMantineTheme()
@@ -67,9 +67,8 @@ const GoLive = () => {
               <Button
                 fullWidth
                 color="green"
-                disabled={isLive}
                 onClick={() => {
-                  wretch(`${REACT_APP_API_URL}/obs/start-broadcast`)
+                  wretch(`${REACT_APP_API_2_URL}/obs/start-broadcast`)
                     .post()
                     .json((res) => {
                       if (res?.error) {
@@ -82,12 +81,18 @@ const GoLive = () => {
                         })
                       }
                     })
-                    .catch((err) => {
-                      showNotification({
-                        title: 'Error',
-                        message: err.message,
-                        color: 'red',
-                      })
+                    .catch((e) => {
+                      try {
+                        const err = JSON.parse(e.message)
+                        const message = err?.error
+                        showNotification({
+                          title: 'OBS Error',
+                          color: 'red',
+                          message,
+                        })
+                      } catch (e) {
+                        console.error('Error parsing OBS error', e)
+                      }
                     })
                 }}
               >
@@ -96,9 +101,8 @@ const GoLive = () => {
               <Button
                 fullWidth
                 color="red"
-                disabled={!isLive}
                 onClick={() => {
-                  wretch(`${REACT_APP_API_URL}/obs/stop-broadcast`)
+                  wretch(`${REACT_APP_API_2_URL}/obs/stop-broadcast`)
                     .post()
                     .json((res) => {
                       if (res?.error) {
@@ -111,12 +115,18 @@ const GoLive = () => {
                         })
                       }
                     })
-                    .catch((err) => {
-                      showNotification({
-                        title: 'Error',
-                        message: err.message,
-                        color: 'red',
-                      })
+                    .catch((e) => {
+                      try {
+                        const err = JSON.parse(e.message)
+                        const message = err?.error
+                        showNotification({
+                          title: 'OBS Error',
+                          color: 'red',
+                          message,
+                        })
+                      } catch (e) {
+                        console.error('Error parsing OBS error', e)
+                      }
                     })
                 }}
               >
