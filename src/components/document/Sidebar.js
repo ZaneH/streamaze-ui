@@ -64,7 +64,7 @@ const Sidebar = () => {
         }}
       />
       <Divider my="sm" />
-      <StyledNavLink
+      {/* <StyledNavLink
         label={<NavLinkLabel>Raspberry Pi</NavLinkLabel>}
         active={pathname === '/raspberrypi'}
         icon={
@@ -78,7 +78,7 @@ const Sidebar = () => {
         onClick={() => {
           navigate('/raspberrypi')
         }}
-      />
+      /> */}
       <StyledNavLink
         label={<NavLinkLabel>Livebond Controls</NavLinkLabel>}
         active={pathname === '/server'}
