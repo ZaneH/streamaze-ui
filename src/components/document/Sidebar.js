@@ -1,13 +1,5 @@
 import styled from '@emotion/styled'
-import {
-  Box,
-  CloseButton,
-  Divider,
-  Navbar,
-  NavLink,
-  Text,
-  useMantineTheme,
-} from '@mantine/core'
+import { Box, CloseButton, Divider, Navbar, NavLink, Text } from '@mantine/core'
 import {
   IconDashboard,
   IconPower,
@@ -17,7 +9,6 @@ import {
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
-import { ReactComponent as IconRaspberryPi } from '../../raspberry-pi.svg'
 
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;
@@ -31,7 +22,6 @@ const Sidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { colors } = useMantineTheme()
 
   useEffect(() => {
     setIsSidebarOpen(false)

@@ -11,11 +11,9 @@ import {
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconOctagonOff, IconVideoOff } from '@tabler/icons'
-import { useContext } from 'react'
+import { IconOctagonOff } from '@tabler/icons'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
-import { HopContext } from '../components/Providers/HopProvider'
 
 const LiveContainer = styled(Paper)`
   border: 1px solid #495057;

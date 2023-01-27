@@ -36,7 +36,7 @@ const { REACT_APP_API_2_URL } = process.env
 
 const ServerControl = () => {
   const { colors } = useMantineTheme()
-  const { serverState, hopError, streamActiveScene } = useContext(HopContext)
+  const { serverState, hopError } = useContext(HopContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
 
   const isStopped = serverState === 'stopped'
