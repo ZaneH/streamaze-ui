@@ -7,6 +7,7 @@ import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
+import SuperChatCard from './SuperChatCard'
 
 const { REACT_APP_API_2_WS_URL } = process.env
 
@@ -190,6 +191,16 @@ const DonationLog = () => {
           isSub = true
         } else if (typeof currency !== 'undefined') {
           isCurrency = true
+        }
+
+        if (isCurrency) {
+          return (
+            <SuperChatCard
+              key={eventId}
+              donation={donation}
+              isAnimated={i === 0}
+            />
+          )
         }
 
         return (

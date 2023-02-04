@@ -6,6 +6,7 @@ export const DonationContext = createContext()
 const DonationProvider = ({ children }) => {
   // Store donations
   const [donations, setDonations] = useState([])
+
   // For determining when to show/play the next donation
   const [donationIndex, setDonationIndex] = useState(-1)
 
