@@ -16,26 +16,6 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Avatar, Box, Flex, Text } from '@mantine/core'
 
-const darkenHexColor = (hex, amount) => {
-  hex = hex.replace('#', '')
-
-  let r = parseInt(hex.substring(0, 2), 16),
-    g = parseInt(hex.substring(2, 4), 16),
-    b = parseInt(hex.substring(4, 6), 16),
-    diff = amount || 10
-
-  r = Math.max(0, Math.min(255, r - diff))
-  g = Math.max(0, Math.min(255, g - diff))
-  b = Math.max(0, Math.min(255, b - diff))
-
-  return (
-    '#' +
-    r.toString(16).padStart(2, '0') +
-    g.toString(16).padStart(2, '0') +
-    b.toString(16).padStart(2, '0')
-  )
-}
-
 /**
  * Calculate the colors for a given super chat amount.
  * Returns the the background color [0], the header color (darkened) [1],
