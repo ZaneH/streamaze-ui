@@ -103,7 +103,7 @@ const YTCard = styled.div`
 
 export default function SuperChatCard({ donation, isAnimated }) {
   const {
-    data: { amount, message, id: eventId, name },
+    data: { amount, message, name, pfp },
   } = donation
 
   const [bgColor, headerBgColor, textColor] = getSuperChatColors(amount)
@@ -121,8 +121,8 @@ export default function SuperChatCard({ donation, isAnimated }) {
             borderRadius: '4px',
           }}
         >
-          <Avatar size="44px" radius="50%">
-            AT
+          <Avatar size="44px" radius="50%" src={pfp && pfp}>
+            {!pfp && name?.[0]}
           </Avatar>
           <Flex direction="column" justify="center">
             <Box>
@@ -143,11 +143,13 @@ export default function SuperChatCard({ donation, isAnimated }) {
             </Box>
           </Flex>
         </Flex>
-        <Box py="md" px="16px">
-          <Text color={textColor} weight={500}>
-            {message}
-          </Text>
-        </Box>
+        {message && (
+          <Box py="md" px="16px">
+            <Text color={textColor} weight={500}>
+              {message}
+            </Text>
+          </Box>
+        )}
       </Flex>
     </YTCard>
   )
