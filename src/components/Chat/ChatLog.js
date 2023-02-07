@@ -63,10 +63,11 @@ const Footer = styled.div`
   padding-top: 18px;
 `
 
+// TODO: word-break: break-all; will not work with isBig
 const SenderText = styled(Text)`
   display: inline;
   vertical-align: middle;
-  word-break: break-all;
+  word-break: break-word;
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
   ${({ ismember }) => ismember && 'color: #2ba640;'}
   ${({ ismod }) => ismod && 'color: #5e84f1;'}
@@ -75,7 +76,7 @@ const SenderText = styled(Text)`
 const MessageText = styled(Text)`
   display: inline;
   vertical-align: middle;
-  word-break: break-all;
+  word-break: break-word;
   color: white;
 `
 

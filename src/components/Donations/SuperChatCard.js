@@ -18,7 +18,7 @@ import { Avatar, Box, Flex, Text } from '@mantine/core'
 
 /**
  * Calculate the colors for a given super chat amount.
- * Returns the the background color [0], the header color (darkened) [1],
+ * Returns the background color [0], the header color (darkened) [1],
  * and the text color [2].
  * @param {string|number} amount
  * @returns {[string, string, string]}
