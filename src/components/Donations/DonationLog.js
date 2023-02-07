@@ -65,12 +65,15 @@ const AnimatedDiv = styled.div`
 const DonationLog = () => {
   const { slobsConfig } = useContext(ConfigContext)
   const { donations, setDonations, donationIndex } = useContext(DonationContext)
-  const streamToken = slobsConfig?.streamToken
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
 
   // Donations websocket
-  const donationsWS = useWebSocket(`${REACT_APP_API_2_WS_URL}`, {
+  const {
+    lastJsonMessage: donationLastMessage,
+    sendJsonMessage: donationSendMessage,
+    readyState: donationReadyState,
+  } = useWebSocket(`${REACT_APP_API_2_WS_URL}`, {
     retryOnError: true,
     reconnectInterval: 10000,
     shouldReconnect: () => true,
@@ -83,40 +86,35 @@ const DonationLog = () => {
     },
     onOpen: () => {
       const params = {}
-      if (streamToken) {
-        params['streamToken'] = streamToken
+      if (slobsConfig?.streamToken) {
+        params['streamToken'] = slobsConfig?.streamToken
       }
 
       if (slobsConfig?.tiktokUsername) {
         params['tiktokDonos'] = slobsConfig?.tiktokUsername
       }
 
-      donationsWS.sendMessage(JSON.stringify(params))
+      donationSendMessage(params)
     },
   })
 
-  const {
-    lastJsonMessage: lastDonationJsonMessage,
-    readyState: donationsReadyState,
-  } = donationsWS
-
   useEffect(() => {
-    if (lastDonationJsonMessage) {
+    if (donationLastMessage) {
       try {
-        setDonations((prev) => [...prev, lastDonationJsonMessage])
+        setDonations((prev) => [...prev, donationLastMessage])
       } catch {
-        console.log('Error parsing donation message', lastDonationJsonMessage)
+        console.log('Error parsing donation message', donationLastMessage)
       }
     }
-  }, [lastDonationJsonMessage, setDonations])
+  }, [donationLastMessage, setDonations])
 
-  if (donations.length === 0 && donationsReadyState !== 1) {
+  if (donations.length === 0 && donationReadyState !== 1) {
     return (
       <Center my="lg">
         <Loader />
       </Center>
     )
-  } else if (donations.length === 0 && donationsReadyState === 1) {
+  } else if (donations.length === 0 && donationReadyState === 1) {
     return (
       <Box my="lg" mx="36px">
         <Text color="dimmed" size="lg">

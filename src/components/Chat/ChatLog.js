@@ -113,7 +113,7 @@ const ChatLog = ({
     isDark = searchParams.get('theme') === 'dark'
   }
 
-  const { lastMessage: lastChatJsonMessage, sendMessage: chatWSSendMessage } =
+  const { lastMessage: lastChatJsonMessage, sendJsonMessage: chatSendMessage } =
     useWebSocket(
       `${REACT_APP_API_2_WS_URL}`,
       {
@@ -142,7 +142,7 @@ const ChatLog = ({
           //   params['twitchChat'] = _twitchUsername
           // }
 
-          chatWSSendMessage(JSON.stringify(params))
+          chatSendMessage(params)
         },
       },
       !!_tiktokUsername || !!_youtubeChannel || !!_twitchUsername

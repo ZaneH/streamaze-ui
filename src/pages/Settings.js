@@ -19,6 +19,8 @@ const Settings = () => {
     setStatsConfig,
     slobsConfig,
     setSlobsConfig,
+    lanyardConfig,
+    setLanyardConfig,
   } = useContext(ConfigContext)
 
   const chatForm = useForm({
@@ -54,6 +56,13 @@ const Settings = () => {
       streamToken: slobsConfig.streamToken,
       ttsVoice: slobsConfig?.ttsVoice,
       tiktokUsername: slobsConfig?.tiktokUsername,
+    },
+  })
+
+  const lanyardForm = useForm({
+    initialValues: {
+      discordUserId: lanyardConfig?.discordUserId,
+      apiKey: lanyardConfig?.apiKey,
     },
   })
 
@@ -332,6 +341,44 @@ const Settings = () => {
           </FormSection>
         </form>
 
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            setLanyardConfig((prev) => ({
+              ...prev,
+              discordUserId: lanyardForm.values.discordUserId,
+              apiKey: lanyardForm.values.apiKey,
+            }))
+
+            showNotification({
+              message: 'Lanyard API settings saved!',
+              color: 'teal',
+            })
+          }}
+        >
+          <FormSection
+            title="Lanyard API"
+            subtitle="Add custom data to your stream!"
+          >
+            <TextInput
+              label={<FieldLabel>Discord User ID</FieldLabel>}
+              placeholder="1234567890"
+              defaultValue={lanyardForm.values.discordUserId}
+              onChange={(e) => {
+                lanyardForm.setFieldValue('discordUserId', e.target.value)
+              }}
+            />
+            <TextInput
+              label={<FieldLabel>API Key</FieldLabel>}
+              placeholder="API Key"
+              defaultValue={lanyardForm.values.apiKey}
+              onChange={(e) => {
+                lanyardForm.setFieldValue('apiKey', e.target.value)
+              }}
+            />
+          </FormSection>
+        </form>
+
         <Flex my="lg" pb="48px" justify="center">
           <Button
             mt="lg"
@@ -370,6 +417,12 @@ const Settings = () => {
                 ...prev,
                 tiktokUsername: statsForm.values.tiktok,
                 youtubeChannel: statsForm.values.youtube,
+              }))
+
+              setLanyardConfig((prev) => ({
+                ...prev,
+                discordUserId: lanyardForm.values.discordUserId,
+                apiKey: lanyardForm.values.apiKey,
               }))
 
               showNotification({

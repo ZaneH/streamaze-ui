@@ -75,6 +75,16 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Lanyard config
+  const [lanyardConfig, setLanyardConfig] = useLocalStorage({
+    key: 'lanyard-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      discordUserId: '',
+      apiKey: '',
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
@@ -82,6 +92,7 @@ const ConfigProvider = ({ children }) => {
   const isClip = searchParams.get('isClip') === 'true'
   const isSlobs = searchParams.get('isSlobs') === 'true'
   const isKeypad = searchParams.get('isKeypad') === 'true'
+  const isLanyard = searchParams.get('isLanyard') === 'true'
 
   // Load chat config from URLs
   let tiktokChat = ''
@@ -167,6 +178,19 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
+  // Load Lanyard config from URL
+  let discordUserId = ''
+  let apiKey = ''
+  if (isLanyard) {
+    if (searchParams.get('discordUserId')) {
+      discordUserId = searchParams.get('discordUserId')
+    }
+
+    if (searchParams.get('apiKey')) {
+      apiKey = searchParams.get('apiKey')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
@@ -227,6 +251,14 @@ const ConfigProvider = ({ children }) => {
           code: keypadCode ? keypadCode : keypadConfig.code,
         },
         setKeypadConfig,
+        lanyardConfig: {
+          ...lanyardConfig,
+          discordUserId: discordUserId
+            ? discordUserId
+            : lanyardConfig.discordUserId,
+          apiKey: apiKey ? apiKey : lanyardConfig.apiKey,
+        },
+        setLanyardConfig,
       }}
     >
       {children}
