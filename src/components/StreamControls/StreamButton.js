@@ -22,7 +22,7 @@ const getBackgroundGradient = (color) => {
 
 const LargeButton = styled(UnstyledButton)`
   width: 100%;
-  padding: 28px 0;
+  padding: 18px 0;
   text-transform: uppercase;
   ${({ disabled }) =>
     disabled
