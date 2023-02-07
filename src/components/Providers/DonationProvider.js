@@ -1,5 +1,6 @@
 import { useInterval } from '@mantine/hooks'
 import { createContext, useEffect, useState } from 'react'
+import PeppersAudio from 'assets/peppers_in_the_chat.mp3'
 
 export const DonationContext = createContext()
 
@@ -25,7 +26,12 @@ const DonationProvider = ({ children }) => {
       setIsPlaying(true)
       setDonationIndex((prev) => prev + 1)
 
-      const ttsUrl = donations[donationIndex]?.data?.tts_url
+      let ttsUrl = donations[donationIndex]?.data?.tts_url
+
+      if (!ttsUrl) {
+        ttsUrl = PeppersAudio
+      }
+
       if (ttsUrl) {
         const _audio = new Audio(ttsUrl)
 
