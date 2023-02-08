@@ -64,7 +64,8 @@ const AnimatedDiv = styled.div`
 
 const DonationLog = () => {
   const { slobsConfig } = useContext(ConfigContext)
-  const { donations, setDonations, donationIndex } = useContext(DonationContext)
+  const { donations, setDonations, donationIndex, setDonationsInChat } =
+    useContext(DonationContext)
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
 
@@ -105,6 +106,14 @@ const DonationLog = () => {
   useEffect(() => {
     if (donationLastMessage) {
       try {
+        if (
+          donationLastMessage.type === 'donation' ||
+          donationLastMessage.type === 'superchat'
+        ) {
+          setDonationsInChat((prev) => [...prev, donationLastMessage])
+          return
+        }
+
         setDonations((prev) => [...prev, donationLastMessage])
       } catch {
         console.log('Error parsing donation message', donationLastMessage)
@@ -152,13 +161,6 @@ const DonationLog = () => {
         const { data = {}, type } = donation
         const { id: eventId } = data
         const isTikTokGift = type === 'tiktok_gift'
-        const isSuperchat = type === 'superchat'
-        const isSlobsDonation = type === 'donation'
-
-        // We display these in the ChatLog
-        // if (isSuperchat || isSlobsDonation) {
-        //   return
-        // }
 
         if (isTikTokGift) {
           const {
