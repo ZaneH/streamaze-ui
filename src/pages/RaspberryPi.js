@@ -48,22 +48,24 @@ const RaspberryPi = () => {
             gap="18px"
             justify={isSmall ? 'center' : 'inherit'}
           >
-            {!isLive && <IconOctagonOff color={colors.red[7]} size={32} />}
-            <Title>Your Pi is {statusMessage}</Title>
-            {isLive ? (
+            {/*!isLive && <IconOctagonOff color={colors.red[7]} size={32} />*/}
+            {/* <Title>Your Pi is {statusMessage}</Title> */}
+            <Title w="100%" align="center">
+              Raspberry Pi Control
+            </Title>
+            {/* {isLive ? (
               <BlinkingDiv>
                 <ColorSwatch color={colors.red[7]} />
               </BlinkingDiv>
-            ) : null}
+            ) : null} */}
           </Flex>
           <LiveContainer>
             <Stack>
-              <Button
+              {/* <Button
                 fullWidth
                 color="green"
-                disabled={isLive}
                 onClick={() => {
-                  wretch(`${REACT_APP_API_2_URL}/obs/start-broadcast`)
+                  wretch(`${REACT_APP_API_2_URL}/pi/start`)
                     .post()
                     .json((res) => {
                       if (res?.error) {
@@ -86,13 +88,12 @@ const RaspberryPi = () => {
                 }}
               >
                 Start Raspberry Pi
-              </Button>
+              </Button> */}
               <Button
                 fullWidth
                 color="red"
-                disabled={!isLive}
                 onClick={() => {
-                  wretch(`${REACT_APP_API_2_URL}/obs/stop-broadcast`)
+                  wretch(`${REACT_APP_API_2_URL}/pi/stop`)
                     .post()
                     .json((res) => {
                       if (res?.error) {

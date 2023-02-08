@@ -9,6 +9,7 @@ import {
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
+import { ReactComponent as IconRaspberryPi } from 'raspberry-pi.svg'
 
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;
@@ -54,7 +55,7 @@ const Sidebar = () => {
         }}
       />
       <Divider my="sm" />
-      {/* <StyledNavLink
+      <StyledNavLink
         label={<NavLinkLabel>Raspberry Pi</NavLinkLabel>}
         active={pathname === '/raspberrypi'}
         icon={
@@ -68,7 +69,7 @@ const Sidebar = () => {
         onClick={() => {
           navigate('/raspberrypi')
         }}
-      /> */}
+      />
       <StyledNavLink
         label={<NavLinkLabel>Livebond Controls</NavLinkLabel>}
         active={pathname === '/server'}
