@@ -1,17 +1,7 @@
 import styled from '@emotion/styled'
-import {
-  Button,
-  ColorSwatch,
-  Container,
-  Flex,
-  Paper,
-  Stack,
-  Title,
-  useMantineTheme,
-} from '@mantine/core'
+import { Button, Container, Flex, Paper, Stack, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconOctagonOff } from '@tabler/icons'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
 
@@ -22,22 +12,22 @@ const LiveContainer = styled(Paper)`
   margin-top: 16px;
 `
 
-const BlinkingDiv = styled.div`
-  animation: blinker 1.32s ease-in-out infinite;
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-`
+// const BlinkingDiv = styled.div`
+//   animation: blinker 1.32s ease-in-out infinite;
+//   @keyframes blinker {
+//     50% {
+//       opacity: 0;
+//     }
+//   }
+// `
 
 const { REACT_APP_API_2_URL } = process.env
 
 const RaspberryPi = () => {
-  const { colors } = useMantineTheme()
-  const isLive = false
+  // const { colors } = useMantineTheme()
+  // const isLive = false
   const isSmall = useMediaQuery('(max-width: 600px)')
-  let statusMessage = 'Offline'
+  // let statusMessage = 'Offline'
 
   return (
     <Layout>
