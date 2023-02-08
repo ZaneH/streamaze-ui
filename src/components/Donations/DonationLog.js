@@ -73,30 +73,34 @@ const DonationLog = () => {
     lastJsonMessage: donationLastMessage,
     sendJsonMessage: donationSendMessage,
     readyState: donationReadyState,
-  } = useWebSocket(`${REACT_APP_API_2_WS_URL}`, {
-    retryOnError: true,
-    reconnectInterval: 10000,
-    shouldReconnect: () => true,
-    onError: () => {
-      showNotification({
-        title: 'Donations Error',
-        message: "Couldn't connect to donations server.",
-        color: 'red',
-      })
-    },
-    onOpen: () => {
-      const params = {}
-      if (slobsConfig?.streamToken) {
-        params['streamToken'] = slobsConfig?.streamToken
-      }
+  } = useWebSocket(
+    `${REACT_APP_API_2_WS_URL}`,
+    {
+      retryOnError: true,
+      reconnectInterval: 10000,
+      shouldReconnect: () => true,
+      onError: () => {
+        showNotification({
+          title: 'Donations Error',
+          message: "Couldn't connect to donations server.",
+          color: 'red',
+        })
+      },
+      onOpen: () => {
+        const params = {}
+        if (slobsConfig?.streamToken) {
+          params['streamToken'] = slobsConfig?.streamToken
+        }
 
-      if (slobsConfig?.tiktokUsername) {
-        params['tiktokDonos'] = slobsConfig?.tiktokUsername
-      }
+        if (slobsConfig?.tiktokUsername) {
+          params['tiktokDonos'] = slobsConfig?.tiktokUsername
+        }
 
-      donationSendMessage(params)
+        donationSendMessage(params)
+      },
     },
-  })
+    !!slobsConfig?.streamToken || !!slobsConfig?.tiktokUsername
+  )
 
   useEffect(() => {
     if (donationLastMessage) {
@@ -148,6 +152,13 @@ const DonationLog = () => {
         const { data = {}, type } = donation
         const { id: eventId } = data
         const isTikTokGift = type === 'tiktok_gift'
+        const isSuperchat = type === 'superchat'
+        const isSlobsDonation = type === 'donation'
+
+        // We display these in the ChatLog
+        // if (isSuperchat || isSlobsDonation) {
+        //   return
+        // }
 
         if (isTikTokGift) {
           const {

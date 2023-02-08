@@ -1,9 +1,14 @@
 import { Flex, Text } from '@mantine/core'
 import { SocialIcon } from 'react-social-icons'
 
-const StatInfo = ({ network, label, image }) => {
+const StatInfo = ({ network, label, image, onClick }) => {
   return (
-    <Flex>
+    <Flex
+      onClick={onClick}
+      style={{
+        cursor: onClick ? 'pointer' : 'initial',
+      }}
+    >
       {image ? (
         image
       ) : (
