@@ -150,7 +150,14 @@ const DonationLog = () => {
         console.log('Error parsing donation message', donationLastMessage)
       }
     }
-  }, [donationLastMessage, setDonations, setDonationsInChat])
+  }, [
+    donationLastMessage,
+    setDonations,
+    setDonationsInChat,
+    kv?.net_profit,
+    discordUserId,
+    apiKey,
+  ])
 
   if (donations.length === 0 && donationReadyState !== 1) {
     return (
