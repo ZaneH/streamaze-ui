@@ -63,7 +63,7 @@ const StatProvider = ({ children }) => {
           )
         }
 
-        if (res?.viewers) {
+        if (res?.viewers && res?.viewers > 1) {
           setTiktokViewers(res.viewers)
         } else if (res?.error) {
           throw new Error(res.error)
