@@ -150,11 +150,11 @@ const DonationLog = () => {
         console.log('Error parsing donation message', donationLastMessage)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     donationLastMessage,
     setDonations,
     setDonationsInChat,
-    kv?.net_profit,
     discordUserId,
     apiKey,
   ])
