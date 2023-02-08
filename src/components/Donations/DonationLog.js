@@ -2,9 +2,11 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Center, Flex, Loader, Text, Title } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { useContext, useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
+import wretch from 'wretch'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
 import SuperChatCard from './SuperChatCard'
@@ -63,9 +65,11 @@ const AnimatedDiv = styled.div`
 `
 
 const DonationLog = () => {
-  const { slobsConfig } = useContext(ConfigContext)
+  const { slobsConfig, lanyardConfig } = useContext(ConfigContext)
+  const { discordUserId, apiKey } = lanyardConfig
   const { donations, setDonations, donationIndex, setDonationsInChat } =
     useContext(DonationContext)
+  const { kv } = useContext(LanyardContext)
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
 
@@ -111,15 +115,42 @@ const DonationLog = () => {
           donationLastMessage.type === 'superchat'
         ) {
           setDonationsInChat((prev) => [...prev, donationLastMessage])
-          return
+        } else {
+          setDonations((prev) => [...prev, donationLastMessage])
         }
 
-        setDonations((prev) => [...prev, donationLastMessage])
+        const donationAmount = donationLastMessage?.data?.amount
+        // remove non-numeric characters
+        const donationAmountNumeric = parseFloat(
+          donationAmount.replace(/[^\d.-]/g, '')
+        )
+
+        if (donationAmountNumeric > 0) {
+          // Update net_profit KV value
+          const oldNetProfit = parseFloat(kv?.net_profit)
+          const newNetProfit = oldNetProfit + donationAmountNumeric
+
+          if (isNaN(newNetProfit)) {
+            console.error('Error updating net_profit KV value')
+            return
+          }
+
+          wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
+            .post({
+              discordUserId,
+              apiKey,
+              key: 'net_profit',
+              value: newNetProfit,
+            })
+            .catch((err) => {
+              console.log('Error updating net_profit KV value', err)
+            })
+        }
       } catch {
         console.log('Error parsing donation message', donationLastMessage)
       }
     }
-  }, [donationLastMessage, setDonations])
+  }, [donationLastMessage, setDonations, setDonationsInChat])
 
   if (donations.length === 0 && donationReadyState !== 1) {
     return (

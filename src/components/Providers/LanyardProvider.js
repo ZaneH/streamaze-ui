@@ -1,13 +1,18 @@
-import { showNotification } from '@mantine/notifications'
-import { createContext, useContext, useEffect, useState } from 'react'
-import useWebSocket from 'react-use-websocket'
+import { createContext, useContext } from 'react'
+import { useLanyardWS } from 'use-lanyard'
 import { ConfigContext } from './ConfigProvider'
 export const LanyardContext = createContext()
 
-const { REACT_APP_API_2_WS_URL } = process.env
-
 const LanyardProvider = ({ children }) => {
-  return null
+  const { lanyardConfig } = useContext(ConfigContext)
+  const { discordUserId } = lanyardConfig
+
+  const data = useLanyardWS(discordUserId)
+  const kv = data?.kv
+
+  return (
+    <LanyardContext.Provider value={{ kv }}>{children}</LanyardContext.Provider>
+  )
 }
 
 export default LanyardProvider

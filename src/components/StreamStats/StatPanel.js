@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Modal, Text, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { ReactComponent as DollarSignIcon } from 'dollar-sign-icon.svg'
 import { useContext, useRef, useState } from 'react'
-import { useLanyardWS } from 'use-lanyard'
 import wretch from 'wretch'
 import { ReactComponent as BitRateIcon } from '../../bit-rate-icon.svg'
 import { HopContext } from '../Providers/HopProvider'
@@ -15,14 +15,12 @@ const { REACT_APP_API_2_URL } = process.env
 const StatPanel = () => {
   const { ytViewers, tiktokViewers, isYTLoading, isTikTokLoading } =
     useContext(StatContext)
+  const { bitrate } = useContext(HopContext)
+  const { kv } = useContext(LanyardContext)
   const { lanyardConfig } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
-  const { bitrate } = useContext(HopContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
-  const data = useLanyardWS(discordUserId)
   const expenseRef = useRef(null)
-
-  const netProfit = data?.kv?.net_profit
 
   return (
     <>
@@ -54,10 +52,10 @@ const StatPanel = () => {
             image={<BitRateIcon style={{ width: 26, height: 26 }} />}
             label={bitrate ? `${bitrate} Kbps` : 'Offline'}
           />
-          {netProfit ? (
+          {kv?.net_profit ? (
             <StatInfo
               onClick={() => {
-                if (netProfit) {
+                if (kv?.net_profit) {
                   setShowMoneyModal(true)
                 } else {
                   showNotification({
@@ -68,7 +66,7 @@ const StatPanel = () => {
                 }
               }}
               image={<DollarSignIcon style={{ width: 26, height: 26 }} />}
-              label={parseFloat(netProfit)
+              label={parseFloat(kv?.net_profit)
                 .toLocaleString('en-US', {
                   style: 'currency',
                   currency: 'USD',
@@ -93,7 +91,7 @@ const StatPanel = () => {
           <Box>
             <Text>
               <b>Current:</b>{' '}
-              {parseFloat(netProfit)
+              {parseFloat(kv?.net_profit)
                 .toLocaleString('en-US', {
                   style: 'currency',
                   currency: 'USD',
@@ -114,7 +112,7 @@ const StatPanel = () => {
               fullWidth
               color="red"
               onClick={() => {
-                const previousValue = parseFloat(netProfit)
+                const previousValue = parseFloat(kv?.net_profit)
                 const newValue =
                   previousValue - parseFloat(expenseRef.current.value)
 
@@ -152,7 +150,7 @@ const StatPanel = () => {
               fullWidth
               color="green"
               onClick={() => {
-                const previousValue = parseFloat(netProfit)
+                const previousValue = parseFloat(kv?.net_profit)
                 const newValue =
                   previousValue + parseFloat(expenseRef.current.value)
 
