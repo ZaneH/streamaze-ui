@@ -67,8 +67,7 @@ const AnimatedDiv = styled.div`
 const DonationLog = () => {
   const { slobsConfig, lanyardConfig } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
-  const { donations, setDonations, donationIndex, setDonationsInChat } =
-    useContext(DonationContext)
+  const { donations, setDonations, donationIndex } = useContext(DonationContext)
   const { kv } = useContext(LanyardContext)
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
@@ -110,14 +109,7 @@ const DonationLog = () => {
   useEffect(() => {
     if (donationLastMessage) {
       try {
-        if (
-          donationLastMessage.type === 'donation' ||
-          donationLastMessage.type === 'superchat'
-        ) {
-          setDonationsInChat((prev) => [...prev, donationLastMessage])
-        } else {
-          setDonations((prev) => [...prev, donationLastMessage])
-        }
+        setDonations((prev) => [...prev, donationLastMessage])
 
         const donationAmount = donationLastMessage?.data?.amount
         // remove non-numeric characters
@@ -140,7 +132,7 @@ const DonationLog = () => {
               discordUserId,
               apiKey,
               key: 'net_profit',
-              value: newNetProfit,
+              value: newNetProfit.toString(),
             })
             .catch((err) => {
               console.log('Error updating net_profit KV value', err)
@@ -151,13 +143,7 @@ const DonationLog = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    donationLastMessage,
-    setDonations,
-    setDonationsInChat,
-    discordUserId,
-    apiKey,
-  ])
+  }, [donationLastMessage, setDonations, discordUserId, apiKey])
 
   if (donations.length === 0 && donationReadyState !== 1) {
     return (

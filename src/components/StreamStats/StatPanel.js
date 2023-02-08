@@ -120,7 +120,7 @@ const StatPanel = () => {
                   .post({
                     discordUserId,
                     key: 'net_profit',
-                    value: newValue,
+                    value: newValue.toString(),
                     apiKey,
                   })
                   .res((res) => {
@@ -158,7 +158,7 @@ const StatPanel = () => {
                   .post({
                     discordUserId,
                     key: 'net_profit',
-                    value: newValue,
+                    value: newValue.toString(),
                     apiKey,
                   })
                   .res((res) => {

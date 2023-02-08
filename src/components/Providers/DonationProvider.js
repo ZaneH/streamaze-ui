@@ -7,7 +7,6 @@ export const DonationContext = createContext()
 const DonationProvider = ({ children }) => {
   // Store donations
   const [donations, setDonations] = useState([])
-  const [donationsInChat, setDonationsInChat] = useState([])
 
   // For determining when to show/play the next donation
   const [donationIndex, setDonationIndex] = useState(-1)
@@ -69,8 +68,6 @@ const DonationProvider = ({ children }) => {
       value={{
         donations,
         setDonations,
-        donationsInChat,
-        setDonationsInChat,
         donationIndex,
         setDonationIndex,
         isAutoplay,

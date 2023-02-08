@@ -9,17 +9,15 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { ReactComponent as ModChatIcon } from '../../mod-chat-icon.svg'
-import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg'
 import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
+import { ReactComponent as ModChatIcon } from '../../mod-chat-icon.svg'
+import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
-import { showNotification } from '@mantine/notifications'
-import { DonationContext } from 'components/Providers/DonationProvider'
-import SuperChatCard from 'components/Donations/SuperChatCard'
 
 const Item = styled.div`
   margin: 4px 0;
@@ -102,7 +100,6 @@ const ChatLog = ({
   const virtuosoRef = useRef(null)
   const { colors } = useMantineTheme()
   const { chatConfig } = useContext(ConfigContext)
-  const { donationsInChat } = useContext(DonationContext)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -122,6 +119,7 @@ const ChatLog = ({
       {
         retryOnError: true,
         reconnectInterval: 10000,
+        reconnectAttempts: Infinity,
         shouldReconnect: () => true,
         onError: () => {
           showNotification({
@@ -194,19 +192,6 @@ const ChatLog = ({
     }
   }, [lastChatJsonMessage])
 
-  // Add donations to chat (Super Chat and Streamlabs Donations)
-  useEffect(() => {
-    const latestDonation = donationsInChat[donationsInChat.length - 1]
-    if (latestDonation) {
-      setChatData((prev) => [
-        ...prev,
-        {
-          ...latestDonation,
-        },
-      ])
-    }
-  }, [donationsInChat])
-
   // Scroll to end
   useEffect(() => {
     if (virtuosoRef.current) {
@@ -277,17 +262,6 @@ const ChatLog = ({
           Footer,
         }}
         itemContent={(_, chatEvent) => {
-          if (
-            chatEvent?.type === 'donation' ||
-            chatEvent?.type === 'superchat'
-          ) {
-            return (
-              <Box {...props} my="4px">
-                <SuperChatCard donation={chatEvent} />
-              </Box>
-            )
-          }
-
           const {
             sender,
             message,
