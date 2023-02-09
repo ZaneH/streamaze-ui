@@ -52,14 +52,12 @@ const ServerControl = () => {
             gap="12px"
             justify={isSmall ? 'center' : 'inherit'}
           >
-            <Title>Server Control</Title>
+            <Title>YouTube Server</Title>
             <Tooltip
               withinPortal
               label={
                 <Box m="sm">
-                  <Text>
-                    This server allows you to control OBS from the dashboard.
-                  </Text>
+                  <Text>Initialize the YouTube server.</Text>
                 </Box>
               }
             >
@@ -117,7 +115,100 @@ const ServerControl = () => {
               fullWidth
               color="green"
               onClick={() => {
-                wretch(`${REACT_APP_API_2_URL}/obs/start-server`)
+                wretch(`${REACT_APP_API_2_URL}/obs/start-server/youtube`)
+                  .post()
+                  .json((res) => {
+                    if (res?.error) {
+                      throw new Error(res.error)
+                    } else if (res?.message) {
+                      showNotification({
+                        title: 'Success!',
+                        message: res.message,
+                      })
+                    }
+                  })
+                  .catch((err) => {
+                    showNotification({
+                      title: 'OBS Error',
+                      message: err.message,
+                    })
+                  })
+              }}
+            >
+              Turn On
+            </Button>
+          </Button.Group>
+
+          <Flex
+            align="center"
+            gap="12px"
+            justify={isSmall ? 'center' : 'inherit'}
+            mt="42px"
+          >
+            <Title>TikTok Server</Title>
+            <Tooltip
+              withinPortal
+              label={
+                <Box m="sm">
+                  <Text>Initialize the TikTok server.</Text>
+                </Box>
+              }
+            >
+              <Text>
+                <IconHelp
+                  size={24}
+                  color={colors.gray[4]}
+                  style={{ verticalAlign: 'middle' }}
+                />
+              </Text>
+            </Tooltip>
+          </Flex>
+          <LiveContainer>
+            <Flex align="center" gap="lg">
+              {hopError ? <IconCircleX color={colors.red[7]} /> : null}
+              {isStopped ? <IconOctagonOff color={colors.red[7]} /> : null}
+              {isStarting ? <IconLoader size={28} /> : null}
+              {isReady ? (
+                <IconMoodSmile size={28} color={colors.green[6]} />
+              ) : null}
+
+              <Text size="lg">
+                Livebond is <b>{capitalizeFirstLetter(serverState)}</b>
+              </Text>
+            </Flex>
+          </LiveContainer>
+          <Button.Group mt="lg">
+            <Button
+              fullWidth
+              color="red"
+              onClick={() => {
+                wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
+                  .post()
+                  .json((res) => {
+                    if (res?.error) {
+                      throw new Error(res.error)
+                    } else if (res?.message) {
+                      showNotification({
+                        title: 'Success!',
+                        message: res.message,
+                      })
+                    }
+                  })
+                  .catch((err) => {
+                    showNotification({
+                      title: 'OBS Error',
+                      message: err.message,
+                    })
+                  })
+              }}
+            >
+              Turn Off
+            </Button>
+            <Button
+              fullWidth
+              color="green"
+              onClick={() => {
+                wretch(`${REACT_APP_API_2_URL}/obs/start-server/tiktok`)
                   .post()
                   .json((res) => {
                     if (res?.error) {
