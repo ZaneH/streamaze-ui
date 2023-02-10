@@ -89,8 +89,8 @@ const StatPanel = () => {
           }}
         >
           <Box>
-            <Text>
-              <b>Current:</b>{' '}
+            <Text lh="2em">
+              <b>Current (in USD):</b>{' '}
               {parseFloat(kv?.net_profit)
                 .toLocaleString('en-US', {
                   style: 'currency',
@@ -98,10 +98,13 @@ const StatPanel = () => {
                 })
                 .replace('.00', '')}
             </Text>
+            <Text>
+              Please enter the amount in <b>Baht</b>
+            </Text>
           </Box>
           <TextInput
-            label="Amount"
-            placeholder="100"
+            label="Amount (฿)"
+            placeholder="฿10,000"
             required
             style={{ width: '100%' }}
             ref={expenseRef}
@@ -112,30 +115,67 @@ const StatPanel = () => {
               fullWidth
               color="red"
               onClick={() => {
-                const previousValue = parseFloat(kv?.net_profit)
-                const newValue =
-                  previousValue - parseFloat(expenseRef.current.value)
+                let usdConversionRate = 33.5
 
-                wretch(`${REACT_APP_API_2_URL}/kv/set`)
-                  .post({
-                    discordUserId,
-                    key: 'net_profit',
-                    value: newValue.toString(),
-                    apiKey,
-                  })
-                  .res((res) => {
+                wretch(`${REACT_APP_API_2_URL}/exchange/baht`)
+                  .get()
+                  .res(async (res) => {
                     if (res.ok) {
-                      setShowMoneyModal(false)
-
-                      showNotification({
-                        title: 'Expense Added',
-                        message: 'Net profit was updated successfully',
-                        color: 'teal',
-                      })
+                      try {
+                        usdConversionRate = parseFloat(await res.text())
+                      } catch (err) {
+                        console.error(
+                          'Error fetching the exchange rate from server',
+                          err
+                        )
+                      }
                     }
                   })
                   .catch((err) => {
-                    console.error(err)
+                    console.error('Error fetching the exchange rate: ', err)
+                  })
+                  .finally(() => {
+                    const previousUSDValue = parseFloat(kv?.net_profit)
+                    let numericInput = expenseRef.current.value
+                    numericInput = numericInput.replace(/[^0-9.]/g, '')
+
+                    if (isNaN(numericInput)) {
+                      throw new Error('Invalid input')
+                    }
+
+                    const newUSDValue =
+                      previousUSDValue -
+                      parseFloat(numericInput) / usdConversionRate
+
+                    wretch(`${REACT_APP_API_2_URL}/kv/set`)
+                      .post({
+                        discordUserId,
+                        key: 'net_profit',
+                        value: newUSDValue.toString(),
+                        apiKey,
+                      })
+                      .res((res) => {
+                        if (res.ok) {
+                          setShowMoneyModal(false)
+
+                          showNotification({
+                            title: 'Expense Added',
+                            message: 'Net profit was updated successfully',
+                            color: 'teal',
+                          })
+                        }
+                      })
+                      .catch((err) => {
+                        console.error(err)
+                        showNotification({
+                          title: 'Error',
+                          message: 'There was an error adding the expense',
+                          color: 'red',
+                        })
+                      })
+                  })
+                  .catch((err) => {
+                    console.error('Error adding the new expense: ', err)
                     showNotification({
                       title: 'Error',
                       message: 'There was an error adding the expense',
@@ -150,30 +190,67 @@ const StatPanel = () => {
               fullWidth
               color="green"
               onClick={() => {
-                const previousValue = parseFloat(kv?.net_profit)
-                const newValue =
-                  previousValue + parseFloat(expenseRef.current.value)
+                let usdConversionRate = 33.5
 
-                wretch(`${REACT_APP_API_2_URL}/kv/set`)
-                  .post({
-                    discordUserId,
-                    key: 'net_profit',
-                    value: newValue.toString(),
-                    apiKey,
-                  })
-                  .res((res) => {
+                wretch(`${REACT_APP_API_2_URL}/exchange/baht`)
+                  .get()
+                  .res(async (res) => {
                     if (res.ok) {
-                      setShowMoneyModal(false)
-
-                      showNotification({
-                        title: 'Expense Added',
-                        message: 'Net profit was updated successfully',
-                        color: 'teal',
-                      })
+                      try {
+                        usdConversionRate = parseFloat(await res.text())
+                      } catch (err) {
+                        console.error(
+                          'Error fetching the exchange rate from server',
+                          err
+                        )
+                      }
                     }
                   })
                   .catch((err) => {
-                    console.error(err)
+                    console.error('Error fetching the exchange rate: ', err)
+                  })
+                  .finally(() => {
+                    const previousUSDValue = parseFloat(kv?.net_profit)
+                    let numericInput = expenseRef.current.value
+                    numericInput = numericInput.replace(/[^0-9.]/g, '')
+
+                    if (isNaN(numericInput)) {
+                      throw new Error('Invalid input')
+                    }
+
+                    const newUSDValue =
+                      previousUSDValue +
+                      parseFloat(numericInput) / usdConversionRate
+
+                    wretch(`${REACT_APP_API_2_URL}/kv/set`)
+                      .post({
+                        discordUserId,
+                        key: 'net_profit',
+                        value: newUSDValue.toString(),
+                        apiKey,
+                      })
+                      .res((res) => {
+                        if (res.ok) {
+                          setShowMoneyModal(false)
+
+                          showNotification({
+                            title: 'Expense Added',
+                            message: 'Net profit was updated successfully',
+                            color: 'teal',
+                          })
+                        }
+                      })
+                      .catch((err) => {
+                        console.error(err)
+                        showNotification({
+                          title: 'Error',
+                          message: 'There was an error adding the expense',
+                          color: 'red',
+                        })
+                      })
+                  })
+                  .catch((err) => {
+                    console.error('Error adding the new expense: ', err)
                     showNotification({
                       title: 'Error',
                       message: 'There was an error adding the expense',
