@@ -200,6 +200,7 @@ const ChatLog = ({
         index: chatData.length - 1,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatData.length])
 
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
