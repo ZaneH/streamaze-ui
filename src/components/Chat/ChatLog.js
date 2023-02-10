@@ -192,6 +192,15 @@ const ChatLog = ({
     }
   }, [lastChatJsonMessage])
 
+  // Scroll to end
+  useEffect(() => {
+    if (virtuosoRef.current) {
+      virtuosoRef.current.scrollToIndex({
+        index: chatData.length - 1,
+      })
+    }
+  }, [chatData.length])
+
   if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
     return (
       <Box {...props} py="xl">
@@ -245,6 +254,7 @@ const ChatLog = ({
         ref={virtuosoRef}
         initialTopMostItemIndex={999}
         data={chatData}
+        followOutput="smooth"
         totalCount={chatData.length}
         components={{
           Item,
