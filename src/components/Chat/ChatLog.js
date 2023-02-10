@@ -97,6 +97,7 @@ const ChatLog = ({
 }) => {
   const [searchParams] = useSearchParams()
   const [chatData, setChatData] = useState([])
+  const [isChatBottom, setIsChatBottom] = useState(true)
   const virtuosoRef = useRef(null)
   const { colors } = useMantineTheme()
   const { chatConfig } = useContext(ConfigContext)
@@ -194,7 +195,7 @@ const ChatLog = ({
 
   // Scroll to end
   useEffect(() => {
-    if (virtuosoRef.current) {
+    if (virtuosoRef.current && isChatBottom) {
       virtuosoRef.current.scrollToIndex({
         index: chatData.length - 1,
       })
@@ -254,7 +255,13 @@ const ChatLog = ({
         ref={virtuosoRef}
         initialTopMostItemIndex={999}
         data={chatData}
-        followOutput="smooth"
+        endReached={() => {
+          setIsChatBottom(true)
+        }}
+        onScroll={() => {
+          setIsChatBottom(false)
+        }}
+        followOutput={isChatBottom ? 'smooth' : false}
         totalCount={chatData.length}
         components={{
           Item,
