@@ -112,11 +112,32 @@ const DonationLog = () => {
         setDonations((prev) => [...prev, donationLastMessage])
 
         // only update the net profit if an amount is present
-        if (!donationLastMessage?.data?.amount) {
+        // or if the donation is a membership gift
+        if (
+          !donationLastMessage?.data?.amount &&
+          !donationLastMessage?.type === 'membershipGift'
+        ) {
           return
         }
 
-        const donationAmount = donationLastMessage?.data?.amount
+        let donationAmount = donationLastMessage?.data?.amount
+        if (donationLastMessage?.type === 'membershipGift') {
+          // calculate membership worth
+          const giftCount = donationLastMessage?.data?.gift_count
+          const giftLevel = donationLastMessage?.data?.gift_level
+
+          let giftLevelCost = 0
+          if (giftCount && giftLevel) {
+            if (giftLevel === 'Member') {
+              giftLevelCost = 1.99
+            } else if (giftLevel === 'Membership') {
+              giftLevelCost = 4.99
+            }
+
+            donationAmount = (giftCount * giftLevelCost).toString()
+          }
+        }
+
         // remove non-numeric characters
         const donationAmountNumeric = parseFloat(
           donationAmount.replace(/[^\d.-]/g, '')
@@ -128,7 +149,10 @@ const DonationLog = () => {
           const newNetProfit = oldNetProfit + donationAmountNumeric
 
           if (isNaN(newNetProfit)) {
-            console.error('Error updating net_profit KV value')
+            console.error(
+              'Error updating net_profit KV value (NaN)',
+              newNetProfit
+            )
             return
           }
 
@@ -139,12 +163,12 @@ const DonationLog = () => {
               key: 'net_profit',
               value: newNetProfit.toString(),
             })
-            .catch((err) => {
+            .error((err) => {
               console.log('Error updating net_profit KV value', err)
             })
         }
-      } catch {
-        console.log('Error parsing donation message', donationLastMessage)
+      } catch (e) {
+        console.log('Error parsing donation message', donationLastMessage, e)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

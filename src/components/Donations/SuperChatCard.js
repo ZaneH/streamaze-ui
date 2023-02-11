@@ -1,17 +1,3 @@
-// |Amount Range|Color|Time Displayed (in Ticker)|Max Characters|
-// |---|---|---|---|
-// |$1.00 - $1.99|#1747A4 (Blue)|0s|0|
-// |$2.00 - $4.99|#44E4FF (Light blue)|0s|50|
-// |$5.00 - $9.99|#4BE8B2 (Green)|2m|150|
-// |$10.00 - $19.99|#FBD900 (Yellow)|5m|200|
-// |$20.00 - $49.99|#EF7E00 (Orange)|10m|225|
-// |$50.00 - $99.99|#E12866 (Magenta)|30m|250|
-// |$100.00 - $199.99|#DE2A1A (Red)|1hr|270|
-// |$200.00 - $299.99|#DE2A1A (Red)|2hr|290|
-// |$300.00 - $399.99|#DE2A1A (Red)|3hr|310|
-// |$400.00 - $499.99|#DE2A1A (Red)|4hr|330|
-// |$500.00+|#DE2A1A (Red)|5hr|350|
-
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Avatar, Box, Flex, Text } from '@mantine/core'
@@ -20,6 +6,7 @@ import { Avatar, Box, Flex, Text } from '@mantine/core'
  * Calculate the colors for a given super chat amount.
  * Returns the background color [0], the header color (darkened) [1],
  * and the text color [2].
+ * https://stackoverflow.com/questions/67161041/what-are-the-ui-colors-for-the-youtube-superchat-tiers/75343187#75343187
  * @param {string|number} amount
  * @returns {[string, string, string]}
  */
@@ -87,7 +74,7 @@ export default function SuperChatCard({ donation, isAnimated }) {
     type,
   } = donation || {}
 
-  const [bgColor, headerBgColor, textColor] = getSuperChatColors(amount || 2)
+  const [bgColor, headerBgColor, textColor] = getSuperChatColors(amount || 5)
 
   return (
     <YTCard bg={bgColor} isAnimated={isAnimated}>
