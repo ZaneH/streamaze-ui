@@ -85,6 +85,15 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Currency config
+  const [currencyConfig, setCurrencyConfig] = useLocalStorage({
+    key: 'currency-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      currency: 'usd',
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
@@ -259,6 +268,8 @@ const ConfigProvider = ({ children }) => {
           apiKey: apiKey ? apiKey : lanyardConfig.apiKey,
         },
         setLanyardConfig,
+        currencyConfig,
+        setCurrencyConfig,
       }}
     >
       {children}

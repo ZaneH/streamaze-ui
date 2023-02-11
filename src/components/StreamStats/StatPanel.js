@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Modal, Text, TextInput } from '@mantine/core'
+import {
+  Box,
+  Button,
+  Flex,
+  Modal,
+  Select,
+  Space,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
@@ -10,14 +19,20 @@ import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
 import StatInfo from './StatInfo'
 
-const { REACT_APP_API_2_URL } = process.env
+const { REACT_APP_API_2_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
 const StatPanel = () => {
   const { ytViewers, tiktokViewers, isYTLoading, isTikTokLoading } =
     useContext(StatContext)
   const { bitrate } = useContext(HopContext)
   const { kv } = useContext(LanyardContext)
-  const { lanyardConfig } = useContext(ConfigContext)
+  const {
+    lanyardConfig,
+    currencyConfig = {
+      currency: 'usd',
+    },
+    setCurrencyConfig,
+  } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const expenseRef = useRef(null)
@@ -98,34 +113,52 @@ const StatPanel = () => {
                 })
                 .replace('.00', '')}
             </Text>
-            <Text>
-              Please enter the amount in <b>Baht</b>
-            </Text>
+            <Space h="16px" />
+            <Select
+              label="Choose Currency"
+              value={currencyConfig?.currency}
+              onChange={(value) => {
+                setCurrencyConfig({
+                  ...currencyConfig,
+                  currency: value,
+                })
+              }}
+              data={[
+                { label: 'Thai Baht (฿)', value: 'thb' },
+                { label: 'US Dollar ($)', value: 'usd' },
+              ]}
+            />
           </Box>
           <TextInput
-            label="Amount (฿)"
-            placeholder="฿10,000"
+            label={`Amount (${currencyConfig?.currency?.toUpperCase()})`}
+            placeholder="Enter the amount"
             required
             style={{ width: '100%' }}
             ref={expenseRef}
             data-autofocus
           />
+          <Space h="8px" />
           <Button.Group>
             <Button
               fullWidth
               color="red"
               onClick={() => {
-                let usdConversionRate = 33.5
+                let usdConversionRate
 
-                wretch(`${REACT_APP_API_2_URL}/exchange/baht`)
+                // get exchange rate
+                wretch(
+                  `${REACT_APP_EXCHANGE_RATE_API_URL}/v1/rates/${currencyConfig?.currency}`
+                )
                   .get()
-                  .res(async (res) => {
-                    if (res.ok) {
+                  .json(async (res) => {
+                    if (res) {
                       try {
-                        usdConversionRate = parseFloat(await res.text())
+                        usdConversionRate = parseFloat(
+                          res?.data?.[currencyConfig?.currency]
+                        )
                       } catch (err) {
                         console.error(
-                          'Error fetching the exchange rate from server',
+                          "Couldn't parse the exchange rate response",
                           err
                         )
                       }
@@ -151,7 +184,7 @@ const StatPanel = () => {
                       .post({
                         discordUserId,
                         key: 'net_profit',
-                        value: newUSDValue.toString(),
+                        value: newUSDValue.toFixed(2),
                         apiKey,
                       })
                       .res((res) => {
@@ -184,23 +217,28 @@ const StatPanel = () => {
                   })
               }}
             >
-              Subtract
+              Subtract -
             </Button>
             <Button
               fullWidth
               color="green"
               onClick={() => {
-                let usdConversionRate = 33.5
+                let usdConversionRate
 
-                wretch(`${REACT_APP_API_2_URL}/exchange/baht`)
+                // get exchange rate
+                wretch(
+                  `${REACT_APP_EXCHANGE_RATE_API_URL}/v1/rates/${currencyConfig?.currency}`
+                )
                   .get()
-                  .res(async (res) => {
-                    if (res.ok) {
+                  .json(async (res) => {
+                    if (res) {
                       try {
-                        usdConversionRate = parseFloat(await res.text())
+                        usdConversionRate = parseFloat(
+                          res?.data?.[currencyConfig?.currency]
+                        )
                       } catch (err) {
                         console.error(
-                          'Error fetching the exchange rate from server',
+                          "Couldn't parse the exchange rate response",
                           err
                         )
                       }
@@ -259,7 +297,7 @@ const StatPanel = () => {
                   })
               }}
             >
-              Add
+              Add +
             </Button>
           </Button.Group>
         </form>
