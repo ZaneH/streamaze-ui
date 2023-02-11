@@ -111,6 +111,11 @@ const DonationLog = () => {
       try {
         setDonations((prev) => [...prev, donationLastMessage])
 
+        // only update the net profit if an amount is present
+        if (!donationLastMessage?.data?.amount) {
+          return
+        }
+
         const donationAmount = donationLastMessage?.data?.amount
         // remove non-numeric characters
         const donationAmountNumeric = parseFloat(
@@ -214,6 +219,7 @@ const DonationLog = () => {
         const months = amount?.months
         const currency = amount
         const isFollow = type === 'follow'
+        const isMembershipGift = type === 'membershipGift'
 
         let isBits
         let isSub
@@ -229,6 +235,16 @@ const DonationLog = () => {
         }
 
         if (isCurrency) {
+          return (
+            <SuperChatCard
+              key={eventId}
+              donation={donation}
+              isAnimated={i === 0}
+            />
+          )
+        }
+
+        if (isMembershipGift) {
           return (
             <SuperChatCard
               key={eventId}
