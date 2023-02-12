@@ -24,6 +24,8 @@ const ControlPanel = () => {
     donationIndex,
     setDonationIndex,
     isPlaying,
+    playingMediaId,
+    setPlayingMediaId,
   } = useContext(DonationContext)
 
   return (
@@ -48,6 +50,11 @@ const ControlPanel = () => {
             (donationIndex === donations.length && !isPlaying)
           }
           onClick={() => {
+            if (playingMediaId) {
+              setPlayingMediaId(null)
+              setIsPlaying(false)
+            }
+
             if (ttsAudio) {
               ttsAudio.pause()
               ttsAudio.currentTime = 0

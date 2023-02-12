@@ -9,6 +9,7 @@ import { Virtuoso } from 'react-virtuoso'
 import wretch from 'wretch'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
+import MediaCard from './MediaCard'
 import SuperChatCard from './SuperChatCard'
 
 const { REACT_APP_API_2_WS_URL } = process.env
@@ -120,6 +121,11 @@ const DonationLog = () => {
           return
         }
 
+        // TODO: Add mediaShareEvents to net_profit
+        if (donationLastMessage?.type === 'mediaShareEvent') {
+          return
+        }
+
         let donationAmount = donationLastMessage?.data?.amount
         if (donationLastMessage?.type === 'membershipGift') {
           // calculate membership worth
@@ -214,11 +220,12 @@ const DonationLog = () => {
         const { data = {}, type } = donation
         const { id: eventId } = data
         const isTikTokGift = type === 'tiktok_gift'
+        const isMediaShare = type === 'mediaShareEvent'
 
         if (isTikTokGift) {
           const {
             gift_name: giftName,
-            gift_cost: giftCost,
+            gift_cost: giftCost, // TODO: Use this, it is the diamond count per gift
             gift_repeat_count: giftRepeatCount,
             name: senderName,
           } = data
@@ -258,7 +265,7 @@ const DonationLog = () => {
           isCurrency = true
         }
 
-        if (isCurrency) {
+        if (isMembershipGift || isCurrency) {
           return (
             <SuperChatCard
               key={eventId}
@@ -268,13 +275,27 @@ const DonationLog = () => {
           )
         }
 
-        if (isMembershipGift) {
+        if (isMediaShare) {
+          const {
+            action_by: actionBy,
+            donation_id: donationId,
+            media_link: mediaUrl,
+            media_title: mediaTitle,
+            duration,
+          } = data
+
           return (
-            <SuperChatCard
-              key={eventId}
-              donation={donation}
-              isAnimated={i === 0}
-            />
+            <MediaCard key={eventId} url={mediaUrl} donationId={donationId}>
+              <Text mb="md">
+                <b>{actionBy}</b> sent media
+              </Text>
+              <Text>
+                <b>Title:</b> {mediaTitle}
+              </Text>
+              <Text>
+                <b>Duration:</b> {parseFloat(duration ?? 0) / 1000}s
+              </Text>
+            </MediaCard>
           )
         }
 

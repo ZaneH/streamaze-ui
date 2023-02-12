@@ -15,6 +15,7 @@ const DonationProvider = ({ children }) => {
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [ttsAudio, setTTSAudio] = useState(null)
+  const [playingMediaId, setPlayingMediaId] = useState(null)
 
   const ttsInterval = useInterval(() => {
     if (
@@ -26,7 +27,21 @@ const DonationProvider = ({ children }) => {
       setIsPlaying(true)
       setDonationIndex((prev) => prev + 1)
 
-      let ttsUrl = donations[donationIndex]?.data?.tts_url
+      const currentDonation = donations[donationIndex]
+
+      let ttsUrl = currentDonation?.data?.tts_url
+
+      if (currentDonation?.type === 'mediaShareEvent') {
+        const mediaDuration = currentDonation?.data?.duration
+        setPlayingMediaId(currentDonation?.data?.donation_id)
+
+        setTimeout(() => {
+          setPlayingMediaId(null)
+          setIsPlaying(false)
+        }, mediaDuration)
+
+        return
+      }
 
       if (!ttsUrl) {
         ttsUrl = PeppersAudio
@@ -76,6 +91,8 @@ const DonationProvider = ({ children }) => {
         setTTSAudio,
         isPlaying,
         setIsPlaying,
+        playingMediaId,
+        setPlayingMediaId,
       }}
     >
       {children}
