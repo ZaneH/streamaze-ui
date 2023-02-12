@@ -68,7 +68,13 @@ const AnimatedDiv = styled.div`
 const DonationLog = () => {
   const { slobsConfig, lanyardConfig } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
-  const { donations, setDonations, donationIndex } = useContext(DonationContext)
+  const {
+    donations,
+    setDonations,
+    donationIndex,
+    setPlayingMediaId,
+    setIsPlaying,
+  } = useContext(DonationContext)
   const { kv } = useContext(LanyardContext)
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
@@ -110,7 +116,10 @@ const DonationLog = () => {
   useEffect(() => {
     if (donationLastMessage) {
       try {
-        setDonations((prev) => [...prev, donationLastMessage])
+        // this donation event is a 'skip', not a real donation
+        if (donationLastMessage?.data?.action !== 'modMoveToNext') {
+          setDonations((prev) => [...prev, donationLastMessage])
+        }
 
         // only update the net profit if an amount is present
         // or if the donation is a membership gift
@@ -118,6 +127,13 @@ const DonationLog = () => {
           !donationLastMessage?.data?.amount &&
           !donationLastMessage?.type === 'membershipGift'
         ) {
+          return
+        }
+
+        // skip for media shares
+        if (donationLastMessage?.data?.action === 'modMoveToNext') {
+          setPlayingMediaId(null)
+          setIsPlaying(false)
           return
         }
 
