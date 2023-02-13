@@ -236,6 +236,10 @@ const ChatLog = ({
   }
 
   if (chatData.length === 0) {
+    if (fluid) {
+      return
+    }
+
     return (
       <Center mih={fullHeight ? '100%' : height} {...props}>
         <Loader />
