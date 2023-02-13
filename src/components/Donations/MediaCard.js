@@ -38,7 +38,7 @@ export default function MediaCard({ children, url, donationId }) {
     <AnimatedDiv>
       <Flex direction="column" justify="space-between" gap="lg">
         <Box>{children}</Box>
-        <Box>
+        <Box style={{ display: 'none' }}>
           <ReactPlayer
             url={url}
             width="100%"
