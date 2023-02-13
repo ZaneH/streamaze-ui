@@ -66,9 +66,11 @@ const AnimatedDiv = styled.div`
 `
 
 const DonationLog = () => {
-  const { slobsConfig, lanyardConfig } = useContext(ConfigContext)
+  const { slobsConfig, lanyardConfig, subathonConfig } =
+    useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
   const { donations, setDonations, donationIndex } = useContext(DonationContext)
+  const { isSubathonActive } = subathonConfig
   const { kv } = useContext(LanyardContext)
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
@@ -172,6 +174,31 @@ const DonationLog = () => {
             .error((err) => {
               console.log('Error updating net_profit KV value', err)
             })
+
+          if (isSubathonActive) {
+            // Update subathon KV value
+            const oldSubathonTotal = parseFloat(kv?.donation_amount)
+            const newSubathonTotal = oldSubathonTotal + donationAmountNumeric
+
+            if (isNaN(newSubathonTotal)) {
+              console.error(
+                'Error updating donation_amount KV value (NaN)',
+                newSubathonTotal
+              )
+              return
+            }
+
+            wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
+              .post({
+                discordUserId,
+                apiKey,
+                key: 'donation_amount',
+                value: newSubathonTotal.toString(),
+              })
+              .error((err) => {
+                console.log('Error updating donation_amount KV value', err)
+              })
+          }
         }
       } catch (e) {
         console.log('Error parsing donation message', donationLastMessage, e)
@@ -285,7 +312,12 @@ const DonationLog = () => {
           } = data
 
           return (
-            <MediaCard key={eventId} url={mediaUrl} donationId={donationId}>
+            <MediaCard
+              key={eventId}
+              url={mediaUrl}
+              donationId={donationId}
+              isAnimated={i === 0}
+            >
               <Text mb="md">
                 <b>{actionBy}</b> sent media
               </Text>

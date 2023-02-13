@@ -31,11 +31,11 @@ const AnimatedDiv = styled.div`
     `}
 `
 
-export default function MediaCard({ children, url, donationId }) {
+export default function MediaCard({ children, url, donationId, isAnimated }) {
   const { playingMediaId } = useContext(DonationContext)
 
   return (
-    <AnimatedDiv>
+    <AnimatedDiv isAnimated={isAnimated}>
       <Flex direction="column" justify="space-between" gap="lg">
         <Box>{children}</Box>
         <Box style={{ display: 'none' }}>

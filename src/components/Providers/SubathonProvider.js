@@ -40,7 +40,7 @@ const SubathonProvider = ({ children }) => {
   useEffect(() => {
     if (kv?.time_unit_base && kv?.stream_start_time && kv?.donation_amount) {
       // how long each $ should add to the subathon (in minutes)
-      const timeUnitBase = parseFloat(kv.time_unit_base)
+      const timeUnitBase = parseFloat(kv.time_unit_base * 60)
       // when the stream started (unix timestamp)
       const streamStartTime = parseFloat(kv.stream_start_time)
       // how much has been donated
