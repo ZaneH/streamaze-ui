@@ -71,15 +71,15 @@ const SenderText = styled(Text)`
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
   ${({ ismember }) => ismember && 'color: #2ba640;'}
   ${({ ismod }) => ismod && 'color: #5e84f1;'}
-  ${({ shadow }) => shadow && 'text-shadow: 2px 2px 4px #000'}
-}`
+  ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000'}
+`
 
 const MessageText = styled(Text)`
   display: inline;
   vertical-align: middle;
   word-break: break-word;
   color: white;
-  ${({ shadow }) => shadow && 'text-shadow: 2px 2px 4px #000'}
+  ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000'}
 `
 
 const { REACT_APP_API_2_WS_URL } = process.env
