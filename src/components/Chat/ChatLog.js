@@ -263,10 +263,14 @@ const ChatLog = ({
         initialTopMostItemIndex={999}
         data={chatData}
         endReached={() => {
-          setIsChatBottom(true)
+          if (!fluid) {
+            setIsChatBottom(true)
+          }
         }}
         onScroll={() => {
-          setIsChatBottom(false)
+          if (!fluid) {
+            setIsChatBottom(false)
+          }
         }}
         followOutput={isChatBottom ? 'smooth' : false}
         totalCount={chatData.length}
