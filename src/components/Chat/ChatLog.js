@@ -71,6 +71,7 @@ const SenderText = styled(Text)`
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
   ${({ ismember }) => ismember && 'color: #2ba640;'}
   ${({ ismod }) => ismod && 'color: #5e84f1;'}
+  ${({ shadow }) => shadow && 'text-shadow: 2px 2px 4px #000'}
 }`
 
 const MessageText = styled(Text)`
@@ -78,6 +79,7 @@ const MessageText = styled(Text)`
   vertical-align: middle;
   word-break: break-word;
   color: white;
+  ${({ shadow }) => shadow && 'text-shadow: 2px 2px 4px #000'}
 `
 
 const { REACT_APP_API_2_WS_URL } = process.env
@@ -341,6 +343,7 @@ const ChatLog = ({
                     isbig={isBig ? 'true' : undefined}
                     ismod={isMod ? 'true' : undefined}
                     ismember={isMember ? 'true' : undefined}
+                    shadow={fluid ? 'true' : undefined}
                   >
                     {`${sender}${isBig ? ':' : ''}`}
                     {isMod && !isBig && (
@@ -382,6 +385,7 @@ const ChatLog = ({
                   <MessageText
                     ff={isBig ? 'Impact' : 'Roboto'}
                     lh={isBig ? '1.64em' : '1em'}
+                    shadow={fluid ? 'true' : undefined}
                   >
                     <span
                       dangerouslySetInnerHTML={{ __html: newMessageString }}
