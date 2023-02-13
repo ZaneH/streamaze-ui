@@ -11,13 +11,17 @@ import {
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
+import { SubathonContext } from 'components/Providers/SubathonProvider'
 import { ReactComponent as DollarSignIcon } from 'dollar-sign-icon.svg'
+import { ReactComponent as FlagIcon } from 'flag-icon.svg'
 import { useContext, useRef, useState } from 'react'
+import { secondsToHHMMSS } from 'utils/time'
 import wretch from 'wretch'
 import { ReactComponent as BitRateIcon } from '../../bit-rate-icon.svg'
 import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
 import StatInfo from './StatInfo'
+import SubathonModal from './SubathonModal'
 
 const { REACT_APP_API_2_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
@@ -26,15 +30,18 @@ const StatPanel = () => {
     useContext(StatContext)
   const { bitrate } = useContext(HopContext)
   const { kv } = useContext(LanyardContext)
+  const { timeRemaining } = useContext(SubathonContext)
   const {
     lanyardConfig,
+    setCurrencyConfig,
+    subathonConfig,
     currencyConfig = {
       currency: 'usd',
     },
-    setCurrencyConfig,
   } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
   const [showMoneyModal, setShowMoneyModal] = useState(false)
+  const [showSubathonModal, setShowSubathonModal] = useState(false)
   const expenseRef = useRef(null)
 
   return (
@@ -89,6 +96,16 @@ const StatPanel = () => {
                 .replace('.00', '')}
             />
           ) : null}
+
+          {subathonConfig?.isSubathonActive && (
+            <StatInfo
+              image={<FlagIcon style={{ width: 26, height: 26 }} />}
+              label={secondsToHHMMSS(timeRemaining)}
+              onClick={() => {
+                setShowSubathonModal(true)
+              }}
+            />
+          )}
         </Flex>
       </Flex>
       <Modal
@@ -302,6 +319,12 @@ const StatPanel = () => {
           </Button.Group>
         </form>
       </Modal>
+      <SubathonModal
+        isOpen={showSubathonModal}
+        onClose={() => {
+          setShowSubathonModal(false)
+        }}
+      />
     </>
   )
 }

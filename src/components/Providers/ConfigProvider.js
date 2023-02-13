@@ -94,6 +94,16 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Subathon config
+  const [subathonConfig, setSubathonConfig] = useLocalStorage({
+    key: 'subathon-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      timeUnitBase: 1,
+      isSubathonActive: false,
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
@@ -270,6 +280,8 @@ const ConfigProvider = ({ children }) => {
         setLanyardConfig,
         currencyConfig,
         setCurrencyConfig,
+        subathonConfig,
+        setSubathonConfig,
       }}
     >
       {children}

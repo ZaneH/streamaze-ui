@@ -10,6 +10,7 @@ import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
 import { ReactComponent as IconRaspberryPi } from 'raspberry-pi.svg'
+import { ReactComponent as FlagIcon } from 'flag-icon-nav.svg'
 
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;
@@ -84,6 +85,14 @@ const Sidebar = () => {
         icon={<IconVideo size={28} />}
         onClick={() => {
           navigate('/go-live')
+        }}
+      />
+      <StyledNavLink
+        label={<NavLinkLabel>Subathon</NavLinkLabel>}
+        active={pathname === '/subathon'}
+        icon={<FlagIcon style={{ width: 28, height: 28 }} />}
+        onClick={() => {
+          navigate('/subathon')
         }}
       />
     </Navbar>
