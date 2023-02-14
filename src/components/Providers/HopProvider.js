@@ -1,9 +1,8 @@
 import { useReadChannelState } from '@onehop/react'
+import ErrorChime from 'assets/error_chime.mp3'
+import DisconnectModal from 'components/Modals/DisconnectModal'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { ConfigContext } from './ConfigProvider'
-import ErrorChime from 'assets/error_chime.mp3'
-import { showNotification } from '@mantine/notifications'
-import DisconnectModal from 'components/Modals/DisconnectModal'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
@@ -31,6 +30,7 @@ const HopProvider = ({ children }) => {
         setShowDisconnectedModal(false)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bitrate, isLive])
 
   return (
