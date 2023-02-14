@@ -84,6 +84,8 @@ const MessageText = styled(Text)`
 
 const { REACT_APP_API_2_WS_URL } = process.env
 
+const PX_BEFORE_AUTOSCROLL = 100
+
 const ChatLog = ({
   twitchUsername,
   tiktokUsername,
@@ -267,8 +269,13 @@ const ChatLog = ({
             setIsChatBottom(true)
           }
         }}
-        onScroll={() => {
-          if (!fluid) {
+        onScroll={(e) => {
+          const bottomOffset = e.target.scrollHeight - e.target.scrollTop
+
+          if (
+            !fluid &&
+            bottomOffset < e.target.clientHeight + PX_BEFORE_AUTOSCROLL
+          ) {
             setIsChatBottom(false)
           }
         }}
