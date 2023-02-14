@@ -1,6 +1,9 @@
 import { useReadChannelState } from '@onehop/react'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { ConfigContext } from './ConfigProvider'
+import ErrorChime from 'assets/error_chime.mp3'
+import { showNotification } from '@mantine/notifications'
+import DisconnectModal from 'components/Modals/DisconnectModal'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
@@ -15,6 +18,21 @@ const HopProvider = ({ children }) => {
   const streamActiveScene = state?.server?.active_scene ?? ''
   const bitrate = state?.rtmp?.bitrate ?? 0
 
+  const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
+
+  useEffect(() => {
+    if (bitrate === 0 && isLive) {
+      const chime = new Audio(ErrorChime)
+      chime.play()
+
+      setShowDisconnectedModal(true)
+    } else {
+      if (showDisconnectedModal) {
+        setShowDisconnectedModal(false)
+      }
+    }
+  }, [bitrate, isLive])
+
   return (
     <HopContext.Provider
       value={{
@@ -26,6 +44,10 @@ const HopProvider = ({ children }) => {
         bitrate,
       }}
     >
+      <DisconnectModal
+        isOpen={showDisconnectedModal}
+        onClose={() => setShowDisconnectedModal(false)}
+      />
       {children}
     </HopContext.Provider>
   )
