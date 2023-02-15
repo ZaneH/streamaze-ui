@@ -20,7 +20,7 @@ const HopProvider = ({ children }) => {
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
 
   useEffect(() => {
-    if (bitrate === 0 && isLive) {
+    if (bitrate <= 1000 && isLive) {
       const chime = new Audio(ErrorChime)
       chime.play()
 
