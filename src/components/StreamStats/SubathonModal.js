@@ -1,7 +1,8 @@
-import { Button, Modal } from '@mantine/core'
+import { Button, Modal, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
-import { useContext } from 'react'
+import { FieldLabel } from 'components/Settings'
+import { useContext, useRef } from 'react'
 import wretch from 'wretch'
 
 const { REACT_APP_API_2_URL } = process.env
@@ -10,6 +11,7 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
   const { lanyardConfig, subathonConfig } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
   const { timeUnitBase } = subathonConfig
+  const initialTime = useRef(null)
 
   return (
     <Modal
@@ -18,8 +20,15 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
       centered
       onClose={onClose}
     >
+      <TextInput
+        label={<FieldLabel>Initial Clock Time (in minutes)</FieldLabel>}
+        placeholder="30"
+        defaultValue={'30'}
+        ref={initialTime}
+      />
       <Button
         color="green"
+        mt="md"
         fullWidth
         onClick={() => {
           if (!discordUserId || !apiKey) {
@@ -36,7 +45,10 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
             .post({
               discordUserId,
               key: 'stream_start_time',
-              value: (Date.now() / 1000).toFixed(0),
+              value: (
+                Date.now() / 1000 +
+                initialTime.current.value * 60
+              ).toFixed(0),
               apiKey,
             })
             .res((_r) => {

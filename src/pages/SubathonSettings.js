@@ -6,9 +6,14 @@ import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from 'components/Settings'
 import TagSEO from 'components/TagSEO'
 import { useContext } from 'react'
+import wretch from 'wretch'
+
+const { REACT_APP_API_2_URL } = process.env
 
 const SubathonSettings = () => {
-  const { subathonConfig, setSubathonConfig } = useContext(ConfigContext)
+  const { subathonConfig, setSubathonConfig, lanyardConfig } =
+    useContext(ConfigContext)
+  const { discordUserId, apiKey } = lanyardConfig
 
   const subathonForm = useForm({
     initialValues: {
@@ -29,6 +34,14 @@ const SubathonSettings = () => {
               isSubathonActive: subathonForm.values.isSubathonActive,
               timeUnitBase: subathonForm.values.timeUnitBase,
             }))
+
+            // update time_unit_base in kv store
+            wretch(`${REACT_APP_API_2_URL}/kv/set`).post({
+              discordUserId,
+              key: 'time_unit_base',
+              value: subathonForm.values.timeUnitBase,
+              apiKey,
+            })
 
             showNotification({
               title: 'Subathon Settings',
