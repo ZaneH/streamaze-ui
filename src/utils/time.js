@@ -1,7 +1,7 @@
 export function secondsToHHMMSS(secs) {
   var sec_num = parseInt(secs, 10)
   if (sec_num <= 0) {
-    return '00:00'
+    return '00:00:00'
   }
 
   var hours = Math.floor(sec_num / 3600)

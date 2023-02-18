@@ -114,8 +114,6 @@ const DonationLog = () => {
     const oldNetProfit = parseFloat(kv?.net_profit)
     const newNetProfit = oldNetProfit + donationAmountNumeric
 
-    console.log(oldNetProfit, donationAmountNumeric)
-
     if (isNaN(newNetProfit)) {
       console.error('Error updating net_profit KV value (NaN)', newNetProfit)
       return
@@ -167,8 +165,7 @@ const DonationLog = () => {
         // or if the donation is a membership gift
         if (
           !donationLastMessage?.data?.amount &&
-          !donationLastMessage?.type === 'membershipGift' &&
-          !donationLastMessage?.type === 'subscription'
+          donationLastMessage?.type !== 'membershipGift'
         ) {
           return
         }
@@ -197,6 +194,10 @@ const DonationLog = () => {
 
             donationAmount = (giftCount * giftLevelCost).toString()
           }
+        } else if (donationLastMessage?.type === 'subscription') {
+          // assume a subscription is worth $1.99 for now
+          const subscriptionMonths = amount?.months
+          donationAmount = (subscriptionMonths * 1.99).toString()
         }
 
         // remove non-numeric characters
@@ -204,7 +205,7 @@ const DonationLog = () => {
 
         if (donationAmountNumeric > 0) {
           // if non-USD, convert to USD
-          if (currency.toLowerCase() !== 'usd') {
+          if (!!currency && currency.toLowerCase() !== 'usd') {
             wretch(
               `${REACT_APP_EXCHANGE_RATE_API_URL}/v1/rates/${currency.toLowerCase()}`
             )

@@ -2,6 +2,7 @@ import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import LanyardProvider from 'components/Providers/LanyardProvider'
 import SubathonProvider from 'components/Providers/SubathonProvider'
+import Countdown from 'pages/Countdown'
 import SubathonSettings from 'pages/SubathonSettings'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
@@ -109,6 +110,10 @@ const App = () => {
                                 element={<Navigate to="/home" />}
                               />
 
+                              <Route
+                                path="/subathon/clock"
+                                element={<Countdown />}
+                              />
                               <Route
                                 path="/subathon"
                                 element={<SubathonSettings />}

@@ -3,6 +3,7 @@ import ErrorChime from 'assets/error_chime.mp3'
 import DisconnectModal from 'components/Modals/DisconnectModal'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { ConfigContext } from './ConfigProvider'
+import { useLocation } from 'react-router-dom'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
@@ -16,11 +17,12 @@ const HopProvider = ({ children }) => {
   const streamScenes = state?.server?.scenes ?? []
   const streamActiveScene = state?.server?.active_scene ?? ''
   const bitrate = state?.rtmp?.bitrate ?? 0
+  const { pathname } = useLocation()
 
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
 
   useEffect(() => {
-    if (bitrate <= 1000 && isLive) {
+    if (bitrate <= 1000 && isLive && pathname === '/home') {
       const chime = new Audio(ErrorChime)
       chime.play()
 
