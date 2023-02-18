@@ -70,7 +70,7 @@ const YTCard = styled.div`
 
 export default function SuperChatCard({ donation, isAnimated }) {
   const {
-    data: { amount, message, name, pfp, gift_count, gift_level },
+    data: { amount, displayString, message, name, pfp, gift_count, gift_level },
     type,
   } = donation || {}
 
@@ -108,7 +108,7 @@ export default function SuperChatCard({ donation, isAnimated }) {
               <Text color={textColor} weight={700}>
                 {type === 'membershipGift'
                   ? `${gift_count}x ${gift_level}s`
-                  : amount}
+                  : displayString}
               </Text>
             </Box>
           </Flex>

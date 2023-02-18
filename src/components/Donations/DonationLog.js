@@ -12,7 +12,7 @@ import { DonationContext } from '../Providers/DonationProvider'
 import MediaCard from './MediaCard'
 import SuperChatCard from './SuperChatCard'
 
-const { REACT_APP_API_2_WS_URL } = process.env
+const { REACT_APP_API_2_WS_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
 const Item = styled.div`
   margin: 12px 32px;
@@ -109,6 +109,55 @@ const DonationLog = () => {
     !!slobsConfig?.streamToken || !!slobsConfig?.tiktokUsername
   )
 
+  const updateKV = (donationAmountNumeric) => {
+    // Update net_profit KV value
+    const oldNetProfit = parseFloat(kv?.net_profit)
+    const newNetProfit = oldNetProfit + donationAmountNumeric
+
+    console.log(oldNetProfit, donationAmountNumeric)
+
+    if (isNaN(newNetProfit)) {
+      console.error('Error updating net_profit KV value (NaN)', newNetProfit)
+      return
+    }
+
+    wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
+      .post({
+        discordUserId,
+        apiKey,
+        key: 'net_profit',
+        value: newNetProfit.toString(),
+      })
+      .error((err) => {
+        console.log('Error updating net_profit KV value', err)
+      })
+
+    if (isSubathonActive) {
+      // Update subathon KV value
+      const oldSubathonTotal = parseFloat(kv?.donation_amount)
+      const newSubathonTotal = oldSubathonTotal + donationAmountNumeric
+
+      if (isNaN(newSubathonTotal)) {
+        console.error(
+          'Error updating donation_amount KV value (NaN)',
+          newSubathonTotal
+        )
+        return
+      }
+
+      wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
+        .post({
+          discordUserId,
+          apiKey,
+          key: 'donation_amount',
+          value: newSubathonTotal.toString(),
+        })
+        .error((err) => {
+          console.log('Error updating donation_amount KV value', err)
+        })
+    }
+  }
+
   useEffect(() => {
     if (donationLastMessage) {
       try {
@@ -118,7 +167,8 @@ const DonationLog = () => {
         // or if the donation is a membership gift
         if (
           !donationLastMessage?.data?.amount &&
-          !donationLastMessage?.type === 'membershipGift'
+          !donationLastMessage?.type === 'membershipGift' &&
+          !donationLastMessage?.type === 'subscription'
         ) {
           return
         }
@@ -128,11 +178,14 @@ const DonationLog = () => {
           return
         }
 
-        let donationAmount = donationLastMessage?.data?.amount
+        const { currency, amount, gift_count, gift_level } =
+          donationLastMessage?.data || {}
+
+        let donationAmount = amount
         if (donationLastMessage?.type === 'membershipGift') {
           // calculate membership worth
-          const giftCount = donationLastMessage?.data?.gift_count
-          const giftLevel = donationLastMessage?.data?.gift_level
+          const giftCount = gift_count
+          const giftLevel = gift_level
 
           let giftLevelCost = 0
           if (giftCount && giftLevel) {
@@ -147,57 +200,31 @@ const DonationLog = () => {
         }
 
         // remove non-numeric characters
-        const donationAmountNumeric = parseFloat(
-          donationAmount.replace(/[^\d.-]/g, '')
-        )
+        let donationAmountNumeric = parseFloat(donationAmount)
 
         if (donationAmountNumeric > 0) {
-          // Update net_profit KV value
-          const oldNetProfit = parseFloat(kv?.net_profit)
-          const newNetProfit = oldNetProfit + donationAmountNumeric
-
-          if (isNaN(newNetProfit)) {
-            console.error(
-              'Error updating net_profit KV value (NaN)',
-              newNetProfit
+          // if non-USD, convert to USD
+          if (currency.toLowerCase() !== 'usd') {
+            wretch(
+              `${REACT_APP_EXCHANGE_RATE_API_URL}/v1/rates/${currency.toLowerCase()}`
             )
-            return
-          }
-
-          wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
-            .post({
-              discordUserId,
-              apiKey,
-              key: 'net_profit',
-              value: newNetProfit.toString(),
-            })
-            .error((err) => {
-              console.log('Error updating net_profit KV value', err)
-            })
-
-          if (isSubathonActive) {
-            // Update subathon KV value
-            const oldSubathonTotal = parseFloat(kv?.donation_amount)
-            const newSubathonTotal = oldSubathonTotal + donationAmountNumeric
-
-            if (isNaN(newSubathonTotal)) {
-              console.error(
-                'Error updating donation_amount KV value (NaN)',
-                newSubathonTotal
-              )
-              return
-            }
-
-            wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
-              .post({
-                discordUserId,
-                apiKey,
-                key: 'donation_amount',
-                value: newSubathonTotal.toString(),
+              .get()
+              .json(({ status, data }) => {
+                if (status === 'ok') {
+                  const exchangeRate = parseFloat(
+                    data?.[currency.toLowerCase()]
+                  )
+                  donationAmountNumeric = donationAmountNumeric / exchangeRate
+                  updateKV(donationAmountNumeric)
+                } else {
+                  console.log('Error getting exchange rate', data)
+                }
               })
               .error((err) => {
-                console.log('Error updating donation_amount KV value', err)
+                console.log('Error getting exchange rate', err)
               })
+          } else {
+            updateKV(donationAmountNumeric)
           }
         }
       } catch (e) {
