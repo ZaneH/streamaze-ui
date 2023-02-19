@@ -11,6 +11,7 @@ import {
 } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconArrowRight, IconSettings } from '@tabler/icons'
+import { PollContext } from 'components/Providers/PollProvider'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
@@ -105,6 +106,7 @@ const ChatLog = ({
   const virtuosoRef = useRef(null)
   const { colors } = useMantineTheme()
   const { chatConfig } = useContext(ConfigContext)
+  const { handlePollResponse } = useContext(PollContext)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -154,6 +156,46 @@ const ChatLog = ({
       !!_tiktokUsername || !!_youtubeChannel || !!_twitchUsername
     )
 
+  // Useful for testing the Poll functionality
+  // const [fakeInterval, setFakeInterval] = useState(null)
+  // useEffect(() => {
+  //   if (fakeInterval) {
+  //     clearInterval(fakeInterval)
+  //   } else {
+  //     const interval = setInterval(() => {
+  //       const payload = {
+  //         origin: 'youtube',
+  //         // random number between 1 and 5
+  //         message: `${Math.floor(Math.random() * 5) + 1}`,
+  //         sender: `Test User ${Math.floor(Math.random() * 100) + 1}`,
+  //       }
+
+  //       setChatData((prev) => [
+  //         ...prev,
+  //         {
+  //           message: payload.message,
+  //           sender: payload.sender,
+  //           origin: payload.origin,
+  //           emotes: [],
+  //         },
+  //       ])
+
+  //       handlePollResponse({
+  //         userId: payload.sender,
+  //         content: payload.message,
+  //       })
+  //     }, 2000)
+
+  //     setFakeInterval(interval)
+  //   }
+
+  //   return () => {
+  //     if (fakeInterval) {
+  //       clearInterval(fakeInterval)
+  //     }
+  //   }
+  // }, [fakeInterval])
+
   useEffect(() => {
     if (lastChatJsonMessage !== null) {
       const payload = JSON.parse(lastChatJsonMessage.data)
@@ -168,6 +210,11 @@ const ChatLog = ({
             pfp: payload.pfp,
           },
         ])
+
+        handlePollResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'youtube') {
         setChatData((prev) => [
           ...prev,
@@ -183,6 +230,11 @@ const ChatLog = ({
             memberBadge: payload.member_badge,
           },
         ])
+
+        handlePollResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'twitch') {
         setChatData((prev) => [
           ...prev,
@@ -193,9 +245,14 @@ const ChatLog = ({
             emotes: [],
           },
         ])
+
+        handlePollResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
       }
     }
-  }, [lastChatJsonMessage])
+  }, [lastChatJsonMessage, handlePollResponse])
 
   // Scroll to end
   useEffect(() => {

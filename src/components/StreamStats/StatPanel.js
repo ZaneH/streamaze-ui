@@ -49,7 +49,7 @@ const StatPanel = () => {
             />
           ) : null}
         </Flex>
-        <Flex gap="md">
+        <Flex gap="md" style={{ flexWrap: 'wrap' }}>
           <StatInfo
             image={<BitRateIcon style={{ width: 26, height: 26 }} />}
             label={bitrate ? `${bitrate} Kbps` : 'Offline'}
