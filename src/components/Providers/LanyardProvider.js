@@ -1,17 +1,49 @@
-import { createContext, useContext } from 'react'
+import { createContext, useCallback, useContext } from 'react'
 import { useLanyardWS } from 'use-lanyard'
 import { ConfigContext } from './ConfigProvider'
+import wretch from 'wretch'
 export const LanyardContext = createContext()
 
 const LanyardProvider = ({ children }) => {
   const { lanyardConfig } = useContext(ConfigContext)
-  const { discordUserId } = lanyardConfig
+  const { discordUserId, apiKey } = lanyardConfig
 
   const data = useLanyardWS(discordUserId)
   const kv = data?.kv
 
+  const updateKV = useCallback(
+    (key, value) => {
+      if (!discordUserId || !apiKey) {
+        return
+      }
+
+      return new Promise((resolve, reject) => {
+        wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
+          .post({
+            key,
+            value,
+            discordUserId,
+            apiKey,
+          })
+          .res((res) => {
+            if (res.ok) {
+              resolve()
+            } else {
+              reject()
+            }
+          })
+          .catch((err) => {
+            reject(err)
+          })
+      })
+    },
+    [discordUserId, apiKey]
+  )
+
   return (
-    <LanyardContext.Provider value={{ kv }}>{children}</LanyardContext.Provider>
+    <LanyardContext.Provider value={{ kv, updateKV }}>
+      {children}
+    </LanyardContext.Provider>
   )
 }
 

@@ -1,11 +1,35 @@
-import { createContext, useCallback, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
+import { LanyardContext } from './LanyardProvider'
 export const PollContext = createContext()
 
 const PollProvider = ({ children }) => {
+  const { updateKV } = useContext(LanyardContext)
   const [showPollModal, setShowPollModal] = useState(false)
   const [isPollActive, setIsPollActive] = useState(true)
   // formatted: [{ userId: '123456', content: '1' }]
   const [pollResponses, setPollResponses] = useState([])
+
+  const updatePollKV = useCallback(
+    (pollData) => {
+      /**
+       * 1. Convert pollResponses to {choice: count} object
+       * 2. Update KV
+       */
+      const pollResults = pollData.reduce((acc, pollResponse) => {
+        const choice = pollResponse.content
+        if (acc[choice]) {
+          acc[choice] += 1
+        } else {
+          acc[choice] = 1
+        }
+
+        return acc
+      }, {})
+
+      updateKV('poll', JSON.stringify(pollResults))
+    },
+    [updateKV]
+  )
 
   // 1. Check if poll is active
   // 2. Check if user's message is a poll response (e.g. 1, 2, 3, 4)
@@ -37,9 +61,13 @@ const PollProvider = ({ children }) => {
                 return pollResponse.userId !== message.userId
               })
 
-              return [...removedDuplicate, message]
+              const newValue = [...removedDuplicate, message]
+              updatePollKV(newValue)
+              return newValue
             } else {
-              return [...prev, message]
+              const newValue = [...prev, message]
+              updatePollKV(newValue)
+              return newValue
             }
           })
         } catch (error) {
@@ -47,7 +75,7 @@ const PollProvider = ({ children }) => {
         }
       }
     },
-    [isPollActive]
+    [isPollActive, updatePollKV]
   )
 
   return (
@@ -60,6 +88,7 @@ const PollProvider = ({ children }) => {
         pollResponses,
         setPollResponses,
         handlePollResponse,
+        updatePollKV,
       }}
     >
       {children}

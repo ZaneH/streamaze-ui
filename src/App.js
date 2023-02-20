@@ -4,6 +4,7 @@ import LanyardProvider from 'components/Providers/LanyardProvider'
 import PollProvider from 'components/Providers/PollProvider'
 import SubathonProvider from 'components/Providers/SubathonProvider'
 import Countdown from 'pages/Countdown'
+import PollWidget from 'pages/PollWidget'
 import SubathonSettings from 'pages/SubathonSettings'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
@@ -111,17 +112,22 @@ const App = () => {
                                 />
 
                                 <Route
-                                  path="*"
-                                  element={<Navigate to="/home" />}
-                                />
-
-                                <Route
                                   path="/subathon/clock"
                                   element={<Countdown />}
                                 />
                                 <Route
                                   path="/subathon"
                                   element={<SubathonSettings />}
+                                />
+
+                                <Route
+                                  path="/poll/:id"
+                                  element={<PollWidget />}
+                                />
+
+                                <Route
+                                  path="*"
+                                  element={<Navigate to="/home" />}
                                 />
                               </Routes>
                             </PollProvider>

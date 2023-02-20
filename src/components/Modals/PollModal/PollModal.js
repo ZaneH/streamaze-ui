@@ -4,7 +4,8 @@ import { useContext } from 'react'
 import PollBarGraph from './PollBarGraph'
 
 const PollModal = ({ isOpen = false, onClose }) => {
-  const { pollResponses, setPollResponses } = useContext(PollContext)
+  const { pollResponses, setPollResponses, updatePollKV } =
+    useContext(PollContext)
 
   return (
     <Modal
@@ -26,6 +27,7 @@ const PollModal = ({ isOpen = false, onClose }) => {
           size="lg"
           onClick={() => {
             setPollResponses([])
+            updatePollKV([])
           }}
         >
           Reset Poll
