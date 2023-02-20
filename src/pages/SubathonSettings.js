@@ -43,6 +43,14 @@ const SubathonSettings = () => {
               apiKey,
             })
 
+            // update is_subathon_active in kv store
+            wretch(`${REACT_APP_API_2_URL}/kv/set`).post({
+              discordUserId,
+              key: 'is_subathon_active',
+              value: String(subathonForm.values.isSubathonActive),
+              apiKey,
+            })
+
             showNotification({
               title: 'Subathon Settings',
               message: 'Subathon settings have been saved',
