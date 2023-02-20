@@ -58,7 +58,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
             data={[
               { label: 'Thai Baht (฿)', value: 'thb' },
               { label: 'US Dollar ($)', value: 'usd' },
-              { label: 'Chinese Yuan (¥)', value: 'cny' },
+              { label: 'Hong Kong Dollar (HKD)', value: 'hkd' },
               { label: 'Philippine Peso (₱)', value: 'php' },
             ]}
           />
