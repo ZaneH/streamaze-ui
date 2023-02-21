@@ -91,6 +91,8 @@ const ChatLog = ({
   twitchUsername,
   tiktokUsername,
   youtubeChannel,
+  kickChatroomId,
+  kickChannelId,
   fullHeight,
   compact = false,
   fluid = false,
@@ -111,6 +113,8 @@ const ChatLog = ({
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
   const _twitchUsername = twitchUsername || chatConfig?.twitch?.username
+  const _kickChatroomId = kickChatroomId || chatConfig?.kick?.chatroomId
+  const _kickChannelId = kickChannelId || chatConfig?.kick?.channelId
 
   if (isBig === undefined) {
     isBig = searchParams.get('theme') === 'overlay-impact'
@@ -150,10 +154,18 @@ const ChatLog = ({
           //   params['twitchChat'] = _twitchUsername
           // }
 
+          if (_kickChatroomId && _kickChannelId) {
+            params['kickChatroomId'] = _kickChatroomId
+            params['kickChannelId'] = _kickChannelId
+          }
+
           chatSendMessage(params)
         },
       },
-      !!_tiktokUsername || !!_youtubeChannel || !!_twitchUsername
+      !!_tiktokUsername ||
+        !!_youtubeChannel ||
+        !!_twitchUsername ||
+        (!!_kickChatroomId && !!_kickChannelId)
     )
 
   // Useful for testing the Poll functionality
@@ -250,6 +262,24 @@ const ChatLog = ({
           userId: payload.sender,
           content: payload.message,
         })
+      } else if (payload?.origin === 'kick') {
+        setChatData((prev) => [
+          ...prev,
+          {
+            message: payload.message,
+            sender: payload.sender,
+            origin: payload.origin,
+            pfp: payload.pfp,
+            isMod: payload.is_mod || payload.is_owner,
+            isVerified: payload.is_verified,
+            isMember: payload.is_member,
+          },
+        ])
+
+        handlePollResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
       }
     }
   }, [lastChatJsonMessage, handlePollResponse])
@@ -264,7 +294,12 @@ const ChatLog = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatData.length])
 
-  if (!_twitchUsername && !_tiktokUsername && !_youtubeChannel) {
+  if (
+    !_twitchUsername &&
+    !_tiktokUsername &&
+    !_youtubeChannel &&
+    !(_kickChatroomId || _kickChannelId)
+  ) {
     return (
       <Box {...props} py="xl">
         <Text align="center">

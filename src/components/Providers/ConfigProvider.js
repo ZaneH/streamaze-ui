@@ -22,6 +22,11 @@ const ConfigProvider = ({ children }) => {
         enabled: false,
         channel: '',
       },
+      kick: {
+        enabled: false,
+        chatroomId: '',
+        channelId: '',
+      },
     },
   })
 
@@ -117,6 +122,8 @@ const ConfigProvider = ({ children }) => {
   let tiktokChat = ''
   let youtubeChat = ''
   let twitchChat = ''
+  let kickChatroomId = ''
+  let kickChannelId = ''
   if (isChat) {
     if (searchParams.get('tiktokChat')) {
       tiktokChat = searchParams.get('tiktokChat')
@@ -128,6 +135,14 @@ const ConfigProvider = ({ children }) => {
 
     if (searchParams.get('twitchChat')) {
       twitchChat = searchParams.get('twitchChat')
+    }
+
+    if (searchParams.get('kickChatroomId')) {
+      kickChatroomId = searchParams.get('kickChatroomId')
+    }
+
+    if (searchParams.get('kickChannelId')) {
+      kickChannelId = searchParams.get('kickChannelId')
     }
   }
 
@@ -226,6 +241,15 @@ const ConfigProvider = ({ children }) => {
           twitch: {
             ...chatConfig.twitch,
             username: twitchChat ? twitchChat : chatConfig.twitch.username,
+          },
+          kick: {
+            ...chatConfig.kick,
+            chatroomId: kickChatroomId
+              ? kickChatroomId
+              : chatConfig.kick.chatroomId,
+            channelId: kickChannelId
+              ? kickChannelId
+              : chatConfig.kick.channelId,
           },
         },
         setChatConfig,

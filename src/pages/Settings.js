@@ -1,4 +1,11 @@
-import { Button, Container, Flex, Select, TextInput } from '@mantine/core'
+import {
+  Button,
+  Container,
+  Divider,
+  Flex,
+  Select,
+  TextInput,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { useContext } from 'react'
@@ -28,6 +35,8 @@ const Settings = () => {
       tiktok: chatConfig.tiktok.username,
       youtube: chatConfig.youtube.channel,
       twitch: chatConfig.twitch.username,
+      kickChatroomId: chatConfig.kick.chatroomId,
+      kickChannelId: chatConfig.kick.channelId,
     },
   })
 
@@ -83,9 +92,14 @@ const Settings = () => {
                 ...prev.youtube,
                 channel: chatForm.values.youtube,
               },
-              twitch: {
-                ...prev.twitch,
-                username: chatForm.values.twitch,
+              // twitch: {
+              //   ...prev.twitch,
+              //   username: chatForm.values.twitch,
+              // },
+              kick: {
+                ...prev.kick,
+                chatroomId: chatForm.values.kickChatroomId,
+                channelId: chatForm.values.kickChannelId,
               },
             }))
 
@@ -115,12 +129,29 @@ const Settings = () => {
                 chatForm.setFieldValue('youtube', e.target.value)
               }}
             />
-            <TextInput
+            {/* <TextInput
               label={<FieldLabel>Twitch Username</FieldLabel>}
               placeholder="sampepper"
               defaultValue={chatForm.values.twitch}
               onChange={(e) => {
                 chatForm.setFieldValue('twitch', e.target.value)
+              }}
+            /> */}
+            <Divider />
+            <TextInput
+              label={<FieldLabel>Kick Chatroom ID</FieldLabel>}
+              placeholder="123456789"
+              defaultValue={chatForm.values.kickChatroomId}
+              onChange={(e) => {
+                chatForm.setFieldValue('kickChatroomId', e.target.value)
+              }}
+            />
+            <TextInput
+              label={<FieldLabel>Kick Channel ID</FieldLabel>}
+              placeholder="123456789"
+              defaultValue={chatForm.values.kickChannelId}
+              onChange={(e) => {
+                chatForm.setFieldValue('kickChannelId', e.target.value)
               }}
             />
           </FormSection>
