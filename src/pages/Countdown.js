@@ -7,9 +7,10 @@ import { secondsToHHMMSS } from 'utils/time'
 const CountdownLabel = styled.div`
   font-size: 8rem;
   font-family: 'Inter';
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: #fff;
-  text-align: right;
+  text-align: center;
   text-shadow: 0 0 10px #000;
 `
 
