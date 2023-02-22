@@ -49,6 +49,8 @@ const YTCard = styled.div`
 
   opacity: 1;
 
+  ${({ onClick }) => onClick && 'cursor: pointer;'}
+
   ${({ isAnimated }) =>
     isAnimated &&
     css`
@@ -68,7 +70,7 @@ const YTCard = styled.div`
     `}
 `
 
-export default function SuperChatCard({ donation, isAnimated }) {
+export default function SuperChatCard({ donation, isAnimated, onClick }) {
   const {
     data: { amount, displayString, message, name, pfp, gift_count, gift_level },
     type,
@@ -77,7 +79,7 @@ export default function SuperChatCard({ donation, isAnimated }) {
   const [bgColor, headerBgColor, textColor] = getSuperChatColors(amount || 5)
 
   return (
-    <YTCard bg={bgColor} isAnimated={isAnimated}>
+    <YTCard bg={bgColor} isAnimated={isAnimated} onClick={onClick}>
       <Flex direction="column">
         <Flex
           py="md"

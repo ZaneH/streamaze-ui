@@ -69,7 +69,8 @@ const DonationLog = () => {
   const { slobsConfig, lanyardConfig, subathonConfig } =
     useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
-  const { donations, setDonations, donationIndex } = useContext(DonationContext)
+  const { donations, setDonations, donationIndex, setDonationIndex } =
+    useContext(DonationContext)
   const { isSubathonActive } = subathonConfig
   const { kv } = useContext(LanyardContext)
   // TODO: Add voice back
@@ -326,6 +327,11 @@ const DonationLog = () => {
               key={eventId}
               donation={donation}
               isAnimated={i === 0}
+              onClick={() => {
+                // set the donationIndex to the current index
+                // keeping in mind that the donations are reversed
+                setDonationIndex(donations.length - i - 1)
+              }}
             />
           )
         }
