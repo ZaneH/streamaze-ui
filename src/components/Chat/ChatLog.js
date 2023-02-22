@@ -72,7 +72,9 @@ const SenderText = styled(Text)`
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
   ${({ ismember }) => ismember && 'color: #2ba640;'}
   ${({ ismod }) => ismod && 'color: #5e84f1;'}
-  ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000'}
+  ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000;'}
+  ${({ origin }) => origin === 'kick' && 'color: rgba(255, 255, 255, 0.7);'}
+  ${({ origin }) => origin === 'youtube' && 'color: #E62117;'}
 `
 
 const MessageText = styled(Text)`
@@ -384,6 +386,7 @@ const ChatLog = ({
             message,
             emotes,
             pfp,
+            origin,
             isMod,
             isVerified,
             isMember,
@@ -451,6 +454,7 @@ const ChatLog = ({
                     ismod={isMod ? 'true' : undefined}
                     ismember={isMember ? 'true' : undefined}
                     shadow={fluid ? 'true' : undefined}
+                    origin={origin}
                   >
                     {`${sender}${isBig ? ':' : ''}`}
                     {isMod && !isBig && (
