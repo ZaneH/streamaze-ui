@@ -1,10 +1,5 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { useInterval } from '@mantine/hooks'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { LanyardContext } from './LanyardProvider'
 export const SubathonContext = createContext()
 
@@ -14,28 +9,17 @@ const SubathonProvider = ({ children }) => {
   // Time remaining in seconds
   const [timeRemaining, setTimeRemaining] = useState(0)
   const [isSubathonActive, setIsSubathonActive] = useState(false)
-  const [secondsInterval, setSecondsInterval] = useState(null)
-
-  const setupInterval = useCallback(() => {
-    if (secondsInterval) {
-      clearInterval(secondsInterval)
-    }
-
-    const interval = setInterval(() => {
-      setTimeRemaining((prev) => {
-        const newTime = prev - 1
-        if (newTime <= 0) {
-          clearInterval(secondsInterval)
-          setIsSubathonActive(false)
-          return 0
-        } else {
-          return newTime
-        }
-      })
-    }, 1000)
-
-    setSecondsInterval(interval)
-  }, [secondsInterval])
+  const secondsInterval = useInterval(() => {
+    setTimeRemaining((prev) => {
+      const newTime = prev - 1
+      if (newTime <= 0) {
+        setIsSubathonActive(false)
+        return 0
+      } else {
+        return newTime
+      }
+    })
+  }, 1000)
 
   useEffect(() => {
     if (kv?.time_unit_base && kv?.stream_start_time && kv?.donation_amount) {
@@ -51,13 +35,13 @@ const SubathonProvider = ({ children }) => {
         streamStartTime - Date.now() / 1000 + donationAmount * timeUnitBase
 
       setTimeRemaining(timeRemaining)
-      setupInterval()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kv])
+  }, [kv?.time_unit_base, kv?.stream_start_time, kv?.donation_amount])
 
   useEffect(() => {
-    return () => clearInterval(secondsInterval)
+    secondsInterval.start()
+    return secondsInterval.stop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
