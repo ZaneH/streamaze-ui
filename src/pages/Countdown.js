@@ -11,7 +11,20 @@ const CountdownLabel = styled.div`
   font-variant-numeric: tabular-nums;
   color: #fff;
   text-align: center;
-  text-shadow: 0 0 10px #000;
+
+  position: relative;
+  background: transparent;
+  z-index: 5;
+
+  &:before {
+    content: attr(data-content);
+    text-align: center;
+    position: absolute;
+    -webkit-text-stroke: 0.1em #000;
+    left: auto;
+    right: auto;
+    z-index: -1;
+  }
 `
 
 const Countdown = () => {
@@ -22,9 +35,14 @@ const Countdown = () => {
     return null
   }
 
+  const timeRemainingString = secondsToHHMMSS(timeRemaining)
+
   return (
-    <CountdownLabel className="countdown-label">
-      {secondsToHHMMSS(timeRemaining)}
+    <CountdownLabel
+      className="countdown-label"
+      data-content={timeRemainingString}
+    >
+      {timeRemainingString}
     </CountdownLabel>
   )
 }
