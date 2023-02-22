@@ -13,11 +13,12 @@ const LanyardProvider = ({ children }) => {
 
   const updateKV = useCallback(
     (key, value) => {
-      if (!discordUserId || !apiKey) {
-        return
-      }
-
       return new Promise((resolve, reject) => {
+        if (!discordUserId || !apiKey) {
+          reject()
+          return
+        }
+
         wretch(`${process.env.REACT_APP_API_2_URL}/kv/set`)
           .post({
             key,

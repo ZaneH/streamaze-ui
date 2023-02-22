@@ -12,6 +12,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconVideoOff } from '@tabler/icons'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { useContext } from 'react'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
@@ -38,6 +39,7 @@ const { REACT_APP_API_2_URL } = process.env
 const GoLive = () => {
   const { colors } = useMantineTheme()
   const { isLive } = useContext(HopContext)
+  const { updateKV } = useContext(LanyardContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
 
   let statusMessage = 'You are Offline'
@@ -79,6 +81,27 @@ const GoLive = () => {
                           message: res.message,
                           color: 'green',
                         })
+
+                        // set actual_stream_start_time in KV
+                        updateKV(
+                          'actual_stream_start_time',
+                          (Date.now() / 1000).toFixed(0)
+                        )
+                          .then(() => {
+                            showNotification({
+                              title: 'Success',
+                              message: 'Updated Stream Start Time',
+                              color: 'green',
+                            })
+                          })
+                          .catch(() => {
+                            showNotification({
+                              title: 'Error',
+                              message:
+                                'Failed to update Stream Start Time. This is not a fatal error.',
+                              color: 'red',
+                            })
+                          })
                       }
                     })
                     .catch((e) => {

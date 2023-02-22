@@ -12,12 +12,13 @@ import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
 import ExpenseModal from './ExpenseModal'
 import StatInfo from './StatInfo'
+import StreamTime from './StreamTime'
 import SubathonModal from './SubathonModal'
 
 const StatPanel = () => {
   const { ytViewers, tiktokViewers, isYTLoading, isTikTokLoading } =
     useContext(StatContext)
-  const { bitrate } = useContext(HopContext)
+  const { bitrate, isLive } = useContext(HopContext)
   const { kv } = useContext(LanyardContext)
   const { timeRemaining } = useContext(SubathonContext)
   const { subathonConfig } = useContext(ConfigContext)
@@ -86,6 +87,8 @@ const StatPanel = () => {
               }}
             />
           )}
+
+          {isLive && <StreamTime />}
         </Flex>
       </Flex>
 
