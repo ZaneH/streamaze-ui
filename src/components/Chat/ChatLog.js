@@ -70,11 +70,11 @@ const SenderText = styled(Text)`
   vertical-align: middle;
   word-break: break-word;
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
+  ${({ origin }) => origin === 'kick' && 'color: rgba(255, 255, 255, 0.7);'}
+  ${({ origin }) => origin === 'youtube' && 'color: #E62117;'}
   ${({ ismember }) => ismember && 'color: #2ba640;'}
   ${({ ismod }) => ismod && 'color: #5e84f1;'}
   ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000;'}
-  ${({ origin }) => origin === 'kick' && 'color: rgba(255, 255, 255, 0.7);'}
-  ${({ origin }) => origin === 'youtube' && 'color: #E62117;'}
 `
 
 const MessageText = styled(Text)`
