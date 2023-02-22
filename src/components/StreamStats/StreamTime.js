@@ -28,7 +28,7 @@ const StreamTime = () => {
     tickInterval.stop()
     setSeconds(parseInt(Date.now() / 1000) - startTime)
     tickInterval.start()
-  }, [kv?.actual_stream_start_time])
+  }, [kv?.actual_stream_start_time, tickInterval, startTime])
 
   return (
     <>
