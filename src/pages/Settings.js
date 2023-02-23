@@ -57,6 +57,7 @@ const Settings = () => {
     initialValues: {
       tiktok: statsConfig.tiktokUsername,
       youtube: statsConfig.youtubeChannel,
+      kick: statsConfig.kickChannelName,
     },
   })
 
@@ -231,6 +232,7 @@ const Settings = () => {
               ...prev,
               tiktokUsername: statsForm.values.tiktok,
               youtubeChannel: statsForm.values.youtube,
+              kickChannelName: statsForm.values.kick,
             }))
 
             showNotification({
@@ -257,6 +259,14 @@ const Settings = () => {
               defaultValue={statsForm.values.youtube}
               onChange={(e) => {
                 statsForm.setFieldValue('youtube', e.target.value)
+              }}
+            />
+            <TextInput
+              label={<FieldLabel>Kick Channel Name</FieldLabel>}
+              placeholder="sam"
+              defaultValue={statsForm.values.kick}
+              onChange={(e) => {
+                statsForm.setFieldValue('kick', e.target.value)
               }}
             />
           </FormSection>

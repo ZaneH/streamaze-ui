@@ -47,6 +47,7 @@ const ConfigProvider = ({ children }) => {
       tiktokUsername: '',
       twitchUsername: '',
       youtubeChannel: '',
+      kickChannelName: '',
     },
   })
 
@@ -158,6 +159,7 @@ const ConfigProvider = ({ children }) => {
   let tiktokStats = ''
   let youtubeStats = ''
   // let twitchStats = ''
+  let kickStats = ''
   if (isStats) {
     if (searchParams.get('tiktokStats')) {
       tiktokStats = searchParams.get('tiktokStats')
@@ -171,6 +173,10 @@ const ConfigProvider = ({ children }) => {
     // if (searchParams.get('twitchStats')) {
     //   twitchStats = searchParams.get('twitchStats')
     // }
+
+    if (searchParams.get('kickStats')) {
+      kickStats = searchParams.get('kickStats')
+    }
   }
 
   // Load timestamp config from URLs
@@ -268,6 +274,7 @@ const ConfigProvider = ({ children }) => {
             : statsConfig.youtubeChannel,
           // twitchUsername: twitchStats
           //   ? twitchStats : statsConfig.twitchUsername,
+          kickChannelName: kickStats ? kickStats : statsConfig.kickChannelName,
         },
         setStatsConfig,
         timestampConfig: {

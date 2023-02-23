@@ -15,6 +15,7 @@ const SubathonProvider = ({ children }) => {
       if (newTime <= 0) {
         setIsSubathonActive(false)
         updateKV('subathon_ended', 'true')
+        secondsInterval.stop()
         return 0
       } else {
         return newTime
@@ -36,6 +37,12 @@ const SubathonProvider = ({ children }) => {
         streamStartTime - Date.now() / 1000 + donationAmount * timeUnitBase
 
       setTimeRemaining(timeRemaining)
+      if (timeRemaining > 0) {
+        setIsSubathonActive(true)
+        if (!secondsInterval.active) {
+          secondsInterval.start()
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kv?.time_unit_base, kv?.stream_start_time, kv?.donation_amount])

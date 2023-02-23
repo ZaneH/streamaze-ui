@@ -58,7 +58,7 @@ const App = () => {
                                   element={
                                     <Navigate
                                       replace
-                                      to={`/home?isChat=true&youtubeChat=@sam&tiktokChat=sampepper&kickChatroomId=328681&kickChannelId=328683&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}&tiktokDonos=sampepper&isLanyard=true&discordUserId=${process.env.REACT_APP_SAM_DISCORD_ID}&apiKey=${process.env.REACT_APP_SAM_LANYARD_API_KEY}`}
+                                      to={`/home?isChat=true&youtubeChat=@sam&tiktokChat=sampepper&kickChatroomId=328681&kickChannelId=328683&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&kickStats=sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}&tiktokDonos=sampepper&isLanyard=true&discordUserId=${process.env.REACT_APP_SAM_DISCORD_ID}&apiKey=${process.env.REACT_APP_SAM_LANYARD_API_KEY}`}
                                     />
                                   }
                                 />
@@ -67,7 +67,7 @@ const App = () => {
                                   element={
                                     <Navigate
                                       replace
-                                      to={`/settings?isChat=true&youtubeChat=@sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}&tiktokDonos=sampepper&isLanyard=true&discordUserId=${process.env.REACT_APP_SAM_DISCORD_ID}&apiKey=${process.env.REACT_APP_SAM_LANYARD_API_KEY}`}
+                                      to={`/settings?isChat=true&youtubeChat=@sam&tiktokChat=sampepper&isClip=true&clipDiscord=1061689422455767141&clipYT=https://www.youtube.com/c/sam&isObs=true&obsChannel=bondctrl:sam&isStats=true&tiktokStats=sampepper&youtubeStats=https://youtube.com/c/sam&kickStats=sam&isSlobs=true&streamToken=${process.env.REACT_APP_SAM_SOCKET_TOKEN_ALIAS}&tiktokDonos=sampepper&isLanyard=true&discordUserId=${process.env.REACT_APP_SAM_DISCORD_ID}&apiKey=${process.env.REACT_APP_SAM_LANYARD_API_KEY}`}
                                     />
                                   }
                                 />

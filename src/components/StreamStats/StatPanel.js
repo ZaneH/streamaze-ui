@@ -4,6 +4,7 @@ import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { SubathonContext } from 'components/Providers/SubathonProvider'
 import { ReactComponent as DollarSignIcon } from 'dollar-sign-icon.svg'
+import { ReactComponent as KickIcon } from 'kick-logo-icon.svg'
 import { ReactComponent as FlagIcon } from 'flag-icon.svg'
 import { useContext, useState } from 'react'
 import { secondsToHHMMSS } from 'utils/time'
@@ -16,8 +17,14 @@ import StreamTime from './StreamTime'
 import SubathonModal from './SubathonModal'
 
 const StatPanel = () => {
-  const { ytViewers, tiktokViewers, isYTLoading, isTikTokLoading } =
-    useContext(StatContext)
+  const {
+    ytViewers,
+    tiktokViewers,
+    isYTLoading,
+    isTikTokLoading,
+    kickViewers,
+    isKickLoading,
+  } = useContext(StatContext)
   const { bitrate, isLive } = useContext(HopContext)
   const { kv } = useContext(LanyardContext)
   const { timeRemaining } = useContext(SubathonContext)
@@ -46,6 +53,17 @@ const StatPanel = () => {
                 isTikTokLoading
                   ? 'Loading'
                   : parseInt(tiktokViewers).toLocaleString()
+              }
+            />
+          ) : null}
+          {kickViewers || isKickLoading ? (
+            <StatInfo
+              network="kick"
+              image={<KickIcon style={{ width: 26, height: 26 }} />}
+              label={
+                isKickLoading
+                  ? 'Loading'
+                  : parseInt(kickViewers).toLocaleString()
               }
             />
           ) : null}

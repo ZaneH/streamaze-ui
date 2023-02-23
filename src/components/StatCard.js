@@ -16,6 +16,7 @@ import { showNotification } from '@mantine/notifications'
 import { IconAdjustmentsHorizontal } from '@tabler/icons'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { SocialIcon } from 'react-social-icons'
+import { ReactComponent as KickIcon } from 'kick-logo-icon.svg'
 import wretch from 'wretch'
 import { SidebarContext } from './SidebarProvider'
 
@@ -29,11 +30,14 @@ const SocialStat = styled(Flex)`
 const StatCard = () => {
   const [ytViewers, setYtViewers] = useState()
   const [tiktokViewers, setTiktokViewers] = useState()
+  const [kickViewers, setKickViewers] = useState()
+
   const [isEditing, setIsEditing] = useState(false)
   const { statsConfig, setStatsConfig } = useContext(SidebarContext)
 
   const [isYTLoading, setIsYTLoading] = useState(true)
   const [isTikTokLoading, setIsTikTokLoading] = useState(true)
+  const [isKickLoading, setIsKickLoading] = useState(true)
 
   const form = useForm({
     initialValues: Object.assign({}, statsConfig),
@@ -57,7 +61,7 @@ const StatCard = () => {
 
         setIsYTLoading(false)
       })
-  }, 12 * 1000)
+  }, 60 * 1000) // 1 minute
 
   const tiktokInterval = useInterval(() => {
     wretch(
@@ -77,19 +81,40 @@ const StatCard = () => {
 
         setIsTikTokLoading(false)
       })
-  }, 12 * 1000)
+  }, 60 * 1000) // 1 minute
+
+  const kickInterval = useInterval(() => {
+    wretch(
+      `${REACT_APP_API_URL}/kick/viewers?channelName=${statsConfig?.kickChannelName}`
+    )
+      .get()
+      .json((res) => {
+        if (res?.viewers) {
+          setKickViewers(res.viewers)
+        } else if (res?.error) {
+          showNotification({
+            color: 'red',
+            title: 'Kick Viewers Error',
+            message: res.error,
+          })
+        }
+      })
+  }, 240 * 1000) // 4 minutes
 
   useEffect(() => {
     setIsYTLoading(true)
     setIsTikTokLoading(true)
+    setIsKickLoading(true)
 
     // reset the viewers
     setYtViewers()
     setTiktokViewers()
+    setKickViewers()
 
     // refresh the intervals (after config change)
     ytInterval.stop()
     tiktokInterval.stop()
+    kickInterval.stop()
 
     if (statsConfig?.youtubeChannel) {
       ytInterval.start()
@@ -101,6 +126,12 @@ const StatCard = () => {
       tiktokInterval.start()
     } else {
       setIsTikTokLoading(false)
+    }
+
+    if (statsConfig?.kickChannelName) {
+      kickInterval.start()
+    } else {
+      setIsKickLoading(false)
     }
 
     // eslint-disable-next-line
@@ -122,9 +153,17 @@ const StatCard = () => {
       setIsTikTokLoading(false)
     }
 
+    if (statsConfig?.kickChannelName) {
+      kickInterval.start()
+    } else {
+      kickInterval.stop()
+      setIsKickLoading(false)
+    }
+
     return () => {
       ytInterval.stop()
       tiktokInterval.stop()
+      kickInterval.stop()
     }
 
     // eslint-disable-next-line
@@ -142,27 +181,50 @@ const StatCard = () => {
         count: tiktokViewers,
         name: statsConfig?.tiktokUsername,
       },
+      {
+        network: 'kick',
+        count: kickViewers,
+        name: statsConfig?.kickChannelName,
+      },
     ].filter((o) => o?.count && o?.name)
 
-    const elements = data.map((o, i) => (
-      <SocialStat key={i}>
-        <SocialIcon
-          network={o?.network}
-          style={{
-            height: 36,
-            width: 36,
-          }}
-        />
-        <Flex direction="column">
-          <Text weight={600} lh="1em">
-            {o?.count}
-          </Text>
-          <Text size="sm" color="dimmed">
-            {o?.name}
-          </Text>
-        </Flex>
-      </SocialStat>
-    ))
+    const elements = data.map((o, i) => {
+      if (o?.network === 'kick') {
+        return (
+          <SocialStat key={i}>
+            <KickIcon style={{ height: 36, width: 36 }} />
+            <Flex direction="column">
+              <Text weight={600} lh="1em">
+                {o?.count}
+              </Text>
+              <Text size="sm" color="dimmed">
+                {o?.name}
+              </Text>
+            </Flex>
+          </SocialStat>
+        )
+      }
+
+      return (
+        <SocialStat key={i}>
+          <SocialIcon
+            network={o?.network}
+            style={{
+              height: 36,
+              width: 36,
+            }}
+          />
+          <Flex direction="column">
+            <Text weight={600} lh="1em">
+              {o?.count}
+            </Text>
+            <Text size="sm" color="dimmed">
+              {o?.name}
+            </Text>
+          </Flex>
+        </SocialStat>
+      )
+    })
 
     if (elements.length === 0) {
       return (

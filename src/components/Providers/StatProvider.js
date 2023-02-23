@@ -13,8 +13,10 @@ const StatProvider = ({ children }) => {
   const { statsConfig } = useContext(ConfigContext)
   const [ytViewers, setYtViewers] = useState()
   const [tiktokViewers, setTiktokViewers] = useState()
+  const [kickViewers, setKickViewers] = useState()
   const [isYTLoading, setIsYTLoading] = useState(true)
   const [isTikTokLoading, setIsTikTokLoading] = useState(true)
+  const [isKickLoading, setIsKickLoading] = useState(true)
   const { pathname } = useLocation()
 
   const ytInterval = useInterval(() => {
@@ -45,7 +47,7 @@ const StatProvider = ({ children }) => {
           message: err?.message,
         })
       })
-  }, 12 * 1000)
+  }, 60 * 1000) // 1 minute
 
   const tiktokInterval = useInterval(() => {
     if (pathname !== '/home') {
@@ -81,19 +83,58 @@ const StatProvider = ({ children }) => {
           message: err?.message,
         })
       })
-  }, 12 * 1000)
+  }, 60 * 1000) // 1 minute
+
+  const kickInterval = useInterval(() => {
+    if (pathname !== '/home') {
+      return
+    }
+
+    wretch(
+      `${REACT_APP_API_URL}/kick/viewers?channelName=${statsConfig?.kickChannelName}`
+    )
+      .get()
+      .json((res) => {
+        if (parseInt(res?.viewers) === 0) {
+          throw new Error(
+            'Stopping live updates while viewers are at 0. Sorry!'
+          )
+        }
+
+        if (res?.viewers) {
+          setKickViewers(res.viewers)
+        } else if (res?.error) {
+          throw new Error(res.error)
+        }
+
+        setIsKickLoading(false)
+      })
+      .catch((err) => {
+        setIsKickLoading(false)
+        kickInterval.stop()
+
+        showNotification({
+          color: 'red',
+          title: 'Kick Viewers Error',
+          message: err?.message,
+        })
+      })
+  }, 240 * 1000) // 4 minutes
 
   useEffect(() => {
     setIsYTLoading(true)
     setIsTikTokLoading(true)
+    setIsKickLoading(true)
 
     // reset the viewers
     setYtViewers()
     setTiktokViewers()
+    setIsKickLoading()
 
     // refresh the intervals (after config change)
     ytInterval.stop()
     tiktokInterval.stop()
+    kickInterval.stop()
 
     if (statsConfig?.youtubeChannel) {
       ytInterval.start()
@@ -105,6 +146,12 @@ const StatProvider = ({ children }) => {
       tiktokInterval.start()
     } else {
       setIsTikTokLoading(false)
+    }
+
+    if (statsConfig?.kickChannelName) {
+      kickInterval.start()
+    } else {
+      setIsKickLoading(false)
     }
 
     // eslint-disable-next-line
@@ -126,9 +173,17 @@ const StatProvider = ({ children }) => {
       setIsTikTokLoading(false)
     }
 
+    if (statsConfig?.kickChannelName) {
+      kickInterval.start()
+    } else {
+      kickInterval.stop()
+      setIsKickLoading(false)
+    }
+
     return () => {
       ytInterval.stop()
       tiktokInterval.stop()
+      kickInterval.stop()
     }
 
     // eslint-disable-next-line
@@ -139,8 +194,10 @@ const StatProvider = ({ children }) => {
       value={{
         ytViewers,
         tiktokViewers,
+        kickViewers,
         isYTLoading,
         isTikTokLoading,
+        isKickLoading,
       }}
     >
       {children}
