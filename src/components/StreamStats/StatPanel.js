@@ -81,7 +81,11 @@ const StatPanel = () => {
           {subathonConfig?.isSubathonActive && (
             <StatInfo
               image={<FlagIcon style={{ width: 26, height: 26 }} />}
-              label={secondsToHHMMSS(timeRemaining)}
+              label={
+                kv?.subathon_ended === 'true'
+                  ? '[ENDED]'
+                  : secondsToHHMMSS(timeRemaining)
+              }
               onClick={() => {
                 setShowSubathonModal(true)
               }}

@@ -1,6 +1,7 @@
 import { Button, Modal, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { FieldLabel } from 'components/Settings'
 import { useContext, useRef } from 'react'
 import wretch from 'wretch'
@@ -10,6 +11,7 @@ const { REACT_APP_API_2_URL } = process.env
 const SubathonModal = ({ isOpen = false, onClose }) => {
   const { lanyardConfig, subathonConfig } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
+  const { updateKV } = useContext(LanyardContext)
   const { timeUnitBase } = subathonConfig
   const initialTime = useRef(null)
 
@@ -40,6 +42,8 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
             })
             return
           }
+
+          updateKV('subathon_ended', 'false')
 
           wretch(`${REACT_APP_API_2_URL}/kv/set`)
             .post({

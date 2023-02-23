@@ -4,7 +4,7 @@ import { LanyardContext } from './LanyardProvider'
 export const SubathonContext = createContext()
 
 const SubathonProvider = ({ children }) => {
-  const { kv } = useContext(LanyardContext)
+  const { kv, updateKV } = useContext(LanyardContext)
 
   // Time remaining in seconds
   const [timeRemaining, setTimeRemaining] = useState(0)
@@ -14,6 +14,7 @@ const SubathonProvider = ({ children }) => {
       const newTime = prev - 1
       if (newTime <= 0) {
         setIsSubathonActive(false)
+        updateKV('subathon_ended', 'true')
         return 0
       } else {
         return newTime
