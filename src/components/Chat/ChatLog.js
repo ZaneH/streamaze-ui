@@ -274,10 +274,7 @@ const ChatLog = ({
             pfp: payload.pfp,
             isMod: payload.is_mod || payload.is_owner,
             isVerified: payload.is_verified,
-            isMember:
-              payload.is_member ||
-              // TODO: Remove this
-              payload.sender === 'charlottefreya',
+            isMember: payload.is_member,
           },
         ])
 
@@ -471,7 +468,7 @@ const ChatLog = ({
                         }}
                       />
                     )}
-                    {isMember && !isBig && (
+                    {isMember && !isBig && memberBadge && (
                       <img
                         alt="Member Badge"
                         src={memberBadge}
