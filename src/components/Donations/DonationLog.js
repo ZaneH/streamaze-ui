@@ -328,21 +328,6 @@ const DonationLog = () => {
           isCurrency = true
         }
 
-        if (isMembershipGift || isCurrency) {
-          return (
-            <SuperChatCard
-              key={eventId}
-              donation={donation}
-              isAnimated={i === 0}
-              onClick={() => {
-                // set the donationIndex to the current index
-                // keeping in mind that the donations are reversed
-                setDonationIndex(donations.length - i - 1)
-              }}
-            />
-          )
-        }
-
         if (isMediaShare) {
           const {
             action_by: actionBy,
@@ -369,6 +354,21 @@ const DonationLog = () => {
                 <b>Duration:</b> {parseFloat(duration ?? 0) / 1000}s
               </Text>
             </MediaCard>
+          )
+        }
+
+        if (isMembershipGift || isCurrency) {
+          return (
+            <SuperChatCard
+              key={eventId}
+              donation={donation}
+              isAnimated={i === 0}
+              onClick={() => {
+                // set the donationIndex to the current index
+                // keeping in mind that the donations are reversed
+                setDonationIndex(donations.length - i - 1)
+              }}
+            />
           )
         }
 
