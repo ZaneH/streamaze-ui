@@ -1,6 +1,6 @@
 import { useInterval } from '@mantine/hooks'
-import { createContext, useEffect, useState } from 'react'
 import PeppersAudio from 'assets/peppers_in_the_chat.mp3'
+import { createContext, useEffect, useState } from 'react'
 
 export const DonationContext = createContext()
 

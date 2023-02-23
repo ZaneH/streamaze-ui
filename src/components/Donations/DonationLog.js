@@ -160,6 +160,13 @@ const DonationLog = () => {
   useEffect(() => {
     if (donationLastMessage) {
       try {
+        if (
+          donationLastMessage?.type === 'mediaShareEvent' &&
+          donationLastMessage?.data?.action === 'modMoveToNext'
+        ) {
+          return
+        }
+
         setDonations((prev) => [...prev, donationLastMessage])
 
         // only update the net profit if an amount is present

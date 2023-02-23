@@ -39,13 +39,15 @@ export default function MediaCard({ children, url, donationId, isAnimated }) {
       <Flex direction="column" justify="space-between" gap="lg">
         <Box>{children}</Box>
         <Box style={{ display: 'none' }}>
-          <ReactPlayer
-            url={url}
-            width="100%"
-            height="180px"
-            controls
-            playing={donationId === playingMediaId}
-          />
+          {donationId === playingMediaId && (
+            <ReactPlayer
+              url={url}
+              width="100%"
+              height="180px"
+              controls
+              playing={donationId === playingMediaId}
+            />
+          )}
         </Box>
       </Flex>
     </AnimatedDiv>
