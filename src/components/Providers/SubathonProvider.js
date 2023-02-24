@@ -12,7 +12,7 @@ const SubathonProvider = ({ children }) => {
   const secondsInterval = useInterval(() => {
     setTimeRemaining((prev) => {
       const newTime = prev - 1
-      if (newTime <= 0) {
+      if (newTime <= 0 && prev > 0) {
         setIsSubathonActive(false)
         updateKV('subathon_ended', 'true')
         secondsInterval.stop()
