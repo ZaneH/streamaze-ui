@@ -101,7 +101,7 @@ const App = () => {
                                       height="100vh"
                                       fluid
                                       showProfilePicture={false}
-                                      autorefresh={12 * 1000}
+                                      autorefresh={12 * 60 * 1000}
                                     />
                                   }
                                 />
