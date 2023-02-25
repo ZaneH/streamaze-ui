@@ -9,6 +9,7 @@ import {
   Text,
   useMantineTheme,
 } from '@mantine/core'
+import { useInterval } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { PollContext } from 'components/Providers/PollProvider'
@@ -102,6 +103,7 @@ const ChatLog = ({
   height = '300px',
   isDark = undefined,
   isBig = undefined,
+  autorefresh = -1,
   ...props
 }) => {
   const [searchParams] = useSearchParams()
@@ -169,6 +171,10 @@ const ChatLog = ({
         !!_twitchUsername ||
         (!!_kickChatroomId && !!_kickChannelId)
     )
+
+  const autorefreshInterval = useInterval(() => {
+    window.location.reload()
+  }, autorefresh)
 
   // Useful for testing the Poll functionality
   // const [fakeInterval, setFakeInterval] = useState(null)
@@ -286,6 +292,17 @@ const ChatLog = ({
       }
     }
   }, [lastChatJsonMessage, handlePollResponse])
+
+  useEffect(() => {
+    if (autorefresh > 0) {
+      autorefreshInterval.start()
+    }
+  }, [autorefresh, autorefreshInterval])
+
+  useEffect(() => {
+    return () => autorefreshInterval.stop()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Scroll to end
   useEffect(() => {
