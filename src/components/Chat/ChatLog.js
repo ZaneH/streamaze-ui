@@ -386,7 +386,7 @@ const ChatLog = ({
         //     setIsChatBottom(true)
         //   }
         // }}
-        // atBottomThreshold={PX_BEFORE_AUTOSCROLL}
+        atBottomThreshold={PX_BEFORE_AUTOSCROLL}
         followOutput={'auto'}
         totalCount={chatData.length}
         components={{
