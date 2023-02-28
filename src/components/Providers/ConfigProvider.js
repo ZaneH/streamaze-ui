@@ -69,6 +69,7 @@ const ConfigProvider = ({ children }) => {
       streamToken: '',
       ttsVoice: 'Ivy',
       tiktokUsername: '',
+      silentAudioInterval: '10',
     },
   })
 
@@ -294,6 +295,7 @@ const ConfigProvider = ({ children }) => {
           tiktokUsername: tiktokDonos
             ? tiktokDonos
             : slobsConfig.tiktokUsername,
+          silentAudioInterval: slobsConfig.silentAudioInterval,
         },
         setSlobsConfig,
         keypadConfig: {

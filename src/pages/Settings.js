@@ -66,6 +66,7 @@ const Settings = () => {
       streamToken: slobsConfig.streamToken,
       ttsVoice: slobsConfig?.ttsVoice,
       tiktokUsername: slobsConfig?.tiktokUsername,
+      silentAudioInterval: slobsConfig?.silentAudioInterval,
     },
   })
 
@@ -280,6 +281,7 @@ const Settings = () => {
               streamToken: slobsForm.values.streamToken,
               ttsVoice: slobsForm.values.ttsVoice,
               tiktokUsername: slobsForm.values.tiktokUsername,
+              silentAudioInterval: slobsForm.values.silentAudioInterval,
             }))
 
             showNotification({
@@ -377,6 +379,14 @@ const Settings = () => {
               defaultValue={slobsForm.values.tiktokUsername}
               onChange={(e) => {
                 slobsForm.setFieldValue('tiktokUsername', e.target.value)
+              }}
+            />
+            <TextInput
+              label={<FieldLabel>Play Silent Audio</FieldLabel>}
+              placeholder="10 (leave blank to disable)"
+              defaultValue={slobsForm.values.silentAudioInterval}
+              onChange={(e) => {
+                slobsForm.setFieldValue('silentAudioInterval', e.target.value)
               }}
             />
           </FormSection>

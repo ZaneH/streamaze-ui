@@ -1,7 +1,8 @@
 import { Box, Flex } from '@mantine/core'
-import { PanelHead } from '../document'
-import { DonationLog } from '.'
 import { useMediaQuery } from '@mantine/hooks'
+import { DonationLog } from '.'
+import { PanelHead } from '../document'
+import BlankAudio from './BlankAudio'
 
 const DonationPanel = () => {
   const isLarge = useMediaQuery('(min-width: 1440px)')
@@ -22,6 +23,7 @@ const DonationPanel = () => {
         }}
       >
         <DonationLog />
+        <BlankAudio />
       </Box>
       <Box style={{ flex: '0 1 0px' }} />
     </Flex>
