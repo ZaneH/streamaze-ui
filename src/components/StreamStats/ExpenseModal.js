@@ -70,6 +70,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
           style={{ width: '100%' }}
           ref={expenseRef}
           data-autofocus
+          inputMode="decimal"
         />
         <Space h="8px" />
         <Button.Group>
