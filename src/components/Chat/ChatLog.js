@@ -310,14 +310,14 @@ const ChatLog = ({
   }, [])
 
   // Scroll to end
-  // useEffect(() => {
-  //   if (virtuosoRef.current && isChatBottom) {
-  //     virtuosoRef.current.scrollToIndex({
-  //       index: chatData.length - 1,
-  //     })
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [chatData.length])
+  useEffect(() => {
+    if (virtuosoRef.current && isChatBottom) {
+      virtuosoRef.current.scrollToIndex({
+        index: chatData.length - 1,
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatData.length])
 
   if (
     !_twitchUsername &&
@@ -381,11 +381,21 @@ const ChatLog = ({
         ref={virtuosoRef}
         data={chatData}
         alignToBottom={true}
-        // endReached={() => {
-        //   if (!fluid) {
-        //     setIsChatBottom(true)
-        //   }
-        // }}
+        onScroll={(e) => {
+          const bottomOffset = e.target.scrollHeight - e.target.scrollTop
+
+          if (
+            !fluid &&
+            bottomOffset < e.target.clientHeight + PX_BEFORE_AUTOSCROLL
+          ) {
+            setIsChatBottom(false)
+          }
+        }}
+        endReached={() => {
+          if (!fluid) {
+            setIsChatBottom(true)
+          }
+        }}
         atBottomThreshold={PX_BEFORE_AUTOSCROLL}
         followOutput={'auto'}
         totalCount={chatData.length}
