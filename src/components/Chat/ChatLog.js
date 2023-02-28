@@ -22,8 +22,10 @@ import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg
 import { ConfigContext } from '../Providers/ConfigProvider'
 
 const Item = styled.div`
-  margin: 4px 0;
-  padding: 3px 0;
+  margin: 0;
+  padding: 0;
+  padding-top: 4px;
+  padding-bottom: 6px;
 `
 
 const ItemContent = styled.div`
@@ -76,6 +78,8 @@ const SenderText = styled(Text)`
   ${({ ismember }) => ismember && 'color: #2ba640;'}
   ${({ ismod }) => ismod && 'color: #5e84f1;'}
   ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000;'}
+  ${({ origin, ismember }) =>
+    origin === 'kick' && ismember && 'color: #FF6C37;'}
 `
 
 const MessageText = styled(Text)`
@@ -173,6 +177,7 @@ const ChatLog = ({
     )
 
   const autorefreshInterval = useInterval(() => {
+    console.log('Reloading chat...')
     window.location.reload()
   }, autorefresh)
 
@@ -305,14 +310,14 @@ const ChatLog = ({
   }, [])
 
   // Scroll to end
-  useEffect(() => {
-    if (virtuosoRef.current && isChatBottom) {
-      virtuosoRef.current.scrollToIndex({
-        index: chatData.length - 1,
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatData.length])
+  // useEffect(() => {
+  //   if (virtuosoRef.current && isChatBottom) {
+  //     virtuosoRef.current.scrollToIndex({
+  //       index: chatData.length - 1,
+  //     })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [chatData.length])
 
   if (
     !_twitchUsername &&
@@ -374,29 +379,20 @@ const ChatLog = ({
           overflowX: 'hidden',
         }}
         ref={virtuosoRef}
-        initialTopMostItemIndex={999}
         data={chatData}
-        endReached={() => {
-          if (!fluid) {
-            setIsChatBottom(true)
-          }
-        }}
-        onScroll={(e) => {
-          const bottomOffset = e.target.scrollHeight - e.target.scrollTop
-
-          if (
-            !fluid &&
-            bottomOffset < e.target.clientHeight + PX_BEFORE_AUTOSCROLL
-          ) {
-            setIsChatBottom(false)
-          }
-        }}
-        followOutput={isChatBottom ? 'smooth' : false}
+        alignToBottom={true}
+        // endReached={() => {
+        //   if (!fluid) {
+        //     setIsChatBottom(true)
+        //   }
+        // }}
+        // atBottomThreshold={PX_BEFORE_AUTOSCROLL}
+        followOutput={'auto'}
         totalCount={chatData.length}
         components={{
           Item,
           List,
-          Footer,
+          // Footer,
         }}
         itemContent={(_, chatEvent) => {
           const {
