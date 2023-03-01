@@ -31,8 +31,15 @@ const AnimatedDiv = styled.div`
     `}
 `
 
-export default function MediaCard({ children, url, donationId, isAnimated }) {
-  const { playingMediaId } = useContext(DonationContext)
+export default function MediaCard({
+  children,
+  url,
+  donationId,
+  duration,
+  isAnimated,
+}) {
+  const { playingMediaId, setIsPlaying, setPlayingMediaId } =
+    useContext(DonationContext)
 
   return (
     <AnimatedDiv isAnimated={isAnimated}>
@@ -46,6 +53,13 @@ export default function MediaCard({ children, url, donationId, isAnimated }) {
               height="180px"
               controls
               playing={donationId === playingMediaId}
+              onProgress={({ playedSeconds }) => {
+                console.log(playedSeconds, duration)
+                if (playedSeconds * 1000 >= duration) {
+                  setPlayingMediaId(null)
+                  setIsPlaying(false)
+                }
+              }}
             />
           )}
         </Box>

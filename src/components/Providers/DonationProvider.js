@@ -32,13 +32,7 @@ const DonationProvider = ({ children }) => {
       let ttsUrl = currentDonation?.data?.tts_url
 
       if (currentDonation?.type === 'mediaShareEvent') {
-        const mediaDuration = currentDonation?.data?.duration
         setPlayingMediaId(currentDonation?.data?.donation_id)
-
-        setTimeout(() => {
-          setPlayingMediaId(null)
-          setIsPlaying(false)
-        }, mediaDuration)
 
         return
       }

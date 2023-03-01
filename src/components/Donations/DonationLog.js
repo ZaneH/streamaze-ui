@@ -343,6 +343,7 @@ const DonationLog = () => {
               url={mediaUrl}
               donationId={donationId}
               isAnimated={i === 0}
+              duration={parseFloat(duration ?? 0)}
             >
               <Text mb="md">
                 <b>{actionBy}</b> sent media
