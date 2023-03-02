@@ -194,10 +194,12 @@ const DonationLog = () => {
 
           let giftLevelCost = 0
           if (giftCount && giftLevel) {
-            if (giftLevel === 'Member') {
+            if (giftLevel === 'Pepper Pals') {
               giftLevelCost = 1.99
-            } else if (giftLevel === 'Membership') {
+            } else if (giftLevel === 'Member') {
               giftLevelCost = 4.99
+            } else if (giftLevel === 'ATMs') {
+              giftLevelCost = 24.99
             }
 
             donationAmount = (giftCount * giftLevelCost).toString()
