@@ -1,8 +1,16 @@
-import { ActionIcon, Box, Flex, Text, Tooltip } from '@mantine/core'
+import {
+  ActionIcon,
+  Box,
+  Flex,
+  Text,
+  Tooltip,
+  useMantineTheme,
+} from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconChartBar, IconExternalLink } from '@tabler/icons'
 import PollModal from 'components/Modals/PollModal/PollModal'
 import { PollContext } from 'components/Providers/PollProvider'
+import { StatPanel } from 'components/StreamStats'
 import { useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { PanelHead } from '../document'
@@ -14,9 +22,13 @@ const ChatPanel = () => {
   const { showPollModal, setShowPollModal } = useContext(PollContext)
   const isMedium = useMediaQuery('(max-width: 768px)')
   const [searchParams] = useSearchParams()
+  const { colors } = useMantineTheme()
 
   return (
     <Flex direction="column" h="100%">
+      <Flex w="100%" bg={colors.dark[9]} px="lg" py="md" mt="-78px" ml="-10px">
+        <StatPanel />
+      </Flex>
       <PollModal
         isOpen={showPollModal}
         onClose={() => setShowPollModal(false)}

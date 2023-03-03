@@ -13,10 +13,9 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HopContext } from '../Providers/HopProvider'
 import { SidebarContext } from '../Providers/SidebarProvider'
-import { StatPanel } from '../StreamStats'
 import Sidebar from './Sidebar'
 
-const SplitHeader = ({ showStats }) => {
+const SplitHeader = () => {
   const { colors } = useMantineTheme()
   const { setIsSidebarOpen } = useContext(SidebarContext)
   const { isLive } = useContext(HopContext)
@@ -24,15 +23,8 @@ const SplitHeader = ({ showStats }) => {
 
   return (
     <Box height={78}>
-      <Flex align="center" gap="sm">
-        <Flex
-          align="center"
-          px="20px"
-          w={showStats ? '50%' : '100%'}
-          bg={colors.dark[7]}
-          style={{ alignSelf: 'stretch' }}
-          py="md"
-        >
+      <Flex align="start" gap="sm">
+        <Flex align="center" px="20px" w={'100%'} bg={colors.dark[7]} py="md">
           <Burger
             mr="xl"
             onClick={() => {
@@ -58,11 +50,6 @@ const SplitHeader = ({ showStats }) => {
             </Flex>
           </MediaQuery>
         </Flex>
-        {showStats && (
-          <Flex w="50%" bg={colors.dark[9]} px="lg" py="md">
-            <StatPanel />
-          </Flex>
-        )}
       </Flex>
     </Box>
   )

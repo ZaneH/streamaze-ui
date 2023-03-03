@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <Layout showStats>
       <TagSEO />
-      <Flex gap="xs" h="100%">
+      <Flex h="100%">
         <Flex direction="column" w="50%" align="center">
           <DonationPanel />
           <Box w="100%" maw="725px">
