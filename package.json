@@ -16,6 +16,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "echarts-for-react": "^3.0.2",
+    "moment": "^2.29.4",
+    "phoenix": "^1.7.1",
     "preact": "^8.5.3",
     "preact-compat": "^3.19.0",
     "re-resizable": "^6.9.9",
