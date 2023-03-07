@@ -4,14 +4,13 @@ import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { SubathonContext } from 'components/Providers/SubathonProvider'
 import { ReactComponent as DollarSignIcon } from 'dollar-sign-icon.svg'
-import { ReactComponent as KickIcon } from 'kick-logo-icon.svg'
 import { ReactComponent as FlagIcon } from 'flag-icon.svg'
-import { useContext, useEffect, useState } from 'react'
-import { calculateTimeRemaining, secondsToHHMMSS } from 'utils/time'
+import { ReactComponent as KickIcon } from 'kick-logo-icon.svg'
+import { useContext, useState } from 'react'
+import { secondsToHHMMSS } from 'utils/time'
 import { ReactComponent as BitRateIcon } from '../../bit-rate-icon.svg'
 import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
-import wretch from 'wretch'
 import ExpenseModal from './ExpenseModal'
 import StatInfo from './StatInfo'
 import StreamTime from './StreamTime'
@@ -75,10 +74,10 @@ const StatPanel = () => {
             image={<BitRateIcon style={{ width: 26, height: 26 }} />}
             label={bitrate ? `${bitrate} Kbps` : 'Offline'}
           />
-          {kv?.net_profit ? (
+          {netProfit ? (
             <StatInfo
               onClick={() => {
-                if (kv?.net_profit) {
+                if (netProfit) {
                   setShowMoneyModal(true)
                 } else {
                   showNotification({
@@ -102,9 +101,7 @@ const StatPanel = () => {
             <StatInfo
               image={<FlagIcon style={{ width: 26, height: 26 }} />}
               label={
-                kv?.subathon_ended === 'true'
-                  ? '[ENDED]'
-                  : secondsToHHMMSS(timeRemaining)
+                timeRemaining <= 0 ? '[ENDED]' : secondsToHHMMSS(timeRemaining)
               }
               onClick={() => {
                 setShowSubathonModal(true)

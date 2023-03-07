@@ -11,7 +11,8 @@ const PhoenixProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
   const [streamerChannel, setStreamerChannel] = useState(null)
   const { setDonations, setDonationIndex } = useContext(DonationContext)
-  const { setTimeRemaining } = useContext(SubathonContext)
+  const { setTimeRemaining, setSubathonStreamId, setIsSubathonActive } =
+    useContext(SubathonContext)
   const { setNetProfit } = useContext(StatContext)
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const PhoenixProvider = ({ children }) => {
         setStreamerChannel(null)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -91,8 +93,8 @@ const PhoenixProvider = ({ children }) => {
       ch.on('initial_state', (payload) => {
         const {
           active_stream: currentStream,
-          net_profit,
-          last_10_donations,
+          net_profit: streamerNetProfit,
+          last_10_donations: last10Donations,
         } = payload || {}
         const seconds = calculateTimeRemaining(
           currentStream.subathon_seconds_added,
@@ -100,11 +102,18 @@ const PhoenixProvider = ({ children }) => {
           currentStream.subathon_start_minutes
         )
 
+        setSubathonStreamId(currentStream.id)
+
+        if (currentStream.subathon_ended_time === null) {
+          setIsSubathonActive(true)
+        }
+
         setTimeRemaining(seconds)
-        setNetProfit(net_profit)
-        setDonationIndex(last_10_donations.length)
+        setNetProfit(streamerNetProfit)
+        setDonationIndex(last10Donations.length)
+        setSubathonStreamId(currentStream.id)
         setDonations(
-          last_10_donations.map((donation) => {
+          last10Donations.map((donation) => {
             return {
               type: donation.type,
               data: {
@@ -120,6 +129,7 @@ const PhoenixProvider = ({ children }) => {
         )
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket])
 
   return (
