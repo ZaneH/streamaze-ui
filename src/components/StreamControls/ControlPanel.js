@@ -9,12 +9,14 @@ import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
 import { ReactComponent as IconPause } from '../../pause-icon.svg'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 
 const { REACT_APP_API_2_URL } = process.env
 
 const ControlPanel = () => {
   const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
   const { timestampConfig } = useContext(ConfigContext)
+  const { streamerChannel } = useContext(PhoenixContext)
   const {
     donations,
     isAutoplay,
@@ -75,34 +77,7 @@ const ControlPanel = () => {
             requireConfirmation
             color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
             onClick={() => {
-              wretch(`${REACT_APP_API_2_URL}/obs/switch-scene`)
-                .post({
-                  sceneName: scene,
-                })
-                .json((res) => {
-                  if (res?.error) {
-                    throw new Error(res.error)
-                  }
-
-                  showNotification({
-                    title: 'Success',
-                    message: res?.message,
-                    color: 'teal',
-                  })
-                })
-                .catch((e) => {
-                  try {
-                    const err = JSON.parse(e.message)
-                    const message = err?.error
-                    showNotification({
-                      title: 'OBS Error',
-                      color: 'red',
-                      message,
-                    })
-                  } catch (e) {
-                    console.error('Error parsing OBS error', e)
-                  }
-                })
+              streamerChannel.push('switch_scene', { scene })
             }}
           >
             {scene}

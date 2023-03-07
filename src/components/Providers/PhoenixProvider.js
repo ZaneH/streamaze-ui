@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { Socket, Push } from 'phoenix'
+import { Socket } from 'phoenix'
 import { DonationContext } from './DonationProvider'
 import { SubathonContext } from './SubathonProvider'
 import { calculateTimeRemaining } from 'utils/time'
 import { StatContext } from './StatProvider'
 
-const PhoenixContext = createContext()
+export const PhoenixContext = createContext()
 
 const PhoenixProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
@@ -126,6 +126,7 @@ const PhoenixProvider = ({ children }) => {
     <PhoenixContext.Provider
       value={{
         socket,
+        streamerChannel,
       }}
     >
       {children}

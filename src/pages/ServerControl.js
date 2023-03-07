@@ -19,6 +19,7 @@ import {
   IconMoodSmile,
   IconOctagonOff,
 } from '@tabler/icons'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
@@ -38,6 +39,7 @@ const ServerControl = () => {
   const { colors } = useMantineTheme()
   const { serverState, hopError } = useContext(HopContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
+  const { streamerChannel } = useContext(PhoenixContext)
 
   const isStopped = serverState === 'stopped'
   const isStarting = serverState === 'starting'
@@ -89,24 +91,26 @@ const ServerControl = () => {
               fullWidth
               color="red"
               onClick={() => {
-                wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
-                  .post()
-                  .json((res) => {
-                    if (res?.error) {
-                      throw new Error(res.error)
-                    } else if (res?.message) {
-                      showNotification({
-                        title: 'Success!',
-                        message: res.message,
-                      })
-                    }
-                  })
-                  .catch((err) => {
-                    showNotification({
-                      title: 'OBS Error',
-                      message: err.message,
-                    })
-                  })
+                streamerChannel.push('stop_server', {})
+
+                // wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
+                //   .post()
+                //   .json((res) => {
+                //     if (res?.error) {
+                //       throw new Error(res.error)
+                //     } else if (res?.message) {
+                //       showNotification({
+                //         title: 'Success!',
+                //         message: res.message,
+                //       })
+                //     }
+                //   })
+                //   .catch((err) => {
+                //     showNotification({
+                //       title: 'OBS Error',
+                //       message: err.message,
+                //     })
+                //   })
               }}
             >
               Turn Off
@@ -115,24 +119,27 @@ const ServerControl = () => {
               fullWidth
               color="green"
               onClick={() => {
-                wretch(`${REACT_APP_API_2_URL}/obs/start-server/youtube`)
-                  .post()
-                  .json((res) => {
-                    if (res?.error) {
-                      throw new Error(res.error)
-                    } else if (res?.message) {
-                      showNotification({
-                        title: 'Success!',
-                        message: res.message,
-                      })
-                    }
-                  })
-                  .catch((err) => {
-                    showNotification({
-                      title: 'OBS Error',
-                      message: err.message,
-                    })
-                  })
+                streamerChannel.push('start_server', {
+                  service: 'youtube',
+                })
+                // wretch(`${REACT_APP_API_2_URL}/obs/start-server/youtube`)
+                //   .post()
+                //   .json((res) => {
+                //     if (res?.error) {
+                //       throw new Error(res.error)
+                //     } else if (res?.message) {
+                //       showNotification({
+                //         title: 'Success!',
+                //         message: res.message,
+                //       })
+                //     }
+                //   })
+                //   .catch((err) => {
+                //     showNotification({
+                //       title: 'OBS Error',
+                //       message: err.message,
+                //     })
+                //   })
               }}
             >
               Turn On
@@ -182,24 +189,26 @@ const ServerControl = () => {
               fullWidth
               color="red"
               onClick={() => {
-                wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
-                  .post()
-                  .json((res) => {
-                    if (res?.error) {
-                      throw new Error(res.error)
-                    } else if (res?.message) {
-                      showNotification({
-                        title: 'Success!',
-                        message: res.message,
-                      })
-                    }
-                  })
-                  .catch((err) => {
-                    showNotification({
-                      title: 'OBS Error',
-                      message: err.message,
-                    })
-                  })
+                streamerChannel.push('stop_server', {})
+
+                // wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
+                //   .post()
+                //   .json((res) => {
+                //     if (res?.error) {
+                //       throw new Error(res.error)
+                //     } else if (res?.message) {
+                //       showNotification({
+                //         title: 'Success!',
+                //         message: res.message,
+                //       })
+                //     }
+                //   })
+                //   .catch((err) => {
+                //     showNotification({
+                //       title: 'OBS Error',
+                //       message: err.message,
+                //     })
+                //   })
               }}
             >
               Turn Off
@@ -208,24 +217,28 @@ const ServerControl = () => {
               fullWidth
               color="green"
               onClick={() => {
-                wretch(`${REACT_APP_API_2_URL}/obs/start-server/tiktok`)
-                  .post()
-                  .json((res) => {
-                    if (res?.error) {
-                      throw new Error(res.error)
-                    } else if (res?.message) {
-                      showNotification({
-                        title: 'Success!',
-                        message: res.message,
-                      })
-                    }
-                  })
-                  .catch((err) => {
-                    showNotification({
-                      title: 'OBS Error',
-                      message: err.message,
-                    })
-                  })
+                streamerChannel.push('start_server', {
+                  service: 'tiktok',
+                })
+
+                // wretch(`${REACT_APP_API_2_URL}/obs/start-server/tiktok`)
+                //   .post()
+                //   .json((res) => {
+                //     if (res?.error) {
+                //       throw new Error(res.error)
+                //     } else if (res?.message) {
+                //       showNotification({
+                //         title: 'Success!',
+                //         message: res.message,
+                //       })
+                //     }
+                //   })
+                //   .catch((err) => {
+                //     showNotification({
+                //       title: 'OBS Error',
+                //       message: err.message,
+                //     })
+                //   })
               }}
             >
               Turn On

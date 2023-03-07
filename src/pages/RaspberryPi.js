@@ -2,6 +2,8 @@ import styled from '@emotion/styled'
 import { Button, Container, Flex, Paper, Stack, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
+import { useContext } from 'react'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
 
@@ -27,6 +29,7 @@ const RaspberryPi = () => {
   // const { colors } = useMantineTheme()
   // const isLive = false
   const isSmall = useMediaQuery('(max-width: 600px)')
+  const { streamerChannel } = useContext(PhoenixContext)
   // let statusMessage = 'Offline'
 
   return (
@@ -83,26 +86,28 @@ const RaspberryPi = () => {
                 fullWidth
                 color="red"
                 onClick={() => {
-                  wretch(`${REACT_APP_API_2_URL}/pi/stop`)
-                    .post()
-                    .json((res) => {
-                      if (res?.error) {
-                        throw new Error(res.error)
-                      } else if (res?.message) {
-                        showNotification({
-                          title: 'Success',
-                          message: res.message,
-                          color: 'green',
-                        })
-                      }
-                    })
-                    .catch((err) => {
-                      showNotification({
-                        title: 'Error',
-                        message: err.message,
-                        color: 'red',
-                      })
-                    })
+                  streamerChannel.push('stop_pi', {})
+
+                  // wretch(`${REACT_APP_API_2_URL}/pi/stop`)
+                  //   .post()
+                  //   .json((res) => {
+                  //     if (res?.error) {
+                  //       throw new Error(res.error)
+                  //     } else if (res?.message) {
+                  //       showNotification({
+                  //         title: 'Success',
+                  //         message: res.message,
+                  //         color: 'green',
+                  //       })
+                  //     }
+                  //   })
+                  //   .catch((err) => {
+                  //     showNotification({
+                  //       title: 'Error',
+                  //       message: err.message,
+                  //       color: 'red',
+                  //     })
+                  //   })
                 }}
               >
                 Stop Raspberry Pi

@@ -13,6 +13,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconVideoOff } from '@tabler/icons'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
 import wretch from 'wretch'
 import { Layout } from '../components/document'
@@ -40,6 +41,7 @@ const GoLive = () => {
   const { colors } = useMantineTheme()
   const { isLive } = useContext(HopContext)
   const { updateKV } = useContext(LanyardContext)
+  const { streamerChannel } = useContext(PhoenixContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
 
   let statusMessage = 'You are Offline'
@@ -70,53 +72,54 @@ const GoLive = () => {
                 fullWidth
                 color="green"
                 onClick={() => {
-                  wretch(`${REACT_APP_API_2_URL}/obs/start-broadcast`)
-                    .post()
-                    .json((res) => {
-                      if (res?.error) {
-                        throw new Error(res.error)
-                      } else if (res?.message) {
-                        showNotification({
-                          title: 'Success',
-                          message: res.message,
-                          color: 'green',
-                        })
+                  streamerChannel.put('start_broadcast', {})
+                  //   wretch(`${REACT_APP_API_2_URL}/obs/start-broadcast`)
+                  //     .post()
+                  //     .json((res) => {
+                  //       if (res?.error) {
+                  //         throw new Error(res.error)
+                  //       } else if (res?.message) {
+                  //         showNotification({
+                  //           title: 'Success',
+                  //           message: res.message,
+                  //           color: 'green',
+                  //         })
 
-                        // set actual_stream_start_time in KV
-                        updateKV(
-                          'actual_stream_start_time',
-                          (Date.now() / 1000).toFixed(0)
-                        )
-                          .then(() => {
-                            showNotification({
-                              title: 'Success',
-                              message: 'Updated Stream Start Time',
-                              color: 'green',
-                            })
-                          })
-                          .catch(() => {
-                            showNotification({
-                              title: 'Error',
-                              message:
-                                'Failed to update Stream Start Time. This is not a fatal error.',
-                              color: 'red',
-                            })
-                          })
-                      }
-                    })
-                    .catch((e) => {
-                      try {
-                        const err = JSON.parse(e.message)
-                        const message = err?.error
-                        showNotification({
-                          title: 'OBS Error',
-                          color: 'red',
-                          message,
-                        })
-                      } catch (e) {
-                        console.error('Error parsing OBS error', e)
-                      }
-                    })
+                  //         // set actual_stream_start_time in KV
+                  //         updateKV(
+                  //           'actual_stream_start_time',
+                  //           (Date.now() / 1000).toFixed(0)
+                  //         )
+                  //           .then(() => {
+                  //             showNotification({
+                  //               title: 'Success',
+                  //               message: 'Updated Stream Start Time',
+                  //               color: 'green',
+                  //             })
+                  //           })
+                  //           .catch(() => {
+                  //             showNotification({
+                  //               title: 'Error',
+                  //               message:
+                  //                 'Failed to update Stream Start Time. This is not a fatal error.',
+                  //               color: 'red',
+                  //             })
+                  //           })
+                  //       }
+                  //     })
+                  //     .catch((e) => {
+                  //       try {
+                  //         const err = JSON.parse(e.message)
+                  //         const message = err?.error
+                  //         showNotification({
+                  //           title: 'OBS Error',
+                  //           color: 'red',
+                  //           message,
+                  //         })
+                  //       } catch (e) {
+                  //         console.error('Error parsing OBS error', e)
+                  //       }
+                  //     })
                 }}
               >
                 Start Stream
