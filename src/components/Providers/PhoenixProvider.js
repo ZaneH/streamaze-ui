@@ -10,7 +10,7 @@ const PhoenixContext = createContext()
 const PhoenixProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
   const [streamerChannel, setStreamerChannel] = useState(null)
-  const { setDonations } = useContext(DonationContext)
+  const { setDonations, setDonationIndex } = useContext(DonationContext)
   const { setTimeRemaining } = useContext(SubathonContext)
   const { setNetProfit } = useContext(StatContext)
 
@@ -89,7 +89,11 @@ const PhoenixProvider = ({ children }) => {
       })
 
       ch.on('initial_state', (payload) => {
-        const { active_stream: currentStream, net_profit } = payload || {}
+        const {
+          active_stream: currentStream,
+          net_profit,
+          last_10_donations,
+        } = payload || {}
         const seconds = calculateTimeRemaining(
           currentStream.subathon_seconds_added,
           currentStream.subathon_start_time,
@@ -98,6 +102,22 @@ const PhoenixProvider = ({ children }) => {
 
         setTimeRemaining(seconds)
         setNetProfit(net_profit)
+        setDonationIndex(last_10_donations.length)
+        setDonations(
+          last_10_donations.map((donation) => {
+            return {
+              type: donation.type,
+              data: {
+                id: donation.id,
+                name: donation.sender,
+                message: donation.message,
+                displayString: donation.displayString,
+                amount: donation.value.amount,
+                currency: donation.value.currency,
+              },
+            }
+          })
+        )
       })
     }
   }, [socket])
