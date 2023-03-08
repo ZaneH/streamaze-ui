@@ -12,8 +12,13 @@ import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { useContext, useRef } from 'react'
 import wretch from 'wretch'
+import { StatContext } from 'components/Providers/StatProvider'
 
-const { REACT_APP_API_2_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
+const {
+  REACT_APP_API_2_URL,
+  REACT_APP_API_3_URL,
+  REACT_APP_EXCHANGE_RATE_API_URL,
+} = process.env
 
 const ExpenseModal = ({ isOpen = false, onClose }) => {
   const {
@@ -24,6 +29,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
     },
   } = useContext(ConfigContext)
   const { kv } = useContext(LanyardContext)
+  const { netProfit } = useContext(StatContext)
   const { discordUserId, apiKey } = lanyardConfig
   const expenseRef = useRef(null)
 
@@ -38,7 +44,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
         <Box>
           <Text lh="2em">
             <b>Current (in USD):</b>{' '}
-            {parseFloat(kv?.net_profit)
+            {parseFloat(netProfit)
               .toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'USD',
@@ -106,23 +112,23 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
                   console.error('Error fetching the exchange rate: ', err)
                 })
                 .finally(() => {
-                  const previousUSDValue = parseFloat(kv?.net_profit)
                   numericInput = numericInput.replace(/[^0-9.]/g, '')
 
                   if (isNaN(numericInput)) {
                     throw new Error('Invalid input')
                   }
 
-                  const newUSDValue =
-                    previousUSDValue -
+                  const expenseValue =
                     parseFloat(numericInput) / usdConversionRate
 
-                  wretch(`${REACT_APP_API_2_URL}/kv/set`)
+                  wretch(`${REACT_APP_API_3_URL}/api/expenses`)
                     .post({
-                      discordUserId,
-                      key: 'net_profit',
-                      value: newUSDValue.toFixed(2),
-                      apiKey,
+                      amount_in_usd: expenseValue.toFixed(2) * -1,
+                      streamer_id: 1,
+                      value: {
+                        amount: parseFloat(numericInput * -1),
+                        currency: currencyConfig?.currency,
+                      },
                     })
                     .res((res) => {
                       if (res.ok) {
@@ -186,23 +192,23 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
                   console.error('Error fetching the exchange rate: ', err)
                 })
                 .finally(() => {
-                  const previousUSDValue = parseFloat(kv?.net_profit)
                   numericInput = numericInput.replace(/[^0-9.]/g, '')
 
                   if (isNaN(numericInput)) {
                     throw new Error('Invalid input')
                   }
 
-                  const newUSDValue =
-                    previousUSDValue +
+                  const expenseValue =
                     parseFloat(numericInput) / usdConversionRate
 
-                  wretch(`${REACT_APP_API_2_URL}/kv/set`)
+                  wretch(`${REACT_APP_API_3_URL}/api/expenses`)
                     .post({
-                      discordUserId,
-                      key: 'net_profit',
-                      value: newUSDValue.toString(),
-                      apiKey,
+                      amount_in_usd: expenseValue.toFixed(2),
+                      streamer_id: 1,
+                      value: {
+                        amount: parseFloat(numericInput),
+                        currency: currencyConfig?.currency,
+                      },
                     })
                     .res((res) => {
                       if (res.ok) {

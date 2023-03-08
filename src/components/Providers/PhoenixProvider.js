@@ -45,7 +45,7 @@ const PhoenixProvider = ({ children }) => {
       socket.connect()
 
       const ch = socket.channel('streamer:1', {
-        userToken: 'abcdefg',
+        userToken: 'api-asdfasdf',
       })
 
       ch.join().receive('ok', (_resp) => {
@@ -53,7 +53,8 @@ const PhoenixProvider = ({ children }) => {
       })
 
       ch.on('expense', (payload) => {
-        console.log('new expense', payload)
+        const { net_profit } = payload || {}
+        setNetProfit(net_profit)
       })
 
       ch.on('subathon', (payload) => {
@@ -106,9 +107,9 @@ const PhoenixProvider = ({ children }) => {
 
         if (currentStream.subathon_ended_time === null) {
           setIsSubathonActive(true)
+          setTimeRemaining(seconds)
         }
 
-        setTimeRemaining(seconds)
         setNetProfit(streamerNetProfit)
         setDonationIndex(last10Donations.length)
         setSubathonStreamId(currentStream.id)
