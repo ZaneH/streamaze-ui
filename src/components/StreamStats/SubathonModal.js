@@ -3,10 +3,11 @@ import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { FieldLabel } from 'components/Settings'
+import moment from 'moment'
 import { useContext, useRef } from 'react'
 import wretch from 'wretch'
 
-const { REACT_APP_API_2_URL } = process.env
+const { REACT_APP_API_2_URL, REACT_APP_API_3_URL } = process.env
 
 const SubathonModal = ({ isOpen = false, onClose }) => {
   const { lanyardConfig, subathonConfig } = useContext(ConfigContext)
@@ -33,76 +34,26 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
         mt="md"
         fullWidth
         onClick={() => {
-          if (!discordUserId || !apiKey) {
-            showNotification({
-              title: 'Subathon',
-              message:
-                'Set your Discord user ID and API key in the settings page',
-              color: 'red',
+          wretch(`${REACT_APP_API_3_URL}/api/live_streams/1`)
+            .patch({
+              subathon_start_time: moment().utc().toISOString(),
+              subathon_ended_time: null,
+              subathon_start_minutes: initialTime.current.value,
+              subathon_minutes_per_dollar: timeUnitBase,
             })
-            return
-          }
+            .res(() => {
+              showNotification({
+                title: 'Subathon Started',
+                message: 'Your subathon has been started!',
+                color: 'green',
+              })
 
-          updateKV('subathon_ended', 'false')
-
-          wretch(`${REACT_APP_API_2_URL}/kv/set`)
-            .post({
-              discordUserId,
-              key: 'stream_start_time',
-              value: (
-                Date.now() / 1000 +
-                initialTime.current.value * 60
-              ).toFixed(0),
-              apiKey,
-            })
-            .res((_r) => {
-              wretch(`${REACT_APP_API_2_URL}/kv/set`)
-                .post({
-                  discordUserId,
-                  key: 'time_unit_base',
-                  value: timeUnitBase,
-                  apiKey,
-                })
-                .res((_r) => {
-                  wretch(`${REACT_APP_API_2_URL}/kv/set`)
-                    .post({
-                      discordUserId,
-                      key: 'donation_amount',
-                      value: '0',
-                      apiKey,
-                    })
-                    .res((_r) => {
-                      showNotification({
-                        title: 'Subathon',
-                        message: 'Subathon has started',
-                        color: 'teal',
-                      })
-
-                      onClose()
-                    })
-                    .catch((e) => {
-                      console.error(e)
-                      showNotification({
-                        title: 'Subathon',
-                        message: 'Something went wrong',
-                        color: 'red',
-                      })
-                    })
-                })
-                .catch((e) => {
-                  console.error(e)
-                  showNotification({
-                    title: 'Subathon',
-                    message: 'Something went wrong',
-                    color: 'red',
-                  })
-                })
+              onClose()
             })
             .catch((e) => {
-              console.error(e)
               showNotification({
-                title: 'Subathon',
-                message: 'Something went wrong',
+                title: 'Error',
+                message: 'There was an error starting your subathon.',
                 color: 'red',
               })
             })
