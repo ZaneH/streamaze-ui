@@ -98,9 +98,8 @@ const DonationLog = () => {
   return (
     <Virtuoso
       style={{ height: '100%' }}
-      // data is reversed, and only up to the donationIndex
-      data={donations.slice(0, donationIndex).reverse()}
-      totalCount={donations.slice(0, donationIndex).reverse().length}
+      data={donations.slice(0, donationIndex)}
+      totalCount={donations.slice(0, donationIndex).length}
       components={{
         Item,
         List,

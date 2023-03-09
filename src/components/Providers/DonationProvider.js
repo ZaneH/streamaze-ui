@@ -1,6 +1,8 @@
 import { useInterval } from '@mantine/hooks'
 import PeppersAudio from 'assets/peppers_in_the_chat.mp3'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import useWebSocket from 'react-use-websocket'
+import { ConfigContext } from './ConfigProvider'
 
 export const DonationContext = createContext()
 
@@ -16,6 +18,18 @@ const DonationProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [ttsAudio, setTTSAudio] = useState(null)
   const [playingMediaId, setPlayingMediaId] = useState(null)
+
+  const { slobsConfig } = useContext(ConfigContext)
+  const { readyState, sendJsonMessage } = useWebSocket(
+    `${process.env.REACT_APP_API_2_WS_URL}`,
+    {
+      onOpen: () => {
+        sendJsonMessage({
+          streamToken: slobsConfig?.streamToken,
+        })
+      },
+    }
+  )
 
   const ttsInterval = useInterval(() => {
     if (

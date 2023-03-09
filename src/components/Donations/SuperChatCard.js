@@ -39,7 +39,7 @@ const getSuperChatColors = (amount) => {
     return ['#E62117', '#D00000', '#FFFFFF']
   } else {
     console.error('Invalid amount for superchat', amount)
-    return ['#1747A4', '#FFFFFF']
+    return ['#1565C0', '#1565C0', '#FFFFFF']
   }
 }
 

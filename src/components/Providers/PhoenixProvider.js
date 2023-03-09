@@ -84,8 +84,10 @@ const PhoenixProvider = ({ children }) => {
               name: donation.sender,
               message: donation.message,
               displayString: donation.displayString,
-              amount: donation.value.amount,
+              amount: donation.amount_in_usd,
               currency: donation.value.currency,
+              pfp: donation.pfp,
+              tts_url: donation.tts_url,
             },
           },
         ])
@@ -122,8 +124,10 @@ const PhoenixProvider = ({ children }) => {
                 name: donation.sender,
                 message: donation.message,
                 displayString: donation.displayString,
-                amount: donation.value.amount,
+                amount: parseFloat(donation.amount_in_usd),
                 currency: donation.value.currency,
+                pfp: donation.pfp,
+                tts_url: donation.tts_url,
               },
             }
           })
