@@ -1,13 +1,8 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Center, Flex, Loader, Text, Title } from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
-import { useContext, useEffect } from 'react'
-import useWebSocket from 'react-use-websocket'
+import { useContext } from 'react'
 import { Virtuoso } from 'react-virtuoso'
-import wretch from 'wretch'
-import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
 import MediaCard from './MediaCard'
 import SuperChatCard from './SuperChatCard'
@@ -185,7 +180,7 @@ const DonationLog = () => {
           )
         }
 
-        if (isMembershipGift || isCurrency) {
+        if (isMembershipGift || isCurrency || type === 'superchat') {
           return (
             <SuperChatCard
               key={eventId}

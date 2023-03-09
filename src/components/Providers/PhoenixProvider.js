@@ -76,7 +76,6 @@ const PhoenixProvider = ({ children }) => {
         const { donation, net_profit } = payload || {}
         setNetProfit(net_profit)
         setDonations((prev) => [
-          ...prev,
           {
             type: donation.type,
             data: {
@@ -86,10 +85,9 @@ const PhoenixProvider = ({ children }) => {
               displayString: donation.displayString,
               amount: donation.amount_in_usd,
               currency: donation.value.currency,
-              pfp: donation.pfp,
-              tts_url: donation.tts_url,
             },
           },
+          ...prev,
         ])
       })
 
@@ -126,8 +124,6 @@ const PhoenixProvider = ({ children }) => {
                 displayString: donation.displayString,
                 amount: parseFloat(donation.amount_in_usd),
                 currency: donation.value.currency,
-                pfp: donation.pfp,
-                tts_url: donation.tts_url,
               },
             }
           })
