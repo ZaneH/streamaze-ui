@@ -72,11 +72,20 @@ const YTCard = styled.div`
 
 export default function SuperChatCard({ donation, isAnimated, onClick }) {
   const {
-    data: { amount, displayString, message, name, pfp, gift_count, gift_level },
+    data: {
+      amount,
+      displayString,
+      message,
+      name,
+      gift_count,
+      gift_level,
+      metadata,
+    },
     type,
   } = donation || {}
 
   const [bgColor, headerBgColor, textColor] = getSuperChatColors(amount || 5)
+  const pfp = metadata && metadata?.pfp
 
   return (
     <YTCard bg={bgColor} isAnimated={isAnimated} onClick={onClick}>
@@ -110,6 +119,10 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
               <Text color={textColor} weight={700}>
                 {type === 'membershipGift'
                   ? `${gift_count}x ${gift_level}s`
+                  : type === 'subscription' && metadata
+                  ? `Became a member for ${metadata.months} month${
+                      metadata.months > 1 ? 's' : ''
+                    }`
                   : displayString}
               </Text>
             </Box>

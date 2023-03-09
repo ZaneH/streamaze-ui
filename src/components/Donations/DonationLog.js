@@ -93,8 +93,8 @@ const DonationLog = () => {
   return (
     <Virtuoso
       style={{ height: '100%' }}
-      data={donations.slice(0, donationIndex)}
-      totalCount={donations.slice(0, donationIndex).length}
+      data={donations.slice(0, donationIndex).reverse()}
+      totalCount={donations.slice(0, donationIndex).reverse().length}
       components={{
         Item,
         List,
@@ -144,7 +144,7 @@ const DonationLog = () => {
         // Chose how to display the amount
         if (typeof bits !== 'undefined') {
           isBits = true
-        } else if (typeof months !== 'undefined') {
+        } else if (typeof months !== 'undefined' || type === 'subscription') {
           isSub = true
         } else if (typeof currency !== 'undefined') {
           isCurrency = true
@@ -180,7 +180,13 @@ const DonationLog = () => {
           )
         }
 
-        if (isMembershipGift || isCurrency || type === 'superchat') {
+        if (
+          isMembershipGift ||
+          isCurrency ||
+          type === 'superchat' ||
+          type === 'subscription' ||
+          type === 'donation'
+        ) {
           return (
             <SuperChatCard
               key={eventId}

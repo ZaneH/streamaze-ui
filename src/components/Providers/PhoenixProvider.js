@@ -76,6 +76,7 @@ const PhoenixProvider = ({ children }) => {
         const { donation, net_profit } = payload || {}
         setNetProfit(net_profit)
         setDonations((prev) => [
+          ...prev,
           {
             type: donation.type,
             data: {
@@ -85,9 +86,9 @@ const PhoenixProvider = ({ children }) => {
               displayString: donation.displayString,
               amount: donation.amount_in_usd,
               currency: donation.value.currency,
+              metadata: donation.metadata,
             },
           },
-          ...prev,
         ])
       })
 
@@ -114,19 +115,22 @@ const PhoenixProvider = ({ children }) => {
         setDonationIndex(last10Donations.length)
         setSubathonStreamId(currentStream.id)
         setDonations(
-          last10Donations.map((donation) => {
-            return {
-              type: donation.type,
-              data: {
-                id: donation.id,
-                name: donation.sender,
-                message: donation.message,
-                displayString: donation.displayString,
-                amount: parseFloat(donation.amount_in_usd),
-                currency: donation.value.currency,
-              },
-            }
-          })
+          last10Donations
+            .map((donation) => {
+              return {
+                type: donation.type,
+                data: {
+                  id: donation.id,
+                  name: donation.sender,
+                  message: donation.message,
+                  displayString: donation.displayString,
+                  amount: parseFloat(donation.amount_in_usd),
+                  currency: donation.value.currency,
+                  metadata: donation.metadata,
+                },
+              }
+            })
+            .reverse()
         )
       })
     }

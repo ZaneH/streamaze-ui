@@ -43,7 +43,7 @@ const DonationProvider = ({ children }) => {
 
       const currentDonation = donations[donationIndex]
 
-      let ttsUrl = currentDonation?.data?.tts_url
+      let ttsUrl = currentDonation?.data?.metadata?.tts_url
 
       if (currentDonation?.type === 'mediaShareEvent') {
         setPlayingMediaId(currentDonation?.data?.donation_id)
