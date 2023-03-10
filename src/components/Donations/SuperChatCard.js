@@ -72,15 +72,7 @@ const YTCard = styled.div`
 
 export default function SuperChatCard({ donation, isAnimated, onClick }) {
   const {
-    data: {
-      amount,
-      displayString,
-      message,
-      name,
-      gift_count,
-      gift_level,
-      metadata,
-    },
+    data: { amount, displayString, message, name, metadata },
     type,
   } = donation || {}
 
@@ -118,7 +110,7 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
             <Box>
               <Text color={textColor} weight={700}>
                 {type === 'membershipGift'
-                  ? `${gift_count}x ${gift_level}s`
+                  ? `${metadata?.gift_count}x ${metadata?.gift_level}s`
                   : type === 'subscription' && metadata
                   ? `Became a member for ${metadata.months} month${
                       metadata.months > 1 ? 's' : ''

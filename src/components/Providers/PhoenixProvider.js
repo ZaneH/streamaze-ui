@@ -14,6 +14,7 @@ const PhoenixProvider = ({ children }) => {
   const { setTimeRemaining, setSubathonStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
   const { setNetProfit } = useContext(StatContext)
+  const [streamerId, setStreamerId] = useState(null)
 
   useEffect(() => {
     const streamerSocket = new Socket('ws://localhost:4000/socket', {
@@ -83,7 +84,7 @@ const PhoenixProvider = ({ children }) => {
               id: donation.id,
               name: donation.sender,
               message: donation.message,
-              displayString: donation.displayString,
+              displayString: donation.display_string,
               amount: donation.amount_in_usd,
               currency: donation.value.currency,
               metadata: donation.metadata,
@@ -114,6 +115,7 @@ const PhoenixProvider = ({ children }) => {
         setNetProfit(streamerNetProfit)
         setDonationIndex(last10Donations.length)
         setSubathonStreamId(currentStream.id)
+        setStreamerId(currentStream.streamer_id)
         setDonations(
           last10Donations
             .map((donation) => {
@@ -123,7 +125,7 @@ const PhoenixProvider = ({ children }) => {
                   id: donation.id,
                   name: donation.sender,
                   message: donation.message,
-                  displayString: donation.displayString,
+                  displayString: donation.display_string,
                   amount: parseFloat(donation.amount_in_usd),
                   currency: donation.value.currency,
                   metadata: donation.metadata,
@@ -142,6 +144,7 @@ const PhoenixProvider = ({ children }) => {
       value={{
         socket,
         streamerChannel,
+        streamerId,
       }}
     >
       {children}
