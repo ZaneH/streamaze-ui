@@ -42,9 +42,9 @@ const App = () => {
                     <SubathonProvider>
                       <DonationProvider>
                         <StatProvider>
-                          <SidebarProvider>
-                            <PollProvider>
-                              <PhoenixProvider>
+                          <PhoenixProvider>
+                            <SidebarProvider>
+                              <PollProvider>
                                 <Routes>
                                   <Route
                                     path="/"
@@ -133,9 +133,9 @@ const App = () => {
                                     element={<Navigate to="/home" />}
                                   />
                                 </Routes>
-                              </PhoenixProvider>
-                            </PollProvider>
-                          </SidebarProvider>
+                              </PollProvider>
+                            </SidebarProvider>
+                          </PhoenixProvider>
                         </StatProvider>
                       </DonationProvider>
                     </SubathonProvider>

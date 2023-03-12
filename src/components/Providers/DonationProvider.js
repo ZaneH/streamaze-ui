@@ -1,9 +1,6 @@
 import { useInterval } from '@mantine/hooks'
 import PeppersAudio from 'assets/peppers_in_the_chat.mp3'
-import { createContext, useContext, useEffect, useState } from 'react'
-import useWebSocket from 'react-use-websocket'
-import { ConfigContext } from './ConfigProvider'
-import { PhoenixContext } from './PhoenixProvider'
+import { createContext, useEffect, useState } from 'react'
 
 export const DonationContext = createContext()
 
@@ -19,21 +16,6 @@ const DonationProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [ttsAudio, setTTSAudio] = useState(null)
   const [playingMediaId, setPlayingMediaId] = useState(null)
-
-  const { slobsConfig } = useContext(ConfigContext)
-  const { streamerId } = useContext(PhoenixContext)
-  const { readyState, sendJsonMessage } = useWebSocket(
-    `${process.env.REACT_APP_API_2_WS_URL}`,
-    {
-      onOpen: () => {
-        sendJsonMessage({
-          streamToken: slobsConfig?.streamToken,
-          streamerId,
-        })
-      },
-    },
-    !!slobsConfig?.streamToken && !!streamerId
-  )
 
   const ttsInterval = useInterval(() => {
     if (
@@ -62,7 +44,10 @@ const DonationProvider = ({ children }) => {
       if (ttsUrl) {
         const _audio = new Audio(ttsUrl)
 
-        _audio.play()
+        _audio.play().catch((err) => {
+          console.log(err)
+          setIsPlaying(false)
+        })
 
         _audio.addEventListener('ended', () => {
           setIsPlaying(false)

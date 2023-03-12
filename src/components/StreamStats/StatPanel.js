@@ -74,15 +74,15 @@ const StatPanel = () => {
             image={<BitRateIcon style={{ width: 26, height: 26 }} />}
             label={bitrate ? `${bitrate} Kbps` : 'Offline'}
           />
-          {netProfit ? (
+          {netProfit !== undefined ? (
             <StatInfo
               onClick={() => {
-                if (netProfit) {
+                if (netProfit !== undefined) {
                   setShowMoneyModal(true)
                 } else {
                   showNotification({
                     title: 'Error',
-                    message: 'Lanyard is not ready...',
+                    message: 'Net profit is not ready...',
                     color: 'yellow',
                   })
                 }

@@ -4,6 +4,8 @@ import { DonationContext } from './DonationProvider'
 import { SubathonContext } from './SubathonProvider'
 import { calculateTimeRemaining } from 'utils/time'
 import { StatContext } from './StatProvider'
+import { ConfigContext } from './ConfigProvider'
+import useWebSocket from 'react-use-websocket'
 
 export const PhoenixContext = createContext()
 
@@ -15,6 +17,19 @@ const PhoenixProvider = ({ children }) => {
     useContext(SubathonContext)
   const { setNetProfit } = useContext(StatContext)
   const [streamerId, setStreamerId] = useState(null)
+  const { slobsConfig } = useContext(ConfigContext)
+  const { readyState, sendJsonMessage } = useWebSocket(
+    `${process.env.REACT_APP_API_2_WS_URL}`,
+    {
+      onOpen: () => {
+        sendJsonMessage({
+          streamToken: slobsConfig?.streamToken,
+          streamerId,
+        })
+      },
+    },
+    !!slobsConfig?.streamToken && !!streamerId
+  )
 
   useEffect(() => {
     const streamerSocket = new Socket('ws://localhost:4000/socket', {

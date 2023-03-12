@@ -105,7 +105,8 @@ const DonationLog = () => {
         const { data = {}, type } = donation
         const { id: eventId } = data
         const isTikTokGift = type === 'tiktok_gift'
-        const isMediaShare = type === 'mediaShareEvent'
+        const isMediaShare =
+          type === 'mediaShareEvent' || type === 'streamlabs_media'
 
         if (isTikTokGift) {
           const {
@@ -157,7 +158,7 @@ const DonationLog = () => {
             media_link: mediaUrl,
             media_title: mediaTitle,
             duration,
-          } = data
+          } = data.metadata || {}
 
           return (
             <MediaCard

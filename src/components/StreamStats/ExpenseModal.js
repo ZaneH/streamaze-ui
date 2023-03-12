@@ -126,7 +126,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
                       amount_in_usd: expenseValue.toFixed(2) * -1,
                       streamer_id: 1,
                       value: {
-                        amount: parseFloat(numericInput * -1),
+                        amount: parseInt(parseFloat(numericInput * -1) * 100),
                         currency: currencyConfig?.currency,
                       },
                     })
@@ -206,7 +206,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
                       amount_in_usd: expenseValue.toFixed(2),
                       streamer_id: 1,
                       value: {
-                        amount: parseFloat(numericInput),
+                        amount: parseInt(parseFloat(numericInput) * 100),
                         currency: currencyConfig?.currency,
                       },
                     })
