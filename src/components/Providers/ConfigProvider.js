@@ -111,6 +111,16 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // User config
+  const [userConfig, setUserConfig] = useLocalStorage({
+    key: 'user-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      streamerId: '',
+      streamazeKey: '',
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
@@ -119,6 +129,7 @@ const ConfigProvider = ({ children }) => {
   const isSlobs = searchParams.get('isSlobs') === 'true'
   const isKeypad = searchParams.get('isKeypad') === 'true'
   const isLanyard = searchParams.get('isLanyard') === 'true'
+  const isUser = searchParams.get('isUser') === 'true'
 
   // Load chat config from URLs
   let tiktokChat = ''
@@ -232,6 +243,16 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
+  // Load User config from URL
+  let streamazeKey = ''
+  let streamerId = ''
+  if (isUser) {
+    if (searchParams.get('streamazeKey')) {
+      streamerId = searchParams.get('streamerId')
+      streamazeKey = searchParams.get('streamazeKey')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
@@ -315,6 +336,12 @@ const ConfigProvider = ({ children }) => {
         setCurrencyConfig,
         subathonConfig,
         setSubathonConfig,
+        userConfig: {
+          ...userConfig,
+          streamerId: streamerId ? streamerId : userConfig.streamerId,
+          streamazeKey: streamazeKey ? streamazeKey : userConfig.streamazeKey,
+        },
+        setUserConfig,
       }}
     >
       {children}

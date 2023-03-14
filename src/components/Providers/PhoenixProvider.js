@@ -5,7 +5,10 @@ import { SubathonContext } from './SubathonProvider'
 import { calculateTimeRemaining } from 'utils/time'
 import { StatContext } from './StatProvider'
 import { ConfigContext } from './ConfigProvider'
+import wretch from 'wretch'
 import useWebSocket from 'react-use-websocket'
+import { showNotification } from '@mantine/notifications'
+import useStreamer from 'hooks/useStreamer'
 
 export const PhoenixContext = createContext()
 
@@ -16,22 +19,43 @@ const PhoenixProvider = ({ children }) => {
   const { setTimeRemaining, setSubathonStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
   const { setNetProfit } = useContext(StatContext)
-  const [streamerId, setStreamerId] = useState(null)
-  const { slobsConfig } = useContext(ConfigContext)
+
+  const { userConfig, setLanyardConfig } = useContext(ConfigContext)
+  const streamer = useStreamer(userConfig?.streamazeKey)
+
   const { readyState, sendJsonMessage } = useWebSocket(
     `${process.env.REACT_APP_API_2_WS_URL}`,
     {
       onOpen: () => {
         sendJsonMessage({
-          streamToken: slobsConfig?.streamToken,
-          streamerId,
+          streamerId: streamer?.id,
+          streamToken: streamer?.streamlabs_token,
         })
       },
+      shouldReconnect: (closeEvent) => true,
+      reconnectInterval: 3000,
     },
-    !!slobsConfig?.streamToken && !!streamerId
+    !!streamer?.streamlabs_token && !!streamer?.id
   )
 
   useEffect(() => {
+    setLanyardConfig((prev) => ({
+      ...prev,
+      discordUserId: streamer?.discord_id,
+      apiKey: streamer?.lanyard_api_key,
+    }))
+  }, [streamer, setLanyardConfig])
+
+  useEffect(() => {
+    if (!userConfig?.streamazeKey) {
+      showNotification({
+        title: 'Streamaze Key Required',
+        message: 'Please enter your Streamaze key in the settings page.',
+      })
+
+      return
+    }
+
     const streamerSocket = new Socket('ws://localhost:4000/socket', {
       heartbeatIntervalMs: 30000,
     })
@@ -57,11 +81,16 @@ const PhoenixProvider = ({ children }) => {
       streamerChannel.off('initial_state')
     }
 
-    if (socket && !socket.isConnected()) {
+    if (
+      socket &&
+      !socket.isConnected() &&
+      streamer?.id &&
+      userConfig?.streamazeKey
+    ) {
       socket.connect()
 
-      const ch = socket.channel('streamer:1', {
-        userToken: 'api-asdfasdf',
+      const ch = socket.channel(`streamer:${streamer?.id}`, {
+        userToken: userConfig?.streamazeKey,
       })
 
       ch.join().receive('ok', (_resp) => {
@@ -130,7 +159,6 @@ const PhoenixProvider = ({ children }) => {
         setNetProfit(streamerNetProfit)
         setDonationIndex(last10Donations.length)
         setSubathonStreamId(currentStream.id)
-        setStreamerId(currentStream.streamer_id)
         setDonations(
           last10Donations
             .map((donation) => {
@@ -152,14 +180,13 @@ const PhoenixProvider = ({ children }) => {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket])
+  }, [socket, streamer?.id, userConfig?.streamazeKey])
 
   return (
     <PhoenixContext.Provider
       value={{
         socket,
         streamerChannel,
-        streamerId,
       }}
     >
       {children}

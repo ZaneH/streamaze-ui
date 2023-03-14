@@ -67,7 +67,6 @@ const Footer = styled.div`
   padding-top: 18px;
 `
 
-// TODO: word-break: break-all; will not work with isBig
 const SenderText = styled(Text)`
   display: inline;
   vertical-align: middle;

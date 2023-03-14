@@ -16,6 +16,8 @@ import TagSEO from '../components/TagSEO'
 
 const Settings = () => {
   const {
+    userConfig,
+    setUserConfig,
     chatConfig,
     setChatConfig,
     timestampConfig,
@@ -29,6 +31,12 @@ const Settings = () => {
     lanyardConfig,
     setLanyardConfig,
   } = useContext(ConfigContext)
+
+  const userForm = useForm({
+    initialValues: {
+      streamazeKey: userConfig?.streamazeKey,
+    },
+  })
 
   const chatForm = useForm({
     initialValues: {
@@ -81,6 +89,32 @@ const Settings = () => {
     <Layout>
       <TagSEO />
       <Container size="sm" pt="lg">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            setUserConfig((prev) => ({
+              ...prev,
+              streamazeKey: userForm.values.streamazeKey,
+            }))
+            showNotification({
+              title: 'Streamaze Key saved!',
+              color: 'teal',
+            })
+          }}
+        >
+          <FormSection title="Streamaze Key" subtitle="Sign in to Streamaze">
+            <TextInput
+              label="Streamaze Key"
+              placeholder="api-xxxxxxxxxxxx"
+              type="password"
+              defaultValue={userForm.values.streamazeKey}
+              onChange={(e) => {
+                userForm.setFieldValue('streamazeKey', e.target.value)
+              }}
+            />
+          </FormSection>
+        </form>
+
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -423,6 +457,7 @@ const Settings = () => {
               label={<FieldLabel>API Key</FieldLabel>}
               placeholder="API Key"
               defaultValue={lanyardForm.values.apiKey}
+              type="password"
               onChange={(e) => {
                 lanyardForm.setFieldValue('apiKey', e.target.value)
               }}
