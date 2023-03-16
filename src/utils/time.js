@@ -22,8 +22,8 @@ export function calculateTimeRemaining(
   subathonStartMinutes
 ) {
   const startTimeUnix =
-    moment(subathonStartTime).unix() + subathonStartMinutes * 60
-  const currentTimeUnix = moment().unix()
+    moment(subathonStartTime).utc(true).unix() + subathonStartMinutes * 60
+  const currentTimeUnix = moment().utc(true).unix()
 
   const seconds = startTimeUnix - currentTimeUnix + subathonSecondsAdded
 

@@ -41,6 +41,7 @@ const StreamButton = ({
   onClick,
   children,
   requireConfirmation,
+  style,
 }) => {
   const [isConfirmationOpened, setIsConfirmationOpened] = useState(false)
 
@@ -85,9 +86,10 @@ const StreamButton = ({
         onClick={
           requireConfirmation ? () => setIsConfirmationOpened(true) : onClick
         }
+        style={style}
       >
         {!icon && (
-          <Title size={32} weight={800} color="white" align="center">
+          <Title size={26} weight={800} color="white" align="center">
             {label ?? children}
           </Title>
         )}

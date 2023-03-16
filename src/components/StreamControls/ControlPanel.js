@@ -35,7 +35,13 @@ const ControlPanel = () => {
       <Flex>
         <StreamButton
           color={isAutoplay ? 'red' : 'green'}
-          icon={isAutoplay ? <IconPause /> : <PlayIcon />}
+          icon={
+            isAutoplay ? (
+              <IconPause width="32" height="32" />
+            ) : (
+              <PlayIcon width="20" height="32" />
+            )
+          }
           onClick={() => {
             setIsAutoplay((prev) => !prev)
             if (donationIndex === -1) {
@@ -45,7 +51,7 @@ const ControlPanel = () => {
         />
         <StreamButton
           color="blue"
-          icon={<SkipIcon />}
+          icon={<SkipIcon width="36" height="36" />}
           disabled={
             // skip button should only show when there are donations playing
             donationIndex === -1 ||
@@ -68,23 +74,29 @@ const ControlPanel = () => {
 
       <Space h="sm" />
 
-      {streamScenes.map((scene, i) => {
-        const isActive = streamActiveScene === scene
-        return (
-          <StreamButton
-            key={scene}
-            disabled={hopError || isActive}
-            requireConfirmation
-            color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
-            onClick={() => {
-              streamerChannel.push('switch_scene', { scene })
-            }}
-          >
-            {scene}
-            {isActive && ' (active)'}
-          </StreamButton>
-        )
-      })}
+      <Flex style={{ boxSizing: 'border-box', flexWrap: 'wrap' }}>
+        {streamScenes.map((scene, i) => {
+          const isActive = streamActiveScene === scene
+          return (
+            <StreamButton
+              key={scene}
+              disabled={hopError || isActive}
+              requireConfirmation
+              color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
+              onClick={() => {
+                streamerChannel.push('switch_scene', { scene })
+              }}
+              style={{
+                width: '50%',
+                flexGrow: 1,
+                boxSizing: 'border-box',
+              }}
+            >
+              {scene}
+            </StreamButton>
+          )
+        })}
+      </Flex>
 
       <Space h="sm" />
 

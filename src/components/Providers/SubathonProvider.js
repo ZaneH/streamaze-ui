@@ -5,7 +5,7 @@ import moment from 'moment'
 export const SubathonContext = createContext()
 
 const SubathonProvider = ({ children }) => {
-  const [subathonStreamId, setSubathonStreamId] = useState(null)
+  const [activeStreamId, setActiveStreamId] = useState(null) // TODO: Move this out of SubathonProvider
   const [timeRemaining, setTimeRemaining] = useState(0)
   const [isSubathonActive, setIsSubathonActive] = useState(false)
 
@@ -16,7 +16,9 @@ const SubathonProvider = ({ children }) => {
   useEffect(() => {
     if (timeRemaining <= 0 && isSubathonActive) {
       setIsSubathonActive(false)
-      wretch(`http://localhost:4000/api/live_streams/${subathonStreamId}`)
+      wretch(
+        `${process.env.REACT_APP_API_3_URL}/api/live_streams/${activeStreamId}`
+      )
         .patch({
           subathon_ended_time: moment().utc().toISOString(),
         })
@@ -37,8 +39,8 @@ const SubathonProvider = ({ children }) => {
   return (
     <SubathonContext.Provider
       value={{
-        subathonStreamId,
-        setSubathonStreamId,
+        activeStreamId,
+        setActiveStreamId,
         timeRemaining,
         setTimeRemaining,
         isSubathonActive,

@@ -18,6 +18,7 @@ const StatProvider = ({ children }) => {
   const [isTikTokLoading, setIsTikTokLoading] = useState(true)
   const [isKickLoading, setIsKickLoading] = useState(true)
   const [netProfit, setNetProfit] = useState(0)
+  const [streamStartTime, setStreamStartTime] = useState()
   const { pathname } = useLocation()
 
   const ytInterval = useInterval(() => {
@@ -201,6 +202,8 @@ const StatProvider = ({ children }) => {
         isKickLoading,
         netProfit,
         setNetProfit,
+        streamStartTime,
+        setStreamStartTime,
       }}
     >
       {children}

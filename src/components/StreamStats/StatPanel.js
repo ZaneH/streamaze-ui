@@ -1,7 +1,6 @@
 import { Flex } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { SubathonContext } from 'components/Providers/SubathonProvider'
 import { ReactComponent as DollarSignIcon } from 'dollar-sign-icon.svg'
 import { ReactComponent as FlagIcon } from 'flag-icon.svg'
@@ -11,10 +10,10 @@ import { secondsToHHMMSS } from 'utils/time'
 import { ReactComponent as BitRateIcon } from '../../bit-rate-icon.svg'
 import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
-import ExpenseModal from './ExpenseModal'
+import ExpenseModal from '../Modals/ExpenseModal'
 import StatInfo from './StatInfo'
 import StreamTime from './StreamTime'
-import SubathonModal from './SubathonModal'
+import SubathonModal from '../Modals/SubathonModal'
 
 const StatPanel = () => {
   const {
@@ -26,7 +25,6 @@ const StatPanel = () => {
     isKickLoading,
   } = useContext(StatContext)
   const { bitrate, isLive } = useContext(HopContext)
-  const { kv } = useContext(LanyardContext)
   const { timeRemaining } = useContext(SubathonContext)
   const { subathonConfig } = useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
@@ -99,6 +97,7 @@ const StatPanel = () => {
 
           {subathonConfig?.isSubathonActive && (
             <StatInfo
+              tabularNums
               image={<FlagIcon style={{ width: 26, height: 26 }} />}
               label={
                 timeRemaining <= 0 ? '[ENDED]' : secondsToHHMMSS(timeRemaining)

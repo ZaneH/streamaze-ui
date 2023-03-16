@@ -16,9 +16,9 @@ const PhoenixProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
   const [streamerChannel, setStreamerChannel] = useState(null)
   const { setDonations, setDonationIndex } = useContext(DonationContext)
-  const { setTimeRemaining, setSubathonStreamId, setIsSubathonActive } =
+  const { setTimeRemaining, setActiveStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
-  const { setNetProfit } = useContext(StatContext)
+  const { setNetProfit, setStreamStartTime } = useContext(StatContext)
 
   const { userConfig, setLanyardConfig } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
@@ -149,8 +149,6 @@ const PhoenixProvider = ({ children }) => {
           currentStream.subathon_start_minutes
         )
 
-        setSubathonStreamId(currentStream.id)
-
         if (currentStream.subathon_ended_time === null) {
           setIsSubathonActive(true)
           setTimeRemaining(seconds)
@@ -158,7 +156,8 @@ const PhoenixProvider = ({ children }) => {
 
         setNetProfit(streamerNetProfit)
         setDonationIndex(last10Donations.length)
-        setSubathonStreamId(currentStream.id)
+        setActiveStreamId(currentStream.id)
+        setStreamStartTime(currentStream.start_time)
         setDonations(
           last10Donations
             .map((donation) => {

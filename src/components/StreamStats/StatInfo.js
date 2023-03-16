@@ -1,12 +1,13 @@
 import { Flex, Text } from '@mantine/core'
 import { SocialIcon } from 'react-social-icons'
 
-const StatInfo = ({ network, label, image, onClick }) => {
+const StatInfo = ({ network, label, image, onClick, tabularNums = false }) => {
   return (
     <Flex
       onClick={onClick}
       style={{
         cursor: onClick ? 'pointer' : 'initial',
+        ...(tabularNums && { fontVariantNumeric: 'tabular-nums' }),
       }}
     >
       {image ? (

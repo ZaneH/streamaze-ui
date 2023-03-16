@@ -1,17 +1,18 @@
 import { useInterval } from '@mantine/hooks'
 import { ReactComponent as ClockIcon } from 'clock-icon.svg'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
+import { StatContext } from 'components/Providers/StatProvider'
+import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import { secondsToHHMMSS } from 'utils/time'
 import StatInfo from './StatInfo'
-import StreamTimeModal from './StreamTimeModal'
+import StreamTimeModal from '../Modals/StreamTimeModal'
 
 const StreamTime = () => {
   const [showStreamTimeModal, setShowStreamTimeModal] = useState(false)
-  const { kv } = useContext(LanyardContext)
-  const startTime = parseInt(kv?.actual_stream_start_time)
+  const { streamStartTime } = useContext(StatContext)
+  const startTime = moment(streamStartTime).utc(true).unix()
   const [seconds, setSeconds] = useState(
-    parseInt(Date.now() / 1000) - startTime
+    parseInt(moment().utc(true).unix()) - startTime
   )
 
   const tickInterval = useInterval(() => {
@@ -26,13 +27,14 @@ const StreamTime = () => {
 
   useEffect(() => {
     tickInterval.stop()
-    setSeconds(parseInt(Date.now() / 1000) - startTime)
+    setSeconds(parseInt(moment().utc(true).unix()) - startTime)
     tickInterval.start()
-  }, [kv?.actual_stream_start_time, tickInterval, startTime])
+  }, [streamStartTime, startTime])
 
   return (
     <>
       <StatInfo
+        tabularNums
         image={<ClockIcon style={{ width: 26, height: 26 }} />}
         label={secondsToHHMMSS(seconds)}
         onClick={() => {
