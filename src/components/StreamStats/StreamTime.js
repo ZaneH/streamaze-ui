@@ -4,8 +4,8 @@ import { StatContext } from 'components/Providers/StatProvider'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import { secondsToHHMMSS } from 'utils/time'
-import StatInfo from './StatInfo'
 import StreamTimeModal from '../Modals/StreamTimeModal'
+import StatInfo from './StatInfo'
 
 const StreamTime = () => {
   const [showStreamTimeModal, setShowStreamTimeModal] = useState(false)
@@ -29,6 +29,7 @@ const StreamTime = () => {
     tickInterval.stop()
     setSeconds(parseInt(moment().utc(true).unix()) - startTime)
     tickInterval.start()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streamStartTime, startTime])
 
   return (

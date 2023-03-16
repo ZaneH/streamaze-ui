@@ -32,7 +32,7 @@ const StreamTimeModal = ({ isOpen = false, onClose }) => {
                   title: 'Stream Time Reset',
                   message: 'Stream time has been reset.',
                 })
-              } else if (res?.success == false) {
+              } else if (res?.success === false) {
                 showNotification({
                   color: 'red',
                   title: 'Stream Time Reset Error',

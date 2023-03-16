@@ -1,14 +1,13 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { Socket } from 'phoenix'
-import { DonationContext } from './DonationProvider'
-import { SubathonContext } from './SubathonProvider'
-import { calculateTimeRemaining } from 'utils/time'
-import { StatContext } from './StatProvider'
-import { ConfigContext } from './ConfigProvider'
-import wretch from 'wretch'
-import useWebSocket from 'react-use-websocket'
 import { showNotification } from '@mantine/notifications'
 import useStreamer from 'hooks/useStreamer'
+import { Socket } from 'phoenix'
+import { createContext, useContext, useEffect, useState } from 'react'
+import useWebSocket from 'react-use-websocket'
+import { calculateTimeRemaining } from 'utils/time'
+import { ConfigContext } from './ConfigProvider'
+import { DonationContext } from './DonationProvider'
+import { StatContext } from './StatProvider'
+import { SubathonContext } from './SubathonProvider'
 
 export const PhoenixContext = createContext()
 
@@ -23,7 +22,7 @@ const PhoenixProvider = ({ children }) => {
   const { userConfig, setLanyardConfig } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
 
-  const { readyState, sendJsonMessage } = useWebSocket(
+  const { sendJsonMessage } = useWebSocket(
     `${process.env.REACT_APP_API_2_WS_URL}`,
     {
       onOpen: () => {

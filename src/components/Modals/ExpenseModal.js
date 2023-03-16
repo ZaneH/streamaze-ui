@@ -9,28 +9,20 @@ import {
 } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
+import { StatContext } from 'components/Providers/StatProvider'
 import { useContext, useRef } from 'react'
 import wretch from 'wretch'
-import { StatContext } from 'components/Providers/StatProvider'
 
-const {
-  REACT_APP_API_2_URL,
-  REACT_APP_API_3_URL,
-  REACT_APP_EXCHANGE_RATE_API_URL,
-} = process.env
+const { REACT_APP_API_3_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
 const ExpenseModal = ({ isOpen = false, onClose }) => {
   const {
     setCurrencyConfig,
-    lanyardConfig,
     currencyConfig = {
       currency: 'usd',
     },
   } = useContext(ConfigContext)
-  const { kv } = useContext(LanyardContext)
   const { netProfit } = useContext(StatContext)
-  const { discordUserId, apiKey } = lanyardConfig
   const expenseRef = useRef(null)
 
   return (

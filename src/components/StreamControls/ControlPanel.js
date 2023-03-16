@@ -11,8 +11,6 @@ import { DonationContext } from '../Providers/DonationProvider'
 import { ReactComponent as IconPause } from '../../pause-icon.svg'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 
-const { REACT_APP_API_2_URL } = process.env
-
 const ControlPanel = () => {
   const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
   const { timestampConfig } = useContext(ConfigContext)
