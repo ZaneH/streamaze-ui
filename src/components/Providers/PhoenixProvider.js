@@ -55,7 +55,7 @@ const PhoenixProvider = ({ children }) => {
       return
     }
 
-    const streamerSocket = new Socket('ws://localhost:4000/socket', {
+    const streamerSocket = new Socket(process.env.REACT_APP_API_3_WS_URL, {
       heartbeatIntervalMs: 30000,
     })
 
