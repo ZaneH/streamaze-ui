@@ -16,7 +16,11 @@ const dataToFrequency = (data = []) => {
   })
 
   return Object.keys(frequency).map((choice) => {
-    return { choice, frequency: frequency[choice] }
+    return {
+      choice,
+      frequency: frequency[choice],
+      percent: frequency[choice] / data.length,
+    }
   })
 }
 
@@ -58,7 +62,19 @@ const PollBarGraph = () => {
             type: 'bar',
             itemStyle: {
               color: colors.blue[5],
-              barBorderRadius: [6, 6, 0, 0],
+              borderRadius: [6, 6, 0, 0],
+            },
+            label: {
+              show: true,
+              position: 'top',
+              formatter: (params) => {
+                const { frequency, percent } =
+                  frequencyData[params.dataIndex] || {}
+                return `${frequency} (${(percent * 100).toFixed(0)}%)`
+              },
+              color: '#fff',
+              fontSize: 16,
+              fontWeight: 'lighter',
             },
           },
         ],
