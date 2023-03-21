@@ -31,8 +31,12 @@ const DonationProvider = ({ children }) => {
 
       let ttsUrl = currentDonation?.data?.metadata?.tts_url
 
-      if (currentDonation?.type === 'mediaShareEvent') {
-        setPlayingMediaId(currentDonation?.data?.donation_id)
+      if (
+        // TODO: mediaShareEvent is the legacy type, remove later
+        currentDonation?.type === 'mediaShareEvent' ||
+        currentDonation?.type === 'streamlabs_media'
+      ) {
+        setPlayingMediaId(currentDonation?.data?.metadata?.donation_id)
 
         return
       }

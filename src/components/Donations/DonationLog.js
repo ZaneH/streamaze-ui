@@ -7,8 +7,6 @@ import { DonationContext } from '../Providers/DonationProvider'
 import MediaCard from './MediaCard'
 import SuperChatCard from './SuperChatCard'
 
-const { REACT_APP_API_2_WS_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
-
 const Item = styled.div`
   margin: 12px 32px;
 `
