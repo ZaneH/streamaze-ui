@@ -1,6 +1,7 @@
 import { Button, Modal, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { FieldLabel } from 'components/Settings'
 import moment from 'moment'
 import { useContext, useRef } from 'react'
@@ -11,6 +12,7 @@ const { REACT_APP_API_3_URL } = process.env
 const SubathonModal = ({ isOpen = false, onClose }) => {
   const { subathonConfig } = useContext(ConfigContext)
   const { timeUnitBase } = subathonConfig
+  const { currentStreamer } = useContext(PhoenixContext)
   const initialTime = useRef(null)
 
   return (
@@ -31,12 +33,15 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
         mt="md"
         fullWidth
         onClick={() => {
-          wretch(`${REACT_APP_API_3_URL}/api/live_streams/1`)
+          wretch(
+            `${REACT_APP_API_3_URL}/api/live_streams/${currentStreamer.id}`
+          )
             .patch({
               subathon_start_time: moment().utc(false).format(),
               subathon_ended_time: null,
               subathon_start_minutes: initialTime.current.value,
               subathon_minutes_per_dollar: timeUnitBase,
+              subathon_seconds_added: 0,
             })
             .res(() => {
               showNotification({

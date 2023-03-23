@@ -18,8 +18,15 @@ const PhoenixProvider = ({ children }) => {
   const { setTimeRemaining, setActiveStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
   const { setNetProfit, setStreamStartTime } = useContext(StatContext)
-
-  const { userConfig, setLanyardConfig } = useContext(ConfigContext)
+  const {
+    userConfig,
+    setLanyardConfig,
+    setObsConfig,
+    setChatConfig,
+    setSlobsConfig,
+    setTimestampConfig,
+    setStatsConfig,
+  } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
 
   const { sendJsonMessage } = useWebSocket(
@@ -40,10 +47,65 @@ const PhoenixProvider = ({ children }) => {
   useEffect(() => {
     setLanyardConfig((prev) => ({
       ...prev,
-      discordUserId: streamer?.discord_id,
-      apiKey: streamer?.lanyard_api_key,
+      discordUserId: streamer?.lanyard_config?.discord_user_id,
+      apiKey: streamer?.lanyard_config?.api_key,
     }))
-  }, [streamer, setLanyardConfig])
+
+    setObsConfig((prev) => ({
+      ...prev,
+      streamChannelId: streamer?.obs_config?.stream_channel_id,
+    }))
+
+    setChatConfig((prev) => ({
+      ...prev,
+      tiktok: {
+        ...prev.tiktok,
+        username: streamer?.chat_config?.tiktok_username,
+      },
+      youtube: {
+        ...prev.youtube,
+        channel: streamer?.chat_config?.youtube_channel,
+      },
+      kick: {
+        ...prev.kick,
+        chatroomId: streamer?.chat_config?.kick_chatroom_id,
+        channelId: streamer?.chat_config?.kick_channel_id,
+      },
+      twitch: {
+        ...prev.twitch,
+        username: streamer?.chat_config?.twitch_username,
+      },
+    }))
+
+    setSlobsConfig((prev) => ({
+      ...prev,
+      streamToken: streamer?.donations_config?.streamlabs_token,
+      ttsVoice: streamer?.donations_config?.tts_voice,
+      tiktokUsername: streamer?.donations_config?.tiktok_username,
+      silentAudioInterval: streamer?.donations_config?.silent_audio_interval,
+    }))
+
+    setTimestampConfig((prev) => ({
+      ...prev,
+      discordChannelId: streamer?.clip_config?.discord_channel_id,
+      youtubeChannel: streamer?.clip_config?.youtube_channel,
+    }))
+
+    setStatsConfig((prev) => ({
+      ...prev,
+      tiktokUsername: streamer?.viewers_config?.tiktok_username,
+      twitchUsername: streamer?.viewers_config?.twitch_username,
+      youtubeChannel: streamer?.viewers_config?.youtube_channel,
+    }))
+  }, [
+    streamer,
+    setLanyardConfig,
+    setObsConfig,
+    setChatConfig,
+    setSlobsConfig,
+    setTimestampConfig,
+    setStatsConfig,
+  ])
 
   useEffect(() => {
     if (!userConfig?.streamazeKey) {
@@ -185,6 +247,7 @@ const PhoenixProvider = ({ children }) => {
       value={{
         socket,
         streamerChannel,
+        currentStreamer: streamer,
       }}
     >
       {children}
