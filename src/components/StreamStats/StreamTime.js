@@ -32,15 +32,15 @@ const StreamTime = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streamStartTime, startTime])
 
+  const secondsLabel = secondsToHHMMSS(seconds)
+
   return (
     <>
       <StatInfo
         tabularNums
         image={<ClockIcon style={{ width: 26, height: 26 }} />}
-        label={secondsToHHMMSS(seconds)}
-        onClick={() => {
-          setShowStreamTimeModal(true)
-        }}
+        label={isNaN(seconds) ? '00:00:00' : secondsLabel}
+        onClick={() => setShowStreamTimeModal(true)}
       />
       <StreamTimeModal
         isOpen={showStreamTimeModal}

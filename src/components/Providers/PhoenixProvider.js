@@ -96,6 +96,7 @@ const PhoenixProvider = ({ children }) => {
       tiktokUsername: streamer?.viewers_config?.tiktok_username,
       twitchUsername: streamer?.viewers_config?.twitch_username,
       youtubeChannel: streamer?.viewers_config?.youtube_channel,
+      kickChannelName: streamer?.viewers_config?.kick_channel_name,
     }))
   }, [
     streamer,
