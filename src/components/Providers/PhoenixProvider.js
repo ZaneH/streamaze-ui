@@ -35,13 +35,13 @@ const PhoenixProvider = ({ children }) => {
       onOpen: () => {
         sendJsonMessage({
           streamerId: streamer?.id,
-          streamToken: streamer?.streamlabs_token,
+          streamToken: streamer?.donations_config?.streamlabs_token,
         })
       },
       shouldReconnect: (closeEvent) => true,
       reconnectInterval: 3000,
     },
-    !!streamer?.streamlabs_token && !!streamer?.id
+    !!streamer?.donations_config?.streamlabs_token && !!streamer?.id
   )
 
   useEffect(() => {
