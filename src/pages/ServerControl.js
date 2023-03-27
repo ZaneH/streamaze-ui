@@ -21,7 +21,6 @@ import {
 } from '@tabler/icons'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
-import wretch from 'wretch'
 import { Layout } from '../components/document'
 import { HopContext } from '../components/Providers/HopProvider'
 import { capitalizeFirstLetter } from '../utils/strings'
@@ -32,8 +31,6 @@ const LiveContainer = styled(Paper)`
   border-radius: 8px;
   margin-top: 16px;
 `
-
-const { REACT_APP_API_2_URL } = process.env
 
 const ServerControl = () => {
   const { colors } = useMantineTheme()
@@ -47,7 +44,7 @@ const ServerControl = () => {
 
   return (
     <Layout>
-      <Flex direction="column" h="70%" justify="center">
+      <Flex direction="column" justify="center" my="xl">
         <Container miw={isSmall ? 'auto' : '400px'}>
           <Flex
             align="center"
@@ -91,26 +88,22 @@ const ServerControl = () => {
               fullWidth
               color="red"
               onClick={() => {
-                streamerChannel.push('stop_server', {})
+                const resp = streamerChannel.push('stop_server', {})
+                resp.receive('ok', () => {
+                  showNotification({
+                    title: 'Success',
+                    message: 'Server stopped successfully',
+                    color: 'green',
+                  })
+                })
 
-                // wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
-                //   .post()
-                //   .json((res) => {
-                //     if (res?.error) {
-                //       throw new Error(res.error)
-                //     } else if (res?.message) {
-                //       showNotification({
-                //         title: 'Success!',
-                //         message: res.message,
-                //       })
-                //     }
-                //   })
-                //   .catch((err) => {
-                //     showNotification({
-                //       title: 'OBS Error',
-                //       message: err.message,
-                //     })
-                //   })
+                resp.receive('error', (msg) => {
+                  showNotification({
+                    title: 'Error',
+                    message: msg.reason,
+                    color: 'red',
+                  })
+                })
               }}
             >
               Turn Off
@@ -119,27 +112,25 @@ const ServerControl = () => {
               fullWidth
               color="green"
               onClick={() => {
-                streamerChannel.push('start_server', {
+                const resp = streamerChannel.push('start_server', {
                   service: 'youtube',
                 })
-                // wretch(`${REACT_APP_API_2_URL}/obs/start-server/youtube`)
-                //   .post()
-                //   .json((res) => {
-                //     if (res?.error) {
-                //       throw new Error(res.error)
-                //     } else if (res?.message) {
-                //       showNotification({
-                //         title: 'Success!',
-                //         message: res.message,
-                //       })
-                //     }
-                //   })
-                //   .catch((err) => {
-                //     showNotification({
-                //       title: 'OBS Error',
-                //       message: err.message,
-                //     })
-                //   })
+
+                resp.receive('ok', () => {
+                  showNotification({
+                    title: 'Success',
+                    message: 'Server started successfully',
+                    color: 'green',
+                  })
+                })
+
+                resp.receive('error', (msg) => {
+                  showNotification({
+                    title: 'Error',
+                    message: msg.reason,
+                    color: 'red',
+                  })
+                })
               }}
             >
               Turn On
@@ -189,26 +180,22 @@ const ServerControl = () => {
               fullWidth
               color="red"
               onClick={() => {
-                streamerChannel.push('stop_server', {})
+                const resp = streamerChannel.push('stop_server', {})
+                resp.receive('ok', () => {
+                  showNotification({
+                    title: 'Success',
+                    message: 'Server stopped successfully',
+                    color: 'teal',
+                  })
+                })
 
-                // wretch(`${REACT_APP_API_2_URL}/obs/stop-server`)
-                //   .post()
-                //   .json((res) => {
-                //     if (res?.error) {
-                //       throw new Error(res.error)
-                //     } else if (res?.message) {
-                //       showNotification({
-                //         title: 'Success!',
-                //         message: res.message,
-                //       })
-                //     }
-                //   })
-                //   .catch((err) => {
-                //     showNotification({
-                //       title: 'OBS Error',
-                //       message: err.message,
-                //     })
-                //   })
+                resp.receive('error', (msg) => {
+                  showNotification({
+                    title: 'Error',
+                    message: msg.reason,
+                    color: 'red',
+                  })
+                })
               }}
             >
               Turn Off
@@ -217,28 +204,25 @@ const ServerControl = () => {
               fullWidth
               color="green"
               onClick={() => {
-                streamerChannel.push('start_server', {
+                const resp = streamerChannel.push('start_server', {
                   service: 'tiktok',
                 })
 
-                // wretch(`${REACT_APP_API_2_URL}/obs/start-server/tiktok`)
-                //   .post()
-                //   .json((res) => {
-                //     if (res?.error) {
-                //       throw new Error(res.error)
-                //     } else if (res?.message) {
-                //       showNotification({
-                //         title: 'Success!',
-                //         message: res.message,
-                //       })
-                //     }
-                //   })
-                //   .catch((err) => {
-                //     showNotification({
-                //       title: 'OBS Error',
-                //       message: err.message,
-                //     })
-                //   })
+                resp.receive('ok', () => {
+                  showNotification({
+                    title: 'Success',
+                    message: 'Server started successfully',
+                    color: 'teal',
+                  })
+                })
+
+                resp.receive('error', (msg) => {
+                  showNotification({
+                    title: 'Error',
+                    message: msg.reason,
+                    color: 'red',
+                  })
+                })
               }}
             >
               Turn On

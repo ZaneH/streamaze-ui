@@ -12,10 +12,8 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconVideoOff } from '@tabler/icons'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
-import wretch from 'wretch'
 import { Layout } from '../components/document'
 import { HopContext } from '../components/Providers/HopProvider'
 
@@ -35,12 +33,9 @@ const BlinkingDiv = styled.div`
   }
 `
 
-const { REACT_APP_API_2_URL } = process.env
-
 const GoLive = () => {
   const { colors } = useMantineTheme()
   const { isLive } = useContext(HopContext)
-  const { updateKV } = useContext(LanyardContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
 
@@ -51,7 +46,7 @@ const GoLive = () => {
 
   return (
     <Layout>
-      <Flex direction="column" h="70%" justify="center">
+      <Flex direction="column" justify="center" my="xl">
         <Container miw={isSmall ? 'auto' : '400px'}>
           <Flex
             align="center"
@@ -72,54 +67,22 @@ const GoLive = () => {
                 fullWidth
                 color="green"
                 onClick={() => {
-                  streamerChannel.put('start_broadcast', {})
-                  //   wretch(`${REACT_APP_API_2_URL}/obs/start-broadcast`)
-                  //     .post()
-                  //     .json((res) => {
-                  //       if (res?.error) {
-                  //         throw new Error(res.error)
-                  //       } else if (res?.message) {
-                  //         showNotification({
-                  //           title: 'Success',
-                  //           message: res.message,
-                  //           color: 'green',
-                  //         })
+                  const resp = streamerChannel.put('start_broadcast', {})
+                  resp.receive('ok', () => {
+                    showNotification({
+                      title: 'Success',
+                      message: 'Your broadcast has started',
+                      color: 'green',
+                    })
+                  })
 
-                  //         // set actual_stream_start_time in KV
-                  //         updateKV(
-                  //           'actual_stream_start_time',
-                  //           (Date.now() / 1000).toFixed(0)
-                  //         )
-                  //           .then(() => {
-                  //             showNotification({
-                  //               title: 'Success',
-                  //               message: 'Updated Stream Start Time',
-                  //               color: 'green',
-                  //             })
-                  //           })
-                  //           .catch(() => {
-                  //             showNotification({
-                  //               title: 'Error',
-                  //               message:
-                  //                 'Failed to update Stream Start Time. This is not a fatal error.',
-                  //               color: 'red',
-                  //             })
-                  //           })
-                  //       }
-                  //     })
-                  //     .catch((e) => {
-                  //       try {
-                  //         const err = JSON.parse(e.message)
-                  //         const message = err?.error
-                  //         showNotification({
-                  //           title: 'OBS Error',
-                  //           color: 'red',
-                  //           message,
-                  //         })
-                  //       } catch (e) {
-                  //         console.error('Error parsing OBS error', e)
-                  //       }
-                  //     })
+                  resp.receive('error', (resp) => {
+                    showNotification({
+                      title: 'Error',
+                      message: resp.reason,
+                      color: 'red',
+                    })
+                  })
                 }}
               >
                 Start Stream
@@ -128,32 +91,23 @@ const GoLive = () => {
                 fullWidth
                 color="red"
                 onClick={() => {
-                  wretch(`${REACT_APP_API_2_URL}/obs/stop-broadcast`)
-                    .post()
-                    .json((res) => {
-                      if (res?.error) {
-                        throw new Error(res.error)
-                      } else if (res?.message) {
-                        showNotification({
-                          title: 'Success',
-                          message: res.message,
-                          color: 'green',
-                        })
-                      }
+                  const resp = streamerChannel.put('stop_broadcast', {})
+
+                  resp.receive('ok', () => {
+                    showNotification({
+                      title: 'Success',
+                      message: 'Your broadcast has stopped',
+                      color: 'green',
                     })
-                    .catch((e) => {
-                      try {
-                        const err = JSON.parse(e.message)
-                        const message = err?.error
-                        showNotification({
-                          title: 'OBS Error',
-                          color: 'red',
-                          message,
-                        })
-                      } catch (e) {
-                        console.error('Error parsing OBS error', e)
-                      }
+                  })
+
+                  resp.receive('error', (resp) => {
+                    showNotification({
+                      title: 'Error',
+                      message: resp.reason,
+                      color: 'red',
                     })
+                  })
                 }}
               >
                 Stop Stream

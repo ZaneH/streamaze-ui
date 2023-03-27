@@ -4,7 +4,6 @@ import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
-import wretch from 'wretch'
 import { Layout } from '../components/document'
 
 const LiveContainer = styled(Paper)`
@@ -34,7 +33,7 @@ const RaspberryPi = () => {
 
   return (
     <Layout>
-      <Flex direction="column" h="70%" justify="center">
+      <Flex direction="column" justify="center" my="xl">
         <Container miw={isSmall ? 'auto' : '400px'}>
           <Flex
             align="center"
@@ -54,60 +53,26 @@ const RaspberryPi = () => {
           </Flex>
           <LiveContainer>
             <Stack>
-              {/* <Button
-                fullWidth
-                color="green"
-                onClick={() => {
-                  wretch(`${REACT_APP_API_2_URL}/pi/start`)
-                    .post()
-                    .json((res) => {
-                      if (res?.error) {
-                        throw new Error(res.error)
-                      } else if (res?.message) {
-                        showNotification({
-                          title: 'Success',
-                          message: res.message,
-                          color: 'green',
-                        })
-                      }
-                    })
-                    .catch((err) => {
-                      showNotification({
-                        title: 'Error',
-                        message: err.message,
-                        color: 'red',
-                      })
-                    })
-                }}
-              >
-                Start Raspberry Pi
-              </Button> */}
               <Button
                 fullWidth
                 color="red"
                 onClick={() => {
-                  streamerChannel.push('stop_pi', {})
+                  const resp = streamerChannel.push('stop_pi', {})
+                  resp.receive('ok', (resp) => {
+                    showNotification({
+                      title: 'Success',
+                      message: "Raspberry Pi's has been stopped",
+                      color: 'green',
+                    })
+                  })
 
-                  // wretch(`${REACT_APP_API_2_URL}/pi/stop`)
-                  //   .post()
-                  //   .json((res) => {
-                  //     if (res?.error) {
-                  //       throw new Error(res.error)
-                  //     } else if (res?.message) {
-                  //       showNotification({
-                  //         title: 'Success',
-                  //         message: res.message,
-                  //         color: 'green',
-                  //       })
-                  //     }
-                  //   })
-                  //   .catch((err) => {
-                  //     showNotification({
-                  //       title: 'Error',
-                  //       message: err.message,
-                  //       color: 'red',
-                  //     })
-                  //   })
+                  resp.receive('error', (resp) => {
+                    showNotification({
+                      title: 'Error',
+                      message: resp.reason,
+                      color: 'red',
+                    })
+                  })
                 }}
               >
                 Stop Raspberry Pi
