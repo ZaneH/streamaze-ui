@@ -561,6 +561,7 @@ const Settings = () => {
                 subtitle="Add custom data to your stream!"
               >
                 <TextInput
+                  type="password"
                   label={<FieldLabel>Discord User ID</FieldLabel>}
                   placeholder="1234567890"
                   defaultValue={lanyardForm.values.discordUserId}
