@@ -82,7 +82,22 @@ const ControlPanel = () => {
               requireConfirmation
               color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
               onClick={() => {
-                streamerChannel.push('switch_scene', { scene })
+                const resp = streamerChannel.push('switch_scene', { scene })
+                resp.receive('ok', () => {
+                  showNotification({
+                    title: 'Success',
+                    message: `Scene switched to ${scene}`,
+                    color: 'green',
+                  })
+                })
+
+                resp.receive('error', () => {
+                  showNotification({
+                    title: 'Error',
+                    message: `Failed to switch scene to ${scene}`,
+                    color: 'red',
+                  })
+                })
               }}
               style={{
                 width: '50%',
