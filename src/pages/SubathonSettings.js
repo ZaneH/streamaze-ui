@@ -3,17 +3,14 @@ import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { Layout } from 'components/document'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { FieldLabel, FormSection } from 'components/Settings'
 import TagSEO from 'components/TagSEO'
 import { useContext } from 'react'
-import wretch from 'wretch'
-
-const { REACT_APP_API_2_URL } = process.env
 
 const SubathonSettings = () => {
-  const { subathonConfig, setSubathonConfig, lanyardConfig } =
-    useContext(ConfigContext)
-  const { discordUserId, apiKey } = lanyardConfig
+  const { subathonConfig, setSubathonConfig } = useContext(ConfigContext)
+  const { streamerChannel } = useContext(PhoenixContext)
 
   const subathonForm = useForm({
     initialValues: {
@@ -35,26 +32,25 @@ const SubathonSettings = () => {
               timeUnitBase: subathonForm.values.timeUnitBase,
             }))
 
-            // update time_unit_base in kv store
-            wretch(`${REACT_APP_API_2_URL}/kv/set`).post({
-              discordUserId,
-              key: 'time_unit_base',
-              value: subathonForm.values.timeUnitBase,
-              apiKey,
+            const resp = streamerChannel.push('update_subathon_settings', {
+              is_subathon: subathonForm.values.isSubathonActive,
+              subathon_minutes_per_dollar: subathonForm.values.timeUnitBase,
             })
 
-            // update is_subathon_active in kv store
-            wretch(`${REACT_APP_API_2_URL}/kv/set`).post({
-              discordUserId,
-              key: 'is_subathon_active',
-              value: String(subathonForm.values.isSubathonActive),
-              apiKey,
+            resp.receive('ok', () => {
+              showNotification({
+                title: 'Subathon Settings',
+                message: 'Subathon settings have been saved',
+                color: 'teal',
+              })
             })
 
-            showNotification({
-              title: 'Subathon Settings',
-              message: 'Subathon settings have been saved',
-              color: 'teal',
+            resp.receive('error', () => {
+              showNotification({
+                title: 'Subathon Settings',
+                message: 'Subathon settings could not be saved',
+                color: 'red',
+              })
             })
           }}
         >
