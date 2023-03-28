@@ -139,13 +139,6 @@ const ChatLog = ({
         reconnectInterval: 10000,
         reconnectAttempts: Infinity,
         shouldReconnect: () => true,
-        onError: () => {
-          showNotification({
-            title: 'Chat Error',
-            message: "Couldn't connect to the chat.",
-            color: 'red',
-          })
-        },
         onOpen: () => {
           const params = {}
           if (_tiktokUsername) {

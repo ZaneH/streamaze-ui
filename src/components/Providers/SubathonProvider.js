@@ -10,12 +10,11 @@ const SubathonProvider = ({ children }) => {
   const [isSubathonActive, setIsSubathonActive] = useState(false)
 
   const secondsInterval = useInterval(() => {
-    setTimeRemaining((prev) => prev - 1)
+    setTimeRemaining((prev) => Math.max(0, prev - 1))
   }, 1000)
 
   useEffect(() => {
     if (timeRemaining <= 0 && isSubathonActive) {
-      setIsSubathonActive(false)
       wretch(
         `${process.env.REACT_APP_API_3_URL}/api/live_streams/${activeStreamId}`
       )

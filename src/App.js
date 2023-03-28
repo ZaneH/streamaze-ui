@@ -48,8 +48,9 @@ const App = () => {
                                 <Routes>
                                   <Route
                                     path="/"
-                                    element={<Navigate to="/sam" />}
+                                    element={<Navigate to="/home" />}
                                   />
+
                                   <Route
                                     path="/settings"
                                     element={<Settings />}
@@ -62,6 +63,7 @@ const App = () => {
                                     path="/server"
                                     element={<ServerControl />}
                                   />
+
                                   <Route
                                     path="/chat"
                                     element={
@@ -75,6 +77,7 @@ const App = () => {
                                   />
 
                                   <Route path="/keypad" element={<Keypad />} />
+
                                   <Route
                                     path="/raspberrypi"
                                     element={<RaspberryPi />}
