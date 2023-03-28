@@ -27,7 +27,7 @@ const SubathonProvider = ({ children }) => {
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeRemaining])
+  }, [timeRemaining, secondsInterval])
 
   useEffect(() => {
     secondsInterval.start()
@@ -44,6 +44,7 @@ const SubathonProvider = ({ children }) => {
         setTimeRemaining,
         isSubathonActive,
         setIsSubathonActive,
+        secondsInterval,
       }}
     >
       {children}

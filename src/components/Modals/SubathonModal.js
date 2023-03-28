@@ -2,6 +2,7 @@ import { Button, Modal, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
+import { SubathonContext } from 'components/Providers/SubathonProvider'
 import { FieldLabel } from 'components/Settings'
 import moment from 'moment'
 import { useContext, useRef } from 'react'
@@ -11,8 +12,9 @@ const { REACT_APP_API_3_URL } = process.env
 
 const SubathonModal = ({ isOpen = false, onClose }) => {
   const { subathonConfig } = useContext(ConfigContext)
-  const { timeUnitBase } = subathonConfig
   const { currentStreamer } = useContext(PhoenixContext)
+  const { secondsInterval } = useContext(SubathonContext)
+  const { timeUnitBase } = subathonConfig
   const initialTime = useRef(null)
 
   return (
@@ -49,6 +51,8 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
                 message: 'Your subathon has been started!',
                 color: 'green',
               })
+
+              secondsInterval.start()
 
               onClose()
             })
