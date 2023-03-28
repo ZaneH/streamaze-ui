@@ -28,19 +28,14 @@ const CountdownLabel = styled.div`
 `
 
 const Countdown = () => {
-  const { timeRemaining } = useContext(SubathonContext)
-  const { kv } = useContext(LanyardContext)
+  const { timeRemaining, isSubathonActive } = useContext(SubathonContext)
 
-  if (kv?.subathon_ended === 'true') {
+  if (!isSubathonActive) {
     return (
       <CountdownLabel className="countdown-label" data-content="[ENDED]">
         [ENDED]
       </CountdownLabel>
     )
-  }
-
-  if (kv?.is_subathon_active !== 'true') {
-    return null
   }
 
   const timeRemainingString = secondsToHHMMSS(timeRemaining)

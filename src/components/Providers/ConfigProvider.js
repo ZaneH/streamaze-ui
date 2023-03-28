@@ -248,8 +248,11 @@ const ConfigProvider = ({ children }) => {
   let streamerId = ''
   if (isUser) {
     if (searchParams.get('streamazeKey')) {
-      streamerId = searchParams.get('streamerId')
       streamazeKey = searchParams.get('streamazeKey')
+    }
+
+    if (searchParams.get('streamerId')) {
+      streamerId = searchParams.get('streamerId')
     }
   }
 

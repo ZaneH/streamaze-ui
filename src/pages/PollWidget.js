@@ -17,7 +17,7 @@ const formatPollAsText = (poll) => {
   // Output: "<choice> = <count> votes\n<choice2> = <count2> votes"
   const pollText = Object.entries(poll)
     .map(
-      ([choice, count]) => `${choice} = ${count} vote${count === 1 ? '' : 's'}`
+      ([choice, count]) => `${choice}: ${count} vote${count === 1 ? '' : 's'}`
     )
     .join('\n')
   return pollText
@@ -39,7 +39,7 @@ const PollWidget = () => {
       const poll = JSON.parse(kv?.poll)
       setPollData(poll)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }, [kv, setPollData])
 
