@@ -67,7 +67,9 @@ const ConfigProvider = ({ children }) => {
     getInitialValueInEffect: false,
     defaultValue: {
       streamToken: '',
-      ttsVoice: 'Ivy',
+      ttsService: 'streamlabs',
+      streamlabsVoice: 'Ivy',
+      elevenlabsVoice: '',
       tiktokUsername: '',
       silentAudioInterval: '10',
     },
