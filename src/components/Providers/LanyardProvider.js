@@ -8,7 +8,13 @@ const LanyardProvider = ({ children }) => {
   const { lanyardConfig } = useContext(ConfigContext)
   const { discordUserId, apiKey } = lanyardConfig
 
-  const data = useLanyardWS(discordUserId)
+  const data = useLanyardWS(discordUserId, {
+    api: {
+      hostname: discordUserId ? 'https://api.lanyard.rest' : undefined,
+      secure: true,
+    },
+  })
+
   const kv = data?.kv
 
   const updateKV = useCallback(
