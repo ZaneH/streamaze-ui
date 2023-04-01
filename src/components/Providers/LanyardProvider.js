@@ -10,7 +10,7 @@ const LanyardProvider = ({ children }) => {
 
   const data = useLanyardWS(discordUserId, {
     api: {
-      hostname: discordUserId ? 'https://api.lanyard.rest' : undefined,
+      hostname: discordUserId ? 'api.lanyard.rest' : undefined,
       secure: true,
     },
   })

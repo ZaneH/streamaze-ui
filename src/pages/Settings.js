@@ -3,18 +3,20 @@ import {
   Container,
   Divider,
   Flex,
+  PasswordInput,
   Select,
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
-import { Layout } from '../components/document'
+import wretch from 'wretch'
 import { ConfigContext } from '../components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from '../components/Settings'
-import wretch from 'wretch'
 import TagSEO from '../components/TagSEO'
-import { PhoenixContext } from 'components/Providers/PhoenixProvider'
+import { Layout } from '../components/document'
+import useElevenLabs from 'hooks/useElevenLabs'
 
 const Settings = () => {
   const {
@@ -35,6 +37,7 @@ const Settings = () => {
   } = useContext(ConfigContext)
 
   const { currentStreamer } = useContext(PhoenixContext)
+  const { allVoices } = useElevenLabs(userConfig?.streamazeKey)
 
   const userForm = useForm({
     initialValues: {
@@ -79,6 +82,7 @@ const Settings = () => {
       ttsService: slobsConfig.ttsService,
       streamlabsVoice: slobsConfig?.streamlabsVoice,
       elevenlabsVoice: slobsConfig?.elevenlabsVoice,
+      elevenlabsKey: slobsConfig?.elevenlabsKey,
       tiktokUsername: slobsConfig?.tiktokUsername,
       silentAudioInterval: slobsConfig?.silentAudioInterval,
     },
@@ -391,6 +395,7 @@ const Settings = () => {
                   ttsService: slobsForm.values.ttsService,
                   streamlabsVoice: slobsForm.values.streamlabsVoice,
                   elevenlabsVoice: slobsForm.values.elevenlabsVoice,
+                  elevenlabsKey: slobsForm.values.elevenlabsKey,
                   tiktokUsername: slobsForm.values.tiktokUsername,
                   silentAudioInterval: slobsForm.values.silentAudioInterval,
                 }))
@@ -404,6 +409,7 @@ const Settings = () => {
                       tts_service: slobsForm.values.ttsService,
                       streamlabs_voice: slobsForm.values.streamlabsVoice,
                       elevenlabs_voice: slobsForm.values.elevenlabsVoice,
+                      elevenlabs_key: slobsForm.values.elevenlabsKey,
                       tiktok_username: slobsForm.values.tiktokUsername,
                       silent_audio_interval:
                         slobsForm.values.silentAudioInterval,
@@ -429,10 +435,9 @@ const Settings = () => {
                 title="Donation Settings"
                 subtitle="See your YouTube and Twitch donations live!"
               >
-                <TextInput
+                <PasswordInput
                   label={<FieldLabel>Stream Token</FieldLabel>}
                   placeholder="eykdjbnn2mnzb.bemMNjgknwli..."
-                  type="password"
                   defaultValue={slobsForm.values.streamToken}
                   onChange={(e) => {
                     slobsForm.setFieldValue('streamToken', e.target.value)
@@ -542,15 +547,28 @@ const Settings = () => {
                   />
                 ) : null}
                 {slobsForm.values.ttsService === 'elevenlabs' ? (
-                  <Select
-                    label={<FieldLabel>ElevenLabs Voice</FieldLabel>}
-                    defaultValue={slobsForm.values.elevenlabsVoice}
-                    value={slobsForm.values.elevenlabsVoice}
-                    data={[{ value: 'sam', label: 'Sam' }]}
-                    onChange={(e) => {
-                      slobsForm.setFieldValue('elevenlabsVoice', e)
-                    }}
-                  />
+                  <>
+                    <Select
+                      label={<FieldLabel>ElevenLabs Voice</FieldLabel>}
+                      defaultValue={slobsForm.values.elevenlabsVoice}
+                      data={
+                        allVoices?.map((voice) => ({
+                          value: voice?.id,
+                          label: voice?.name,
+                        })) ?? []
+                      }
+                      onChange={(e) => {
+                        slobsForm.setFieldValue('elevenlabsVoice', e)
+                      }}
+                    />
+                    <PasswordInput
+                      label={<FieldLabel>ElevenLabs API Key</FieldLabel>}
+                      defaultValue={slobsForm.values.elevenlabsKey}
+                      onChange={(e) => {
+                        slobsForm.setFieldValue('elevenlabsKey', e.target.value)
+                      }}
+                    />
+                  </>
                 ) : null}
               </FormSection>
             </form>
@@ -591,8 +609,7 @@ const Settings = () => {
                 title="Lanyard API"
                 subtitle="Add custom data to your stream!"
               >
-                <TextInput
-                  type="password"
+                <PasswordInput
                   label={<FieldLabel>Discord User ID</FieldLabel>}
                   placeholder="1234567890"
                   defaultValue={lanyardForm.values.discordUserId}
@@ -600,11 +617,10 @@ const Settings = () => {
                     lanyardForm.setFieldValue('discordUserId', e.target.value)
                   }}
                 />
-                <TextInput
+                <PasswordInput
                   label={<FieldLabel>API Key</FieldLabel>}
                   placeholder="API Key"
                   defaultValue={lanyardForm.values.apiKey}
-                  type="password"
                   onChange={(e) => {
                     lanyardForm.setFieldValue('apiKey', e.target.value)
                   }}

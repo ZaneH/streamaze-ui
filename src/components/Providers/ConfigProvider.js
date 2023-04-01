@@ -70,6 +70,7 @@ const ConfigProvider = ({ children }) => {
       ttsService: 'streamlabs',
       streamlabsVoice: 'Ivy',
       elevenlabsVoice: '',
+      elevenlabsKey: '',
       tiktokUsername: '',
       silentAudioInterval: '10',
     },
