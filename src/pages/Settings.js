@@ -253,7 +253,7 @@ const Settings = () => {
                 title="Clip Settings"
                 subtitle="Timestamp a moment with one click"
               >
-                <TextInput
+                <PasswordInput
                   label={<FieldLabel>Discord Channel ID</FieldLabel>}
                   placeholder="123456789"
                   defaultValue={clipForm.values.discordChannelId}
@@ -308,7 +308,7 @@ const Settings = () => {
                 title="OBS Settings"
                 subtitle="Control your OBS from the dashboard"
               >
-                <TextInput
+                <PasswordInput
                   label={<FieldLabel>Channel ID</FieldLabel>}
                   placeholder="150511291029518563"
                   defaultValue={obsForm.values.streamChannelId}
