@@ -1,7 +1,13 @@
 import { showNotification } from '@mantine/notifications'
 import useStreamer from 'hooks/useStreamer'
 import { Socket } from 'phoenix'
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import useWebSocket from 'react-use-websocket'
 import { calculateTimeRemaining } from 'utils/time'
 import { ConfigContext } from './ConfigProvider'
@@ -29,9 +35,16 @@ const PhoenixProvider = ({ children }) => {
     setStatsConfig,
   } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
+  const [socketUrl, setSocketUrl] = useState()
+
+  useEffect(() => {
+    if (streamer) {
+      setSocketUrl(`${process.env.REACT_APP_API_2_WS_URL}`)
+    }
+  }, [streamer])
 
   const { sendJsonMessage } = useWebSocket(
-    `${process.env.REACT_APP_API_2_WS_URL}`,
+    socketUrl,
     {
       onOpen: () => {
         sendJsonMessage({
