@@ -8,7 +8,7 @@ const useElevenLabs = (apiKey) => {
   useEffect(() => {
     const fetchVoices = async () => {
       const data = await wretch(
-        `${process.env.REACT_APP_API_3_URL}/api/streamers/voices?api_key=${apiKey}`
+        `${process.env.REACT_APP_API_3_URL}/api/tts?api_key=${apiKey}`
       )
         .get()
         .json()

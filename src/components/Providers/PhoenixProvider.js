@@ -20,6 +20,7 @@ const PhoenixProvider = ({ children }) => {
   const { setNetProfit, setStreamStartTime } = useContext(StatContext)
   const {
     userConfig,
+    slobsConfig,
     setLanyardConfig,
     setObsConfig,
     setChatConfig,
@@ -36,12 +37,16 @@ const PhoenixProvider = ({ children }) => {
         sendJsonMessage({
           streamerId: streamer?.id,
           streamToken: streamer?.donations_config?.streamlabs_token,
+          ttsService: slobsConfig?.ttsService || 'streamlabs',
+          streamazeKey: userConfig?.streamazeKey,
         })
       },
       shouldReconnect: (closeEvent) => true,
       reconnectInterval: 3000,
     },
-    !!streamer?.donations_config?.streamlabs_token && !!streamer?.id
+    !!streamer?.donations_config?.streamlabs_token &&
+      !!streamer?.id &&
+      !!userConfig?.streamazeKey
   )
 
   useEffect(() => {
@@ -80,7 +85,10 @@ const PhoenixProvider = ({ children }) => {
     setSlobsConfig((prev) => ({
       ...prev,
       streamToken: streamer?.donations_config?.streamlabs_token,
-      ttsVoice: streamer?.donations_config?.tts_voice,
+      ttsService: streamer?.donations_config?.tts_service,
+      streamlabsVoice: streamer?.donations_config?.streamlabs_voice,
+      elevenlabsVoice: streamer?.donations_config?.elevenlabs_voice,
+      elevenlabsKey: streamer?.donations_config?.elevenlabs_key,
       tiktokUsername: streamer?.donations_config?.tiktok_username,
       silentAudioInterval: streamer?.donations_config?.silent_audio_interval,
     }))

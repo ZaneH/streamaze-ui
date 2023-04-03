@@ -418,14 +418,14 @@ const Settings = () => {
                   .res((res) => {
                     if (res.ok) {
                       showNotification({
-                        title: 'SLOBS Settings saved!',
+                        title: 'Donation Settings saved!',
                         color: 'teal',
                       })
                     }
                   })
                   .catch(() => {
                     showNotification({
-                      title: 'Error saving SLOBS Settings',
+                      title: 'Error saving Donation Settings',
                       color: 'red',
                     })
                   })
