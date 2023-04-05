@@ -35,16 +35,10 @@ const PhoenixProvider = ({ children }) => {
     setStatsConfig,
   } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
-  const [socketUrl, setSocketUrl] = useState()
-
-  useEffect(() => {
-    if (streamer) {
-      setSocketUrl(`${process.env.REACT_APP_API_2_WS_URL}`)
-    }
-  }, [streamer])
+  console.log(streamer)
 
   const { sendJsonMessage } = useWebSocket(
-    socketUrl,
+    `${process.env.REACT_APP_API_2_WS_URL}`,
     {
       onOpen: () => {
         sendJsonMessage({
@@ -147,6 +141,7 @@ const PhoenixProvider = ({ children }) => {
 
     return () => {
       if (socket) {
+        console.log('disconnected')
         socket.disconnect()
         streamerChannel.leave()
         setSocket(null)
@@ -170,6 +165,11 @@ const PhoenixProvider = ({ children }) => {
       streamer?.id &&
       userConfig?.streamazeKey
     ) {
+      console.log(
+        'connectng to streamer ',
+        streamer?.id,
+        userConfig?.streamazeKey
+      )
       socket.connect()
 
       const ch = socket.channel(`streamer:${streamer?.id}`, {
