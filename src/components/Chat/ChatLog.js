@@ -79,6 +79,7 @@ const SenderText = styled(Text)`
   ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000;'}
   ${({ origin, ismember }) =>
     origin === 'kick' && ismember && 'color: #FF6C37;'}
+  ${({ origin, ismod }) => origin === 'kick' && ismod && 'color: #5e84f1;'}
 `
 
 const MessageText = styled(Text)`
