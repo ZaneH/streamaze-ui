@@ -19,6 +19,9 @@ import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
 import { ReactComponent as ModChatIcon } from '../../mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg'
+import { ReactComponent as KickOGBadge } from '../../kick-og-badge.svg'
+import { ReactComponent as KickFoundersBadge } from '../../kick-founders-badge.svg'
+import { ReactComponent as KickGiftedBadge } from '../../kick-gifted-badge.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 
 const Item = styled.div`
@@ -280,6 +283,7 @@ const ChatLog = ({
             isVerified: payload.is_verified,
             isMember: payload.is_member,
             emotes: payload.emotes,
+            badges: payload.badges,
           },
         ])
 
@@ -408,6 +412,7 @@ const ChatLog = ({
             isVerified,
             isMember,
             memberBadge,
+            badges = [],
           } = chatEvent
 
           let newMessageString = message || ''
@@ -474,6 +479,36 @@ const ChatLog = ({
                     origin={origin}
                   >
                     {`${sender}${isBig ? ':' : ''}`}
+                    {badges.includes('OG') && (
+                      <KickOGBadge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {badges.includes('Founder') && (
+                      <KickFoundersBadge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {badges.includes('Gifter') && (
+                      <KickGiftedBadge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
                     {isMod && !isBig && (
                       <ModChatIcon
                         fill="#5e84f1"
