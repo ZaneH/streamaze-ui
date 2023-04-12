@@ -134,7 +134,8 @@ const DonationLog = () => {
         const months = amount?.months
         const currency = amount
         const isFollow = type === 'follow'
-        const isMembershipGift = type === 'membershipGift'
+        const isMembershipGift =
+          type === 'membershipGift' || type === 'kick_gifted_subscription'
 
         let isBits
         let isSub
@@ -143,7 +144,12 @@ const DonationLog = () => {
         // Chose how to display the amount
         if (typeof bits !== 'undefined') {
           isBits = true
-        } else if (typeof months !== 'undefined' || type === 'subscription') {
+        } else if (
+          typeof months !== 'undefined' ||
+          type === 'subscription' ||
+          type === 'kick_gifted_subscription' ||
+          type === 'kick_subscription'
+        ) {
           isSub = true
         } else if (typeof currency !== 'undefined') {
           isCurrency = true
@@ -181,9 +187,9 @@ const DonationLog = () => {
 
         if (
           isMembershipGift ||
+          isSub ||
           isCurrency ||
           type === 'superchat' ||
-          type === 'subscription' ||
           type === 'donation'
         ) {
           return (

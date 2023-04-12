@@ -78,6 +78,8 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
 
   const [bgColor, headerBgColor, textColor] = getSuperChatColors(amount || 5)
   const pfp = metadata && metadata?.pfp
+  const isKickSubscription = type === 'kick_subscription'
+  const isKickGift = type === 'kick_gifted_subscription'
 
   return (
     <YTCard bg={bgColor} isAnimated={isAnimated} onClick={onClick}>
@@ -109,13 +111,22 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
             </Box>
             <Box>
               <Text color={textColor} weight={700}>
-                {type === 'membershipGift'
-                  ? `${metadata?.gift_count}x ${metadata?.gift_level}s`
-                  : type === 'subscription' && metadata
+                {type === 'membershipGift' &&
+                  `${metadata?.gift_count}x ${metadata?.gift_level}s`}
+                {type === 'subscription' && metadata
                   ? `Became a member for ${metadata.months} month${
                       metadata.months > 1 ? 's' : ''
                     }`
-                  : displayString}
+                  : (type === 'superchat' || type === 'donation') &&
+                    displayString}
+                {isKickSubscription &&
+                  `Subscribed on Kick for ${metadata.months} month${
+                    metadata.months > 1 ? 's' : ''
+                  }`}
+                {isKickGift &&
+                  `Gifted ${metadata?.months} subscription${
+                    metadata?.months > 1 ? 's' : ''
+                  } on Kick`}
               </Text>
             </Box>
           </Flex>

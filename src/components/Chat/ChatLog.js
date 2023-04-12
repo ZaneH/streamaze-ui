@@ -24,6 +24,7 @@ import { ReactComponent as KickFoundersBadge } from '../../kick-founders-badge.s
 import { ReactComponent as KickGiftedBadge } from '../../kick-gifted-badge.svg'
 import { ReactComponent as KickVIPBadge } from '../../kick-vip-badge.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import useStreamer from 'hooks/useStreamer'
 
 const Item = styled.div`
   margin: 0;
@@ -119,8 +120,9 @@ const ChatLog = ({
   const [isChatBottom, setIsChatBottom] = useState(true)
   const virtuosoRef = useRef(null)
   const { colors } = useMantineTheme()
-  const { chatConfig } = useContext(ConfigContext)
+  const { chatConfig, userConfig } = useContext(ConfigContext)
   const { handlePollResponse } = useContext(PollContext)
+  const streamer = useStreamer(userConfig?.streamazeKey)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -164,13 +166,18 @@ const ChatLog = ({
             params['kickChannelId'] = _kickChannelId
           }
 
+          if (streamer) {
+            params['streamerId'] = streamer?.id
+          }
+
           chatSendMessage(params)
         },
       },
       !!_tiktokUsername ||
         !!_youtubeChannel ||
         !!_twitchUsername ||
-        (!!_kickChatroomId && !!_kickChannelId)
+        (!!_kickChatroomId && !!_kickChannelId) ||
+        !!streamer
     )
 
   const autorefreshInterval = useInterval(() => {
