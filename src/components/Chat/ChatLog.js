@@ -22,6 +22,7 @@ import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg
 import { ReactComponent as KickOGBadge } from '../../kick-og-badge.svg'
 import { ReactComponent as KickFoundersBadge } from '../../kick-founders-badge.svg'
 import { ReactComponent as KickGiftedBadge } from '../../kick-gifted-badge.svg'
+import { ReactComponent as KickVIPBadge } from '../../kick-vip-badge.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 
 const Item = styled.div`
@@ -481,6 +482,16 @@ const ChatLog = ({
                     {`${sender}${isBig ? ':' : ''}`}
                     {badges.includes('OG') && (
                       <KickOGBadge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {badges.includes('VIP') && (
+                      <KickVIPBadge
                         style={{
                           width: '16px',
                           height: '16px',
