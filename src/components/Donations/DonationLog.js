@@ -62,7 +62,7 @@ const AnimatedDiv = styled.div`
 `
 
 const DonationLog = () => {
-  const { donations, donationIndex, setDonationIndex } =
+  const { donations, donationIndex, setDonationIndex, setPrevDonationIndex } =
     useContext(DonationContext)
   const { userConfig, slobsConfig } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
@@ -222,6 +222,7 @@ const DonationLog = () => {
               donation={donation}
               isAnimated={i === 0}
               onClick={() => {
+                setPrevDonationIndex(donationIndex)
                 // set the donationIndex to the current index
                 // keeping in mind that the donations are reversed
                 setDonationIndex(donations.length - i - 1)

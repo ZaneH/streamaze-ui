@@ -10,6 +10,7 @@ const DonationProvider = ({ children }) => {
 
   // For determining when to show/play the next donation
   const [donationIndex, setDonationIndex] = useState(-1)
+  const [prevDonationIndex, setPrevDonationIndex] = useState(-1)
 
   const [isAutoplay, setIsAutoplay] = useState(false)
 
@@ -25,7 +26,12 @@ const DonationProvider = ({ children }) => {
       !isPlaying
     ) {
       setIsPlaying(true)
-      setDonationIndex((prev) => prev + 1)
+      if (prevDonationIndex > -1) {
+        setDonationIndex(prevDonationIndex)
+        setPrevDonationIndex(-1)
+      } else {
+        setDonationIndex((prev) => prev + 1)
+      }
 
       const currentDonation = donations[donationIndex]
 
@@ -86,6 +92,8 @@ const DonationProvider = ({ children }) => {
         setDonations,
         donationIndex,
         setDonationIndex,
+        prevDonationIndex,
+        setPrevDonationIndex,
         isAutoplay,
         setIsAutoplay,
         ttsAudio,
