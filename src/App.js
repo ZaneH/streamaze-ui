@@ -24,6 +24,7 @@ import Keypad from './pages/Keypad'
 import RaspberryPi from './pages/RaspberryPi'
 import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
+import TickerWidget from 'pages/TickerWidget'
 
 const App = () => {
   return (
@@ -95,6 +96,11 @@ const App = () => {
                                   <Route
                                     path="/poll/:id"
                                     element={<PollWidget />}
+                                  />
+
+                                  <Route
+                                    path="/widget/ticker/:id"
+                                    element={<TickerWidget />}
                                   />
 
                                   <Route
