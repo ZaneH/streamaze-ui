@@ -6,6 +6,9 @@ import { Virtuoso } from 'react-virtuoso'
 import { DonationContext } from '../Providers/DonationProvider'
 import MediaCard from './MediaCard'
 import SuperChatCard from './SuperChatCard'
+import useWebSocket from 'react-use-websocket'
+import useStreamer from 'hooks/useStreamer'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const Item = styled.div`
   margin: 12px 32px;
@@ -61,6 +64,27 @@ const AnimatedDiv = styled.div`
 const DonationLog = () => {
   const { donations, donationIndex, setDonationIndex } =
     useContext(DonationContext)
+  const { userConfig, slobsConfig } = useContext(ConfigContext)
+  const streamer = useStreamer(userConfig?.streamazeKey)
+  const { sendJsonMessage } = useWebSocket(
+    `${process.env.REACT_APP_API_2_WS_URL}`,
+    {
+      onOpen: () => {
+        sendJsonMessage({
+          streamerId: streamer?.id,
+          streamToken: streamer?.donations_config?.streamlabs_token,
+          ttsService: slobsConfig?.ttsService || 'streamlabs',
+          streamazeKey: userConfig?.streamazeKey,
+        })
+      },
+      shouldReconnect: (closeEvent) => true,
+      reconnectInterval: 3000,
+    },
+    !!streamer?.donations_config?.streamlabs_token &&
+      !!streamer?.id &&
+      !!userConfig?.streamazeKey
+  )
+
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
 

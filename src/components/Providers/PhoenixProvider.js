@@ -1,14 +1,7 @@
 import { showNotification } from '@mantine/notifications'
 import useStreamer from 'hooks/useStreamer'
 import { Socket } from 'phoenix'
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import useWebSocket from 'react-use-websocket'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { calculateTimeRemaining } from 'utils/time'
 import { ConfigContext } from './ConfigProvider'
 import { DonationContext } from './DonationProvider'
@@ -26,7 +19,6 @@ const PhoenixProvider = ({ children }) => {
   const { setNetProfit, setStreamStartTime } = useContext(StatContext)
   const {
     userConfig,
-    slobsConfig,
     setLanyardConfig,
     setObsConfig,
     setChatConfig,
@@ -35,26 +27,6 @@ const PhoenixProvider = ({ children }) => {
     setStatsConfig,
   } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
-  console.log(streamer)
-
-  const { sendJsonMessage } = useWebSocket(
-    `${process.env.REACT_APP_API_2_WS_URL}`,
-    {
-      onOpen: () => {
-        sendJsonMessage({
-          streamerId: streamer?.id,
-          streamToken: streamer?.donations_config?.streamlabs_token,
-          ttsService: slobsConfig?.ttsService || 'streamlabs',
-          streamazeKey: userConfig?.streamazeKey,
-        })
-      },
-      shouldReconnect: (closeEvent) => true,
-      reconnectInterval: 3000,
-    },
-    !!streamer?.donations_config?.streamlabs_token &&
-      !!streamer?.id &&
-      !!userConfig?.streamazeKey
-  )
 
   useEffect(() => {
     setLanyardConfig((prev) => ({
