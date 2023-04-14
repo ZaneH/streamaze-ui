@@ -85,6 +85,7 @@ const Settings = () => {
       elevenlabsKey: slobsConfig?.elevenlabsKey,
       tiktokUsername: slobsConfig?.tiktokUsername,
       silentAudioInterval: slobsConfig?.silentAudioInterval,
+      ttsDollarMin: slobsConfig?.ttsDollarMin,
     },
   })
 
@@ -398,6 +399,7 @@ const Settings = () => {
                   elevenlabsKey: slobsForm.values.elevenlabsKey,
                   tiktokUsername: slobsForm.values.tiktokUsername,
                   silentAudioInterval: slobsForm.values.silentAudioInterval,
+                  ttsDollarMin: slobsForm.values.ttsDollarMin,
                 }))
 
                 wretch(
@@ -413,6 +415,7 @@ const Settings = () => {
                       tiktok_username: slobsForm.values.tiktokUsername,
                       silent_audio_interval:
                         slobsForm.values.silentAudioInterval,
+                      tts_dollar_min: slobsForm.values.ttsDollarMin,
                     },
                   })
                   .res((res) => {
@@ -452,7 +455,15 @@ const Settings = () => {
                   }}
                 />
                 <TextInput
-                  label={<FieldLabel>Play Silent Audio</FieldLabel>}
+                  label={<FieldLabel>TTS Dollar Minimum</FieldLabel>}
+                  placeholder="1"
+                  defaultValue={slobsForm.values.ttsDollarMin}
+                  onChange={(e) => {
+                    slobsForm.setFieldValue('ttsDollarMin', e.target.value)
+                  }}
+                />
+                <TextInput
+                  label={<FieldLabel>Play Silent Audio (minutes)</FieldLabel>}
                   placeholder="10 (leave blank to disable)"
                   defaultValue={slobsForm.values.silentAudioInterval}
                   onChange={(e) => {
@@ -705,6 +716,7 @@ const Settings = () => {
                     elevenlabs_voice: slobsForm.values.elevenlabsVoice,
                     tiktok_username: slobsForm.values.tiktokUsername,
                     silent_audio_interval: slobsForm.values.silentAudioInterval,
+                    tts_dollar_min: slobsForm.values.ttsDollarMin,
                   },
                   lanyard_config: {
                     discord_user_id: lanyardForm.values.discordUserId,

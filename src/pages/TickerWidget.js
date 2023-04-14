@@ -25,20 +25,26 @@ const TickerWidget = () => {
   const [tickerData, setTickerData] = useState(null)
 
   useEffect(() => {
-    setVisibleDonations((prev) => [donations[donations.length - 1], ...prev])
-    if (!donoInterval.active) {
-      donoInterval.start()
-    }
+    setVisibleDonations((prev) => [...prev, donations[donations.length - 1]])
+    donoInterval.stop()
+    donoInterval.start()
   }, [donations, setVisibleDonations])
 
   const donoInterval = useInterval(() => {
-    if (visibleDonations && visibleDonations.length > 0) {
-      setVisibleDonations((prev) => prev.slice(0, prev.length - 1))
+    if (visibleDonations?.length > 0) {
+      setVisibleDonations((prev) => {
+        const newVal = prev.slice(1)
+        if (newVal.length === 0) {
+          donoInterval.stop()
+        }
+
+        return newVal
+      })
     } else {
       donoInterval.stop()
       setVisibleDonations([])
     }
-  }, 6000)
+  }, 5000)
 
   useEffect(() => {
     donoInterval.start()

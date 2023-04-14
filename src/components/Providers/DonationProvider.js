@@ -1,6 +1,7 @@
 import { useInterval } from '@mantine/hooks'
 import PeppersAudio from 'assets/peppers_in_the_chat.mp3'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { ConfigContext } from './ConfigProvider'
 
 export const DonationContext = createContext()
 
@@ -17,6 +18,8 @@ const DonationProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [ttsAudio, setTTSAudio] = useState(null)
   const [playingMediaId, setPlayingMediaId] = useState(null)
+
+  const { slobsConfig } = useContext(ConfigContext)
 
   const ttsInterval = useInterval(() => {
     if (
@@ -47,11 +50,15 @@ const DonationProvider = ({ children }) => {
         return
       }
 
+      const isOverMinAmount =
+        parseFloat(currentDonation?.data?.amount) > slobsConfig?.ttsDollarMin ??
+        0
+
       if (!ttsUrl) {
         ttsUrl = PeppersAudio
       }
 
-      if (ttsUrl) {
+      if (ttsUrl && isOverMinAmount) {
         const _audio = new Audio(ttsUrl)
 
         _audio.play().catch((err) => {

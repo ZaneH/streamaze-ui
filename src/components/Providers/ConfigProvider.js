@@ -73,6 +73,7 @@ const ConfigProvider = ({ children }) => {
       elevenlabsKey: '',
       tiktokUsername: '',
       silentAudioInterval: '10',
+      ttsDollarMin: '0',
     },
   })
 
@@ -211,6 +212,7 @@ const ConfigProvider = ({ children }) => {
   let streamToken = ''
   let ttsVoice = ''
   let tiktokDonos = ''
+  let ttsDollarMin = ''
   if (isSlobs) {
     if (searchParams.get('streamToken')) {
       streamToken = searchParams.get('streamToken')
@@ -222,6 +224,10 @@ const ConfigProvider = ({ children }) => {
 
     if (searchParams.get('tiktokDonos')) {
       tiktokDonos = searchParams.get('tiktokDonos')
+    }
+
+    if (searchParams.get('ttsDollarMin')) {
+      ttsDollarMin = searchParams.get('ttsDollarMin')
     }
   }
 
@@ -323,6 +329,7 @@ const ConfigProvider = ({ children }) => {
             ? tiktokDonos
             : slobsConfig.tiktokUsername,
           silentAudioInterval: slobsConfig.silentAudioInterval,
+          ttsDollarMin: ttsDollarMin ? ttsDollarMin : slobsConfig.ttsDollarMin,
         },
         setSlobsConfig,
         keypadConfig: {
