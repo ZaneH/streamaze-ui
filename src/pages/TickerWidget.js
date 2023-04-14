@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import { Space } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
 import { DonationContext } from 'components/Providers/DonationProvider'
 import { useContext, useEffect, useState } from 'react'

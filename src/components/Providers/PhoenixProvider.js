@@ -70,6 +70,7 @@ const PhoenixProvider = ({ children }) => {
       elevenlabsKey: streamer?.donations_config?.elevenlabs_key,
       tiktokUsername: streamer?.donations_config?.tiktok_username,
       silentAudioInterval: streamer?.donations_config?.silent_audio_interval,
+      ttsDollarMin: streamer?.donations_config?.tts_dollar_min,
     }))
 
     setTimestampConfig((prev) => ({
