@@ -22,6 +22,7 @@ const PhoenixProvider = ({ children }) => {
     setAllSubs,
     setKickSubs,
     setYoutubeSubs,
+    setStatsOffset,
   } = useContext(StatContext)
   const {
     userConfig,
@@ -212,6 +213,7 @@ const PhoenixProvider = ({ children }) => {
           net_profit: streamerNetProfit,
           last_10_donations: last10Donations,
           stats,
+          stats_offset: offsets,
         } = payload || {}
         const seconds = calculateTimeRemaining(
           currentStream.subathon_seconds_added,
@@ -249,6 +251,7 @@ const PhoenixProvider = ({ children }) => {
         setAllSubs(stats?.all_subs ?? 0)
         setKickSubs(stats?.kick_subs ?? 0)
         setYoutubeSubs(stats?.youtube_subs ?? 0)
+        setStatsOffset(offsets)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

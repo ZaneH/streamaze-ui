@@ -22,6 +22,7 @@ const StatProvider = ({ children }) => {
   const [allSubs, setAllSubs] = useState(0)
   const [kickSubs, setKickSubs] = useState(0)
   const [youtubeSubs, setYoutubeSubs] = useState(0)
+  const [statsOffset, setStatsOffset] = useState(null)
   const { pathname } = useLocation()
 
   const ytInterval = useInterval(() => {
@@ -213,6 +214,8 @@ const StatProvider = ({ children }) => {
         setKickSubs,
         youtubeSubs,
         setYoutubeSubs,
+        statsOffset,
+        setStatsOffset,
       }}
     >
       {children}

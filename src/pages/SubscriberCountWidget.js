@@ -19,13 +19,26 @@ const SubscriberCountWidget = () => {
   const isKick = platform === 'kick'
   const isYouTube = platform === 'youtube'
 
-  const { allSubs, kickSubs, youtubeSubs } = useContext(StatContext)
+  const { allSubs, kickSubs, youtubeSubs, statsOffset } =
+    useContext(StatContext)
+
+  const {
+    kick_gifted_subscription: kickGiftedSubscriptionOffset = 0,
+    subscription: youtubeSubscriptionOffset = 0,
+    kick_subscription: kickSubscriptionOffset = 0,
+  } = statsOffset || {}
+  const totalOffset =
+    kickGiftedSubscriptionOffset +
+    youtubeSubscriptionOffset +
+    kickSubscriptionOffset
+  const kickOffset = kickGiftedSubscriptionOffset + kickSubscriptionOffset
+
   return (
     <NumberWidget>
       <b>
-        Sub Count: {isAll ? allSubs : null}
-        {isKick ? kickSubs : null}
-        {isYouTube ? youtubeSubs : null}
+        Sub Count: {isAll ? allSubs + totalOffset : null}
+        {isKick ? kickSubs + kickOffset : null}
+        {isYouTube ? youtubeSubs + youtubeSubscriptionOffset : null}
       </b>
     </NumberWidget>
   )
