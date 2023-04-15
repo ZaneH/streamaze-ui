@@ -10,6 +10,7 @@ const NumberWidget = styled.div`
   color: #fff;
   text-shadow: 0 0 10px #000;
   white-space: pre-wrap;
+  letter-spacing: -0.04em;
 `
 
 const SubscriberCountWidget = () => {
