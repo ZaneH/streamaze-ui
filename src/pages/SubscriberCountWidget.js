@@ -21,9 +21,11 @@ const SubscriberCountWidget = () => {
   const { allSubs, kickSubs, youtubeSubs } = useContext(StatContext)
   return (
     <NumberWidget>
-      {isAll ? allSubs : null}
-      {isKick ? kickSubs : null}
-      {isYouTube ? youtubeSubs : null}
+      <b>
+        Sub Count: {isAll ? allSubs : null}
+        {isKick ? kickSubs : null}
+        {isYouTube ? youtubeSubs : null}
+      </b>
     </NumberWidget>
   )
 }
