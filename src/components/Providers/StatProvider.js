@@ -19,6 +19,9 @@ const StatProvider = ({ children }) => {
   const [isKickLoading, setIsKickLoading] = useState(true)
   const [netProfit, setNetProfit] = useState(0)
   const [streamStartTime, setStreamStartTime] = useState()
+  const [allSubs, setAllSubs] = useState(0)
+  const [kickSubs, setKickSubs] = useState(0)
+  const [youtubeSubs, setYoutubeSubs] = useState(0)
   const { pathname } = useLocation()
 
   const ytInterval = useInterval(() => {
@@ -204,6 +207,12 @@ const StatProvider = ({ children }) => {
         setNetProfit,
         streamStartTime,
         setStreamStartTime,
+        allSubs,
+        setAllSubs,
+        kickSubs,
+        setKickSubs,
+        youtubeSubs,
+        setYoutubeSubs,
       }}
     >
       {children}

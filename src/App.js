@@ -25,6 +25,7 @@ import RaspberryPi from './pages/RaspberryPi'
 import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
 import TickerWidget from 'pages/TickerWidget'
+import SubscriberCountWidget from 'pages/SubscriberCountWidget'
 
 const App = () => {
   return (
@@ -101,6 +102,11 @@ const App = () => {
                                   <Route
                                     path="/widget/ticker/:id"
                                     element={<TickerWidget />}
+                                  />
+
+                                  <Route
+                                    path="/widget/subs/:platform"
+                                    element={<SubscriberCountWidget />}
                                   />
 
                                   <Route

@@ -16,7 +16,13 @@ const PhoenixProvider = ({ children }) => {
   const { setDonations, setDonationIndex } = useContext(DonationContext)
   const { setTimeRemaining, setActiveStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
-  const { setNetProfit, setStreamStartTime } = useContext(StatContext)
+  const {
+    setNetProfit,
+    setStreamStartTime,
+    setAllSubs,
+    setKickSubs,
+    setYoutubeSubs,
+  } = useContext(StatContext)
   const {
     userConfig,
     setLanyardConfig,
@@ -193,11 +199,19 @@ const PhoenixProvider = ({ children }) => {
         ])
       })
 
+      ch.on('statistic', (payload) => {
+        const { all_subs, kick_subs, youtube_subs } = payload || {}
+        setAllSubs(parseInt(all_subs))
+        setKickSubs(parseInt(kick_subs))
+        setYoutubeSubs(parseInt(youtube_subs))
+      })
+
       ch.on('initial_state', (payload) => {
         const {
           active_stream: currentStream,
           net_profit: streamerNetProfit,
           last_10_donations: last10Donations,
+          stats,
         } = payload || {}
         const seconds = calculateTimeRemaining(
           currentStream.subathon_seconds_added,
@@ -232,6 +246,9 @@ const PhoenixProvider = ({ children }) => {
             })
             .reverse()
         )
+        setAllSubs(stats?.all_subs ?? 0)
+        setKickSubs(stats?.kick_subs ?? 0)
+        setYoutubeSubs(stats?.youtube_subs ?? 0)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
