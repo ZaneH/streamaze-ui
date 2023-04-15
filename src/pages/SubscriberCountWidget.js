@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
 
 const NumberWidget = styled.div`
-  font-size: 2.5rem;
+  font-size: 4rem;
   font-family: 'Inter';
   font-variant-numeric: tabular-nums;
   color: #fff;
