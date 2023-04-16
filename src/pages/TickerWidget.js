@@ -43,7 +43,7 @@ const TickerWidget = () => {
       donoInterval.stop()
       setVisibleDonations([])
     }
-  }, 7000)
+  }, 10_000)
 
   useEffect(() => {
     donoInterval.start()
