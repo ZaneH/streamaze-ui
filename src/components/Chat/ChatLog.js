@@ -10,21 +10,22 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
-import { showNotification } from '@mantine/notifications'
 import { IconArrowRight, IconSettings } from '@tabler/icons'
 import { PollContext } from 'components/Providers/PollProvider'
+import useStreamer from 'hooks/useStreamer'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
+import { ReactComponent as KickFoundersBadge } from '../../kick-founders-badge.svg'
+import { ReactComponent as KickGifted25Badge } from '../../kick-gifted-25-badge.svg'
+import { ReactComponent as KickGifted50Badge } from '../../kick-gifted-50-badge.svg'
+import { ReactComponent as KickGiftedBadge } from '../../kick-gifted-badge.svg'
+import { ReactComponent as KickOGBadge } from '../../kick-og-badge.svg'
+import { ReactComponent as KickVIPBadge } from '../../kick-vip-badge.svg'
 import { ReactComponent as ModChatIcon } from '../../mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg'
-import { ReactComponent as KickOGBadge } from '../../kick-og-badge.svg'
-import { ReactComponent as KickFoundersBadge } from '../../kick-founders-badge.svg'
-import { ReactComponent as KickGiftedBadge } from '../../kick-gifted-badge.svg'
-import { ReactComponent as KickVIPBadge } from '../../kick-vip-badge.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
-import useStreamer from 'hooks/useStreamer'
 
 const Item = styled.div`
   margin: 0;
@@ -519,6 +520,26 @@ const ChatLog = ({
                     )}
                     {badges.includes('Gifter') && (
                       <KickGiftedBadge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {badges.includes('Gifter25') && (
+                      <KickGifted25Badge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {badges.includes('Gifter50') && (
+                      <KickGifted50Badge
                         style={{
                           width: '16px',
                           height: '16px',
