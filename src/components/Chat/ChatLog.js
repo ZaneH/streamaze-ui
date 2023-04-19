@@ -20,6 +20,8 @@ import { Virtuoso } from 'react-virtuoso'
 import { ReactComponent as KickFoundersBadge } from '../../kick-founders-badge.svg'
 import { ReactComponent as KickGifted25Badge } from '../../kick-gifted-25-badge.svg'
 import { ReactComponent as KickGifted50Badge } from '../../kick-gifted-50-badge.svg'
+import { ReactComponent as KickGifted100Badge } from '../../kick-gifted-100-badge.svg'
+import { ReactComponent as KickGifted200Badge } from '../../kick-gifted-200-badge.svg'
 import { ReactComponent as KickGiftedBadge } from '../../kick-gifted-badge.svg'
 import { ReactComponent as KickOGBadge } from '../../kick-og-badge.svg'
 import { ReactComponent as KickVIPBadge } from '../../kick-vip-badge.svg'
@@ -69,10 +71,6 @@ const List = styled.div`
   padding: 0;
 `
 
-const Footer = styled.div`
-  padding-top: 18px;
-`
-
 const SenderText = styled(Text)`
   display: inline;
   vertical-align: middle;
@@ -104,8 +102,9 @@ const ChatLog = ({
   twitchUsername,
   tiktokUsername,
   youtubeChannel,
-  kickChatroomId,
   kickChannelId,
+  kickChatroomId,
+  kickChannelName,
   fullHeight,
   compact = false,
   fluid = false,
@@ -128,8 +127,9 @@ const ChatLog = ({
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
   const _twitchUsername = twitchUsername || chatConfig?.twitch?.username
-  const _kickChatroomId = kickChatroomId || chatConfig?.kick?.chatroomId
   const _kickChannelId = kickChannelId || chatConfig?.kick?.channelId
+  const _kickChatroomId = kickChatroomId || chatConfig?.kick?.chatroomId
+  const _kickChannelName = kickChannelName || chatConfig?.kick?.channelName
 
   if (isBig === undefined) {
     isBig = searchParams.get('theme') === 'overlay-impact'
@@ -162,9 +162,16 @@ const ChatLog = ({
           //   params['twitchChat'] = _twitchUsername
           // }
 
-          if (_kickChatroomId && _kickChannelId) {
-            params['kickChatroomId'] = _kickChatroomId
+          if (_kickChannelId) {
             params['kickChannelId'] = _kickChannelId
+          }
+
+          if (_kickChatroomId) {
+            params['kickChatroomId'] = _kickChatroomId
+          }
+
+          if (_kickChannelName) {
+            params['kickChannelName'] = _kickChannelName
           }
 
           if (streamer) {
@@ -177,7 +184,7 @@ const ChatLog = ({
       !!_tiktokUsername ||
         !!_youtubeChannel ||
         !!_twitchUsername ||
-        (!!_kickChatroomId && !!_kickChannelId) ||
+        !!_kickChannelName ||
         !!streamer
     )
 
@@ -293,6 +300,7 @@ const ChatLog = ({
             isMember: payload.is_member,
             emotes: payload.emotes,
             badges: payload.badges,
+            giftedCount: payload.gifted_count,
           },
         ])
 
@@ -329,7 +337,7 @@ const ChatLog = ({
     !_twitchUsername &&
     !_tiktokUsername &&
     !_youtubeChannel &&
-    !(_kickChatroomId || _kickChannelId)
+    (!_kickChannelId || !_kickChatroomId || !_kickChannelName)
   ) {
     return (
       <Box {...props} py="xl">
@@ -408,7 +416,6 @@ const ChatLog = ({
         components={{
           Item,
           List,
-          // Footer,
         }}
         itemContent={(_, chatEvent) => {
           const {
@@ -422,7 +429,8 @@ const ChatLog = ({
             isMember,
             memberBadge,
             badges = [],
-          } = chatEvent
+            giftedCount,
+          } = chatEvent || {}
 
           let newMessageString = message || ''
 
@@ -488,7 +496,7 @@ const ChatLog = ({
                     origin={origin}
                   >
                     {`${sender}${isBig ? ':' : ''}`}
-                    {badges.includes('OG') && (
+                    {badges.includes('og') && (
                       <KickOGBadge
                         style={{
                           width: '16px',
@@ -498,7 +506,7 @@ const ChatLog = ({
                         }}
                       />
                     )}
-                    {badges.includes('VIP') && (
+                    {badges.includes('vip') && (
                       <KickVIPBadge
                         style={{
                           width: '16px',
@@ -508,7 +516,7 @@ const ChatLog = ({
                         }}
                       />
                     )}
-                    {badges.includes('Founder') && (
+                    {badges.includes('founder') && (
                       <KickFoundersBadge
                         style={{
                           width: '16px',
@@ -518,7 +526,7 @@ const ChatLog = ({
                         }}
                       />
                     )}
-                    {badges.includes('Gifter') && (
+                    {giftedCount > 0 && giftedCount < 25 && (
                       <KickGiftedBadge
                         style={{
                           width: '16px',
@@ -528,7 +536,7 @@ const ChatLog = ({
                         }}
                       />
                     )}
-                    {badges.includes('Gifter25') && (
+                    {giftedCount >= 25 && giftedCount < 50 && (
                       <KickGifted25Badge
                         style={{
                           width: '16px',
@@ -538,8 +546,28 @@ const ChatLog = ({
                         }}
                       />
                     )}
-                    {badges.includes('Gifter50') && (
+                    {giftedCount >= 50 && giftedCount < 100 && (
                       <KickGifted50Badge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {giftedCount >= 100 && giftedCount < 200 && (
+                      <KickGifted100Badge
+                        style={{
+                          width: '16px',
+                          height: '16px',
+                          verticalAlign: 'middle',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    )}
+                    {giftedCount >= 200 && (
+                      <KickGifted200Badge
                         style={{
                           width: '16px',
                           height: '16px',

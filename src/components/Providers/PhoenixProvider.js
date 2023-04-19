@@ -59,8 +59,9 @@ const PhoenixProvider = ({ children }) => {
       },
       kick: {
         ...prev.kick,
-        chatroomId: streamer?.chat_config?.kick_chatroom_id,
         channelId: streamer?.chat_config?.kick_channel_id,
+        chatroomId: streamer?.chat_config?.kick_chatroom_id,
+        channelName: streamer?.chat_config?.kick_channel_name,
       },
       twitch: {
         ...prev.twitch,

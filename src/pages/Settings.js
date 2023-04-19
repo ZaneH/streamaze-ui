@@ -50,8 +50,9 @@ const Settings = () => {
       tiktok: chatConfig.tiktok.username,
       youtube: chatConfig.youtube.channel,
       twitch: chatConfig.twitch.username,
-      kickChatroomId: chatConfig.kick.chatroomId,
-      kickChannelId: chatConfig.kick.channelId,
+      kickChannelName: chatConfig?.kick?.channelName,
+      kickChannelId: chatConfig?.kick?.channelId,
+      kickChatroomId: chatConfig?.kick?.chatroomId,
     },
   })
 
@@ -144,8 +145,9 @@ const Settings = () => {
                   },
                   kick: {
                     ...prev.kick,
-                    chatroomId: chatForm.values.kickChatroomId,
                     channelId: chatForm.values.kickChannelId,
+                    chatroomId: chatForm.values.kickChatroomId,
+                    channelName: chatForm.values.kickChannelName,
                   },
                 }))
 
@@ -156,8 +158,9 @@ const Settings = () => {
                     chat_config: {
                       tiktok_username: chatForm.values.tiktok,
                       youtube_channel: chatForm.values.youtube,
-                      kick_chatroom_id: chatForm.values.kickChatroomId,
                       kick_channel_id: chatForm.values.kickChannelId,
+                      kick_chatroom_id: chatForm.values.kickChatroomId,
+                      kick_channel_name: chatForm.values.kickChannelName,
                     },
                   })
                   .res((res) => {
@@ -198,19 +201,27 @@ const Settings = () => {
                 />
                 <Divider />
                 <TextInput
+                  label={<FieldLabel>Kick Channel ID</FieldLabel>}
+                  placeholder="123456"
+                  defaultValue={chatForm.values.kickChannelId}
+                  onChange={(e) => {
+                    chatForm.setFieldValue('kickChannelId', e.target.value)
+                  }}
+                />
+                <TextInput
                   label={<FieldLabel>Kick Chatroom ID</FieldLabel>}
-                  placeholder="123456789"
+                  placeholder="123459"
                   defaultValue={chatForm.values.kickChatroomId}
                   onChange={(e) => {
                     chatForm.setFieldValue('kickChatroomId', e.target.value)
                   }}
                 />
                 <TextInput
-                  label={<FieldLabel>Kick Channel ID</FieldLabel>}
-                  placeholder="123456789"
-                  defaultValue={chatForm.values.kickChannelId}
+                  label={<FieldLabel>Kick Channel Name</FieldLabel>}
+                  placeholder="sam"
+                  defaultValue={chatForm.values.kickChannelName}
                   onChange={(e) => {
-                    chatForm.setFieldValue('kickChannelId', e.target.value)
+                    chatForm.setFieldValue('kickChannelName', e.target.value)
                   }}
                 />
               </FormSection>
@@ -662,6 +673,12 @@ const Settings = () => {
                   ...prev.twitch,
                   username: chatForm.values.twitch,
                 },
+                kick: {
+                  ...prev.kick,
+                  channelId: chatForm.values.kickChannelId,
+                  chatroomId: chatForm.values.kickChatroomId,
+                  channelName: chatForm.values.kickChannelName,
+                },
               }))
 
               setTimestampConfig((prev) => ({
@@ -694,8 +711,9 @@ const Settings = () => {
                   chat_config: {
                     tiktok_username: chatForm.values.tiktok,
                     youtube_channel: chatForm.values.youtube,
-                    kick_chatroom_id: chatForm.values.kickChatroomId,
                     kick_channel_id: chatForm.values.kickChannelId,
+                    kick_chatroom_id: chatForm.values.kickChatroomId,
+                    kick_channel_name: chatForm.values.kickChannelName,
                   },
                   clip_config: {
                     discord_channel_id: clipForm.values.discordChannelId,
