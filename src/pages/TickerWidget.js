@@ -13,6 +13,7 @@ const TickerContainer = styled.div`
   font-size: 3em;
   font-weight: bold;
   font-family: 'Roboto', sans-serif;
+  padding: 0 10%;
 `
 
 const TickerWidget = () => {
