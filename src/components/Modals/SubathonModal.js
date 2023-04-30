@@ -1,4 +1,4 @@
-import { Button, Modal, TextInput } from '@mantine/core'
+import { Button, Modal, Space, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
@@ -11,11 +11,10 @@ import wretch from 'wretch'
 const { REACT_APP_API_3_URL } = process.env
 
 const SubathonModal = ({ isOpen = false, onClose }) => {
-  const { subathonConfig } = useContext(ConfigContext)
   const { currentStreamer } = useContext(PhoenixContext)
   const { secondsInterval } = useContext(SubathonContext)
-  const { timeUnitBase } = subathonConfig
   const initialTime = useRef(null)
+  const minutesPerDollar = useRef(null)
 
   return (
     <Modal
@@ -30,6 +29,14 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
         defaultValue={'30'}
         ref={initialTime}
       />
+      <Space h="sm" />
+      <TextInput
+        label={<FieldLabel>Minutes Per Dollar</FieldLabel>}
+        placeholder="1"
+        defaultValue={'1'}
+        ref={minutesPerDollar}
+      />
+      <Space h="sm" />
       <Button
         color="green"
         mt="md"
@@ -42,7 +49,7 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
               subathon_start_time: moment().utc(false).format(),
               subathon_ended_time: null,
               subathon_start_minutes: initialTime.current.value,
-              subathon_minutes_per_dollar: timeUnitBase,
+              subathon_minutes_per_dollar: minutesPerDollar.current.value,
               subathon_seconds_added: 0,
             })
             .res(() => {
