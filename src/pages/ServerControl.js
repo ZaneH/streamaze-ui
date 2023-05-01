@@ -51,12 +51,12 @@ const ServerControl = () => {
             gap="12px"
             justify={isSmall ? 'center' : 'inherit'}
           >
-            <Title>YouTube Server</Title>
+            <Title>YouTube/Kick Server</Title>
             <Tooltip
               withinPortal
               label={
                 <Box m="sm">
-                  <Text>Initialize the YouTube server.</Text>
+                  <Text>Initialize the YouTube/Kick server.</Text>
                 </Box>
               }
             >
