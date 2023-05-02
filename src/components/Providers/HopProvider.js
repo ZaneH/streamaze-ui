@@ -20,19 +20,19 @@ const HopProvider = ({ children }) => {
 
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
 
-  useEffect(() => {
-    if (bitrate <= 1000 && isLive && pathname === '/home') {
-      const chime = new Audio(ErrorChime)
-      chime.play()
+  // useEffect(() => {
+  //   if (bitrate <= 1000 && isLive && pathname === '/home') {
+  //     const chime = new Audio(ErrorChime)
+  //     chime.play()
 
-      setShowDisconnectedModal(true)
-    } else {
-      if (showDisconnectedModal) {
-        setShowDisconnectedModal(false)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bitrate, isLive])
+  //     setShowDisconnectedModal(true)
+  //   } else {
+  //     if (showDisconnectedModal) {
+  //       setShowDisconnectedModal(false)
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [bitrate, isLive])
 
   return (
     <HopContext.Provider
