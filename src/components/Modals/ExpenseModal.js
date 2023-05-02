@@ -58,6 +58,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
               { label: 'US Dollar ($)', value: 'usd' },
               { label: 'Hong Kong Dollar (HKD)', value: 'hkd' },
               { label: 'Philippine Peso (₱)', value: 'php' },
+              { label: 'Indian Rupee (₹)', value: 'inr' },
             ]}
           />
         </Box>
