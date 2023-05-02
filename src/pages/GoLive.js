@@ -67,7 +67,7 @@ const GoLive = () => {
                 fullWidth
                 color="green"
                 onClick={() => {
-                  const resp = streamerChannel.put('start_broadcast', {})
+                  const resp = streamerChannel.push('start_broadcast', {})
                   resp.receive('ok', () => {
                     showNotification({
                       title: 'Success',
@@ -91,7 +91,7 @@ const GoLive = () => {
                 fullWidth
                 color="red"
                 onClick={() => {
-                  const resp = streamerChannel.put('stop_broadcast', {})
+                  const resp = streamerChannel.push('stop_broadcast', {})
 
                   resp.receive('ok', () => {
                     showNotification({
