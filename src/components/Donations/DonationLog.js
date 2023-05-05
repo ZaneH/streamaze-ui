@@ -160,6 +160,7 @@ const DonationLog = () => {
         const isFollow = type === 'follow'
         const isMembershipGift =
           type === 'membershipGift' || type === 'kick_gifted_subscription'
+        const isRaid = type === 'kick_host'
 
         let isBits
         let isSub
@@ -216,6 +217,22 @@ const DonationLog = () => {
           type === 'superchat' ||
           type === 'donation'
         ) {
+          return (
+            <SuperChatCard
+              key={eventId}
+              donation={donation}
+              isAnimated={i === 0}
+              onClick={() => {
+                setPrevDonationIndex(donationIndex)
+                // set the donationIndex to the current index
+                // keeping in mind that the donations are reversed
+                setDonationIndex(donations.length - i - 1)
+              }}
+            />
+          )
+        }
+
+        if (isRaid) {
           return (
             <SuperChatCard
               key={eventId}

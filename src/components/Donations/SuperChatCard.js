@@ -80,6 +80,7 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
   const pfp = metadata && metadata?.pfp
   const isKickSubscription = type === 'kick_subscription'
   const isKickGift = type === 'kick_gifted_subscription'
+  const isRaid = type === 'kick_host'
 
   return (
     <YTCard bg={bgColor} isAnimated={isAnimated} onClick={onClick}>
@@ -127,6 +128,7 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
                   `Gifted ${metadata?.months} subscription${
                     metadata?.months > 1 ? 's' : ''
                   } on Kick`}
+                {isRaid && `Hosted with ${metadata?.number_viewers} viewers`}
               </Text>
             </Box>
           </Flex>
