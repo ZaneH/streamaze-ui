@@ -1,3 +1,4 @@
+import { showNotification } from '@mantine/notifications'
 import { createContext, useContext, useEffect } from 'react'
 import { ConfigContext } from './ConfigProvider'
 export const GpsContext = createContext()
@@ -48,7 +49,13 @@ const GpsProvider = ({ children }) => {
           }
         )
       },
-      (error) => console.error(error),
+      (error) => {
+        showNotification({
+          message: error.message,
+          color: 'red',
+          title: 'Error',
+        })
+      },
       gpsOptions
     )
 
