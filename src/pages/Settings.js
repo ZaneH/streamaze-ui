@@ -19,6 +19,8 @@ import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
 import useElevenLabs from 'hooks/useElevenLabs'
 
+const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
+
 const Settings = () => {
   const {
     userConfig,
@@ -660,12 +662,28 @@ const Settings = () => {
             </form>
 
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault()
                 setGpsConfig((prev) => ({
                   ...prev,
                   isGpsEnabled: gpsForm.values.isGpsEnabled,
                 }))
+
+                if (!gpsForm.values.isGpsEnabled) {
+                  await fetch(
+                    `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
+                    {
+                      headers: {
+                        authorization: lanyardConfig?.apiKey,
+                      },
+                      method: 'PUT',
+                      body: JSON.stringify({
+                        coords: '',
+                        last_updated_at: new Date().toISOString(),
+                      }),
+                    }
+                  )
+                }
 
                 wretch(
                   `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer.id}`
@@ -716,7 +734,7 @@ const Settings = () => {
             w="50%"
             variant="outline"
             size="lg"
-            onClick={() => {
+            onClick={async () => {
               setChatConfig((prev) => ({
                 ...prev,
                 tiktok: {
@@ -766,6 +784,22 @@ const Settings = () => {
                 ...prev,
                 isGpsEnabled: gpsForm.values.isGpsEnabled,
               }))
+
+              if (!gpsForm.values.isGpsEnabled) {
+                await fetch(
+                  `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
+                  {
+                    headers: {
+                      authorization: lanyardConfig?.apiKey,
+                    },
+                    method: 'PUT',
+                    body: JSON.stringify({
+                      coords: '',
+                      last_updated_at: new Date().toISOString(),
+                    }),
+                  }
+                )
+              }
 
               wretch(
                 `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer.id}`

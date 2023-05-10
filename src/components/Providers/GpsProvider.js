@@ -23,7 +23,7 @@ function cloneAsObject(obj) {
 }
 
 const GpsProvider = ({ children }) => {
-  const { gpsConfig, lanyardConfig } = useContext(ConfigContext)
+  const { lanyardConfig } = useContext(ConfigContext)
 
   useEffect(() => {
     if (!navigator.geolocation) return
@@ -31,8 +31,6 @@ const GpsProvider = ({ children }) => {
     const watchId = navigator.geolocation.watchPosition(
       async (position) => {
         if (!lanyardConfig?.discordUserId) return
-
-        if (gpsConfig?.isGpsEnabled !== true) return
 
         await fetch(
           `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
