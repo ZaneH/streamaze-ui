@@ -11,9 +11,11 @@ import { DonationContext } from '../Providers/DonationProvider'
 import { ReactComponent as IconPause } from '../../pause-icon.svg'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 
+const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
+
 const ControlPanel = () => {
   const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
-  const { timestampConfig } = useContext(ConfigContext)
+  const { setGpsConfig, gpsConfig, lanyardConfig } = useContext(ConfigContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const {
     donations,
@@ -27,6 +29,7 @@ const ControlPanel = () => {
     playingMediaId,
     setPlayingMediaId,
   } = useContext(DonationContext)
+  const { currentStreamer } = useContext(PhoenixContext)
 
   return (
     <Flex direction="column">
@@ -115,34 +118,57 @@ const ControlPanel = () => {
 
       <StreamButton
         color="orange"
-        disabled={!timestampConfig?.discordChannelId}
         onClick={() => {
-          wretch(`${process.env.REACT_APP_API_URL}/timestamp/push`)
-            .post({
-              discord_channel: timestampConfig?.discordChannelId,
-              youtube_channel: timestampConfig?.youtubeChannel,
-              timestamp: new Date().toUTCString(),
-            })
-            .res((res) => {
-              if (res.ok) {
-                showNotification({
-                  title: 'Success',
-                  message: 'Timestamp sent to Discord!',
-                  color: 'green',
-                })
-              }
-            })
-            .catch(() => {
-              showNotification({
-                title: 'Error',
-                message:
-                  'Something went wrong. Check your settings and try again.',
-                color: 'red',
+          setGpsConfig((prev) => {
+            const newValue = !prev.isGpsEnabled
+
+            if (!newValue) {
+              fetch(
+                `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
+                {
+                  headers: {
+                    authorization: lanyardConfig?.apiKey,
+                  },
+                  method: 'PUT',
+                  body: JSON.stringify({
+                    coords: '',
+                    last_updated_at: new Date().toISOString(),
+                  }),
+                }
+              )
+            }
+
+            wretch(
+              `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer.id}`
+            )
+              .patch({
+                lanyard_config: {
+                  discord_user_id: lanyardConfig?.discordUserId,
+                  api_key: lanyardConfig?.apiKey,
+                  is_gps_enabled: newValue ? 'true' : 'false',
+                },
               })
-            })
+              .res(() => {
+                showNotification({
+                  message: 'GPS settings updated',
+                  color: 'teal',
+                })
+              })
+              .catch(() => {
+                showNotification({
+                  message: 'GPS settings updated',
+                  color: 'red',
+                })
+              })
+
+            return {
+              ...prev,
+              isGpsEnabled: newValue,
+            }
+          })
         }}
       >
-        Clip
+        Turn GPS {gpsConfig?.isGpsEnabled ? 'off' : 'on'}
       </StreamButton>
     </Flex>
   )

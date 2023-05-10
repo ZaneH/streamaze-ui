@@ -59,9 +59,16 @@ const GpsProvider = ({ children }) => {
       gpsOptions
     )
 
-    return () => navigator.geolocation.clearWatch(watchId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId)
+      }
+    }
+  }, [
+    gpsConfig?.isGpsEnabled,
+    lanyardConfig?.discordUserId,
+    lanyardConfig?.apiKey,
+  ])
 
   return <GpsContext.Provider value={{}}>{children}</GpsContext.Provider>
 }
