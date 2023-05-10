@@ -45,7 +45,7 @@ const PhoenixProvider = ({ children }) => {
 
     setGpsConfig((prev) => ({
       ...prev,
-      isGpsEnabled: streamer?.lanyard_config?.is_gps_enabled,
+      isGpsEnabled: streamer?.lanyard_config?.is_gps_enabled === 'true',
     }))
 
     setObsConfig((prev) => ({

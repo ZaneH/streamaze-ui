@@ -622,6 +622,9 @@ const Settings = () => {
                     lanyard_config: {
                       discord_user_id: lanyardForm.values.discordUserId,
                       api_key: lanyardForm.values.apiKey,
+                      is_gps_enabled: gpsForm.values.isGpsEnabled
+                        ? 'true'
+                        : 'false',
                     },
                   })
                   .res(() => {
@@ -690,7 +693,11 @@ const Settings = () => {
                 )
                   .patch({
                     lanyard_config: {
-                      is_gps_enabled: gpsForm.values.isGpsEnabled,
+                      discord_user_id: lanyardForm.values.discordUserId,
+                      api_key: lanyardForm.values.apiKey,
+                      is_gps_enabled: gpsForm.values.isGpsEnabled
+                        ? 'true'
+                        : 'false',
                     },
                   })
                   .res(() => {
@@ -836,7 +843,9 @@ const Settings = () => {
                   lanyard_config: {
                     discord_user_id: lanyardForm.values.discordUserId,
                     api_key: lanyardForm.values.apiKey,
-                    is_gps_enabled: gpsForm.values.isGpsEnabled,
+                    is_gps_enabled: gpsForm.values.isGpsEnabled
+                      ? 'true'
+                      : 'false',
                   },
                 })
                 .res(() => {
