@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Container,
   Divider,
   Flex,
@@ -34,6 +35,8 @@ const Settings = () => {
     setSlobsConfig,
     lanyardConfig,
     setLanyardConfig,
+    gpsConfig,
+    setGpsConfig,
   } = useContext(ConfigContext)
 
   const { currentStreamer } = useContext(PhoenixContext)
@@ -94,6 +97,12 @@ const Settings = () => {
     initialValues: {
       discordUserId: lanyardConfig?.discordUserId,
       apiKey: lanyardConfig?.apiKey,
+    },
+  })
+
+  const gpsForm = useForm({
+    initialValues: {
+      isGpsEnabled: gpsConfig?.isGpsEnabled,
     },
   })
 
@@ -649,6 +658,55 @@ const Settings = () => {
                 />
               </FormSection>
             </form>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                setGpsConfig((prev) => ({
+                  ...prev,
+                  isGpsEnabled: gpsForm.values.isGpsEnabled,
+                }))
+
+                wretch(
+                  `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer.id}`
+                )
+                  .patch({
+                    lanyard_config: {
+                      is_gps_enabled: gpsForm.values.isGpsEnabled,
+                    },
+                  })
+                  .res(() => {
+                    showNotification({
+                      message: 'GPS settings saved!',
+                      color: 'teal',
+                    })
+                  })
+                  .catch(() => {
+                    showNotification({
+                      message: 'Error saving GPS settings!',
+                      color: 'red',
+                    })
+                  })
+
+                showNotification({
+                  message: 'GPS settings saved!',
+                  color: 'teal',
+                })
+              }}
+            >
+              <FormSection
+                title="GPS"
+                subtitle="Add location data to your stream!"
+              >
+                <Checkbox
+                  label="Enable GPS"
+                  defaultChecked={gpsForm.values.isGpsEnabled}
+                  onChange={(e) => {
+                    gpsForm.setFieldValue('isGpsEnabled', e.target.checked)
+                  }}
+                />
+              </FormSection>
+            </form>
           </>
         )}
 
@@ -704,6 +762,11 @@ const Settings = () => {
                 apiKey: lanyardForm.values.apiKey,
               }))
 
+              setGpsConfig((prev) => ({
+                ...prev,
+                isGpsEnabled: gpsForm.values.isGpsEnabled,
+              }))
+
               wretch(
                 `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer.id}`
               )
@@ -739,6 +802,7 @@ const Settings = () => {
                   lanyard_config: {
                     discord_user_id: lanyardForm.values.discordUserId,
                     api_key: lanyardForm.values.apiKey,
+                    is_gps_enabled: gpsForm.values.isGpsEnabled,
                   },
                 })
                 .res(() => {

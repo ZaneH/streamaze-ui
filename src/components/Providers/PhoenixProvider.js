@@ -32,6 +32,7 @@ const PhoenixProvider = ({ children }) => {
     setSlobsConfig,
     setTimestampConfig,
     setStatsConfig,
+    setGpsConfig,
   } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
 
@@ -40,6 +41,11 @@ const PhoenixProvider = ({ children }) => {
       ...prev,
       discordUserId: streamer?.lanyard_config?.discord_user_id,
       apiKey: streamer?.lanyard_config?.api_key,
+    }))
+
+    setGpsConfig((prev) => ({
+      ...prev,
+      isGpsEnabled: streamer?.lanyard_config?.is_gps_enabled,
     }))
 
     setObsConfig((prev) => ({
@@ -102,6 +108,7 @@ const PhoenixProvider = ({ children }) => {
     setSlobsConfig,
     setTimestampConfig,
     setStatsConfig,
+    setGpsConfig,
   ])
 
   useEffect(() => {

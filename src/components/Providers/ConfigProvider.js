@@ -126,6 +126,15 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // GPS config
+  const [gpsConfig, setGpsConfig] = useLocalStorage({
+    key: 'gps-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      isGpsEnabled: false,
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = searchParams.get('isChat') === 'true'
   const isObs = searchParams.get('isObs') === 'true'
@@ -135,6 +144,7 @@ const ConfigProvider = ({ children }) => {
   const isKeypad = searchParams.get('isKeypad') === 'true'
   const isLanyard = searchParams.get('isLanyard') === 'true'
   const isUser = searchParams.get('isUser') === 'true'
+  const isGps = searchParams.get('isGps') === 'true'
 
   // Load chat config from URLs
   let tiktokChat = ''
@@ -261,6 +271,14 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
+  // Load GPS config from URL
+  let isGpsEnabled = ''
+  if (isGps) {
+    if (searchParams.get('isGpsEnabled')) {
+      isGpsEnabled = searchParams.get('isGpsEnabled')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
@@ -346,6 +364,11 @@ const ConfigProvider = ({ children }) => {
           streamazeKey: streamazeKey ? streamazeKey : userConfig.streamazeKey,
         },
         setUserConfig,
+        gpsConfig: {
+          ...gpsConfig,
+          isGpsEnabled: isGpsEnabled ? isGpsEnabled : gpsConfig.isGpsEnabled,
+        },
+        setGpsConfig,
       }}
     >
       {children}
