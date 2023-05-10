@@ -131,7 +131,7 @@ const ControlPanel = () => {
                   },
                   method: 'PUT',
                   body: JSON.stringify({
-                    coords: '',
+                    coords: null,
                     last_updated_at: new Date().toISOString(),
                   }),
                 }
