@@ -36,7 +36,7 @@ const SubscriberCountWidget = () => {
   return (
     <NumberWidget>
       <b>
-        Subs: {isAll ? `${allSubs + totalOffset} / 1500` : null}
+        Subs: {isAll ? `${allSubs + totalOffset} / 2000` : null}
         {isKick ? kickSubs + kickOffset : null}
         {isYouTube ? youtubeSubs + youtubeSubscriptionOffset : null}
       </b>
