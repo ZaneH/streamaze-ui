@@ -119,48 +119,48 @@ const ControlPanel = () => {
       <StreamButton
         color="orange"
         onClick={() => {
-          setGpsConfig((prev) => {
-            const newValue = !prev.isGpsEnabled
+          const newValue = !gpsConfig?.isGpsEnabled
 
-            if (!newValue) {
-              fetch(
-                `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
-                {
-                  headers: {
-                    authorization: lanyardConfig?.apiKey,
-                  },
-                  method: 'PUT',
-                  body: JSON.stringify({
-                    coords: null,
-                    last_updated_at: new Date().toISOString(),
-                  }),
-                }
-              )
-            }
-
-            wretch(
-              `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer.id}`
-            )
-              .patch({
-                lanyard_config: {
-                  discord_user_id: lanyardConfig?.discordUserId,
-                  api_key: lanyardConfig?.apiKey,
-                  is_gps_enabled: newValue ? 'true' : 'false',
+          if (!newValue) {
+            fetch(
+              `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
+              {
+                headers: {
+                  authorization: lanyardConfig?.apiKey,
                 },
-              })
-              .res(() => {
-                showNotification({
-                  message: 'GPS settings updated',
-                  color: 'teal',
-                })
-              })
-              .catch(() => {
-                showNotification({
-                  message: 'GPS settings updated',
-                  color: 'red',
-                })
-              })
+                method: 'PUT',
+                body: JSON.stringify({
+                  coords: null,
+                  last_updated_at: new Date().toISOString(),
+                }),
+              }
+            )
+          }
 
+          wretch(
+            `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer?.id}`
+          )
+            .patch({
+              lanyard_config: {
+                discord_user_id: lanyardConfig?.discordUserId,
+                api_key: lanyardConfig?.apiKey,
+                is_gps_enabled: newValue ? 'true' : 'false',
+              },
+            })
+            .res(() => {
+              showNotification({
+                message: 'GPS settings updated',
+                color: 'teal',
+              })
+            })
+            .catch(() => {
+              showNotification({
+                message: 'Error updating GPS settings',
+                color: 'red',
+              })
+            })
+
+          setGpsConfig((prev) => {
             return {
               ...prev,
               isGpsEnabled: newValue,

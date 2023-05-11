@@ -4,7 +4,7 @@ import { ConfigContext } from './ConfigProvider'
 export const GpsContext = createContext()
 
 const gpsOptions = {
-  enableHighAccuracy: true,
+  enableHighAccuracy: false,
   timeout: 6000,
   maximumAge: 0,
 }
@@ -28,13 +28,11 @@ const GpsProvider = ({ children }) => {
 
   useEffect(() => {
     if (!navigator.geolocation) return
+    if (!lanyardConfig?.discordUserId) return
+    if (!gpsConfig?.isGpsEnabled) return
 
     const watchId = navigator.geolocation.watchPosition(
       async (position) => {
-        if (!lanyardConfig?.discordUserId) return
-
-        if (!gpsConfig?.isGpsEnabled) return
-
         await fetch(
           `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
           {
@@ -50,6 +48,7 @@ const GpsProvider = ({ children }) => {
         )
       },
       (error) => {
+        console.error('error', error)
         showNotification({
           message: error.message,
           color: 'red',
