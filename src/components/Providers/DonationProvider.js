@@ -51,8 +51,8 @@ const DonationProvider = ({ children }) => {
       }
 
       const isOverMinAmount =
-        parseFloat(currentDonation?.data?.amount) > slobsConfig?.ttsDollarMin ??
-        0
+        parseFloat(currentDonation?.data?.amount) >
+        (slobsConfig?.ttsDollarMin ?? 0)
 
       if (!ttsUrl) {
         ttsUrl = PeppersAudio
