@@ -15,24 +15,26 @@ const HopProvider = ({ children }) => {
   const isError = error || serverState === 'error'
   const streamScenes = state?.server?.scenes ?? []
   const streamActiveScene = state?.server?.active_scene ?? ''
-  const bitrate = state?.rtmp?.bitrate ?? 0
+  const bitrate = state?.srt?.bitrate ?? 0
+  const rtt = state?.srt?.rtt ?? 0
+  const uptime = state?.srt?.uptime ?? 0
   const { pathname } = useLocation()
 
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
 
-  // useEffect(() => {
-  //   if (bitrate <= 1000 && isLive && pathname === '/home') {
-  //     const chime = new Audio(ErrorChime)
-  //     chime.play()
+  useEffect(() => {
+    if (bitrate <= 500 && isLive && pathname === '/home') {
+      const chime = new Audio(ErrorChime)
+      chime.play()
 
-  //     setShowDisconnectedModal(true)
-  //   } else {
-  //     if (showDisconnectedModal) {
-  //       setShowDisconnectedModal(false)
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [bitrate, isLive])
+      setShowDisconnectedModal(true)
+    } else {
+      if (showDisconnectedModal) {
+        setShowDisconnectedModal(false)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bitrate, isLive])
 
   return (
     <HopContext.Provider
@@ -43,6 +45,8 @@ const HopProvider = ({ children }) => {
         streamScenes,
         streamActiveScene,
         bitrate,
+        rtt,
+        uptime,
       }}
     >
       <DisconnectModal

@@ -24,7 +24,7 @@ const StatPanel = () => {
     kickViewers,
     isKickLoading,
   } = useContext(StatContext)
-  const { bitrate, isLive } = useContext(HopContext)
+  const { bitrate, isLive, rtt, uptime } = useContext(HopContext)
   const { timeRemaining } = useContext(SubathonContext)
   const { subathonConfig } = useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
@@ -70,7 +70,15 @@ const StatPanel = () => {
         <Flex gap="md" style={{ flexWrap: 'wrap' }}>
           <StatInfo
             image={<BitRateIcon style={{ width: 26, height: 26 }} />}
-            label={bitrate ? `${bitrate} Kbps` : 'Offline'}
+            label={
+              <>
+                {bitrate ? `${bitrate} Kbps` : 'Offline'}
+                <br />
+                {rtt ? `${rtt} ms` : null}
+                <br />
+                {uptime ? `${uptime}s` : null}
+              </>
+            }
           />
           {netProfit !== undefined ? (
             <StatInfo
