@@ -1,4 +1,5 @@
-import { Flex } from '@mantine/core'
+import { Box, Flex } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { SubathonContext } from 'components/Providers/SubathonProvider'
@@ -8,12 +9,12 @@ import { ReactComponent as KickIcon } from 'kick-logo-icon.svg'
 import { useContext, useState } from 'react'
 import { secondsToHHMMSS } from 'utils/time'
 import { ReactComponent as BitRateIcon } from '../../bit-rate-icon.svg'
+import ExpenseModal from '../Modals/ExpenseModal'
+import SubathonModal from '../Modals/SubathonModal'
 import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
-import ExpenseModal from '../Modals/ExpenseModal'
 import StatInfo from './StatInfo'
 import StreamTime from './StreamTime'
-import SubathonModal from '../Modals/SubathonModal'
 
 const StatPanel = () => {
   const {
@@ -30,6 +31,7 @@ const StatPanel = () => {
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const [showSubathonModal, setShowSubathonModal] = useState(false)
   const { netProfit } = useContext(StatContext)
+  const matches = useMediaQuery('(max-width: 768px)')
 
   return (
     <>
@@ -69,15 +71,19 @@ const StatPanel = () => {
         </Flex>
         <Flex gap="md" style={{ flexWrap: 'wrap' }}>
           <StatInfo
+            textSize={matches ? 14 : 18}
             image={<BitRateIcon style={{ width: 26, height: 26 }} />}
+            tabularNums
             label={
-              <>
+              <Flex align="center" gap="xs" wrap="wrap">
                 {bitrate ? `${bitrate} Kbps` : 'Offline'}
-                <br />
-                {rtt ? `${Math.floor(rtt)} ms` : null}
-                <br />
-                {uptime ? `${uptime}s` : null}
-              </>
+                {rtt ? <Box>{Math.floor(rtt)} ms</Box> : null}
+                {uptime ? (
+                  <Box display="inline-flex" style={{ alignItems: 'center' }}>
+                    {secondsToHHMMSS(uptime)}
+                  </Box>
+                ) : null}
+              </Flex>
             }
           />
           {netProfit !== undefined ? (
