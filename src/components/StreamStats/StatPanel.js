@@ -74,7 +74,7 @@ const StatPanel = () => {
               <>
                 {bitrate ? `${bitrate} Kbps` : 'Offline'}
                 <br />
-                {rtt ? `${rtt} ms` : null}
+                {rtt ? `${Math.floor(rtt)} ms` : null}
                 <br />
                 {uptime ? `${uptime}s` : null}
               </>
