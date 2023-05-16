@@ -54,11 +54,12 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
               })
             }}
             data={[
-              { label: 'Thai Baht (฿)', value: 'thb' },
-              { label: 'US Dollar ($)', value: 'usd' },
+              { label: 'Nepalese Rupee (रू)', value: 'npr' },
+              { label: 'Indian Rupee (₹)', value: 'inr' },
               { label: 'Hong Kong Dollar (HKD)', value: 'hkd' },
               { label: 'Philippine Peso (₱)', value: 'php' },
-              { label: 'Indian Rupee (₹)', value: 'inr' },
+              { label: 'Thai Baht (฿)', value: 'thb' },
+              { label: 'US Dollar ($)', value: 'usd' },
             ]}
           />
         </Box>
