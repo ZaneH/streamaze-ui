@@ -24,10 +24,12 @@ const HopProvider = ({ children }) => {
 
   useEffect(() => {
     if (bitrate <= 500 && isLive && pathname === '/home') {
-      const chime = new Audio(ErrorChime)
-      chime.play()
+      if (state?.server?.active_scene?.toLowerCase() !== 'news') {
+        const chime = new Audio(ErrorChime)
+        chime.play()
 
-      setShowDisconnectedModal(true)
+        setShowDisconnectedModal(true)
+      }
     } else {
       if (showDisconnectedModal) {
         setShowDisconnectedModal(false)
