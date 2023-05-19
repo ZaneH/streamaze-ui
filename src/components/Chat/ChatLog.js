@@ -27,6 +27,7 @@ import { ReactComponent as KickOGBadge } from '../../kick-og-badge.svg'
 import { ReactComponent as KickVIPBadge } from '../../kick-vip-badge.svg'
 import { ReactComponent as ModChatIcon } from '../../mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from '../../verified-chat-icon.svg'
+import { ReactComponent as ArrowReplyIcon } from '../../arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 
 const Item = styled.div`
@@ -293,6 +294,7 @@ const ChatLog = ({
           {
             message: payload.message,
             sender: payload.sender,
+            type: payload.type,
             origin: payload.origin,
             pfp: payload.pfp,
             isMod: payload.is_mod || payload.is_owner,
@@ -301,6 +303,7 @@ const ChatLog = ({
             emotes: payload.emotes,
             badges: payload.badges,
             giftedCount: payload.gifted_count,
+            metadata: payload?.metadata,
           },
         ])
 
@@ -420,6 +423,7 @@ const ChatLog = ({
         itemContent={(_, chatEvent) => {
           const {
             sender,
+            type = 'message',
             message,
             emotes,
             pfp,
@@ -430,6 +434,7 @@ const ChatLog = ({
             memberBadge,
             badges = [],
             giftedCount,
+            metadata = {},
           } = chatEvent || {}
 
           let newMessageString = message || ''
@@ -460,168 +465,201 @@ const ChatLog = ({
               compact={compact}
               fluid={fluid}
             >
-              <Flex gap="16px" style={{ whiteSpace: 'nowrap' }} {...props}>
-                {showProfilePicture && !isBig && (
-                  <Avatar
-                    size="32px"
+              <Flex direction="column" {...props} gap="4px">
+                {type === 'reply' && (
+                  <Flex
+                    direction="row"
+                    align="center"
+                    gap="4px"
+                    onClick={() => {
+                      virtuosoRef.current.scrollToIndex({
+                        index: chatData.findIndex(
+                          (c) => c.id === metadata?.original_message?.id
+                        ),
+                      })
+                    }}
+                  >
+                    <ArrowReplyIcon
+                      style={{ width: 16, height: 16 }}
+                      color={colors.gray[6]}
+                    />
+                    <Text
+                      color="dimmed"
+                      size="md"
+                      style={{
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Replying to @{metadata?.original_sender?.username}:{' '}
+                      {metadata?.original_message?.content}
+                    </Text>
+                  </Flex>
+                )}
+                <Flex gap="16px" style={{ whiteSpace: 'nowrap' }}>
+                  {showProfilePicture && !isBig && (
+                    <Avatar
+                      size="32px"
+                      style={{
+                        display: 'inline-block',
+                      }}
+                      radius="xl"
+                      src={pfp}
+                      color="blue"
+                    >
+                      {sender?.[0] || '?'}
+                    </Avatar>
+                  )}
+                  <div
                     style={{
                       display: 'inline-block',
+                      verticalAlign: 'middle',
+                      whiteSpace: 'break-spaces',
+                      width: '100%',
+                      color: isDark ? '#efeff1' : 'inherit',
                     }}
-                    radius="xl"
-                    src={pfp}
-                    color="blue"
                   >
-                    {sender?.[0] || '?'}
-                  </Avatar>
-                )}
-                <div
-                  style={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    whiteSpace: 'break-spaces',
-                    width: '100%',
-                    color: isDark ? '#efeff1' : 'inherit',
-                  }}
-                >
-                  <SenderText
-                    ff={isBig ? 'Impact' : 'Roboto'}
-                    fw={isBig ? undefined : '700'}
-                    lh={isBig ? '1.64em' : '1em'}
-                    data-outline={`${sender}:  ${newMessageString}`}
-                    className={isBig ? 'chat-outline' : undefined}
-                    isbig={isBig ? 'true' : undefined}
-                    ismod={isMod ? 'true' : undefined}
-                    ismember={isMember ? 'true' : undefined}
-                    shadow={fluid ? 'true' : undefined}
-                    origin={origin}
-                  >
-                    {`${sender}${isBig ? ':' : ''}`}
-                    {badges.includes('og') && (
-                      <KickOGBadge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
+                    <SenderText
+                      ff={isBig ? 'Impact' : 'Roboto'}
+                      fw={isBig ? undefined : '700'}
+                      lh={isBig ? '1.64em' : '1em'}
+                      data-outline={`${sender}:  ${newMessageString}`}
+                      className={isBig ? 'chat-outline' : undefined}
+                      isbig={isBig ? 'true' : undefined}
+                      ismod={isMod ? 'true' : undefined}
+                      ismember={isMember ? 'true' : undefined}
+                      shadow={fluid ? 'true' : undefined}
+                      origin={origin}
+                    >
+                      {`${sender}${isBig ? ':' : ''}`}
+                      {badges.includes('og') && (
+                        <KickOGBadge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {badges.includes('vip') && (
+                        <KickVIPBadge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {badges.includes('founder') && (
+                        <KickFoundersBadge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {giftedCount > 0 && giftedCount < 25 && (
+                        <KickGiftedBadge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {giftedCount >= 25 && giftedCount < 50 && (
+                        <KickGifted25Badge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {giftedCount >= 50 && giftedCount < 100 && (
+                        <KickGifted50Badge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {giftedCount >= 100 && giftedCount < 200 && (
+                        <KickGifted100Badge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {giftedCount >= 200 && (
+                        <KickGifted200Badge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {isMod && !isBig && (
+                        <ModChatIcon
+                          fill="#5e84f1"
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {isMember && !isBig && memberBadge && (
+                        <img
+                          alt="Member Badge"
+                          src={memberBadge}
+                          style={{
+                            height: '16px',
+                            width: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {isVerified && !isBig && (
+                        <VerifiedChatIcon
+                          fill="#999"
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                          }}
+                        />
+                      )}
+                      {`  `}
+                    </SenderText>
+                    <MessageText
+                      ff={isBig ? 'Impact' : 'Roboto'}
+                      lh={isBig ? '1.64em' : '1em'}
+                      shadow={fluid ? 'true' : undefined}
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{ __html: newMessageString }}
                       />
-                    )}
-                    {badges.includes('vip') && (
-                      <KickVIPBadge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {badges.includes('founder') && (
-                      <KickFoundersBadge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {giftedCount > 0 && giftedCount < 25 && (
-                      <KickGiftedBadge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {giftedCount >= 25 && giftedCount < 50 && (
-                      <KickGifted25Badge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {giftedCount >= 50 && giftedCount < 100 && (
-                      <KickGifted50Badge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {giftedCount >= 100 && giftedCount < 200 && (
-                      <KickGifted100Badge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {giftedCount >= 200 && (
-                      <KickGifted200Badge
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {isMod && !isBig && (
-                      <ModChatIcon
-                        fill="#5e84f1"
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {isMember && !isBig && memberBadge && (
-                      <img
-                        alt="Member Badge"
-                        src={memberBadge}
-                        style={{
-                          height: '16px',
-                          width: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {isVerified && !isBig && (
-                      <VerifiedChatIcon
-                        fill="#999"
-                        style={{
-                          width: '16px',
-                          height: '16px',
-                          verticalAlign: 'middle',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    )}
-                    {`  `}
-                  </SenderText>
-                  <MessageText
-                    ff={isBig ? 'Impact' : 'Roboto'}
-                    lh={isBig ? '1.64em' : '1em'}
-                    shadow={fluid ? 'true' : undefined}
-                  >
-                    <span
-                      dangerouslySetInnerHTML={{ __html: newMessageString }}
-                    />
-                  </MessageText>
-                </div>
+                    </MessageText>
+                  </div>
+                </Flex>
               </Flex>
             </ItemContent>
           )

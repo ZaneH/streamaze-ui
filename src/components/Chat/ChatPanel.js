@@ -99,7 +99,7 @@ const ChatPanel = () => {
           fullHeight
           isDark
           compact={isMedium ? true : false}
-          mx={isMedium ? '24px' : '32px'}
+          px={isMedium ? '24px' : '32px'}
           tiktokUsername={chatConfig.tiktok.username}
           youtubeChannel={chatConfig.youtube.channel}
           twitchUsername={chatConfig.twitch.username}
