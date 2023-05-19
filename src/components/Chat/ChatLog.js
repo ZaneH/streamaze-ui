@@ -292,6 +292,7 @@ const ChatLog = ({
         setChatData((prev) => [
           ...prev,
           {
+            id: payload.id,
             message: payload.message,
             sender: payload.sender,
             type: payload.type,
