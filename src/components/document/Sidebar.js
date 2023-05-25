@@ -34,6 +34,7 @@ const Sidebar = () => {
     <Navbar
       p="md"
       width={{ sm: 250, md: 275, lg: 350 }}
+      height="100%"
       display={isSidebarOpen ? 'flex' : 'none'}
     >
       <Box mb="sm">
