@@ -4,6 +4,13 @@ body {
   background: transparent;
 }
 
+body,
+html,
 #root {
-  min-height: 100vh;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
 }

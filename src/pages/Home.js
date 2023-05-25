@@ -8,8 +8,8 @@ import TagSEO from '../components/TagSEO'
 const Home = () => {
   return (
     <Layout showStats>
-      <TagSEO />
       <Flex h="100%">
+        <TagSEO />
         <Flex direction="column" w="50%" align="center">
           <DonationPanel />
           <Box w="100%" maw="725px">

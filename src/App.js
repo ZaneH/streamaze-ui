@@ -75,7 +75,7 @@ const App = () => {
                                       path="/chat"
                                       element={
                                         <ChatLog
-                                          height="100vh"
+                                          height="100%"
                                           fluid
                                           showProfilePicture={false}
                                           autorefresh={20 * 60 * 1000}

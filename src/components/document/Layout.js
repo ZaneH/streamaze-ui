@@ -65,7 +65,7 @@ const Layout = ({ children, showStats = false }) => {
         root: {
           background: '#141518',
           color: 'white',
-          minHeight: '100vh',
+          minHeight: '100%',
           display: 'flex',
           flexDirection: 'column',
         },
@@ -73,10 +73,12 @@ const Layout = ({ children, showStats = false }) => {
           paddingLeft: '28px',
           padding: 0,
           minHeight: 'inherit',
+          height: '100%',
         },
         body: {
           alignItems: 'stretch',
           flex: '1 1 auto',
+          height: '100%',
         },
       }}
     >
