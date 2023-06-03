@@ -54,6 +54,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
               })
             }}
             data={[
+              { label: 'South Korean Won (₩)', value: 'krw' },
               { label: 'Nepalese Rupee (रू)', value: 'npr' },
               { label: 'Indian Rupee (₹)', value: 'inr' },
               { label: 'Hong Kong Dollar (HKD)', value: 'hkd' },
