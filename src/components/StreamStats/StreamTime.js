@@ -1,5 +1,5 @@
 import { useInterval } from '@mantine/hooks'
-import { ReactComponent as ClockIcon } from 'clock-icon.svg'
+import { ReactComponent as ClockIcon } from 'assets/clock-icon.svg'
 import { StatContext } from 'components/Providers/StatProvider'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'

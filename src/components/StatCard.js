@@ -16,7 +16,7 @@ import { showNotification } from '@mantine/notifications'
 import { IconAdjustmentsHorizontal } from '@tabler/icons'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { SocialIcon } from 'react-social-icons'
-import { ReactComponent as KickIcon } from 'kick-logo-icon.svg'
+import { ReactComponent as KickIcon } from 'assets/kick-logo-icon.svg'
 import wretch from 'wretch'
 import { SidebarContext } from './SidebarProvider'
 

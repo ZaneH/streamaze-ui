@@ -9,8 +9,8 @@ import {
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
-import { ReactComponent as IconRaspberryPi } from 'raspberry-pi.svg'
-import { ReactComponent as FlagIcon } from 'flag-icon-nav.svg'
+import { ReactComponent as IconRaspberryPi } from 'assets/raspberry-pi.svg'
+import { ReactComponent as FlagIcon } from 'assets/flag-icon-nav.svg'
 
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;

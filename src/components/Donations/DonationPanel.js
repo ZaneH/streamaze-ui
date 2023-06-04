@@ -1,6 +1,6 @@
 import { Box, Flex, Text, Tooltip } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { ReactComponent as IconWarning } from '../../warning-icon.svg'
+import { ReactComponent as IconWarning } from '../../assets/warning-icon.svg'
 import { DonationLog } from '.'
 import { PanelHead } from '../document'
 import BlankAudio from './BlankAudio'

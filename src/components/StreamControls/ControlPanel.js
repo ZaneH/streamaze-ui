@@ -1,14 +1,14 @@
 import { Flex, Space } from '@mantine/core'
 import { useContext } from 'react'
-import { ReactComponent as PlayIcon } from '../../play-icon.svg'
-import { ReactComponent as SkipIcon } from '../../skip-icon.svg'
+import { ReactComponent as PlayIcon } from 'assets/play-icon.svg'
+import { ReactComponent as SkipIcon } from 'assets/skip-icon.svg'
 import { HopContext } from '../Providers/HopProvider'
 import StreamButton from './StreamButton'
 import wretch from 'wretch'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { DonationContext } from '../Providers/DonationProvider'
-import { ReactComponent as IconPause } from '../../pause-icon.svg'
+import { ReactComponent as IconPause } from 'assets/pause-icon.svg'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 
 const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
