@@ -68,24 +68,7 @@ const StatPanel = () => {
               }
             />
           ) : null}
-        </Flex>
-        <Flex gap="md" style={{ flexWrap: 'wrap' }}>
-          <StatInfo
-            textSize={matches ? 14 : 18}
-            image={<BitRateIcon style={{ width: 26, height: 26 }} />}
-            tabularNums
-            label={
-              <Flex align="center" gap="xs" wrap="wrap">
-                {bitrate ? `${bitrate} Kbps` : 'Offline'}
-                {rtt ? <Box>{Math.floor(rtt)} ms</Box> : null}
-                {uptime ? (
-                  <Box display="inline-flex" style={{ alignItems: 'center' }}>
-                    {secondsToHHMMSS(uptime)}
-                  </Box>
-                ) : null}
-              </Flex>
-            }
-          />
+
           {netProfit !== undefined ? (
             <StatInfo
               onClick={() => {
@@ -123,6 +106,23 @@ const StatPanel = () => {
           )}
 
           {isLive && <StreamTime />}
+
+          <StatInfo
+            textSize={matches ? 14 : 18}
+            image={<BitRateIcon style={{ width: 26, height: 26 }} />}
+            tabularNums
+            label={
+              <Flex align="center" gap="xs" wrap="wrap">
+                {bitrate ? `${bitrate} Kbps` : 'Offline'}
+                {rtt ? <Box>{Math.floor(rtt)} ms</Box> : null}
+                {uptime ? (
+                  <Box display="inline-flex" style={{ alignItems: 'center' }}>
+                    {secondsToHHMMSS(uptime)}
+                  </Box>
+                ) : null}
+              </Flex>
+            }
+          />
         </Flex>
       </Flex>
 
