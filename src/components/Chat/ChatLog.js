@@ -124,6 +124,7 @@ const ChatLog = ({
   const { chatConfig, userConfig } = useContext(ConfigContext)
   const { handlePollResponse } = useContext(PollContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
+  const [isConnected, setIsConnected] = useState(false)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -148,39 +149,6 @@ const ChatLog = ({
         reconnectInterval: 10000,
         reconnectAttempts: Infinity,
         shouldReconnect: () => true,
-        onOpen: () => {
-          const params = {}
-          if (_tiktokUsername) {
-            params['tiktokChat'] = _tiktokUsername
-          }
-
-          if (_youtubeChannel) {
-            params['youtubeChat'] = _youtubeChannel
-          }
-
-          // TODO: Not implemented in the new API yet
-          // if (_twitchUsername) {
-          //   params['twitchChat'] = _twitchUsername
-          // }
-
-          if (_kickChannelId) {
-            params['kickChannelId'] = _kickChannelId
-          }
-
-          if (_kickChatroomId) {
-            params['kickChatroomId'] = _kickChatroomId
-          }
-
-          if (_kickChannelName) {
-            params['kickChannelName'] = _kickChannelName
-          }
-
-          if (streamer) {
-            params['streamerId'] = streamer?.id
-          }
-
-          chatSendMessage(params)
-        },
       },
       !!_tiktokUsername ||
         !!_youtubeChannel ||
@@ -193,6 +161,46 @@ const ChatLog = ({
     console.log('Reloading chat...')
     window.location.reload()
   }, autorefresh)
+
+  useEffect(() => {
+    if (isConnected) return
+
+    const params = {}
+    if (_tiktokUsername) {
+      params['tiktokChat'] = _tiktokUsername
+    }
+
+    if (_youtubeChannel) {
+      params['youtubeChat'] = _youtubeChannel
+    }
+
+    // TODO: Not implemented in the new API yet
+    // if (_twitchUsername) {
+    //   params['twitchChat'] = _twitchUsername
+    // }
+
+    if (_kickChannelId) {
+      params['kickChannelId'] = _kickChannelId
+    }
+
+    if (_kickChatroomId) {
+      params['kickChatroomId'] = _kickChatroomId
+    }
+
+    if (_kickChannelName) {
+      params['kickChannelName'] = _kickChannelName
+    }
+
+    if (streamer) {
+      params['streamerId'] = streamer?.id
+    }
+
+    if (_kickChannelId && _kickChatroomId && _kickChannelName && streamer) {
+      chatSendMessage(params)
+      setIsConnected(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_kickChannelId, _kickChatroomId, _kickChannelName, streamer, isConnected])
 
   // Useful for testing the Poll functionality
   // const [fakeInterval, setFakeInterval] = useState(null)

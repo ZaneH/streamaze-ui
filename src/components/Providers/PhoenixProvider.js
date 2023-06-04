@@ -37,6 +37,8 @@ const PhoenixProvider = ({ children }) => {
   const streamer = useStreamer(userConfig?.streamazeKey)
 
   useEffect(() => {
+    if (!streamer) return
+
     setLanyardConfig((prev) => ({
       ...prev,
       discordUserId: streamer?.lanyard_config?.discord_user_id,
@@ -117,10 +119,10 @@ const PhoenixProvider = ({ children }) => {
         title: 'Streamaze Key Required',
         message: 'Please enter your Streamaze key in the settings page.',
       })
-
-      return
     }
+  }, [userConfig?.streamazeKey])
 
+  useEffect(() => {
     const streamerSocket = new Socket(process.env.REACT_APP_API_3_WS_URL, {
       heartbeatIntervalMs: 30000,
     })
@@ -131,7 +133,9 @@ const PhoenixProvider = ({ children }) => {
       if (socket) {
         console.log('disconnected')
         socket.disconnect()
-        streamerChannel.leave()
+        if (streamerChannel) {
+          streamerChannel.leave()
+        }
         setSocket(null)
         setStreamerChannel(null)
       }
@@ -140,128 +144,125 @@ const PhoenixProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (streamerChannel) {
-      streamerChannel.off('expense')
-      streamerChannel.off('subathon')
-      streamerChannel.off('donation')
-      streamerChannel.off('initial_state')
-    }
-
     if (
-      socket &&
-      !socket.isConnected() &&
-      streamer?.id &&
+      !socket ||
+      socket.isConnected() ||
+      !streamer?.id ||
+      !userConfig?.streamazeKey
+    )
+      return
+
+    console.log(
+      'connecting to streamer',
+      streamer?.id,
       userConfig?.streamazeKey
-    ) {
-      console.log(
-        'connectng to streamer ',
-        streamer?.id,
-        userConfig?.streamazeKey
-      )
-      socket.connect()
+    )
+    socket.connect()
 
-      const ch = socket.channel(`streamer:${streamer?.id}`, {
-        userToken: userConfig?.streamazeKey,
-      })
+    const ch = socket.channel(`streamer:${streamer?.id}`, {
+      userToken: userConfig?.streamazeKey,
+    })
 
-      ch.join().receive('ok', (_resp) => {
-        setStreamerChannel(ch)
-      })
+    ch.join().receive('ok', (_resp) => {
+      setStreamerChannel(ch)
+    })
 
-      ch.on('expense', (payload) => {
-        const { net_profit } = payload || {}
-        setNetProfit(net_profit)
-      })
+    ch.on('expense', (payload) => {
+      const { net_profit } = payload || {}
+      setNetProfit(net_profit)
+    })
 
-      ch.on('subathon', (payload) => {
-        const {
+    ch.on('subathon', (payload) => {
+      const {
+        subathon_seconds_added,
+        subathon_start_time,
+        subathon_start_minutes,
+      } = payload || {}
+      setTimeRemaining(() => {
+        return calculateTimeRemaining(
           subathon_seconds_added,
           subathon_start_time,
-          subathon_start_minutes,
-        } = payload || {}
-        setTimeRemaining(() => {
-          return calculateTimeRemaining(
-            subathon_seconds_added,
-            subathon_start_time,
-            subathon_start_minutes
-          )
-        })
+          subathon_start_minutes
+        )
       })
+    })
 
-      ch.on('donation', (payload) => {
-        const { donation, net_profit } = payload || {}
-        setNetProfit(net_profit)
-        setDonations((prev) => [
-          ...prev,
-          {
-            type: donation.type,
-            data: {
-              id: donation.id,
-              name: donation.sender,
-              message: donation.message,
-              displayString: donation.display_string,
-              amount: donation.amount_in_usd,
-              currency: donation.value.currency,
-              metadata: donation.metadata,
-            },
+    ch.on('donation', (payload) => {
+      const { donation, net_profit } = payload || {}
+      setNetProfit(net_profit)
+      setDonations((prev) => [
+        ...prev,
+        {
+          type: donation.type,
+          data: {
+            id: donation.id,
+            name: donation.sender,
+            message: donation.message,
+            displayString: donation.display_string,
+            amount: donation.amount_in_usd,
+            currency: donation.value.currency,
+            metadata: donation.metadata,
           },
-        ])
-      })
+        },
+      ])
+    })
 
-      ch.on('statistic', (payload) => {
-        const { all_subs, kick_subs, youtube_subs } = payload || {}
-        setAllSubs(parseInt(all_subs))
-        setKickSubs(parseInt(kick_subs))
-        setYoutubeSubs(parseInt(youtube_subs))
-      })
+    ch.on('statistic', (payload) => {
+      const { all_subs, kick_subs, youtube_subs } = payload || {}
+      setAllSubs(parseInt(all_subs))
+      setKickSubs(parseInt(kick_subs))
+      setYoutubeSubs(parseInt(youtube_subs))
+    })
 
-      ch.on('initial_state', (payload) => {
-        const {
-          active_stream: currentStream,
-          net_profit: streamerNetProfit,
-          last_10_donations: last10Donations,
-          stats,
-          stats_offset: offsets,
-        } = payload || {}
-        const seconds = calculateTimeRemaining(
-          currentStream.subathon_seconds_added,
-          currentStream.subathon_start_time,
-          currentStream.subathon_start_minutes
-        )
+    ch.on('initial_state', (payload) => {
+      const {
+        active_stream: currentStream,
+        net_profit: streamerNetProfit,
+        last_10_donations: last10Donations,
+        stats,
+        stats_offset: offsets,
+      } = payload || {}
 
-        if (currentStream.subathon_ended_time === null) {
-          setIsSubathonActive(true)
-          setTimeRemaining(seconds)
-        }
+      const seconds = calculateTimeRemaining(
+        currentStream.subathon_seconds_added,
+        currentStream.subathon_start_time,
+        currentStream.subathon_start_minutes
+      )
 
-        setNetProfit(streamerNetProfit)
-        setDonationIndex(last10Donations.length)
-        setActiveStreamId(currentStream.id)
-        setStreamStartTime(currentStream.start_time)
-        setDonations(
-          last10Donations
-            .map((donation) => {
-              return {
-                type: donation.type,
-                data: {
-                  id: donation.id,
-                  name: donation.sender,
-                  message: donation.message,
-                  displayString: donation.display_string,
-                  amount: parseFloat(donation.amount_in_usd),
-                  currency: donation.value.currency,
-                  metadata: donation.metadata,
-                },
-              }
-            })
-            .reverse()
-        )
-        setAllSubs(stats?.all_subs ?? 0)
-        setKickSubs(stats?.kick_subs ?? 0)
-        setYoutubeSubs(stats?.youtube_subs ?? 0)
-        setStatsOffset(offsets)
-      })
-    }
+      if (currentStream.subathon_ended_time === null) {
+        setIsSubathonActive(true)
+        setTimeRemaining(seconds)
+      }
+
+      setNetProfit(streamerNetProfit)
+      setDonationIndex(last10Donations.length)
+      setActiveStreamId(currentStream.id)
+      setStreamStartTime(currentStream.start_time)
+
+      setDonations(
+        last10Donations
+          .map((donation) => {
+            return {
+              type: donation.type,
+              data: {
+                id: donation.id,
+                name: donation.sender,
+                message: donation.message,
+                displayString: donation.display_string,
+                amount: parseFloat(donation.amount_in_usd),
+                currency: donation.value.currency,
+                metadata: donation.metadata,
+              },
+            }
+          })
+          .reverse()
+      )
+
+      setAllSubs(stats?.all_subs ?? 0)
+      setKickSubs(stats?.kick_subs ?? 0)
+      setYoutubeSubs(stats?.youtube_subs ?? 0)
+      setStatsOffset(offsets)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, streamer?.id, userConfig?.streamazeKey])
 
