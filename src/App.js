@@ -27,6 +27,7 @@ import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
 import TickerWidget from 'pages/TickerWidget'
 import SubscriberCountWidget from 'pages/SubscriberCountWidget'
+import SlotMachine from 'pages/SlotMachine'
 
 const App = () => {
   return (
@@ -115,6 +116,11 @@ const App = () => {
                                     <Route
                                       path="/widget/subs/:platform"
                                       element={<SubscriberCountWidget />}
+                                    />
+
+                                    <Route
+                                      path="/giveaway/slots"
+                                      element={<SlotMachine />}
                                     />
 
                                     <Route
