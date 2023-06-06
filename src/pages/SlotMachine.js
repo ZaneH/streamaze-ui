@@ -1,20 +1,11 @@
 import styled from '@emotion/styled'
 import { Box, Button, Flex, Text, Title } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import { GiveawaySlotMachine } from 'components/Giveaway'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import moment from 'moment'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import wretch from 'wretch'
-
-// const list = [
-//   { name: '???' },
-//   { name: 'Sakuranomiya\nMaika' },
-//   { name: 'Hinata\nKaho' },
-//   // { name: 'Hoshikawa\nMahuyu'},
-//   // { name: 'Amano\nMiu'},
-//   // { name: 'Kanzaki\nHideri'},
-//   // { name: 'Dino'},
-//   // { name: 'Akiduki\nKouyou'},
-// ]
 
 const SlotItem = styled.div`
   height: 100%;
@@ -32,10 +23,6 @@ const SlotMachine = () => {
   const [entries, setEntries] = useState([])
 
   const { userConfig } = useContext(ConfigContext)
-
-  // const { reward } = useReward('slot-machine', 'emoji', {
-  //   emoji: '💸',
-  // })
 
   const fetchGiveawayEntries = useCallback(async () => {
     const res = await wretch(
@@ -67,7 +54,6 @@ const SlotMachine = () => {
       <Box my="10%">
         <Flex direction="column" gap="md" align="center">
           <GiveawaySlotMachine
-            id="slot-machine"
             style={{
               fontSize: '3em',
               height: '3em',
@@ -75,9 +61,20 @@ const SlotMachine = () => {
             duration={duration}
             target={turn ? target : 0}
             times={times}
-            onEnd={() => {
-              // reward()
-              console.log(entries[target])
+            onEnd={async () => {
+              const res = await wretch(
+                `${process.env.REACT_APP_API_3_URL}/api/giveaway_entries/${entries[target]?.id}?api_key=${userConfig?.streamazeKey}`
+              )
+                .patch({ win_count: 1, last_win: moment.utc().toISOString() })
+                .json()
+
+              if (res?.data) {
+                showNotification({
+                  title: 'Congratulations!',
+                  message: `${res?.data?.entry_username} won the giveaway!`,
+                  color: 'teal',
+                })
+              }
             }}
           >
             {entries?.map(({ entry_username: username }, idx) => {
