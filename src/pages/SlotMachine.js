@@ -1,19 +1,20 @@
 import styled from '@emotion/styled'
 import { Box, Button, Flex, Text, Title } from '@mantine/core'
 import { GiveawaySlotMachine } from 'components/Giveaway'
-import { useState } from 'react'
-import { useReward } from 'react-rewards'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { useCallback, useContext, useEffect, useState } from 'react'
+import wretch from 'wretch'
 
-const list = [
-  { name: '???' },
-  { name: 'Sakuranomiya\nMaika' },
-  { name: 'Hinata\nKaho' },
-  // { name: 'Hoshikawa\nMahuyu'},
-  // { name: 'Amano\nMiu'},
-  // { name: 'Kanzaki\nHideri'},
-  // { name: 'Dino'},
-  // { name: 'Akiduki\nKouyou'},
-]
+// const list = [
+//   { name: '???' },
+//   { name: 'Sakuranomiya\nMaika' },
+//   { name: 'Hinata\nKaho' },
+//   // { name: 'Hoshikawa\nMahuyu'},
+//   // { name: 'Amano\nMiu'},
+//   // { name: 'Kanzaki\nHideri'},
+//   // { name: 'Dino'},
+//   // { name: 'Akiduki\nKouyou'},
+// ]
 
 const SlotItem = styled.div`
   height: 100%;
@@ -28,9 +29,30 @@ const SlotMachine = () => {
   const [duration, setDuration] = useState()
   const [turn, setTurn] = useState(false)
 
+  const [entries, setEntries] = useState([])
+
+  const { userConfig } = useContext(ConfigContext)
+
   // const { reward } = useReward('slot-machine', 'emoji', {
   //   emoji: '💸',
   // })
+
+  const fetchGiveawayEntries = useCallback(async () => {
+    const res = await wretch(
+      `${process.env.REACT_APP_API_3_URL}/api/giveaway_entries?api_key=${userConfig?.streamazeKey}`
+    )
+      .get()
+      .json()
+
+    return res?.data || []
+  }, [userConfig?.streamazeKey])
+
+  useEffect(() => {
+    fetchGiveawayEntries().then((data) => {
+      setEntries([{ entry_username: '???' }, ...data])
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -55,14 +77,15 @@ const SlotMachine = () => {
             times={times}
             onEnd={() => {
               // reward()
+              console.log(entries[target])
             }}
           >
-            {list.map(({ name }, idx) => {
+            {entries?.map(({ entry_username: username }, idx) => {
               let randomColor = Math.floor(Math.random() * 16777215).toString(
                 16
               )
 
-              if (name === '???') {
+              if (username === '???') {
                 randomColor = '000'
               }
 
@@ -73,7 +96,7 @@ const SlotMachine = () => {
                     color: `#${randomColor}`,
                   }}
                 >
-                  {name}
+                  {username}
                 </SlotItem>
               )
             })}
@@ -83,7 +106,7 @@ const SlotMachine = () => {
             radius="xl"
             color="green"
             onClick={() => {
-              setTarget(Math.floor(Math.random() * (list.length - 1)) + 1)
+              setTarget(Math.floor(Math.random() * (entries?.length - 1)) + 1)
               setDuration(Math.floor(Math.random() * 3000) + 4000)
               setTimes(Math.floor(Math.random() * 16) + 8)
 
