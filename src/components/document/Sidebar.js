@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { Box, CloseButton, Divider, Navbar, NavLink, Text } from '@mantine/core'
 import {
   IconDashboard,
+  IconGift,
   IconPower,
   IconSettings,
   IconVideo,
@@ -94,6 +95,17 @@ const Sidebar = () => {
         icon={<FlagIcon style={{ width: 28, height: 28 }} />}
         onClick={() => {
           navigate('/subathon')
+        }}
+      />
+
+      <Divider my="sm" />
+
+      <StyledNavLink
+        label={<NavLinkLabel>Giveaway</NavLinkLabel>}
+        active={pathname === '/giveaway/slots'}
+        icon={<IconGift style={{ width: 28, height: 28 }} />}
+        onClick={() => {
+          navigate('/giveaway/slots')
         }}
       />
     </Navbar>
