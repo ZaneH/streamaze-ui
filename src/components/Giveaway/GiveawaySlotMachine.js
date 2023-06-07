@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 
 const GiveawaySlotMachine = ({
@@ -23,6 +23,8 @@ const GiveawaySlotMachine = ({
   const targetRefs = useRef([])
   const frameRef = useRef()
 
+  const [finalElement, setFinalElement] = useState(null)
+
   useEffect(() => {
     if (target === 0) return
 
@@ -34,8 +36,7 @@ const GiveawaySlotMachine = ({
 
     if (!$target) return
 
-    const fullScroll =
-      targetRefs.current[targetRefs.current.length - 1].offsetTop
+    const fullScroll = finalElement?.offsetTop
     const targetOffset = $target.offsetTop
 
     const totalScroll = targetOffset + fullScroll * (times - 1)
@@ -56,7 +57,11 @@ const GiveawaySlotMachine = ({
     }
 
     tick()
-  }, [target, times, duration, easing, onEnd])
+  }, [target, times, duration, easing, onEnd, finalElement])
+
+  useEffect(() => {
+    setFinalElement(targetRefs.current[targetRefs.current.length - 1])
+  }, [targetRefs?.current?.length])
 
   return (
     <div
@@ -64,11 +69,13 @@ const GiveawaySlotMachine = ({
       style={{ overflow: 'hidden', position: 'relative', ...style }}
       ref={frameRef}
     >
-      {React.Children.map(children, (child, index) =>
-        React.cloneElement(child, {
-          ref: (ref) => (targetRefs.current[index] = ref),
-        })
-      )}
+      {children
+        ?.map((child, index) =>
+          React.cloneElement(child, {
+            ref: (ref) => (targetRefs.current[index] = ref),
+          })
+        )
+        ?.filter((child) => child)}
     </div>
   )
 }
