@@ -59,10 +59,12 @@ const SlotMachine = () => {
 
       if (response?.data) {
         setNames(
-          response.data?.map((entry) => ({
-            id: entry.id,
-            username: entry.entry_username,
-          }))
+          response.data
+            ?.map((entry) => ({
+              id: entry.id,
+              username: entry.chat_username,
+            }))
+            ?.filter((entry) => entry.username)
         )
       }
     } catch (error) {
