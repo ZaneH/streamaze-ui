@@ -48,7 +48,7 @@ const PollProvider = ({ children }) => {
           }
 
           const response = parseInt(strippedMessage)
-          if (isNaN(response) || response < 1 || response > 100) {
+          if (isNaN(response) || response < 0 || response > 1000) {
             return
           }
 
