@@ -135,12 +135,12 @@ const PhoenixProvider = ({ children }) => {
     resp.receive('ok', ({ kick_viewer_count } = {}) => {
       setKickViewers(kick_viewer_count)
     })
-  }, 60 * 1000) // 4 minutes
+  }, 60 * 1000) // 1 minute
 
   useEffect(() => {
     kickInterval.stop()
     kickInterval.start()
-  }, [streamerChannel])
+  }, [streamerChannel, kickInterval])
 
   useEffect(() => {
     const streamerSocket = new Socket(process.env.REACT_APP_API_3_WS_URL, {
