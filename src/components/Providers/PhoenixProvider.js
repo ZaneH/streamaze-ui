@@ -7,6 +7,8 @@ import { ConfigContext } from './ConfigProvider'
 import { DonationContext } from './DonationProvider'
 import { StatContext } from './StatProvider'
 import { SubathonContext } from './SubathonProvider'
+import { useInterval } from '@mantine/hooks'
+import { useLocation } from 'react-router-dom'
 
 export const PhoenixContext = createContext()
 
@@ -16,6 +18,7 @@ const PhoenixProvider = ({ children }) => {
   const { setDonations, setDonationIndex } = useContext(DonationContext)
   const { setTimeRemaining, setActiveStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
+  const { pathname } = useLocation()
   const {
     setNetProfit,
     setStreamStartTime,
@@ -23,6 +26,7 @@ const PhoenixProvider = ({ children }) => {
     setKickSubs,
     setYoutubeSubs,
     setStatsOffset,
+    setKickViewers,
   } = useContext(StatContext)
   const {
     userConfig,
@@ -122,6 +126,22 @@ const PhoenixProvider = ({ children }) => {
     }
   }, [userConfig?.streamazeKey])
 
+  const kickInterval = useInterval(() => {
+    if (pathname !== '/home') {
+      return
+    }
+
+    const resp = streamerChannel.push('fetch_viewer_count', {})
+    resp.receive('ok', ({ kick_viewer_count } = {}) => {
+      setKickViewers(kick_viewer_count)
+    })
+  }, 60 * 1000) // 4 minutes
+
+  useEffect(() => {
+    kickInterval.stop()
+    kickInterval.start()
+  }, [streamerChannel])
+
   useEffect(() => {
     const streamerSocket = new Socket(process.env.REACT_APP_API_3_WS_URL, {
       heartbeatIntervalMs: 30000,
@@ -136,8 +156,11 @@ const PhoenixProvider = ({ children }) => {
         if (streamerChannel) {
           streamerChannel.leave()
         }
+
         setSocket(null)
         setStreamerChannel(null)
+
+        kickInterval.stop()
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,6 +180,7 @@ const PhoenixProvider = ({ children }) => {
       streamer?.id,
       userConfig?.streamazeKey
     )
+
     socket.connect()
 
     const ch = socket.channel(`streamer:${streamer?.id}`, {
@@ -220,6 +244,7 @@ const PhoenixProvider = ({ children }) => {
         net_profit: streamerNetProfit,
         last_10_donations: last10Donations,
         stats,
+        viewers,
         stats_offset: offsets,
       } = payload || {}
 
@@ -262,6 +287,8 @@ const PhoenixProvider = ({ children }) => {
       setKickSubs(stats?.kick_subs ?? 0)
       setYoutubeSubs(stats?.youtube_subs ?? 0)
       setStatsOffset(offsets)
+
+      setKickViewers(parseInt(viewers?.kick_count ?? 0))
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, streamer?.id, userConfig?.streamazeKey])
