@@ -140,7 +140,13 @@ const PhoenixProvider = ({ children }) => {
   useEffect(() => {
     kickInterval.stop()
     kickInterval.start()
-  }, [streamerChannel, kickInterval])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streamerChannel])
+
+  useEffect(() => {
+    return kickInterval.stop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const streamerSocket = new Socket(process.env.REACT_APP_API_3_WS_URL, {
