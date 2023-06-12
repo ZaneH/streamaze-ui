@@ -115,14 +115,14 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
                 {type === 'membershipGift' &&
                   `${metadata?.gift_count}x ${metadata?.gift_level}s`}
                 {type === 'subscription' && metadata
-                  ? `Became a member for ${metadata.months} month${
-                      metadata.months > 1 ? 's' : ''
+                  ? `Became a member for ${metadata?.months} month${
+                      metadata?.months > 1 ? 's' : ''
                     }`
                   : (type === 'superchat' || type === 'donation') &&
                     displayString}
                 {isKickSubscription &&
-                  `Subscribed on Kick for ${metadata.months} month${
-                    metadata.months > 1 ? 's' : ''
+                  `Subscribed on Kick for ${metadata?.months} month${
+                    metadata?.months > 1 ? 's' : ''
                   }`}
                 {isKickGift &&
                   `Gifted ${metadata?.months} subscription${
