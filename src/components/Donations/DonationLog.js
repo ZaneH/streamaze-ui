@@ -187,6 +187,7 @@ const DonationLog = () => {
             media_link: mediaUrl,
             media_title: mediaTitle,
             duration,
+            start_time: startTime,
           } = data.metadata || {}
 
           return (
@@ -196,6 +197,7 @@ const DonationLog = () => {
               donationId={donationId}
               isAnimated={i === 0}
               duration={parseFloat(duration ?? 0)}
+              startTime={parseInt(startTime) ?? 0}
             >
               <Text mb="md">
                 <b>{actionBy}</b> sent media

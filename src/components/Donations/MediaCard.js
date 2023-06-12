@@ -1,7 +1,6 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Flex } from '@mantine/core'
-import { useTimeout } from '@mantine/hooks'
 import { DonationContext } from 'components/Providers/DonationProvider'
 import { useContext } from 'react'
 import ReactPlayer from 'react-player/youtube'
@@ -38,18 +37,10 @@ export default function MediaCard({
   donationId,
   duration,
   isAnimated,
+  startTime,
 }) {
   const { playingMediaId, setIsPlaying, setPlayingMediaId } =
     useContext(DonationContext)
-
-  useTimeout(
-    () => {
-      setIsPlaying(false)
-      setPlayingMediaId(null)
-    },
-    duration,
-    { autoInvoke: true }
-  )
 
   return (
     <AnimatedDiv isAnimated={isAnimated}>
@@ -63,6 +54,12 @@ export default function MediaCard({
               height="180px"
               controls
               playing={donationId === playingMediaId}
+              onProgress={({ playedSeconds }) => {
+                if (playedSeconds >= startTime + duration / 1000) {
+                  setIsPlaying(false)
+                  setPlayingMediaId(null)
+                }
+              }}
             />
           )}
         </Box>
