@@ -42,10 +42,10 @@ const App = () => {
             <ConfigProvider>
               <LanyardProvider>
                 <KeypadProvider>
-                  <HopProvider>
-                    <GpsProvider>
-                      <SubathonProvider>
-                        <DonationProvider>
+                  <DonationProvider>
+                    <HopProvider>
+                      <GpsProvider>
+                        <SubathonProvider>
                           <StatProvider>
                             <PhoenixProvider>
                               <SidebarProvider>
@@ -132,10 +132,10 @@ const App = () => {
                               </SidebarProvider>
                             </PhoenixProvider>
                           </StatProvider>
-                        </DonationProvider>
-                      </SubathonProvider>
-                    </GpsProvider>
-                  </HopProvider>
+                        </SubathonProvider>
+                      </GpsProvider>
+                    </HopProvider>
+                  </DonationProvider>
                 </KeypadProvider>
               </LanyardProvider>
             </ConfigProvider>

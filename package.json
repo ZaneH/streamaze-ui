@@ -16,6 +16,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "echarts-for-react": "^3.0.2",
+    "lodash.debounce": "^4.0.8",
     "moment": "^2.29.4",
     "phoenix": "^1.7.1",
     "preact": "^8.5.3",

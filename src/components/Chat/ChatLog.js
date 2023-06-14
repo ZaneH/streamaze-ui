@@ -403,6 +403,7 @@ const ChatLog = ({
         style={{
           minHeight: fullHeight ? '100%' : height,
           overflowX: 'hidden',
+          overscrollBehavior: 'none',
         }}
         ref={virtuosoRef}
         data={chatData}

@@ -1,13 +1,16 @@
 import { useReadChannelState } from '@onehop/react'
 import ErrorChime from 'assets/error_chime.mp3'
 import DisconnectModal from 'components/Modals/DisconnectModal'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { ConfigContext } from './ConfigProvider'
 import { useLocation } from 'react-router-dom'
+import { DonationContext } from './DonationProvider'
+import debounce from 'lodash.debounce'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
   const { obsConfig } = useContext(ConfigContext)
+  const { audioElement } = useContext(DonationContext)
   const { state, error } = useReadChannelState(obsConfig.streamChannelId)
 
   const serverState = state?.server?.state ?? 'error'
@@ -22,13 +25,20 @@ const HopProvider = ({ children }) => {
 
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
 
+  const playChimeWithDebounce = useMemo(() => {
+    const callback = () => {
+      audioElement.src = ErrorChime
+
+      setShowDisconnectedModal(true)
+    }
+
+    return debounce(callback, 5000)
+  }, [])
+
   useEffect(() => {
     if (bitrate <= 500 && isLive && pathname === '/home') {
       if (state?.server?.active_scene?.toLowerCase() !== 'news') {
-        const chime = new Audio(ErrorChime)
-        chime.play()
-
-        setShowDisconnectedModal(true)
+        playChimeWithDebounce()
       }
     } else {
       if (showDisconnectedModal) {
