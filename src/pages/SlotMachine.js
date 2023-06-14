@@ -33,19 +33,15 @@ const SlotMachine = () => {
   const [visibleIndex, setVisibleIndex] = useState(0)
   const [isSpinning, setIsSpinning] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
-  const [winnerIndex, setWinnerIndex] = useState(null) // New state variable
-  const [prevWinnerIndex, setPrevWinnerIndex] = useState()
   const containerRef = useRef(null)
 
   const { userConfig } = useContext(ConfigContext)
 
   useEffect(() => {
-    // Fetch the initial list of names from the API
     fetchNames()
   }, [])
 
   useEffect(() => {
-    // Adjust the visible index when the names list changes
     setVisibleIndex(0)
   }, [names])
 
@@ -62,7 +58,7 @@ const SlotMachine = () => {
           response.data
             ?.map((entry) => ({
               id: entry.id,
-              username: entry.chat_username,
+              username: entry?.entry_username,
             }))
             ?.filter((entry) => entry.username)
         )
@@ -73,12 +69,6 @@ const SlotMachine = () => {
   }
 
   const startSpinning = async () => {
-    if (prevWinnerIndex) {
-      // Remove the selected name from the list
-      setNames((prevNames) => prevNames.filter((_, i) => i !== prevWinnerIndex))
-      setPrevWinnerIndex(null)
-    }
-
     setIsSpinning(true)
     setIsButtonDisabled(true)
 
