@@ -14,3 +14,11 @@ html,
   display: flex;
   flex-direction: column;
 }
+
+body {
+  overscroll-behavior: none;
+}
+
+svg {
+  min-width: auto !important;
+}
