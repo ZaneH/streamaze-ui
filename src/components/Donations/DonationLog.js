@@ -114,7 +114,7 @@ const DonationLog = () => {
 
   return (
     <Virtuoso
-      style={{ height: '100%' }}
+      style={{ height: '100%', backgroundColor: '#141518' }}
       data={donations.slice(0, donationIndex).reverse()}
       totalCount={donations.slice(0, donationIndex).reverse().length}
       components={{

@@ -89,7 +89,7 @@ const StreamButton = ({
         style={style}
       >
         {!icon && (
-          <Title size={26} weight={800} color="white" align="center">
+          <Title size="2.5vw" weight={800} color="white" align="center" px="sm">
             {label ?? children}
           </Title>
         )}

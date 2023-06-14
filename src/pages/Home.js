@@ -4,8 +4,16 @@ import { Layout } from '../components/document'
 import { DonationPanel } from '../components/Donations'
 import { ControlPanel } from '../components/StreamControls'
 import TagSEO from '../components/TagSEO'
+import { useEffect } from 'react'
 
 const Home = () => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
+
   return (
     <Layout showStats>
       <Flex h="100%">

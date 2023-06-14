@@ -63,7 +63,6 @@ const Layout = ({ children, showStats = false }) => {
       navbar={<Sidebar />}
       styles={{
         root: {
-          background: '#141518',
           color: 'white',
           minHeight: '100%',
           display: 'flex',

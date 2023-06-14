@@ -18,7 +18,3 @@ html,
 svg {
   min-width: auto !important;
 }
-
-body {
-  overflow: hidden;
-}
