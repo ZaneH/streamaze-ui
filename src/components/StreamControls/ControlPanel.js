@@ -119,9 +119,9 @@ const ControlPanel = () => {
         })}
       </Flex>
 
-      <Space h="sm" />
+      {/* <Space h="sm" /> */}
 
-      <StreamButton
+      {/* <StreamButton
         color="orange"
         onClick={() => {
           const newValue = !gpsConfig?.isGpsEnabled
@@ -174,7 +174,7 @@ const ControlPanel = () => {
         }}
       >
         Turn GPS {gpsConfig?.isGpsEnabled ? 'off' : 'on'}
-      </StreamButton>
+      </StreamButton> */}
     </Flex>
   )
 }
