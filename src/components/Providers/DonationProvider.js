@@ -8,6 +8,7 @@ export const DonationContext = createContext()
 const DonationProvider = ({ children }) => {
   // Store donations
   const [donations, setDonations] = useState([])
+  const [audioElement] = useState(new Audio())
 
   // For determining when to show/play the next donation
   const [donationIndex, setDonationIndex] = useState(-1)
@@ -109,6 +110,7 @@ const DonationProvider = ({ children }) => {
         setIsPlaying,
         playingMediaId,
         setPlayingMediaId,
+        audioElement,
       }}
     >
       {children}
