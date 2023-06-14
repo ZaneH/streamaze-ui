@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Flex } from '@mantine/core'
 import { DonationContext } from 'components/Providers/DonationProvider'
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import ReactPlayer from 'react-player/youtube'
 
 const AnimatedDiv = styled.div`
@@ -42,13 +42,24 @@ export default function MediaCard({
   const { playingMediaId, setIsPlaying, setPlayingMediaId } =
     useContext(DonationContext)
 
+  const videoRef = useRef(null)
+
   return (
-    <AnimatedDiv isAnimated={isAnimated}>
+    <AnimatedDiv
+      isAnimated={isAnimated}
+      onClick={() => {
+        setIsPlaying(true)
+        setPlayingMediaId(donationId)
+
+        videoRef.current.seekTo(startTime, 'seconds')
+      }}
+    >
       <Flex direction="column" justify="space-between" gap="lg">
         <Box>{children}</Box>
         <Box style={{ display: 'none' }}>
           {donationId === playingMediaId && (
             <ReactPlayer
+              ref={videoRef}
               url={url}
               width="100%"
               height="180px"
