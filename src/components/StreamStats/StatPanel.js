@@ -105,7 +105,7 @@ const StatPanel = () => {
             />
           )}
 
-          {isLive && <StreamTime />}
+          {/* {isLive && <StreamTime />} */}
 
           <StatInfo
             textSize={matches ? 14 : 18}
