@@ -33,7 +33,7 @@ const HopProvider = ({ children }) => {
     }
 
     return debounce(callback, 5000)
-  }, [])
+  }, [audioElement])
 
   useEffect(() => {
     if (bitrate <= 500 && isLive && pathname === '/home') {

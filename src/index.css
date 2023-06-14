@@ -18,3 +18,7 @@ html,
 svg {
   min-width: auto !important;
 }
+
+.roulette-pro-regular-image-wrapper {
+  display: none;
+}
