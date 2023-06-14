@@ -60,18 +60,20 @@ const DonationProvider = ({ children }) => {
       }
 
       if (ttsUrl && isOverMinAmount) {
-        const _audio = new Audio(ttsUrl)
+        audioElement.src = ttsUrl
 
-        _audio.play().catch((err) => {
+        audioElement.play().catch((err) => {
           console.log(err)
           setIsPlaying(false)
         })
 
-        _audio.addEventListener('ended', () => {
+        const endedListener = audioElement.addEventListener('ended', () => {
           setIsPlaying(false)
+
+          audioElement.removeEventListener('ended', endedListener)
         })
 
-        setTTSAudio(_audio)
+        setTTSAudio(audioElement)
       } else {
         setIsPlaying(false)
       }

@@ -54,6 +54,7 @@ export default function MediaCard({
               height="180px"
               controls
               playing={donationId === playingMediaId}
+              playsinline
               onProgress={({ playedSeconds }) => {
                 if (playedSeconds >= startTime + duration / 1000) {
                   setIsPlaying(false)
