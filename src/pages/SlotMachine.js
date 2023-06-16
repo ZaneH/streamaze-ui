@@ -1,4 +1,4 @@
-import { Box, Button, Center, Text } from '@mantine/core'
+import { Box, Button, Center, Flex, Text } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { nanoid } from 'nanoid'
@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 import RoulettePro from 'react-roulette-pro'
 import wretch from 'wretch'
 
+import ResetGiveawayModal from 'components/Modals/ResetGiveawayModal'
 import { Layout } from 'components/document'
 import 'react-roulette-pro/dist/index.css'
 
@@ -23,6 +24,8 @@ const SlotMachine = () => {
   const [spinning, setSpinning] = useState(false)
   const [prizeIndex, setPrizeIndex] = useState(0)
   const [previousWinner, setPreviousWinner] = useState(null)
+
+  const [showResetModal, setShowResetModal] = useState(false)
 
   const { userConfig } = useContext(ConfigContext)
 
@@ -152,26 +155,71 @@ const SlotMachine = () => {
       </Box>
 
       <Center>
-        <Button
-          color="green"
-          disabled={spinning}
-          size="lg"
-          style={{
-            borderRadius: '25px',
-          }}
-          onClick={() => {
-            if (previousWinner) {
-              setNames(
-                names.filter((name) => name.id !== previousWinner.entryId)
-              )
-            }
+        <Flex direction="column" gap="md">
+          <Button
+            color="green"
+            disabled={spinning}
+            size="lg"
+            style={{
+              borderRadius: '25px',
+            }}
+            onClick={() => {
+              if (previousWinner) {
+                setNames(
+                  names.filter((name) => name.id !== previousWinner.entryId)
+                )
+              }
 
-            setSpinning(true)
-          }}
-        >
-          Spin
-        </Button>
+              setSpinning(true)
+            }}
+          >
+            Spin
+          </Button>
+
+          <Button
+            color="red"
+            size="lg"
+            style={{
+              borderRadius: '25px',
+            }}
+            onClick={() => {
+              setShowResetModal(true)
+            }}
+          >
+            Reset All
+          </Button>
+        </Flex>
       </Center>
+
+      <ResetGiveawayModal
+        isOpen={showResetModal}
+        onClose={() => {
+          setShowResetModal(false)
+        }}
+        onConfirm={() => {
+          wretch(
+            `${process.env.REACT_APP_API_3_URL}/api/giveaway_entries/reset?api_key=${userConfig?.streamazeKey}`
+          )
+            .post()
+            .res(() => {
+              showNotification({
+                title: 'Giveaway Reset',
+                message: 'The giveaway has been reset.',
+                color: 'teal',
+              })
+
+              setShowResetModal(false)
+            })
+            .catch(() => {
+              showNotification({
+                title: 'Error',
+                message:
+                  'There was an error resetting the giveaway. Please try again later.',
+                color: 'red',
+              })
+            })
+        }}
+      />
     </Layout>
   )
 }
