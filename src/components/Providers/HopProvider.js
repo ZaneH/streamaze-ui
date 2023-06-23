@@ -6,12 +6,14 @@ import { ConfigContext } from './ConfigProvider'
 import { useLocation } from 'react-router-dom'
 import { DonationContext } from './DonationProvider'
 import debounce from 'lodash.debounce'
+import ListeningToModal from 'components/Modals/ListeningToModal'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
   const { obsConfig } = useContext(ConfigContext)
   const { audioElement } = useContext(DonationContext)
   const { state, error } = useReadChannelState(obsConfig.streamChannelId)
+  const { state: meIrlState } = useReadChannelState('me_irl:sam')
 
   const serverState = state?.server?.state ?? 'error'
   const isLive = state?.stream_live === true
@@ -21,9 +23,15 @@ const HopProvider = ({ children }) => {
   const bitrate = state?.srt?.bitrate ?? 0
   const rtt = state?.srt?.rtt ?? 0
   const uptime = state?.srt?.uptime ?? 0
+  const { artist, title } = meIrlState?.listening_to ?? {}
+
   const { pathname } = useLocation()
 
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
+  const [showListeningToModal, setShowListeningToModal] = useState(false)
+  const [previouslyShownListeningTo, setPreviouslyShownListeningTo] = useState(
+    {}
+  )
 
   const playChimeWithDebounce = useMemo(() => {
     const callback = () => {
@@ -34,6 +42,14 @@ const HopProvider = ({ children }) => {
 
     return debounce(callback, 5000)
   }, [audioElement])
+
+  const showListeningToModalWithDebounce = useMemo(() => {
+    const callback = () => {
+      setShowListeningToModal(true)
+    }
+
+    return debounce(callback, 5000)
+  }, [])
 
   useEffect(() => {
     if (bitrate <= 500 && isLive && pathname === '/home') {
@@ -48,6 +64,30 @@ const HopProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bitrate, isLive])
 
+  useEffect(() => {
+    if (artist && title) {
+      if (
+        previouslyShownListeningTo.artist !== artist ||
+        previouslyShownListeningTo.title !== title
+      ) {
+        showListeningToModalWithDebounce()
+        setPreviouslyShownListeningTo({ artist, title })
+      }
+    } else {
+      if (showListeningToModal) {
+        setShowListeningToModal(false)
+      }
+
+      if (
+        previouslyShownListeningTo.artist &&
+        previouslyShownListeningTo.title
+      ) {
+        setPreviouslyShownListeningTo({})
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [artist, title])
+
   return (
     <HopContext.Provider
       value={{
@@ -59,11 +99,20 @@ const HopProvider = ({ children }) => {
         bitrate,
         rtt,
         uptime,
+        listeningTo: {
+          artist,
+          title,
+        },
       }}
     >
       <DisconnectModal
         isOpen={showDisconnectedModal}
         onClose={() => setShowDisconnectedModal(false)}
+      />
+      <ListeningToModal
+        isOpen={showListeningToModal}
+        onClose={() => setShowListeningToModal(false)}
+        listeningTo={{ artist, title }}
       />
       {children}
     </HopContext.Provider>
