@@ -3,6 +3,12 @@ import { createContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
 export const ConfigContext = createContext()
 
+const isPositiveString = (string) => {
+  if (string === 'true') return true
+  if (string === '1') return true
+  return false
+}
+
 const ConfigProvider = ({ children }) => {
   // Chat config
   const [chatConfig, setChatConfig] = useLocalStorage({
@@ -135,16 +141,26 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Theme config
+  const [themeConfig, setThemeConfig] = useLocalStorage({
+    key: 'theme-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      theme: 'dark',
+    },
+  })
+
   const [searchParams] = useSearchParams()
-  const isChat = searchParams.get('isChat') === 'true'
-  const isObs = searchParams.get('isObs') === 'true'
-  const isStats = searchParams.get('isStats') === 'true'
-  const isClip = searchParams.get('isClip') === 'true'
-  const isSlobs = searchParams.get('isSlobs') === 'true'
-  const isKeypad = searchParams.get('isKeypad') === 'true'
-  const isLanyard = searchParams.get('isLanyard') === 'true'
-  const isUser = searchParams.get('isUser') === 'true'
-  const isGps = searchParams.get('isGps') === 'true'
+  const isChat = isPositiveString(searchParams.get('isChat'))
+  const isObs = isPositiveString(searchParams.get('isObs'))
+  const isStats = isPositiveString(searchParams.get('isStats'))
+  const isClip = isPositiveString(searchParams.get('isClip'))
+  const isSlobs = isPositiveString(searchParams.get('isSlobs'))
+  const isKeypad = isPositiveString(searchParams.get('isKeypad'))
+  const isLanyard = isPositiveString(searchParams.get('isLanyard'))
+  const isUser = isPositiveString(searchParams.get('isUser'))
+  const isGps = isPositiveString(searchParams.get('isGps'))
+  const isTheme = isPositiveString(searchParams.get('isTheme'))
 
   // Load chat config from URLs
   let tiktokChat = ''
@@ -279,6 +295,14 @@ const ConfigProvider = ({ children }) => {
     }
   }
 
+  // Load Theme config from URL
+  let theme = ''
+  if (isTheme) {
+    if (searchParams.get('theme')) {
+      theme = searchParams.get('theme')
+    }
+  }
+
   return (
     <ConfigContext.Provider
       value={{
@@ -369,6 +393,11 @@ const ConfigProvider = ({ children }) => {
           isGpsEnabled: isGpsEnabled ? isGpsEnabled : gpsConfig.isGpsEnabled,
         },
         setGpsConfig,
+        themeConfig: {
+          ...themeConfig,
+          theme: theme ? theme : themeConfig.theme,
+        },
+        setThemeConfig,
       }}
     >
       {children}

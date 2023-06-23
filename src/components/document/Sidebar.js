@@ -1,17 +1,20 @@
 import styled from '@emotion/styled'
 import { Box, CloseButton, Divider, Navbar, NavLink, Text } from '@mantine/core'
 import {
+  IconBulb,
+  IconBulbOff,
   IconDashboard,
   IconGift,
   IconPower,
   IconSettings,
   IconVideo,
 } from '@tabler/icons'
+import { ReactComponent as FlagIcon } from 'assets/flag-icon-nav.svg'
+import { ReactComponent as IconRaspberryPi } from 'assets/raspberry-pi.svg'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { SidebarContext } from '../Providers/SidebarProvider'
-import { ReactComponent as IconRaspberryPi } from 'assets/raspberry-pi.svg'
-import { ReactComponent as FlagIcon } from 'assets/flag-icon-nav.svg'
 
 const StyledNavLink = styled(NavLink)`
   border-radius: 8px;
@@ -22,9 +25,11 @@ const StyledNavLink = styled(NavLink)`
 const NavLinkLabel = ({ children }) => <Text size="md">{children}</Text>
 
 const Sidebar = () => {
+  const { themeConfig, setThemeConfig } = useContext(ConfigContext)
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const isOled = themeConfig?.theme === 'oled'
 
   useEffect(() => {
     setIsSidebarOpen(false)
@@ -106,6 +111,26 @@ const Sidebar = () => {
         icon={<IconGift style={{ width: 28, height: 28 }} />}
         onClick={() => {
           navigate('/giveaway/slots')
+        }}
+      />
+
+      <Divider my="sm" />
+
+      <StyledNavLink
+        label={<NavLinkLabel>{isOled ? 'OLED On' : 'OLED Off'}</NavLinkLabel>}
+        active={isOled}
+        icon={
+          isOled ? (
+            <IconBulbOff style={{ width: 28, height: 28 }} />
+          ) : (
+            <IconBulb style={{ width: 28, height: 28 }} />
+          )
+        }
+        onClick={() => {
+          setThemeConfig({
+            ...themeConfig,
+            theme: isOled ? 'dark' : 'oled',
+          })
         }}
       />
     </Navbar>

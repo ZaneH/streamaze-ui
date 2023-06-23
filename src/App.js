@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import LanyardProvider from 'components/Providers/LanyardProvider'
 import PhoenixProvider from 'components/Providers/PhoenixProvider'
@@ -6,16 +5,20 @@ import PollProvider from 'components/Providers/PollProvider'
 import SubathonProvider from 'components/Providers/SubathonProvider'
 import Countdown from 'pages/Countdown'
 import PollWidget from 'pages/PollWidget'
+import SlotMachine from 'pages/SlotMachine'
 import SubathonSettings from 'pages/SubathonSettings'
+import SubscriberCountWidget from 'pages/SubscriberCountWidget'
+import TickerWidget from 'pages/TickerWidget'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ChatLog } from './components/Chat'
 import {
   ConfigProvider,
   DonationProvider,
-  HopProvider,
-  StatProvider,
   GpsProvider,
+  HopProvider,
+  OledMantineProvider,
+  StatProvider,
 } from './components/Providers'
 import KeypadProvider from './components/Providers/KeypadProvider'
 import SidebarProvider from './components/Providers/SidebarProvider'
@@ -25,21 +28,14 @@ import Keypad from './pages/Keypad'
 import RaspberryPi from './pages/RaspberryPi'
 import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
-import TickerWidget from 'pages/TickerWidget'
-import SubscriberCountWidget from 'pages/SubscriberCountWidget'
-import SlotMachine from 'pages/SlotMachine'
 
 const App = () => {
   return (
-    <MantineProvider
-      withNormalizeCSS
-      withGlobalStyles
-      theme={{ colorScheme: 'dark' }}
-    >
-      <HelmetProvider>
-        <NotificationsProvider>
-          <BrowserRouter>
-            <ConfigProvider>
+    <HelmetProvider>
+      <BrowserRouter>
+        <ConfigProvider>
+          <OledMantineProvider>
+            <NotificationsProvider>
               <LanyardProvider>
                 <KeypadProvider>
                   <DonationProvider>
@@ -138,11 +134,11 @@ const App = () => {
                   </DonationProvider>
                 </KeypadProvider>
               </LanyardProvider>
-            </ConfigProvider>
-          </BrowserRouter>
-        </NotificationsProvider>
-      </HelmetProvider>
-    </MantineProvider>
+            </NotificationsProvider>
+          </OledMantineProvider>
+        </ConfigProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   )
 }
 

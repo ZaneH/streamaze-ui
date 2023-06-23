@@ -1,6 +1,14 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box, Center, Flex, Loader, Text, Title } from '@mantine/core'
+import {
+  Box,
+  Center,
+  Flex,
+  Loader,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core'
 import { useContext } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 import { DonationContext } from '../Providers/DonationProvider'
@@ -62,6 +70,7 @@ const AnimatedDiv = styled.div`
 `
 
 const DonationLog = () => {
+  const { colors } = useMantineTheme()
   const { donations, donationIndex, setDonationIndex, setPrevDonationIndex } =
     useContext(DonationContext)
   const { userConfig, slobsConfig } = useContext(ConfigContext)
@@ -114,7 +123,7 @@ const DonationLog = () => {
 
   return (
     <Virtuoso
-      style={{ height: '100%', backgroundColor: '#141518' }}
+      style={{ height: '100%', backgroundColor: colors.dark[9] }}
       data={donations.slice(0, donationIndex).reverse()}
       totalCount={donations.slice(0, donationIndex).reverse().length}
       components={{
@@ -133,7 +142,7 @@ const DonationLog = () => {
         if (isTikTokGift) {
           const {
             gift_name: giftName,
-            gift_cost: giftCost, // TODO: Use this, it is the diamond count per gift
+            // gift_cost: giftCost,
             gift_repeat_count: giftRepeatCount,
             name: senderName,
           } = data
