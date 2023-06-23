@@ -48,6 +48,7 @@ const SlotMachine = () => {
             ?.map((entry) => ({
               id: entry.id,
               username: entry?.entry_username,
+              chatName: entry?.chat_username,
             }))
             ?.filter((entry) => entry.username)
         )
@@ -60,7 +61,8 @@ const SlotMachine = () => {
   useEffect(() => {
     const prizes = names?.map((name) => ({
       entryId: name.id,
-      text: name.username,
+      text: `Stake: ${name.username}\nKick: ${name.chatName}`,
+      image: name.chatName,
     }))
 
     const reproducedArray = [
@@ -74,6 +76,7 @@ const SlotMachine = () => {
 
     const list = [...reproducedArray].map((item) => ({
       ...item,
+      // add an ID to each item
       id: `${item.id}--${nanoid()}`,
     }))
 

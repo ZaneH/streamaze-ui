@@ -22,3 +22,16 @@ svg {
 .roulette-pro-regular-image-wrapper {
   display: none;
 }
+
+.roulette-pro-regular-prize-item-text::first-line {
+  font-size: 1em;
+  color: white;
+}
+
+.roulette-pro-regular-prize-item-text {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.6);
+
+  display: block;
+  height: 100%;
+}
