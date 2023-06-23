@@ -195,10 +195,13 @@ const ChatLog = ({
       params['streamerId'] = streamer?.id
     }
 
-    if (_kickChannelId && _kickChatroomId && _kickChannelName && streamer) {
-      chatSendMessage(params)
-      setIsConnected(true)
+    if (_kickChannelId && _kickChatroomId && _kickChannelName && !streamer) {
+      // TODO: Perform this check on the server-side instead
+      return
     }
+
+    chatSendMessage(params)
+    setIsConnected(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_kickChannelId, _kickChatroomId, _kickChannelName, streamer, isConnected])
 
@@ -380,7 +383,7 @@ const ChatLog = ({
     )
   }
 
-  if (chatData.length === 0) {
+  if (!isConnected) {
     if (fluid) {
       return
     }
