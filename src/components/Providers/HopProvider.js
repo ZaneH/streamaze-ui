@@ -1,12 +1,13 @@
+import { showNotification } from '@mantine/notifications'
 import { useReadChannelState } from '@onehop/react'
+import { IconMusic } from '@tabler/icons'
 import ErrorChime from 'assets/error_chime.mp3'
 import DisconnectModal from 'components/Modals/DisconnectModal'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { ConfigContext } from './ConfigProvider'
-import { useLocation } from 'react-router-dom'
-import { DonationContext } from './DonationProvider'
 import debounce from 'lodash.debounce'
-import ListeningToModal from 'components/Modals/ListeningToModal'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { ConfigContext } from './ConfigProvider'
+import { DonationContext } from './DonationProvider'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
@@ -28,7 +29,6 @@ const HopProvider = ({ children }) => {
   const { pathname } = useLocation()
 
   const [showDisconnectedModal, setShowDisconnectedModal] = useState(false)
-  const [showListeningToModal, setShowListeningToModal] = useState(false)
   const [previouslyShownListeningTo, setPreviouslyShownListeningTo] = useState(
     {}
   )
@@ -43,13 +43,18 @@ const HopProvider = ({ children }) => {
     return debounce(callback, 5000)
   }, [audioElement])
 
-  const showListeningToModalWithDebounce = useMemo(() => {
+  const showListeningToNotifWithDebounce = useMemo(() => {
     const callback = () => {
-      setShowListeningToModal(true)
+      showNotification({
+        title: 'Song Detected',
+        message: `${artist} - ${title}`,
+        autoClose: 10_000,
+        icon: <IconMusic style={{ width: 16, height: 16 }} />,
+      })
     }
 
     return debounce(callback, 5000)
-  }, [])
+  }, [artist, title])
 
   useEffect(() => {
     if (bitrate <= 500 && isLive && pathname === '/home') {
@@ -70,14 +75,10 @@ const HopProvider = ({ children }) => {
         previouslyShownListeningTo.artist !== artist ||
         previouslyShownListeningTo.title !== title
       ) {
-        showListeningToModalWithDebounce()
+        showListeningToNotifWithDebounce()
         setPreviouslyShownListeningTo({ artist, title })
       }
     } else {
-      if (showListeningToModal) {
-        setShowListeningToModal(false)
-      }
-
       if (
         previouslyShownListeningTo.artist &&
         previouslyShownListeningTo.title
@@ -108,11 +109,6 @@ const HopProvider = ({ children }) => {
       <DisconnectModal
         isOpen={showDisconnectedModal}
         onClose={() => setShowDisconnectedModal(false)}
-      />
-      <ListeningToModal
-        isOpen={showListeningToModal}
-        onClose={() => setShowListeningToModal(false)}
-        listeningTo={{ artist, title }}
       />
       {children}
     </HopContext.Provider>

@@ -10,7 +10,7 @@ const OledMantineProvider = ({ children }) => {
           dark: [
             '#bfbfbe',
             '#000000',
-            '#000000',
+            '#bfbfbe',
             '#000000',
             '#444444',
             '#000000',
