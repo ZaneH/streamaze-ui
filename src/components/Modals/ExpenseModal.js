@@ -17,11 +17,13 @@ const { REACT_APP_API_3_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
 const ExpenseModal = ({ isOpen = false, onClose }) => {
   const {
+    userConfig,
     setCurrencyConfig,
     currencyConfig = {
       currency: 'usd',
     },
   } = useContext(ConfigContext)
+  const { streamazeKey } = userConfig
   const { netProfit } = useContext(StatContext)
   const expenseRef = useRef(null)
 
@@ -119,7 +121,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
                   wretch(`${REACT_APP_API_3_URL}/api/expenses`)
                     .post({
                       amount_in_usd: expenseValue.toFixed(2) * -1,
-                      streamer_id: 1,
+                      api_key: streamazeKey,
                       value: {
                         amount: parseInt(parseFloat(numericInput * -1) * 100),
                         currency: currencyConfig?.currency,
@@ -199,7 +201,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
                   wretch(`${REACT_APP_API_3_URL}/api/expenses`)
                     .post({
                       amount_in_usd: expenseValue.toFixed(2),
-                      streamer_id: 1,
+                      api_key: streamazeKey,
                       value: {
                         amount: parseInt(parseFloat(numericInput) * 100),
                         currency: currencyConfig?.currency,
