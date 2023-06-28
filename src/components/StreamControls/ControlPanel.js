@@ -1,21 +1,16 @@
 import { Flex, Space } from '@mantine/core'
-import { useContext } from 'react'
+import { showNotification } from '@mantine/notifications'
+import { ReactComponent as IconPause } from 'assets/pause-icon.svg'
 import { ReactComponent as PlayIcon } from 'assets/play-icon.svg'
 import { ReactComponent as SkipIcon } from 'assets/skip-icon.svg'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
+import { useContext } from 'react'
+import { DonationContext } from '../Providers/DonationProvider'
 import { HopContext } from '../Providers/HopProvider'
 import StreamButton from './StreamButton'
-import wretch from 'wretch'
-import { showNotification } from '@mantine/notifications'
-import { ConfigContext } from '../Providers/ConfigProvider'
-import { DonationContext } from '../Providers/DonationProvider'
-import { ReactComponent as IconPause } from 'assets/pause-icon.svg'
-import { PhoenixContext } from 'components/Providers/PhoenixProvider'
-
-const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
 
 const ControlPanel = () => {
   const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
-  const { setGpsConfig, gpsConfig, lanyardConfig } = useContext(ConfigContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const {
     donations,
@@ -29,8 +24,8 @@ const ControlPanel = () => {
     playingMediaId,
     setPlayingMediaId,
     audioElement,
+    blankAudio,
   } = useContext(DonationContext)
-  const { currentStreamer } = useContext(PhoenixContext)
 
   return (
     <Flex direction="column">
@@ -48,6 +43,10 @@ const ControlPanel = () => {
             setIsAutoplay((prev) => !prev)
             audioElement.autoplay = true
             audioElement.src =
+              'data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV'
+
+            blankAudio.autoplay = true
+            blankAudio.src =
               'data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV'
 
             if (donationIndex === -1) {
@@ -118,63 +117,6 @@ const ControlPanel = () => {
           )
         })}
       </Flex>
-
-      {/* <Space h="sm" /> */}
-
-      {/* <StreamButton
-        color="orange"
-        onClick={() => {
-          const newValue = !gpsConfig?.isGpsEnabled
-
-          if (!newValue) {
-            fetch(
-              `${REACT_APP_LANYARD_API_ENDPOINT}/${lanyardConfig?.discordUserId}/kv/gps`,
-              {
-                headers: {
-                  authorization: lanyardConfig?.apiKey,
-                },
-                method: 'PUT',
-                body: JSON.stringify({
-                  coords: null,
-                  last_updated_at: new Date().toISOString(),
-                }),
-              }
-            )
-          }
-
-          wretch(
-            `${process.env.REACT_APP_API_3_URL}/api/streamers/${currentStreamer?.id}`
-          )
-            .patch({
-              lanyard_config: {
-                discord_user_id: lanyardConfig?.discordUserId,
-                api_key: lanyardConfig?.apiKey,
-                is_gps_enabled: newValue ? 'true' : 'false',
-              },
-            })
-            .res(() => {
-              showNotification({
-                message: 'GPS settings updated',
-                color: 'teal',
-              })
-            })
-            .catch(() => {
-              showNotification({
-                message: 'Error updating GPS settings',
-                color: 'red',
-              })
-            })
-
-          setGpsConfig((prev) => {
-            return {
-              ...prev,
-              isGpsEnabled: newValue,
-            }
-          })
-        }}
-      >
-        Turn GPS {gpsConfig?.isGpsEnabled ? 'off' : 'on'}
-      </StreamButton> */}
     </Flex>
   )
 }

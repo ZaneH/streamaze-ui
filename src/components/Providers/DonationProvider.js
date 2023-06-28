@@ -9,6 +9,7 @@ const DonationProvider = ({ children }) => {
   // Store donations
   const [donations, setDonations] = useState([])
   const [audioElement] = useState(new Audio())
+  const [blankAudio] = useState(new Audio())
 
   // For determining when to show/play the next donation
   const [donationIndex, setDonationIndex] = useState(-1)
@@ -113,6 +114,7 @@ const DonationProvider = ({ children }) => {
         playingMediaId,
         setPlayingMediaId,
         audioElement,
+        blankAudio,
       }}
     >
       {children}
