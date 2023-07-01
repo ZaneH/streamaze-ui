@@ -544,7 +544,9 @@ const ChatLog = ({
                       isbig={isBig ? 'true' : undefined}
                       ismod={isMod ? 'true' : undefined}
                       ismember={isMember ? 'true' : undefined}
-                      isverified={isVerified ? 'true' : undefined}
+                      isverified={
+                        isVerified && sender !== 'BotRix' ? 'true' : undefined
+                      }
                       shadow={fluid ? 'true' : undefined}
                       origin={origin}
                     >
