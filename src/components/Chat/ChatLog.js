@@ -85,6 +85,7 @@ const SenderText = styled(Text)`
   ${({ origin, ismember }) =>
     origin === 'kick' && ismember && 'color: #FF6C37;'}
   ${({ origin, ismod }) => origin === 'kick' && ismod && 'color: #5e84f1;'}
+  ${({ isverified }) => isverified && 'color: #5BFE2E;'}
 `
 
 const MessageText = styled(Text)`
@@ -543,6 +544,7 @@ const ChatLog = ({
                       isbig={isBig ? 'true' : undefined}
                       ismod={isMod ? 'true' : undefined}
                       ismember={isMember ? 'true' : undefined}
+                      isverified={isVerified ? 'true' : undefined}
                       shadow={fluid ? 'true' : undefined}
                       origin={origin}
                     >
