@@ -9,7 +9,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { useContext } from 'react'
+import { useCallback, useContext, useRef, useState } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 import { DonationContext } from '../Providers/DonationProvider'
 import MediaCard from './MediaCard'
@@ -17,6 +17,7 @@ import SuperChatCard from './SuperChatCard'
 import useWebSocket from 'react-use-websocket'
 import useStreamer from 'hooks/useStreamer'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { useInterval } from '@mantine/hooks'
 
 const Item = styled.div`
   margin: 12px 32px;
@@ -75,6 +76,8 @@ const DonationLog = () => {
     useContext(DonationContext)
   const { userConfig, slobsConfig } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const virtuosoRef = useRef(null)
   const { sendJsonMessage } = useWebSocket(
     `${process.env.REACT_APP_API_2_WS_URL}`,
     {
@@ -86,7 +89,7 @@ const DonationLog = () => {
           streamazeKey: userConfig?.streamazeKey,
         })
       },
-      shouldReconnect: (closeEvent) => true,
+      shouldReconnect: () => true,
       reconnectInterval: 3000,
     },
     !!streamer?.donations_config?.streamlabs_token &&
@@ -96,6 +99,24 @@ const DonationLog = () => {
 
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
+
+  const inactivityInterval = useInterval(() => {
+    if (isScrolling) {
+      setIsScrolling(false)
+      virtuosoRef?.current?.scrollToIndex({
+        index: 0,
+        behavior: 'smooth',
+      })
+    }
+
+    inactivityInterval.stop()
+  }, 60 * 1000)
+
+  const handleScroll = useCallback(() => {
+    inactivityInterval.stop()
+    inactivityInterval.start()
+    setIsScrolling(true)
+  }, [inactivityInterval])
 
   if (donations.length === 0) {
     return (
@@ -126,6 +147,12 @@ const DonationLog = () => {
       style={{ height: '100%', backgroundColor: colors.dark[9] }}
       data={donations.slice(0, donationIndex).reverse()}
       totalCount={donations.slice(0, donationIndex).reverse().length}
+      ref={virtuosoRef}
+      onScroll={() => handleScroll()}
+      startReached={() => {
+        setIsScrolling(false)
+        inactivityInterval.stop()
+      }}
       components={{
         Item,
         List,
