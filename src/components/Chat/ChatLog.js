@@ -29,6 +29,7 @@ import { ReactComponent as ModChatIcon } from 'assets/mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from 'assets/verified-chat-icon.svg'
 import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import { WordRankContext } from 'components/Providers/WordRankProvider'
 
 const Item = styled.div`
   margin: 0;
@@ -124,6 +125,8 @@ const ChatLog = ({
   const { colors } = useMantineTheme()
   const { chatConfig, userConfig } = useContext(ConfigContext)
   const { handlePollResponse } = useContext(PollContext)
+  const { handleIncomingWord: handleWordRankMessage } =
+    useContext(WordRankContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isConnected, setIsConnected] = useState(false)
 
@@ -265,6 +268,11 @@ const ChatLog = ({
           userId: payload.sender,
           content: payload.message,
         })
+
+        handleWordRankMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'youtube') {
         setChatData((prev) => [
           ...prev,
@@ -285,6 +293,11 @@ const ChatLog = ({
           userId: payload.sender,
           content: payload.message,
         })
+
+        handleWordRankMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'twitch') {
         setChatData((prev) => [
           ...prev,
@@ -297,6 +310,11 @@ const ChatLog = ({
         ])
 
         handlePollResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
+
+        handleWordRankMessage({
           userId: payload.sender,
           content: payload.message,
         })
@@ -321,6 +339,11 @@ const ChatLog = ({
         ])
 
         handlePollResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
+
+        handleWordRankMessage({
           userId: payload.sender,
           content: payload.message,
         })

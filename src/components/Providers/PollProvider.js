@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useState } from 'react'
 import { LanyardContext } from './LanyardProvider'
+import WordRankProvider from './WordRankProvider'
 export const PollContext = createContext()
 
 const PollProvider = ({ children }) => {
@@ -91,7 +92,7 @@ const PollProvider = ({ children }) => {
         updatePollKV,
       }}
     >
-      {children}
+      <WordRankProvider>{children}</WordRankProvider>
     </PollContext.Provider>
   )
 }

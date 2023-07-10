@@ -7,19 +7,23 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconChartBar, IconExternalLink } from '@tabler/icons'
+import { IconChartBar, IconExternalLink, IconListNumbers } from '@tabler/icons'
 import PollModal from 'components/Modals/PollModal/PollModal'
 import { PollContext } from 'components/Providers/PollProvider'
+import { WordRankContext } from 'components/Providers/WordRankProvider'
 import { StatPanel } from 'components/StreamStats'
 import { useContext } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { PanelHead } from '../document'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import { PanelHead } from '../document'
 import ChatLog from './ChatLog'
+import WordRank from './WordRank'
 
 const ChatPanel = () => {
   const { chatConfig } = useContext(ConfigContext)
   const { showPollModal, setShowPollModal } = useContext(PollContext)
+  const { showWordRankPanel, setShowWordRankPanel } =
+    useContext(WordRankContext)
   const isMedium = useMediaQuery('(max-width: 768px)')
   const [searchParams] = useSearchParams()
   const { colors } = useMantineTheme()
@@ -91,12 +95,29 @@ const ChatPanel = () => {
                 <IconChartBar size={22} />
               </ActionIcon>
             </Tooltip>
+            <Tooltip
+              label={
+                <Box m="sm">
+                  <Text>Open Word Rank</Text>
+                </Box>
+              }
+            >
+              <ActionIcon
+                onClick={() => {
+                  setShowWordRankPanel(!showWordRankPanel)
+                }}
+              >
+                <IconListNumbers size={22} />
+              </ActionIcon>
+            </Tooltip>
           </Flex>
         </Flex>
       </PanelHead>
       <Box style={{ flex: '1 1 auto' }}>
+        {showWordRankPanel && <WordRank />}
         <ChatLog
-          fullHeight
+          fullHeight={showWordRankPanel ? false : true}
+          height={showWordRankPanel ? '60%' : '100%'}
           isDark
           compact={isMedium ? true : false}
           px={isMedium ? '24px' : '32px'}
