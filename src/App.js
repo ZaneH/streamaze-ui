@@ -1,9 +1,10 @@
-import { NotificationsProvider } from '@mantine/notifications'
+import { Notifications } from '@mantine/notifications'
 import LanyardProvider from 'components/Providers/LanyardProvider'
 import PhoenixProvider from 'components/Providers/PhoenixProvider'
 import PollProvider from 'components/Providers/PollProvider'
 import SubathonProvider from 'components/Providers/SubathonProvider'
 import Countdown from 'pages/Countdown'
+import Landing from 'pages/Landing'
 import PollWidget from 'pages/PollWidget'
 import SlotMachine from 'pages/SlotMachine'
 import SubathonSettings from 'pages/SubathonSettings'
@@ -35,106 +36,104 @@ const App = () => {
       <BrowserRouter>
         <ConfigProvider>
           <OledMantineProvider>
-            <NotificationsProvider>
-              <LanyardProvider>
-                <KeypadProvider>
-                  <DonationProvider>
-                    <HopProvider>
-                      <GpsProvider>
-                        <SubathonProvider>
-                          <StatProvider>
-                            <PhoenixProvider>
-                              <SidebarProvider>
-                                <PollProvider>
-                                  <Routes>
-                                    <Route
-                                      path="/"
-                                      element={<Navigate to="/home" />}
-                                    />
+            <Notifications />
+            <LanyardProvider>
+              <KeypadProvider>
+                <DonationProvider>
+                  <HopProvider>
+                    <GpsProvider>
+                      <SubathonProvider>
+                        <StatProvider>
+                          <PhoenixProvider>
+                            <SidebarProvider>
+                              <PollProvider>
+                                <Routes>
+                                  <Route
+                                    path="/landing"
+                                    element={<Landing />}
+                                  />
 
-                                    <Route
-                                      path="/settings"
-                                      element={<Settings />}
-                                    />
+                                  <Route
+                                    path="/"
+                                    element={<Navigate to="/home" />}
+                                  />
 
-                                    <Route path="/home" element={<Home />} />
+                                  <Route
+                                    path="/settings"
+                                    element={<Settings />}
+                                  />
 
-                                    <Route
-                                      path="/go-live"
-                                      element={<GoLive />}
-                                    />
-                                    <Route
-                                      path="/server"
-                                      element={<ServerControl />}
-                                    />
+                                  <Route path="/home" element={<Home />} />
 
-                                    <Route
-                                      path="/chat"
-                                      element={
-                                        <ChatLog
-                                          height="100%"
-                                          fluid
-                                          showProfilePicture={false}
-                                          autorefresh={20 * 60 * 1000}
-                                        />
-                                      }
-                                    />
+                                  <Route path="/go-live" element={<GoLive />} />
+                                  <Route
+                                    path="/server"
+                                    element={<ServerControl />}
+                                  />
 
-                                    <Route
-                                      path="/keypad"
-                                      element={<Keypad />}
-                                    />
+                                  <Route
+                                    path="/chat"
+                                    element={
+                                      <ChatLog
+                                        height="100%"
+                                        fluid
+                                        showProfilePicture={false}
+                                        autorefresh={20 * 60 * 1000}
+                                      />
+                                    }
+                                  />
 
-                                    <Route
-                                      path="/raspberrypi"
-                                      element={<RaspberryPi />}
-                                    />
+                                  <Route path="/keypad" element={<Keypad />} />
 
-                                    <Route
-                                      path="/subathon/clock"
-                                      element={<Countdown />}
-                                    />
-                                    <Route
-                                      path="/subathon"
-                                      element={<SubathonSettings />}
-                                    />
+                                  <Route
+                                    path="/raspberrypi"
+                                    element={<RaspberryPi />}
+                                  />
 
-                                    <Route
-                                      path="/poll/:id"
-                                      element={<PollWidget />}
-                                    />
+                                  <Route
+                                    path="/subathon/clock"
+                                    element={<Countdown />}
+                                  />
+                                  <Route
+                                    path="/subathon"
+                                    element={<SubathonSettings />}
+                                  />
 
-                                    <Route
-                                      path="/widget/ticker/:id"
-                                      element={<TickerWidget />}
-                                    />
+                                  <Route
+                                    path="/poll/:id"
+                                    element={<PollWidget />}
+                                  />
 
-                                    <Route
-                                      path="/widget/subs/:platform"
-                                      element={<SubscriberCountWidget />}
-                                    />
+                                  <Route
+                                    path="/widget/ticker/:id"
+                                    element={<TickerWidget />}
+                                  />
 
-                                    <Route
-                                      path="/giveaway/slots"
-                                      element={<SlotMachine />}
-                                    />
+                                  <Route
+                                    path="/widget/subs/:platform"
+                                    element={<SubscriberCountWidget />}
+                                  />
 
-                                    <Route
-                                      path="*"
-                                      element={<Navigate to="/home" />}
-                                    />
-                                  </Routes>
-                                </PollProvider>
-                              </SidebarProvider>
-                            </PhoenixProvider>
-                          </StatProvider>
-                        </SubathonProvider>
-                      </GpsProvider>
-                    </HopProvider>
-                  </DonationProvider>
-                </KeypadProvider>
-              </LanyardProvider>
-            </NotificationsProvider>
+                                  <Route
+                                    path="/giveaway/slots"
+                                    element={<SlotMachine />}
+                                  />
+
+                                  <Route
+                                    path="*"
+                                    element={<Navigate to="/home" />}
+                                  />
+                                </Routes>
+                              </PollProvider>
+                            </SidebarProvider>
+                          </PhoenixProvider>
+                        </StatProvider>
+                      </SubathonProvider>
+                    </GpsProvider>
+                  </HopProvider>
+                </DonationProvider>
+              </KeypadProvider>
+            </LanyardProvider>
           </OledMantineProvider>
         </ConfigProvider>
       </BrowserRouter>
