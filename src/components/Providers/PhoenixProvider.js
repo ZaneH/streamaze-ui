@@ -147,7 +147,7 @@ const PhoenixProvider = ({ children }) => {
           console.error(`Viewers not found: ${res}`)
         }
       })
-  })
+  }, [statsConfig?.kickChannelName, setKickViewers])
 
   const kickInterval = useInterval(async () => {
     if (pathname !== '/home') {
