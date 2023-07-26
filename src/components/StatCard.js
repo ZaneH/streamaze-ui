@@ -85,7 +85,7 @@ const StatCard = () => {
 
   const kickInterval = useInterval(() => {
     wretch(
-      `${REACT_APP_API_URL}/kick/viewers?channelName=${statsConfig?.kickChannelName}`
+      `${REACT_APP_API_3_URL}/kick/viewers/${statsConfig?.kickChannelName}`
     )
       .get()
       .json((res) => {
