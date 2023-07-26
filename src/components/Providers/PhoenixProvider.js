@@ -1,7 +1,13 @@
 import { showNotification } from '@mantine/notifications'
 import useStreamer from 'hooks/useStreamer'
 import { Socket } from 'phoenix'
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { calculateTimeRemaining } from 'utils/time'
 import { ConfigContext } from './ConfigProvider'
 import { DonationContext } from './DonationProvider'
@@ -9,8 +15,10 @@ import { StatContext } from './StatProvider'
 import { SubathonContext } from './SubathonProvider'
 import { useInterval } from '@mantine/hooks'
 import { useLocation } from 'react-router-dom'
+import wretch from 'wretch'
 
 export const PhoenixContext = createContext()
+const { REACT_APP_API_2_URL } = process.env
 
 const PhoenixProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
@@ -30,6 +38,7 @@ const PhoenixProvider = ({ children }) => {
   } = useContext(StatContext)
   const {
     userConfig,
+    statsConfig,
     setLanyardConfig,
     setObsConfig,
     setChatConfig,
@@ -126,15 +135,26 @@ const PhoenixProvider = ({ children }) => {
     }
   }, [userConfig?.streamazeKey])
 
-  const kickInterval = useInterval(() => {
+  const updateKickViewers = useCallback(async () => {
+    await wretch(
+      `${REACT_APP_API_2_URL}/kick/viewers/${statsConfig?.kickChannelName}`
+    )
+      .get()
+      .json((res) => {
+        if (res?.viewers) {
+          setKickViewers(res.viewers)
+        } else {
+          console.error(`Viewers not found: ${res}`)
+        }
+      })
+  })
+
+  const kickInterval = useInterval(async () => {
     if (pathname !== '/home') {
       return
     }
 
-    const resp = streamerChannel.push('fetch_viewer_count', {})
-    resp.receive('ok', ({ kick_viewer_count } = {}) => {
-      setKickViewers(kick_viewer_count)
-    })
+    updateKickViewers()
   }, 60 * 1000) // 1 minute
 
   useEffect(() => {
@@ -144,6 +164,7 @@ const PhoenixProvider = ({ children }) => {
   }, [streamerChannel])
 
   useEffect(() => {
+    updateKickViewers()
     return kickInterval.stop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
