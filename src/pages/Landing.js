@@ -12,6 +12,7 @@ import {
   Transition,
   createStyles,
   rem,
+  useMantineTheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconChevronDown } from '@tabler/icons'
@@ -156,8 +157,15 @@ const HeaderMenu = ({ links }) => {
 }
 
 const Landing = () => {
+  const theme = useMantineTheme()
+
   return (
-    <Box>
+    <Box
+      style={{
+        backgroundColor:
+          theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+      }}
+    >
       <HeaderMenu
         links={[
           { label: 'Stats', link: '/stats' },

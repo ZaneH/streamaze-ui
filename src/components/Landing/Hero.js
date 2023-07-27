@@ -1,25 +1,20 @@
-import {
-  Button,
-  Container,
-  Group,
-  Indicator,
-  Text,
-  createStyles,
-  rem,
-} from '@mantine/core'
+import { Box, Button, Group, createStyles, px, rem } from '@mantine/core'
+import { motion } from 'framer-motion'
+import { ReactComponent as BasicIllustration } from 'assets/streamaze-basic-illustration.svg'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: 'relative',
     boxSizing: 'border-box',
-    backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
   },
 
   inner: {
     position: 'relative',
-    paddingTop: rem(120),
-    paddingBottom: rem(120),
+    paddingTop: px(80),
+    paddingBottom: px(80),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: px(24),
 
     [theme.fn.smallerThan('sm')]: {
       paddingBottom: rem(80),
@@ -28,13 +23,14 @@ const useStyles = createStyles((theme) => ({
   },
 
   title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontSize: rem(62),
-    fontWeight: 900,
+    fontFamily: `Unbounded, ${theme.fontFamily}`,
+    fontSize: rem(36),
+    fontWeight: 500,
     lineHeight: 1.1,
     margin: 0,
     padding: 0,
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    color: theme.white,
+    textAlign: 'center',
 
     [theme.fn.smallerThan('sm')]: {
       fontSize: rem(42),
@@ -52,7 +48,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   controls: {
-    marginTop: `calc(${theme.spacing.xl} * 2)`,
+    justifyContent: 'center',
 
     [theme.fn.smallerThan('sm')]: {
       marginTop: theme.spacing.xl,
@@ -63,6 +59,10 @@ const useStyles = createStyles((theme) => ({
     height: rem(54),
     paddingLeft: rem(38),
     paddingRight: rem(38),
+    fontFamily: `Unbounded, ${theme.fontFamily}`,
+    fontWeight: 500,
+    borderRadius: theme.radius.lg,
+    color: theme.colors.dark[8],
 
     [theme.fn.smallerThan('sm')]: {
       height: rem(54),
@@ -77,48 +77,45 @@ export const Hero = () => {
   const { classes } = useStyles()
   return (
     <div className={classes.wrapper}>
-      <Container size={700} className={classes.inner}>
-        <h1 className={classes.title}>
-          The{' '}
-          <Text
-            component="span"
-            variant="gradient"
-            gradient={{ from: 'blue', to: 'cyan' }}
-            inherit
-          >
-            Ultimate
-          </Text>{' '}
-          Streamer Toolkit
-        </h1>
-
-        <Text className={classes.description} color="dimmed">
-          Elevate your live streaming experience with unrivaled control and
-          seamless interaction– all in one place.
-        </Text>
+      <Box size={700} className={classes.inner}>
+        <h1 className={classes.title}>The Ultimate Live Stream Dashboard</h1>
 
         <Group className={classes.controls}>
-          <Button
-            size="xl"
-            className={classes.control}
-            variant="gradient"
-            gradient={{ from: 'blue', to: 'cyan' }}
+          <motion.div
+            whileHover={{
+              scale: 1.035,
+            }}
           >
-            Learn more
-          </Button>
-
-          <Indicator processing>
             <Button
-              component="a"
-              href="https://github.com/mantinedev/mantine"
               size="xl"
-              variant="default"
               className={classes.control}
+              variant="gradient"
+              gradient={{
+                from: '#0634D6',
+                to: '#062282',
+                deg: 160,
+              }}
+              style={{ color: 'white' }}
             >
-              Sign up
+              Sign Up
             </Button>
-          </Indicator>
+          </motion.div>
+
+          <Button
+            component="a"
+            href="https://github.com/mantinedev/mantine"
+            size="xl"
+            variant="white"
+            className={classes.control}
+          >
+            Docs
+          </Button>
         </Group>
-      </Container>
+
+        <BasicIllustration
+          style={{ paddingTop: '34px', alignSelf: 'center' }}
+        />
+      </Box>
     </div>
   )
 }
