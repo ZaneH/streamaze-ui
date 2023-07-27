@@ -147,6 +147,9 @@ const PhoenixProvider = ({ children }) => {
           console.error(`Viewers not found: ${res}`)
         }
       })
+      .catch((err) => {
+        console.error(`Error fetching viewers: ${err}`)
+      })
   }, [statsConfig?.kickChannelName, setKickViewers])
 
   const kickInterval = useInterval(async () => {
