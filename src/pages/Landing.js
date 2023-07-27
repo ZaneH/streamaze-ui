@@ -4,6 +4,7 @@ import {
   Center,
   Container,
   Divider,
+  Flex,
   Group,
   Header,
   Menu,
@@ -16,7 +17,7 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconChevronDown } from '@tabler/icons'
-import { FeaturesGrid, Hero } from 'components/Landing'
+import { DonationSection, FeaturesGrid, Hero } from 'components/Landing'
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -176,8 +177,11 @@ const Landing = () => {
           { label: 'Register', link: '/register' },
         ]}
       />
-      <Hero />
-      <FeaturesGrid />
+      <Flex direction="column" gap={80} mt={80}>
+        <Hero />
+        <DonationSection />
+      </Flex>
+      {/* <FeaturesGrid /> */}
     </Box>
   )
 }

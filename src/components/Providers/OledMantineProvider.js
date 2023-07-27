@@ -42,6 +42,7 @@ const OledMantineProvider = ({ children }) => {
       theme={{
         colorScheme: 'dark',
         colors: darkColorValues,
+        white: '#FDFFFC',
       }}
     >
       {children}

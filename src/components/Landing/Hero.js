@@ -10,16 +10,9 @@ const useStyles = createStyles((theme) => ({
 
   inner: {
     position: 'relative',
-    paddingTop: px(80),
-    paddingBottom: px(80),
     display: 'flex',
     flexDirection: 'column',
     gap: px(24),
-
-    [theme.fn.smallerThan('sm')]: {
-      paddingBottom: rem(80),
-      paddingTop: rem(80),
-    },
   },
 
   title: {
