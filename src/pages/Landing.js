@@ -9,7 +9,7 @@ import {
   Header,
   Menu,
   Paper,
-  Title,
+  SimpleGrid,
   Transition,
   createStyles,
   rem,
@@ -28,6 +28,11 @@ import {
 import { ParallaxProvider } from 'react-scroll-parallax'
 
 const useStyles = createStyles((theme) => ({
+  title: {
+    fontFamily: `Unbounded, ${theme.fontFamily}`,
+    color: theme.white,
+  },
+
   inner: {
     height: rem(56),
     display: 'flex',
@@ -53,18 +58,12 @@ const useStyles = createStyles((theme) => ({
     padding: `${rem(8)} ${rem(12)}`,
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
-    color:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[0]
-        : theme.colors.gray[7],
+    color: theme.colors.dark[0],
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
 
     '&:hover': {
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+      backgroundColor: theme.colors.dark[6],
     },
   },
 
@@ -78,13 +77,29 @@ const useStyles = createStyles((theme) => ({
     '*': {
       padding: `${rem(10)} ${rem(12)}`,
     },
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
+    },
   },
 
   wrapper: {
     position: 'relative',
     boxSizing: 'border-box',
-    backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+  },
+
+  footer: {
+    fontWeight: 500,
+    color: 'white',
+  },
+
+  footerLink: {
+    textAlign: 'right',
+  },
+
+  verticalDivide: {
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none',
+    },
   },
 }))
 
@@ -94,7 +109,9 @@ const HeaderMenu = ({ links }) => {
 
   const items = links.map((link) => {
     if (link === null) {
-      return <Divider orientation="vertical" />
+      return (
+        <Divider orientation="vertical" className={classes.verticalDivide} />
+      )
     }
 
     const menuItems = link.links?.map((item) => (
@@ -139,10 +156,10 @@ const HeaderMenu = ({ links }) => {
   })
 
   return (
-    <Header height={56}>
+    <Header height={56} style={{ position: 'relative' }}>
       <Container>
         <div className={classes.inner}>
-          <Title order={3}>Streamaze</Title>
+          <Box className={classes.title}>Streamaze</Box>
           <Group spacing={5} className={classes.links}>
             {items}
           </Group>
@@ -162,6 +179,32 @@ const HeaderMenu = ({ links }) => {
         </Transition>
       </Container>
     </Header>
+  )
+}
+
+const Footer = () => {
+  const theme = useMantineTheme()
+  const { classes } = useStyles()
+
+  return (
+    <Box
+      mt={80}
+      style={{ backgroundColor: theme.colors.dark[9] }}
+      pt={40}
+      pb={80}
+    >
+      <Container size="md">
+        <SimpleGrid cols={2} className={classes.footer}>
+          <Box>Streamaze &copy; 2023</Box>
+          <Flex direction="column" gap={8} className={classes.footerLink}>
+            <Box>Visit the docs</Box>
+            <Box>Forgot password?</Box>
+            <Box>Contact</Box>
+            <Box>About us</Box>
+          </Flex>
+        </SimpleGrid>
+      </Container>
+    </Box>
   )
 }
 
@@ -194,6 +237,7 @@ const Landing = () => {
           <PricingSection />
           <NewsletterSection />
         </Flex>
+        <Footer />
       </Box>
     </ParallaxProvider>
   )
