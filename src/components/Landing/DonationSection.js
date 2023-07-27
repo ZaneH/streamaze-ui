@@ -1,5 +1,7 @@
 import { Box, Container, Grid, createStyles, px, rem } from '@mantine/core'
 import { SuperChatCard } from 'components/Donations'
+import { useInView } from 'framer-motion'
+import { useRef } from 'react'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -155,6 +157,26 @@ const DONATION_BLURBS = [
   },
 ]
 
+const PopupText = ({ children }) => {
+  const ref = useRef()
+  const isInView = useInView(ref, {
+    amount: 'all',
+    margin: '0px 0px -100px 0px',
+  })
+
+  return (
+    <Box
+      ref={ref}
+      style={{
+        opacity: isInView ? 1 : 0,
+        transition: 'opacity 0.7s',
+      }}
+    >
+      {children}
+    </Box>
+  )
+}
+
 export const DonationSection = () => {
   const { classes } = useStyles()
 
@@ -175,12 +197,18 @@ export const DonationSection = () => {
           <Grid.Col span={1}>
             <Box className={classes.donationBlurbs}>
               {DONATION_BLURBS.map((b, i) => (
-                <Box className={classes.donationBlurb} key={i}>
-                  <h3>{b.title}</h3>
-                  <Box pt={6} opacity={0.66} style={{ whiteSpace: 'pre-line' }}>
-                    {b.description}
+                <PopupText>
+                  <Box className={classes.donationBlurb} key={i}>
+                    <h3>{b.title}</h3>
+                    <Box
+                      pt={6}
+                      opacity={0.66}
+                      style={{ whiteSpace: 'pre-line' }}
+                    >
+                      {b.description}
+                    </Box>
                   </Box>
-                </Box>
+                </PopupText>
               ))}
             </Box>
           </Grid.Col>

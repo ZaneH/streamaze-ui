@@ -106,7 +106,12 @@ export const Hero = () => {
         </Group>
 
         <BasicIllustration
-          style={{ paddingTop: '34px', alignSelf: 'center' }}
+          style={{
+            paddingTop: '34px',
+            marginBottom: '54px',
+            marginTop: '12px',
+            alignSelf: 'center',
+          }}
         />
       </Box>
     </div>
