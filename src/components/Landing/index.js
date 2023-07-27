@@ -1,3 +1,6 @@
-export * from './Features'
+export * from './FeaturesSection'
 export * from './Hero'
 export * from './DonationSection'
+export * from './NextGenChatSection'
+export * from './PricingSection'
+export * from './NewsletterSection'

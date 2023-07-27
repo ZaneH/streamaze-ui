@@ -86,8 +86,6 @@ const useStyles = createStyles((theme) => ({
       padding: 0,
     },
   },
-
-  donationBlurb: {},
 }))
 
 const DONATIONS = [
@@ -179,7 +177,7 @@ export const DonationSection = () => {
               {DONATION_BLURBS.map((b, i) => (
                 <Box className={classes.donationBlurb} key={i}>
                   <h3>{b.title}</h3>
-                  <Box pt={6} opacity={0.6} style={{ whiteSpace: 'pre-line' }}>
+                  <Box pt={6} opacity={0.66} style={{ whiteSpace: 'pre-line' }}>
                     {b.description}
                   </Box>
                 </Box>

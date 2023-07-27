@@ -7,6 +7,7 @@ const OledMantineProvider = ({ children }) => {
   const darkColorValues =
     themeConfig?.theme === 'oled'
       ? {
+          // OLED
           dark: [
             '#bfbfbe',
             '#000000',
@@ -21,6 +22,7 @@ const OledMantineProvider = ({ children }) => {
           ],
         }
       : {
+          // Dark mode
           dark: [
             '#C1C2C5',
             '#A6A7AB',
@@ -28,7 +30,7 @@ const OledMantineProvider = ({ children }) => {
             '#5C5F66',
             '#373A40',
             '#2C2E33',
-            '#25262B',
+            '#0A0A0B',
             '#1A1B1E',
             '#020100',
             '#101113',

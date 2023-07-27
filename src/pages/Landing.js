@@ -17,7 +17,15 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconChevronDown } from '@tabler/icons'
-import { DonationSection, FeaturesGrid, Hero } from 'components/Landing'
+import {
+  DonationSection,
+  FeaturesSection,
+  Hero,
+  NewsletterSection,
+  NextGenChatSection,
+  PricingSection,
+} from 'components/Landing'
+import { ParallaxProvider } from 'react-scroll-parallax'
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -161,28 +169,33 @@ const Landing = () => {
   const theme = useMantineTheme()
 
   return (
-    <Box
-      style={{
-        backgroundColor:
-          theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
-      }}
-    >
-      <HeaderMenu
-        links={[
-          { label: 'Stats', link: '/stats' },
-          { label: 'Contact', link: '/contact' },
-          { label: 'Pricing', link: '/pricing' },
-          null,
-          { label: 'Login', link: '/login' },
-          { label: 'Register', link: '/register' },
-        ]}
-      />
-      <Flex direction="column" gap={80} mt={80}>
-        <Hero />
-        <DonationSection />
-      </Flex>
-      {/* <FeaturesGrid /> */}
-    </Box>
+    <ParallaxProvider>
+      <Box
+        style={{
+          backgroundColor:
+            theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+        }}
+      >
+        <HeaderMenu
+          links={[
+            { label: 'Stats', link: '/stats' },
+            { label: 'Contact', link: '/contact' },
+            { label: 'Pricing', link: '/pricing' },
+            null,
+            { label: 'Login', link: '/login' },
+            { label: 'Register', link: '/register' },
+          ]}
+        />
+        <Flex direction="column" gap={80} mt={80}>
+          <Hero />
+          <DonationSection />
+          <NextGenChatSection />
+          <FeaturesSection />
+          <PricingSection />
+          <NewsletterSection />
+        </Flex>
+      </Box>
+    </ParallaxProvider>
   )
 }
 
