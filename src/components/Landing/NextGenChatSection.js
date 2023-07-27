@@ -233,7 +233,7 @@ export const NextGenChatSection = () => {
   const { classes } = useStyles()
   const parallax = useParallax({
     speed: -10,
-    translateY: [100, -300],
+    translateY: ['30vh', '-200vh'],
   })
 
   return (
@@ -244,7 +244,7 @@ export const NextGenChatSection = () => {
           <Box className={classes.chatContainer}>
             <Box ref={parallax.ref} px={30}>
               <Box>
-                <SenderText isverified>
+                <SenderText isverified="true">
                   The President
                   <VerifiedIcon />
                 </SenderText>
@@ -262,7 +262,7 @@ export const NextGenChatSection = () => {
                 <MessageText> KEKW! That reaction was priceless!</MessageText>
               </Box>
               <Box>
-                <SenderText ismod>
+                <SenderText ismod="true">
                   ModMan
                   <ModIcon />
                 </SenderText>
@@ -276,7 +276,7 @@ export const NextGenChatSection = () => {
                 </MessageText>
               </Box>
               <Box>
-                <SenderText ismember>
+                <SenderText ismember="true">
                   DogeOiler
                   <KickGift200Icon />
                 </SenderText>
@@ -298,7 +298,7 @@ export const NextGenChatSection = () => {
                 <MessageText> Incredible skills!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>
+                <SenderText ismember="true">
                   ChatOverlord
                   <VIPIcon />
                   <OGIcon />
@@ -317,7 +317,7 @@ export const NextGenChatSection = () => {
                 <MessageText> OMG, I can't believe that happened!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>
+                <SenderText ismember="true">
                   LaughingLad
                   <OGIcon />
                 </SenderText>
@@ -331,7 +331,7 @@ export const NextGenChatSection = () => {
                 </MessageText>
               </Box>
               <Box>
-                <SenderText ismember>Skilled Clipper</SenderText>
+                <SenderText ismember="true">Skilled Clipper</SenderText>
                 <MessageText> That move was 200 IQ!</MessageText>
               </Box>
               <Box>
@@ -348,7 +348,7 @@ export const NextGenChatSection = () => {
                 <MessageText> Woot woot! Go, go, go!</MessageText>
               </Box>
               <Box>
-                <SenderText ismod>
+                <SenderText ismod="true">
                   ReactionaryRuler
                   <ModIcon />
                 </SenderText>
@@ -369,11 +369,11 @@ export const NextGenChatSection = () => {
                 </MessageText>
               </Box>
               <Box>
-                <SenderText ismember>Dank Meme Lord</SenderText>
+                <SenderText ismember="true">Dank Meme Lord</SenderText>
                 <MessageText> What a legend!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>LOLinator</SenderText>
+                <SenderText ismember="true">LOLinator</SenderText>
                 <MessageText> PogU! I'm amazed!</MessageText>
               </Box>
               <Box>
@@ -385,7 +385,7 @@ export const NextGenChatSection = () => {
                 <MessageText> Haha, chat is going wild!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>Joke Junkie</SenderText>
+                <SenderText ismember="true">Joke Junkie</SenderText>
                 <MessageText> FeelsGoodMan to watch this!</MessageText>
               </Box>
               <Box>
@@ -408,11 +408,11 @@ export const NextGenChatSection = () => {
                 <MessageText> Poggers! This stream is a gem!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>KappaConductor</SenderText>
+                <SenderText ismember="true">KappaConductor</SenderText>
                 <MessageText> You're the GOAT!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>KEKWClown</SenderText>
+                <SenderText ismember="true">KEKWClown</SenderText>
                 <MessageText> Keep entertaining us!</MessageText>
               </Box>
               <Box>
@@ -427,7 +427,7 @@ export const NextGenChatSection = () => {
                 <MessageText> I'm in awe of your talent!</MessageText>
               </Box>
               <Box>
-                <SenderText isverified>
+                <SenderText isverified="true">
                   ChatComedian
                   <VerifiedIcon />
                   <VIPIcon />
@@ -444,7 +444,7 @@ export const NextGenChatSection = () => {
                 </MessageText>
               </Box>
               <Box>
-                <SenderText ismember>
+                <SenderText ismember="true">
                   ROFLRoyalty
                   <KickGift50Icon />
                 </SenderText>
@@ -458,7 +458,7 @@ export const NextGenChatSection = () => {
                 <MessageText> You're a legend in the making!</MessageText>
               </Box>
               <Box>
-                <SenderText ismod>
+                <SenderText ismod="true">
                   Giggle Giver
                   <ModIcon />
                   <OGIcon />
@@ -478,14 +478,14 @@ export const NextGenChatSection = () => {
                 <MessageText> Your skills are on another level!</MessageText>
               </Box>
               <Box>
-                <SenderText ismod>
+                <SenderText ismod="true">
                   PogUProdigy
                   <ModIcon />
                 </SenderText>
                 <MessageText> I'm having a blast watching this!</MessageText>
               </Box>
               <Box>
-                <SenderText ismember>
+                <SenderText ismember="true">
                   LOLzLover
                   <KickGift200Icon />
                 </SenderText>
@@ -506,13 +506,14 @@ export const NextGenChatSection = () => {
                 </MessageText>
               </Box>
               <Box>
-                <SenderText ismember>HahaHype</SenderText>
+                <SenderText ismember="true">HahaHype</SenderText>
                 <MessageText> Thanks for making my day!</MessageText>
               </Box>
             </Box>
           </Box>
           <Box opacity={0.66} mt={18}>
             Combine live stream chats from your favorite platforms into one.
+            Currently supports YouTube, Kick, Twitch, and TikTok live streams.
           </Box>
         </Box>
       </Container>

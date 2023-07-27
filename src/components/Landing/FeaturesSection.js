@@ -3,12 +3,10 @@ import {
   Container,
   Flex,
   Grid,
-  Text,
   createStyles,
   px,
   rem,
 } from '@mantine/core'
-import { useParallax } from 'react-scroll-parallax'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -113,7 +111,7 @@ const FeatureCol = ({ title, description, subtext }) => {
   const { classes } = useStyles()
 
   return (
-    <Grid.Col span={3}>
+    <Grid.Col sm={6} md={3}>
       <Box className={classes.subtleContainer}>
         <Flex direction="column" justify="space-between" gap={8} h="100%">
           <h4 className={classes.featureTitle}>{title}</h4>

@@ -2,6 +2,7 @@ import { Box, Container, Grid, createStyles, px, rem } from '@mantine/core'
 import { SuperChatCard } from 'components/Donations'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { motion } from 'framer-motion'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -186,19 +187,30 @@ export const DonationSection = () => {
         <h1 className={classes.title}>Make Donations Fun!</h1>
 
         <Grid gutter={px(45)} grow>
-          <Grid.Col span={4}>
+          <Grid.Col xs={12} sm={4}>
             <Box className={classes.donationLog}>
-              {DONATIONS.map((d) => (
-                <SuperChatCard donation={d} />
+              {DONATIONS.map((d, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{
+                    scale: 1.08,
+                    transition: {
+                      duration: 0.4,
+                      ease: 'backOut',
+                    },
+                  }}
+                >
+                  <SuperChatCard donation={d} />
+                </motion.div>
               ))}
             </Box>
           </Grid.Col>
 
-          <Grid.Col span={1}>
+          <Grid.Col xs={12} sm={1}>
             <Box className={classes.donationBlurbs}>
               {DONATION_BLURBS.map((b, i) => (
-                <PopupText>
-                  <Box className={classes.donationBlurb} key={i}>
+                <PopupText key={i}>
+                  <Box className={classes.donationBlurb}>
                     <h3>{b.title}</h3>
                     <Box
                       pt={6}

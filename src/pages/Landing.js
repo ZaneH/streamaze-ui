@@ -107,21 +107,25 @@ const HeaderMenu = ({ links }) => {
   const [opened, { toggle }] = useDisclosure(false)
   const { classes } = useStyles()
 
-  const items = links.map((link) => {
+  const items = links.map((link, i) => {
     if (link === null) {
       return (
-        <Divider orientation="vertical" className={classes.verticalDivide} />
+        <Divider
+          key={i}
+          orientation="vertical"
+          className={classes.verticalDivide}
+        />
       )
     }
 
-    const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+    const menuItems = link.links?.map((item, j) => (
+      <Menu.Item key={j}>{item.label}</Menu.Item>
     ))
 
     if (menuItems) {
       return (
         <Menu
-          key={link.label}
+          key={i}
           trigger="hover"
           transitionProps={{ exitDuration: 0 }}
           withinPortal

@@ -56,13 +56,6 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 500,
     borderRadius: theme.radius.lg,
     color: theme.colors.dark[8],
-
-    [theme.fn.smallerThan('sm')]: {
-      height: rem(54),
-      paddingLeft: rem(18),
-      paddingRight: rem(18),
-      flex: 1,
-    },
   },
 }))
 
