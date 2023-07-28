@@ -31,6 +31,22 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  subtitle: {
+    fontFamily: `Unbounded, ${theme.fontFamily}`,
+    fontSize: rem(24),
+    fontWeight: 500,
+    margin: 0,
+    padding: 0,
+    color: theme.white,
+    opacity: 0.8,
+    textAlign: 'center',
+    marginTop: theme.spacing.xs,
+
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: rem(18),
+    },
+  },
+
   description: {
     marginTop: theme.spacing.xl,
     fontSize: rem(24),
@@ -64,7 +80,12 @@ export const Hero = () => {
   return (
     <div className={classes.wrapper}>
       <Box size={700} className={classes.inner}>
-        <h1 className={classes.title}>The Ultimate Live Stream Dashboard</h1>
+        <Box>
+          <h1 className={classes.title}>The Ultimate Live Stream Dashboard</h1>
+          <h2 className={classes.subtitle}>
+            Control all of your live streams in one place
+          </h2>
+        </Box>
 
         <Group className={classes.controls}>
           <motion.div
@@ -94,13 +115,13 @@ export const Hero = () => {
             variant="white"
             className={classes.control}
           >
-            Docs
+            FAQ
           </Button>
         </Group>
 
         <BasicIllustration
           style={{
-            paddingTop: '34px',
+            paddingTop: '18px',
             marginBottom: '54px',
             marginTop: '12px',
             alignSelf: 'center',
