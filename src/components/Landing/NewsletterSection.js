@@ -75,6 +75,7 @@ const useStyles = createStyles((theme) => ({
     opacity: 0.66,
     fontSize: px(20),
     fontWeight: 400,
+    fontFamily: `IBM Plex Sans, ${theme.fontFamily}`,
   },
 }))
 

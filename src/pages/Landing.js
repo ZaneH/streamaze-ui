@@ -90,6 +90,7 @@ const useStyles = createStyles((theme) => ({
   footer: {
     fontWeight: 500,
     color: 'white',
+    fontFamily: `IBM Plex Sans, ${theme.fontFamily}`,
   },
 
   footerLink: {

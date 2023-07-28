@@ -97,21 +97,11 @@ const DONATIONS = [
     data: {
       amount: 2.0,
       displayString: '$3.00',
-      message: 'Nice',
-      name: 'John Doe',
+      message:
+        "!rick Here's some interdimensional cash, idiots! Enjoy the show!",
+      name: 'Jacob C.',
       metadata: {
-        pfp: 'https://i.imgur.com/2x2f6VJ.png',
-      },
-    },
-  },
-  {
-    type: 'kick_subscription',
-    data: {
-      amount: 9.99,
-      name: 'John Doe',
-      metadata: {
-        pfp: 'https://i.imgur.com/2x2f6VJ.png',
-        months: 5,
+        pfp: '/images/gan-pfp-1.jpeg',
       },
     },
   },
@@ -120,10 +110,20 @@ const DONATIONS = [
     data: {
       amount: 10,
       displayString: '$10.00',
-      message: 'Thanks for the India stream! Hope you do more!',
-      name: 'John Doe',
+      message: 'Donating for the first time!',
+      name: 'Jinx',
       metadata: {
-        pfp: 'https://i.imgur.com/2x2f6VJ.png',
+        pfp: '/images/gan-pfp-3.jpeg',
+      },
+    },
+  },
+  {
+    type: 'kick_subscription',
+    data: {
+      amount: 9.99,
+      name: 'Drew7',
+      metadata: {
+        months: 5,
       },
     },
   },
@@ -132,10 +132,10 @@ const DONATIONS = [
     data: {
       amount: 200,
       displayString: '$200.00',
-      message: 'Thanks for the India stream! Hope you do more!',
-      name: 'John Doe',
+      message: 'Thanks for the India stream, I hope you do more!',
+      name: 'Kelsey Baker',
       metadata: {
-        pfp: 'https://i.imgur.com/2x2f6VJ.png',
+        pfp: '/images/gan-pfp-4.jpeg',
       },
     },
   },

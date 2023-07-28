@@ -23,7 +23,7 @@ const SenderText = styled(Text)`
   ${({ origin, ismod }) => origin === 'kick' && ismod && 'color: #5e84f1;'}
   ${({ isverified }) => isverified && 'color: #5BFE2E;'}
   font-weight: 700;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
 `
 
 const MessageText = styled(Text)`
@@ -32,7 +32,7 @@ const MessageText = styled(Text)`
   word-break: break-word;
   color: white;
   ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000'}
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
 `
 
@@ -107,6 +107,7 @@ const useStyles = createStyles((theme) => ({
     paddingBottom: px(56),
     border: '1px solid rgba(255, 255, 255, 0.1)',
     color: theme.white,
+    fontFamily: `IBM Plex Sans, ${theme.fontFamily}`,
     '& > *': {
       marginRight: 'auto',
       marginLeft: 'auto',
