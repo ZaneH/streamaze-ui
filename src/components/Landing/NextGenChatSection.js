@@ -514,7 +514,7 @@ export const NextGenChatSection = () => {
               </Box>
             </Box>
           </Box>
-          <Box opacity={0.66} mt={18}>
+          <Box opacity={0.66} mt={18} px="lg">
             Combine live stream chats from your favorite platforms into one.
             Currently supports YouTube, Kick, Twitch, and TikTok live streams.
           </Box>

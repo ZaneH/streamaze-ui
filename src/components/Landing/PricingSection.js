@@ -157,7 +157,6 @@ export const PricingSection = () => {
               'Chat features',
               'Donation + TTS features',
               'Viewer statistics',
-              'OBS plugins',
               'OBS widgets',
               'Support',
             ]}
@@ -165,7 +164,12 @@ export const PricingSection = () => {
           <PricingCol
             title="Premium"
             subtext="$14.99/mo. &rarr;"
-            includes={['Everything', 'Giveaways', 'Priority support']}
+            includes={[
+              'Everything',
+              'OBS plugins',
+              'Giveaways',
+              'Priority support',
+            ]}
           />
         </Grid>
       </Container>

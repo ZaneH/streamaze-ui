@@ -12,7 +12,8 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconCheck } from '@tabler/icons'
-import { useParallax } from 'react-scroll-parallax'
+import jsonp from 'jsonp'
+import { useRef } from 'react'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -107,37 +108,62 @@ const FeatureCol = ({ title, includes, subtext }) => {
 export const NewsletterSection = () => {
   const { classes } = useStyles()
   const theme = useMantineTheme()
+  const emailInputRef = useRef()
 
   return (
     <div className={classes.wrapper}>
       <Container className={classes.inner}>
         <h1 className={classes.title}>Sign Up for Updates</h1>
 
-        <Flex
-          w="100%"
-          align="center"
-          gap={18}
-          maw={550}
-          style={{ alignSelf: 'center' }}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            const mailchimpUrl = process.env.REACT_APP_MAILCHIMP_URL
+            jsonp(
+              `${mailchimpUrl}&EMAIL=${emailInputRef.current.value}`,
+              { param: 'c' },
+              (_, data) => {
+                const { msg, result } = data
+                if (result === 'success') {
+                  emailInputRef.current.value = ''
+                }
+
+                alert(msg)
+              }
+            )
+          }}
+          style={{ width: '100%' }}
         >
-          <Input
+          <Flex
             w="100%"
-            type="email"
-            placeholder="example@email.com"
-            size="lg"
-            radius="lg"
-          />
-          <Button
-            size="xl"
-            className={classes.control}
-            style={{
-              color: theme.colors.dark[8],
-              backgroundColor: '#F1D302',
-            }}
+            align="center"
+            gap={18}
+            maw={550}
+            style={{ alignSelf: 'center' }}
+            mx="auto"
           >
-            Submit
-          </Button>
-        </Flex>
+            <Input
+              ref={emailInputRef}
+              w="100%"
+              type="email"
+              placeholder="example@email.com"
+              size="lg"
+              radius="lg"
+              required
+            />
+            <Button
+              size="xl"
+              className={classes.control}
+              type="submit"
+              style={{
+                color: theme.colors.dark[8],
+                backgroundColor: '#F1D302',
+              }}
+            >
+              Submit
+            </Button>
+          </Flex>
+        </form>
 
         <Box className={classes.disclaimer}>
           We will not spam or sell your information.

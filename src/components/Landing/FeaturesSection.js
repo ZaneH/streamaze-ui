@@ -175,7 +175,7 @@ export const FeaturesSection = () => {
             description="Keep track of every donation (or expense) and add it to the stream overlay automagically."
             subtext={
               <Box className={classes.featureSubtext}>
-                (OBS plugin provided)
+                (OBS widget provided)
               </Box>
             }
           />
@@ -184,7 +184,7 @@ export const FeaturesSection = () => {
             description="Built for one of the greatest subathons of all time. We have everything you need to keep the clock going!"
             subtext={
               <Box className={classes.featureSubtext}>
-                (OBS plugin provided)
+                (OBS widget provided)
               </Box>
             }
           />
