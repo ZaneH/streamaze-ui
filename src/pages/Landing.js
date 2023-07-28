@@ -216,34 +216,34 @@ const Landing = () => {
   const theme = useMantineTheme()
 
   return (
-    <ParallaxProvider>
-      <Box
-        style={{
-          backgroundColor:
-            theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
-        }}
-      >
-        <HeaderMenu
-          links={[
-            { label: 'Stats', link: '/stats' },
-            { label: 'Contact', link: '/contact' },
-            { label: 'Pricing', link: '/pricing' },
-            null,
-            { label: 'Login', link: '/login' },
-            { label: 'Register', link: '/register' },
-          ]}
-        />
-        <Flex direction="column" gap={80} mt={80}>
+    <Box
+      style={{
+        backgroundColor:
+          theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+      }}
+    >
+      <HeaderMenu
+        links={[
+          { label: 'Stats', link: '/stats' },
+          { label: 'Contact', link: '/contact' },
+          { label: 'Pricing', link: '/pricing' },
+          null,
+          { label: 'Login', link: '/login' },
+          { label: 'Register', link: '/register' },
+        ]}
+      />
+      <Flex direction="column" gap={80} mt={80}>
+        <ParallaxProvider>
           <Hero />
           <DonationSection />
           <NextGenChatSection />
           <FeaturesSection />
           <PricingSection />
           <NewsletterSection />
-        </Flex>
-        <Footer />
-      </Box>
-    </ParallaxProvider>
+        </ParallaxProvider>
+      </Flex>
+      <Footer />
+    </Box>
   )
 }
 

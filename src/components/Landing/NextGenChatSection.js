@@ -110,7 +110,10 @@ const useStyles = createStyles((theme) => ({
     '& > *': {
       marginRight: 'auto',
       marginLeft: 'auto',
-      width: '75%',
+      width: '90%',
+      [theme.fn.largerThan('sm')]: {
+        width: '75%',
+      },
     },
   },
 

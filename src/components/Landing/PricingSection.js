@@ -9,7 +9,6 @@ import {
   rem,
 } from '@mantine/core'
 import { IconCheck } from '@tabler/icons'
-import { useParallax } from 'react-scroll-parallax'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -110,11 +109,11 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-const FeatureCol = ({ title, includes, subtext }) => {
+const PricingCol = ({ title, includes, subtext }) => {
   const { classes } = useStyles()
 
   return (
-    <Grid.Col span={4}>
+    <Grid.Col xs={12} sm={4}>
       <Box className={classes.subtleContainer}>
         <Flex direction="column" justify="space-between" gap={8} h="100%">
           <h4 className={classes.featureTitle}>{title}</h4>
@@ -146,12 +145,12 @@ export const PricingSection = () => {
         <h1 className={classes.title}>Pricing</h1>
 
         <Grid grow>
-          <FeatureCol
+          <PricingCol
             title="Free"
             subtext="Create an account &rarr;"
             includes={['Chat features']}
           />
-          <FeatureCol
+          <PricingCol
             title="Subscriber"
             subtext="$8.99/mo. &rarr;"
             includes={[
@@ -163,7 +162,7 @@ export const PricingSection = () => {
               'Support',
             ]}
           />
-          <FeatureCol
+          <PricingCol
             title="Premium"
             subtext="$14.99/mo. &rarr;"
             includes={['Everything', 'Giveaways', 'Priority support']}
