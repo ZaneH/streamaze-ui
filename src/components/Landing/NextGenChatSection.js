@@ -243,7 +243,7 @@ export const NextGenChatSection = () => {
     <div className={classes.wrapper}>
       <Container className={classes.inner}>
         <Box className={classes.subtleContainer}>
-          <h1 className={classes.title}>Next-Gen Chat</h1>
+          <h2 className={classes.title}>Next-Gen Chat</h2>
           <Box className={classes.chatContainer}>
             <Box ref={parallax.ref} px={30}>
               <Box>

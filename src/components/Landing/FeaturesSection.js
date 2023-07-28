@@ -129,7 +129,7 @@ export const FeaturesSection = () => {
   return (
     <div className={classes.wrapper}>
       <Container className={classes.inner}>
-        <h1 className={classes.title}>The Highlights</h1>
+        <h2 className={classes.title}>The Highlights</h2>
 
         <Grid grow>
           <FeatureCol

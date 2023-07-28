@@ -184,7 +184,7 @@ export const DonationSection = () => {
   return (
     <div className={classes.wrapper}>
       <Container className={classes.inner}>
-        <h1 className={classes.title}>Make Donations Fun!</h1>
+        <h2 className={classes.title}>Make Donations Fun!</h2>
 
         <Grid gutter={px(45)} grow>
           <Grid.Col xs={12} sm={4}>

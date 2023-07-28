@@ -142,7 +142,7 @@ export const PricingSection = () => {
   return (
     <div className={classes.wrapper}>
       <Container className={classes.inner}>
-        <h1 className={classes.title}>Pricing</h1>
+        <h2 className={classes.title}>Pricing</h2>
 
         <Grid grow>
           <PricingCol

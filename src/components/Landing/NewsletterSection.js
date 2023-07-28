@@ -113,7 +113,7 @@ export const NewsletterSection = () => {
   return (
     <div className={classes.wrapper}>
       <Container className={classes.inner}>
-        <h1 className={classes.title}>Sign Up for Updates</h1>
+        <h2 className={classes.title}>Sign Up for Updates</h2>
 
         <form
           onSubmit={(e) => {
