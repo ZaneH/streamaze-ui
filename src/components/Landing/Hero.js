@@ -6,6 +6,8 @@ const useStyles = createStyles((theme) => ({
   wrapper: {
     position: 'relative',
     boxSizing: 'border-box',
+    paddingLeft: '18px',
+    paddingRight: '18px',
   },
 
   inner: {
@@ -13,6 +15,10 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: px(24),
+    marginTop: '40px',
+    [theme.fn.largerThan('sm')]: {
+      marginTop: '80px',
+    },
   },
 
   title: {
@@ -73,6 +79,19 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.lg,
     color: theme.colors.dark[8],
   },
+
+  illustration: {
+    marginBottom: '0',
+    width: '100%',
+    [theme.fn.largerThan('xs')]: {
+      marginTop: '12px',
+      paddingTop: '18px',
+      marginBottom: '54px',
+    },
+    alignSelf: 'center',
+    paddingLeft: '18px',
+    paddingRight: '18px',
+  },
 }))
 
 export const Hero = () => {
@@ -119,14 +138,7 @@ export const Hero = () => {
           </Button>
         </Group>
 
-        <BasicIllustration
-          style={{
-            paddingTop: '18px',
-            marginBottom: '54px',
-            marginTop: '12px',
-            alignSelf: 'center',
-          }}
-        />
+        <BasicIllustration className={classes.illustration} />
       </Box>
     </div>
   )

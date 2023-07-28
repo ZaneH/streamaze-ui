@@ -233,7 +233,7 @@ const Landing = () => {
           { label: 'Register', link: '/register' },
         ]}
       />
-      <Flex direction="column" gap={80} mt={80}>
+      <Flex direction="column" gap={80}>
         <ParallaxProvider>
           <Hero />
           <DonationSection />

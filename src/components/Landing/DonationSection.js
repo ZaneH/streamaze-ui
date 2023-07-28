@@ -145,16 +145,17 @@ const DONATION_BLURBS = [
   {
     title: 'Text-to-Speech',
     description:
-      'Pick voices from Elevenlabs or Streamlabs to read out donations.',
+      'Pick voices from ElevenLabs (AI) or Streamlabs to read out donations.',
   },
   {
     title: 'OBS widgets',
-    description: 'Have a sub goal? Add our widget to your OBS scene!',
+    description:
+      'Have a sub goal? Add our widget to your OBS scene to show it!',
   },
   {
     title: 'Media donos',
     description:
-      'Play YouTube media donations straight from the browser.\n\nInteract with your stream in new and exciting ways!',
+      'Play YouTube media donations straight from the dashboard.\n\nInteract with your stream in new and exciting ways!',
   },
 ]
 
