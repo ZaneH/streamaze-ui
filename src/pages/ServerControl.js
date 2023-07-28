@@ -19,10 +19,11 @@ import {
   IconMoodSmile,
   IconOctagonOff,
 } from '@tabler/icons'
+import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
-import { Layout } from '../components/document'
 import { HopContext } from '../components/Providers/HopProvider'
+import { Layout } from '../components/document'
 import { capitalizeFirstLetter } from '../utils/strings'
 
 const LiveContainer = styled(Paper)`
@@ -31,6 +32,14 @@ const LiveContainer = styled(Paper)`
   border-radius: 8px;
   margin-top: 16px;
 `
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <ServerControl />
+    </ProviderProvider>
+  )
+}
 
 const ServerControl = () => {
   const { colors } = useMantineTheme()
@@ -234,4 +243,4 @@ const ServerControl = () => {
   )
 }
 
-export default ServerControl
+export default ProvidersWrapper

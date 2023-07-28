@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { Button, Container, Flex, Paper, Stack, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
+import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
 import { Layout } from '../components/document'
@@ -13,23 +14,17 @@ const LiveContainer = styled(Paper)`
   margin-top: 16px;
 `
 
-// const BlinkingDiv = styled.div`
-//   animation: blinker 1.32s ease-in-out infinite;
-//   @keyframes blinker {
-//     50% {
-//       opacity: 0;
-//     }
-//   }
-// `
-
-const { REACT_APP_API_2_URL } = process.env
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <RaspberryPi />
+    </ProviderProvider>
+  )
+}
 
 const RaspberryPi = () => {
-  // const { colors } = useMantineTheme()
-  // const isLive = false
   const isSmall = useMediaQuery('(max-width: 600px)')
   const { streamerChannel } = useContext(PhoenixContext)
-  // let statusMessage = 'Offline'
 
   return (
     <Layout>
@@ -40,16 +35,9 @@ const RaspberryPi = () => {
             gap="18px"
             justify={isSmall ? 'center' : 'inherit'}
           >
-            {/*!isLive && <IconOctagonOff color={colors.red[7]} size={32} />*/}
-            {/* <Title>Your Pi is {statusMessage}</Title> */}
             <Title w="100%" align="center">
               Raspberry Pi Control
             </Title>
-            {/* {isLive ? (
-              <BlinkingDiv>
-                <ColorSwatch color={colors.red[7]} />
-              </BlinkingDiv>
-            ) : null} */}
           </Flex>
           <LiveContainer>
             <Stack>
@@ -85,4 +73,4 @@ const RaspberryPi = () => {
   )
 }
 
-export default RaspberryPi
+export default ProvidersWrapper

@@ -47,6 +47,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
           </Text>
           <Space h="16px" />
           <Select
+            withinPortal
             label="Choose Currency"
             value={currencyConfig?.currency}
             onChange={(value) => {

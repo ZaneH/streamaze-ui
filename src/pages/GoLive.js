@@ -12,10 +12,14 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconVideoOff } from '@tabler/icons'
-import { PhoenixContext } from 'components/Providers/PhoenixProvider'
+import { DonationProvider, StatProvider } from 'components/Providers'
+import PhoenixProvider, {
+  PhoenixContext,
+} from 'components/Providers/PhoenixProvider'
+import SubathonProvider from 'components/Providers/SubathonProvider'
 import { useContext } from 'react'
+import HopProvider, { HopContext } from '../components/Providers/HopProvider'
 import { Layout } from '../components/document'
-import { HopContext } from '../components/Providers/HopProvider'
 
 const LiveContainer = styled(Paper)`
   border: 1px solid #495057;
@@ -32,6 +36,22 @@ const BlinkingDiv = styled.div`
     }
   }
 `
+
+const ProvidersWrapper = () => {
+  return (
+    <DonationProvider>
+      <HopProvider>
+        <SubathonProvider>
+          <StatProvider>
+            <PhoenixProvider>
+              <GoLive />
+            </PhoenixProvider>
+          </StatProvider>
+        </SubathonProvider>
+      </HopProvider>
+    </DonationProvider>
+  )
+}
 
 const GoLive = () => {
   const { colors } = useMantineTheme()
@@ -120,4 +140,4 @@ const GoLive = () => {
   )
 }
 
-export default GoLive
+export default ProvidersWrapper

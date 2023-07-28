@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { useInterval } from '@mantine/hooks'
+import { ProviderProvider } from 'components/Providers'
 import { DonationContext } from 'components/Providers/DonationProvider'
 import { useContext, useEffect, useState } from 'react'
 import Marquee from 'react-fast-marquee'
@@ -15,6 +16,14 @@ const TickerContainer = styled.div`
   font-family: 'Roboto', sans-serif;
   padding: 0 10%;
 `
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <TickerWidget />
+    </ProviderProvider>
+  )
+}
 
 const TickerWidget = () => {
   const { id } = useParams()
@@ -106,4 +115,4 @@ const TickerWidget = () => {
   )
 }
 
-export default TickerWidget
+export default ProvidersWrapper

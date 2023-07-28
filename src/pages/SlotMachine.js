@@ -7,8 +7,17 @@ import RoulettePro from 'react-roulette-pro'
 import wretch from 'wretch'
 
 import ResetGiveawayModal from 'components/Modals/ResetGiveawayModal'
+import { ProviderProvider } from 'components/Providers'
 import { Layout } from 'components/document'
 import 'react-roulette-pro/dist/index.css'
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <SlotMachine />
+    </ProviderProvider>
+  )
+}
 
 const reproductionArray = (array = [], length = 0) => [
   ...Array(length)
@@ -227,4 +236,4 @@ const SlotMachine = () => {
   )
 }
 
-export default SlotMachine
+export default ProvidersWrapper

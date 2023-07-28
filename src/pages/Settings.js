@@ -10,16 +10,25 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
+import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
+import useElevenLabs from 'hooks/useElevenLabs'
 import { useContext } from 'react'
 import wretch from 'wretch'
 import { ConfigContext } from '../components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from '../components/Settings'
 import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
-import useElevenLabs from 'hooks/useElevenLabs'
 
 const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <Settings />
+    </ProviderProvider>
+  )
+}
 
 const Settings = () => {
   const {
@@ -870,4 +879,4 @@ const Settings = () => {
   )
 }
 
-export default Settings
+export default ProvidersWrapper

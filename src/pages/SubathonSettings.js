@@ -2,11 +2,20 @@ import { Checkbox, Container, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { Layout } from 'components/document'
+import { ProviderProvider } from 'components/Providers'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { FieldLabel, FormSection } from 'components/Settings'
 import TagSEO from 'components/TagSEO'
 import { useContext } from 'react'
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <SubathonSettings />
+    </ProviderProvider>
+  )
+}
 
 const SubathonSettings = () => {
   const { subathonConfig, setSubathonConfig } = useContext(ConfigContext)
@@ -86,4 +95,4 @@ const SubathonSettings = () => {
   )
 }
 
-export default SubathonSettings
+export default ProvidersWrapper

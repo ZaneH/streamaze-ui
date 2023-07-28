@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
+import { ProviderProvider } from 'components/Providers'
 import { SubathonContext } from 'components/Providers/SubathonProvider'
 import { useContext } from 'react'
 import { secondsToHHMMSS } from 'utils/time'
@@ -27,6 +27,14 @@ const CountdownLabel = styled.div`
   }
 `
 
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <Countdown />
+    </ProviderProvider>
+  )
+}
+
 const Countdown = () => {
   const { timeRemaining, isSubathonActive } = useContext(SubathonContext)
 
@@ -50,4 +58,4 @@ const Countdown = () => {
   )
 }
 
-export default Countdown
+export default ProvidersWrapper

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { ProviderProvider } from 'components/Providers'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useLanyardWS } from 'use-lanyard'
@@ -11,6 +12,14 @@ const PollLabel = styled.div`
   text-shadow: 0 0 10px #000;
   white-space: pre-wrap;
 `
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <PollWidget />
+    </ProviderProvider>
+  )
+}
 
 const formatPollAsText = (poll) => {
   // Input: { <choice>: <count>, <choice2>: <count2> }
@@ -50,4 +59,4 @@ const PollWidget = () => {
   return <PollLabel>{formatPollAsText(pollData)}</PollLabel>
 }
 
-export default PollWidget
+export default ProvidersWrapper
