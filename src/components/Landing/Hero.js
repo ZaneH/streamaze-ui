@@ -129,7 +129,7 @@ export const Hero = () => {
 
           <Button
             component="a"
-            href="https://github.com/mantinedev/mantine"
+            href="https://docs.streamaze.live/"
             size="xl"
             variant="white"
             className={classes.control}
