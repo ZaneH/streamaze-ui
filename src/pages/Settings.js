@@ -119,7 +119,7 @@ const Settings = () => {
 
   return (
     <Layout>
-      <TagSEO />
+      <TagSEO title="Streamaze | Settings" />
       <Container size="sm" pt="lg">
         <form
           onSubmit={(e) => {

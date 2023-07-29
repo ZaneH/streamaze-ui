@@ -10,6 +10,7 @@ import ResetGiveawayModal from 'components/Modals/ResetGiveawayModal'
 import { ProviderProvider } from 'components/Providers'
 import { Layout } from 'components/document'
 import 'react-roulette-pro/dist/index.css'
+import TagSEO from 'components/TagSEO'
 
 const ProvidersWrapper = () => {
   return (
@@ -124,6 +125,7 @@ const SlotMachine = () => {
 
   return (
     <Layout>
+      <TagSEO title="Streamaze | Giveaway" />
       <Box mt="12vh" mb="4vh">
         {names.length > 0 ? (
           <RoulettePro

@@ -37,7 +37,7 @@ const Home = () => {
                     <PollProvider>
                       <Layout showStats>
                         <Flex h="100%">
-                          <TagSEO />
+                          <TagSEO title="Streamaze | Dashboard" />
                           <Flex direction="column" w="50%" align="center">
                             <DonationPanel />
                             <Box w="100%" maw="725px">

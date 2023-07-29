@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { HopContext } from '../Providers/HopProvider'
 import { SidebarContext } from '../Providers/SidebarProvider'
 import Sidebar from './Sidebar'
+import TagSEO from 'components/TagSEO'
 
 const SplitHeader = () => {
   const { colors } = useMantineTheme()
@@ -81,6 +82,7 @@ const Layout = ({ children, showStats = false }) => {
         },
       }}
     >
+      <TagSEO />
       {children}
     </AppShell>
   )

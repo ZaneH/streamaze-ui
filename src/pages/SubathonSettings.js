@@ -30,7 +30,7 @@ const SubathonSettings = () => {
 
   return (
     <Layout>
-      <TagSEO />
+      <TagSEO title="Streamaze | Subathon Settings" />
       <Container size="sm" pt="lg">
         <form
           onSubmit={(e) => {

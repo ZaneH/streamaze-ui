@@ -25,6 +25,7 @@ import {
   NextGenChatSection,
   PricingSection,
 } from 'components/Landing'
+import TagSEO from 'components/TagSEO'
 import { ParallaxProvider } from 'react-scroll-parallax'
 
 const useStyles = createStyles((theme) => ({
@@ -223,6 +224,7 @@ const Landing = () => {
           theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
       }}
     >
+      <TagSEO />
       <HeaderMenu
         links={[
           { label: 'Stats', link: '/stats' },
