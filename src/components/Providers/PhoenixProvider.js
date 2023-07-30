@@ -153,7 +153,7 @@ const PhoenixProvider = ({ children }) => {
   }, [statsConfig?.kickChannelName, setKickViewers])
 
   const kickInterval = useInterval(async () => {
-    if (pathname !== '/home') {
+    if (pathname !== '/dashboard') {
       return
     }
 

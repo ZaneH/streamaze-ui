@@ -57,7 +57,7 @@ const HopProvider = ({ children }) => {
   }, [artist, title])
 
   useEffect(() => {
-    if (bitrate <= 500 && isLive && pathname === '/home') {
+    if (bitrate <= 500 && isLive && pathname === '/dashboard') {
       if (state?.server?.active_scene?.toLowerCase() !== 'news') {
         playChimeWithDebounce()
       }

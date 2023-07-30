@@ -101,9 +101,16 @@ const useStyles = createStyles((theme) => ({
   featureSubtext: {
     opacity: 0.66,
     fontSize: px(16),
-    fontWeight: 400,
+    fontWeight: 500,
     fontFamily: `IBM Plex Sans, ${theme.fontFamily}`,
     marginTop: px(8),
+    // external link icon
+    '&::after': {
+      content: '"\\2197"',
+      marginLeft: px(4),
+      position: 'absolute',
+      fontSize: px(12),
+    },
   },
 }))
 
@@ -136,27 +143,45 @@ export const FeaturesSection = () => {
             title="Polls"
             description="Press 1 if you’ve ever ran a poll. View every response to your poll here."
             subtext={
-              <Box className={classes.featureSubtext}>
-                (OBS widget provided)
-              </Box>
+              <a
+                href="https://docs.streamaze.live/widgets/polls"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Box className={classes.featureSubtext}>
+                  OBS widget provided
+                </Box>
+              </a>
             }
           />
           <FeatureCol
             title="GPS"
             description="Turn on the GPS to share your live location on stream."
             subtext={
-              <Box className={classes.featureSubtext}>
-                (OBS widget provided)
-              </Box>
+              <a
+                href="https://docs.streamaze.live/widgets/gps"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Box className={classes.featureSubtext}>
+                  OBS widget provided
+                </Box>
+              </a>
             }
           />
           <FeatureCol
             title="OBS Ctrl"
             description="Switch OBS scenes, start your stream and end it straight from the dashboard."
             subtext={
-              <Box className={classes.featureSubtext}>
-                (OBS plugin provided)
-              </Box>
+              <a
+                href="https://docs.streamaze.live/connections/obs-ctrl"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Box className={classes.featureSubtext}>
+                  OBS plugin provided
+                </Box>
+              </a>
             }
           />
           <FeatureCol
@@ -167,25 +192,39 @@ export const FeaturesSection = () => {
             title="Giveaways"
             description="Type !enter in chat and spin the wheel! We also provide a Stake.com plugin to make affiliate giveaways easier."
             subtext={
-              <Box className={classes.featureSubtext}>Read more &rarr;</Box>
+              <a
+                href="https://docs.streamaze.live/features/giveaways"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Box className={classes.featureSubtext}>Learn more</Box>
+              </a>
             }
           />
           <FeatureCol
             title="Track Profits"
             description="Keep track of every donation (or expense) and add it to the stream overlay automagically."
             subtext={
-              <Box className={classes.featureSubtext}>
-                (OBS widget provided)
-              </Box>
+              <a href="#" target="_blank" rel="noreferrer">
+                <Box className={classes.featureSubtext}>
+                  OBS widget provided
+                </Box>
+              </a>
             }
           />
           <FeatureCol
             title="Subathons"
             description="Built for one of the greatest subathons of all time. We have everything you need to keep the clock going!"
             subtext={
-              <Box className={classes.featureSubtext}>
-                (OBS widget provided)
-              </Box>
+              <a
+                href="https://docs.streamaze.live/widgets/subathon"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Box className={classes.featureSubtext}>
+                  OBS widget provided
+                </Box>
+              </a>
             }
           />
         </Grid>

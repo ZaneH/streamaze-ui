@@ -19,7 +19,7 @@ import TagSEO from 'components/TagSEO'
 const SplitHeader = () => {
   const { colors } = useMantineTheme()
   const { setIsSidebarOpen } = useContext(SidebarContext)
-  const { isLive } = useContext(HopContext)
+  const { isLive } = useContext(HopContext) || {}
   const navigate = useNavigate()
 
   return (

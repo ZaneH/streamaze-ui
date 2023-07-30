@@ -29,11 +29,11 @@ const App = () => {
               <Routes>
                 <Route path="/landing" element={<Landing />} />
 
-                <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="/" element={<Navigate to="/dashboard" />} />
 
                 <Route path="/settings" element={<Settings />} />
 
-                <Route path="/home" element={<Home />} />
+                <Route path="/dashboard" element={<Home />} />
 
                 <Route path="/go-live" element={<GoLive />} />
                 <Route path="/server" element={<ServerControl />} />
@@ -68,7 +68,7 @@ const App = () => {
 
                 <Route path="/giveaway/slots" element={<SlotMachine />} />
 
-                <Route path="*" element={<Navigate to="/home" />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
               </Routes>
             </SidebarProvider>
           </OledMantineProvider>
