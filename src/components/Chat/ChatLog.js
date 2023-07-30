@@ -27,6 +27,8 @@ import { ReactComponent as KickOGBadge } from 'assets/kick-og-badge.svg'
 import { ReactComponent as KickVIPBadge } from 'assets/kick-vip-badge.svg'
 import { ReactComponent as ModChatIcon } from 'assets/mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from 'assets/verified-chat-icon.svg'
+import { ReactComponent as KickVerifiedBadge } from 'assets/kick-verified-badge.svg'
+import { ReactComponent as KickModBadge } from 'assets/kick-mod-badge.svg'
 import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
@@ -74,7 +76,7 @@ const List = styled.div`
 `
 
 const SenderText = styled(Text)`
-  display: inline;
+  display: inline-flex;
   vertical-align: middle;
   word-break: break-word;
   color: ${({ isbig }) => (isbig ? '#fff' : 'rgba(255, 255, 255, 0.7)')};
@@ -95,6 +97,8 @@ const MessageText = styled(Text)`
   word-break: break-word;
   color: white;
   ${({ shadow }) => shadow && 'text-shadow: 0px 0px 4px #000'}
+  margin-bottom: auto;
+  margin-top: auto;
 `
 
 const { REACT_APP_API_2_WS_URL } = process.env
@@ -573,14 +577,13 @@ const ChatLog = ({
                       shadow={fluid ? 'true' : undefined}
                       origin={origin}
                     >
-                      {`${sender}${isBig ? ':' : ''}`}
                       {badges.includes('og') && (
                         <KickOGBadge
                           style={{
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -590,7 +593,7 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -600,7 +603,7 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -610,7 +613,7 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -620,7 +623,7 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -630,7 +633,7 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -640,7 +643,7 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
@@ -650,21 +653,34 @@ const ChatLog = ({
                             width: '16px',
                             height: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
-                      {isMod && !isBig && (
-                        <ModChatIcon
-                          fill="#5e84f1"
-                          style={{
-                            width: '16px',
-                            height: '16px',
-                            verticalAlign: 'middle',
-                            marginLeft: '4px',
-                          }}
-                        />
-                      )}
+                      {origin === 'kick'
+                        ? isMod &&
+                          !isBig && (
+                            <KickModBadge
+                              style={{
+                                width: '16px',
+                                height: '16px',
+                                verticalAlign: 'middle',
+                                marginRight: '4px',
+                              }}
+                            />
+                          )
+                        : isMod &&
+                          !isBig && (
+                            <ModChatIcon
+                              fill="#5e84f1"
+                              style={{
+                                width: '16px',
+                                height: '16px',
+                                verticalAlign: 'middle',
+                                marginRight: '4px',
+                              }}
+                            />
+                          )}
                       {isMember && !isBig && memberBadge && (
                         <img
                           alt="Member Badge"
@@ -673,21 +689,36 @@ const ChatLog = ({
                             height: '16px',
                             width: '16px',
                             verticalAlign: 'middle',
-                            marginLeft: '4px',
+                            marginRight: '4px',
                           }}
                         />
                       )}
-                      {isVerified && !isBig && (
-                        <VerifiedChatIcon
-                          fill="#999"
-                          style={{
-                            width: '16px',
-                            height: '16px',
-                            verticalAlign: 'middle',
-                            marginLeft: '4px',
-                          }}
-                        />
-                      )}
+                      {origin === 'kick'
+                        ? isVerified &&
+                          !isBig && (
+                            <KickVerifiedBadge
+                              fill="#999"
+                              style={{
+                                width: '16px',
+                                height: '16px',
+                                verticalAlign: 'middle',
+                                marginRight: '4px',
+                              }}
+                            />
+                          )
+                        : isVerified &&
+                          !isBig && (
+                            <VerifiedChatIcon
+                              fill="#999"
+                              style={{
+                                width: '16px',
+                                height: '16px',
+                                verticalAlign: 'middle',
+                                marginRight: '4px',
+                              }}
+                            />
+                          )}
+                      {`${sender}${isBig ? ':' : ''}`}
                       {`  `}
                     </SenderText>
                     <MessageText
