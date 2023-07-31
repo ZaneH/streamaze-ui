@@ -112,19 +112,21 @@ export const Hero = () => {
               scale: 1.035,
             }}
           >
-            <Button
-              size="xl"
-              className={classes.control}
-              variant="gradient"
-              gradient={{
-                from: '#0634D6',
-                to: '#062282',
-                deg: 160,
-              }}
-              style={{ color: 'white' }}
-            >
-              Sign Up
-            </Button>
+            <a href="https://my.streamaze.live/account/register">
+              <Button
+                size="xl"
+                className={classes.control}
+                variant="gradient"
+                style={{ color: 'white' }}
+                gradient={{
+                  from: '#0634D6',
+                  to: '#062282',
+                  deg: 160,
+                }}
+              >
+                Sign Up
+              </Button>
+            </a>
           </motion.div>
 
           <Button

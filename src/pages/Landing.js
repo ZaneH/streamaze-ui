@@ -133,11 +133,7 @@ const HeaderMenu = ({ links }) => {
           withinPortal
         >
           <Menu.Target>
-            <a
-              href={link.link}
-              className={classes.link}
-              onClick={(event) => event.preventDefault()}
-            >
+            <a href={link.link} className={classes.link}>
               <Center>
                 <span className={classes.linkLabel}>{link.label}</span>
                 <IconChevronDown size="0.9rem" stroke={1.5} />
@@ -150,12 +146,7 @@ const HeaderMenu = ({ links }) => {
     }
 
     return (
-      <a
-        key={link.label}
-        href={link.link}
-        className={classes.link}
-        onClick={(event) => event.preventDefault()}
-      >
+      <a key={link.label} href={link.link} className={classes.link}>
         {link.label}
       </a>
     )
@@ -227,12 +218,13 @@ const Landing = () => {
       <TagSEO />
       <HeaderMenu
         links={[
-          { label: 'Stats', link: '/stats' },
-          { label: 'Contact', link: '/contact' },
-          { label: 'Pricing', link: '/pricing' },
+          { label: 'Discord', link: 'https://discord.gg/c3RetD5r5Y' },
           null,
-          { label: 'Login', link: '/login' },
-          { label: 'Register', link: '/register' },
+          { label: 'Login', link: 'https://my.streamaze.live/account/login' },
+          {
+            label: 'Register',
+            link: 'https://my.streamaze.live/account/register',
+          },
         ]}
       />
       <Flex direction="column" gap={80}>

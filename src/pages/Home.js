@@ -1,21 +1,20 @@
 import { Box, Flex } from '@mantine/core'
-import { ChatPanel } from '../components/Chat'
-import { Layout } from '../components/document'
-import { DonationPanel } from '../components/Donations'
-import { ControlPanel } from '../components/StreamControls'
-import TagSEO from '../components/TagSEO'
-import { useEffect } from 'react'
-import LanyardProvider from 'components/Providers/LanyardProvider'
-import KeypadProvider from 'components/Providers/KeypadProvider'
 import {
   DonationProvider,
   GpsProvider,
   HopProvider,
   StatProvider,
 } from 'components/Providers'
-import SubathonProvider from 'components/Providers/SubathonProvider'
+import LanyardProvider from 'components/Providers/LanyardProvider'
 import PhoenixProvider from 'components/Providers/PhoenixProvider'
 import PollProvider from 'components/Providers/PollProvider'
+import SubathonProvider from 'components/Providers/SubathonProvider'
+import { useEffect } from 'react'
+import { ChatPanel } from '../components/Chat'
+import { DonationPanel } from '../components/Donations'
+import { ControlPanel } from '../components/StreamControls'
+import TagSEO from '../components/TagSEO'
+import { Layout } from '../components/document'
 
 const Home = () => {
   useEffect(() => {
