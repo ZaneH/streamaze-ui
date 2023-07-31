@@ -29,6 +29,7 @@ import { ReactComponent as ModChatIcon } from 'assets/mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from 'assets/verified-chat-icon.svg'
 import { ReactComponent as KickVerifiedBadge } from 'assets/kick-verified-badge.svg'
 import { ReactComponent as KickModBadge } from 'assets/kick-mod-badge.svg'
+import { ReactComponent as KickBroadcasterBadge } from 'assets/kick-broadcaster-badge.svg'
 import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
@@ -332,6 +333,7 @@ const ChatLog = ({
             type: payload.type,
             origin: payload.origin,
             pfp: payload.pfp,
+            isOwner: payload.is_owner,
             isMod: payload.is_mod || payload.is_owner,
             isVerified: payload.is_verified,
             isMember: payload.is_member,
@@ -470,6 +472,7 @@ const ChatLog = ({
             emotes,
             pfp,
             origin,
+            isOwner,
             isMod,
             isVerified,
             isMember,
@@ -657,9 +660,20 @@ const ChatLog = ({
                           }}
                         />
                       )}
+                      {isOwner && (
+                        <KickBroadcasterBadge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginRight: '4px',
+                          }}
+                        />
+                      )}
                       {origin === 'kick'
                         ? isMod &&
-                          !isBig && (
+                          !isBig &&
+                          !isOwner && (
                             <KickModBadge
                               style={{
                                 width: '16px',
