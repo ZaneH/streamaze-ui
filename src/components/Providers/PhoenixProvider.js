@@ -136,6 +136,10 @@ const PhoenixProvider = ({ children }) => {
   }, [userConfig?.streamazeKey])
 
   const updateKickViewers = useCallback(async () => {
+    if (!statsConfig?.kickChannelName) {
+      return
+    }
+
     await wretch(
       `${REACT_APP_API_2_URL}/kick/viewers/${statsConfig?.kickChannelName}`
     )

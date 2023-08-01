@@ -2,12 +2,18 @@ import {
   ActionIcon,
   Box,
   Flex,
+  Menu,
   Text,
-  Tooltip,
   useMantineTheme,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconChartBar, IconExternalLink, IconListNumbers } from '@tabler/icons'
+import {
+  IconChartBar,
+  IconDotsVertical,
+  IconExternalLink,
+  IconHeartMinus,
+  IconListNumbers,
+} from '@tabler/icons'
 import PollModal from 'components/Modals/PollModal/PollModal'
 import { PollContext } from 'components/Providers/PollProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
@@ -18,15 +24,71 @@ import { ConfigContext } from '../Providers/ConfigProvider'
 import { PanelHead } from '../document'
 import ChatLog from './ChatLog'
 import WordRank from './WordRank'
+import { NextUpContext } from 'components/Providers/NextUpProvider'
+import NextUpModal from 'components/Modals/NextUpModal'
 
 const ChatPanel = () => {
   const { chatConfig } = useContext(ConfigContext)
   const { showPollModal, setShowPollModal } = useContext(PollContext)
   const { showWordRankPanel, setShowWordRankPanel } =
     useContext(WordRankContext)
+  const { nextUp, setShowNextUpModal, nextUpClock } = useContext(NextUpContext)
   const isMedium = useMediaQuery('(max-width: 768px)')
   const [searchParams] = useSearchParams()
   const { colors } = useMantineTheme()
+
+  const menuItems = [
+    {
+      element: 'Open chat in a popout window',
+      icon: IconExternalLink,
+      onClick: () => {
+        const qs = new URLSearchParams()
+        qs.append('isChat', 'true')
+        qs.append('theme', searchParams.get('theme') || 'dark')
+
+        if (chatConfig?.tiktok?.username) {
+          qs.append('tiktokChat', chatConfig.tiktok.username)
+        }
+
+        if (chatConfig?.twitch?.username) {
+          qs.append('twitchChat', chatConfig.twitch.username)
+        }
+
+        if (chatConfig?.youtube?.channel) {
+          qs.append('youtubeChat', chatConfig.youtube.channel)
+        }
+
+        window.open(
+          `/chat?${qs.toString()}`,
+          'sharer',
+          'toolbar=0,status=0,width=350,height=550'
+        )
+      },
+    },
+    null,
+    {
+      element: 'Show chat poll',
+      icon: IconChartBar,
+      onClick: () => {
+        setShowPollModal(true)
+      },
+    },
+    {
+      element: `${showWordRankPanel ? 'Hide' : 'Show'} word rank`,
+      icon: IconListNumbers,
+      onClick: () => {
+        setShowWordRankPanel(!showWordRankPanel)
+      },
+    },
+    null,
+    {
+      element: 'Play Next Up game',
+      icon: IconHeartMinus,
+      onClick: () => {
+        setShowNextUpModal(true)
+      },
+    },
+  ]
 
   return (
     <Flex direction="column" h="100%">
@@ -37,6 +99,7 @@ const ChatPanel = () => {
         isOpen={showPollModal}
         onClose={() => setShowPollModal(false)}
       />
+      <NextUpModal />
       <PanelHead
         style={{
           flex: '0 1 auto',
@@ -45,74 +108,59 @@ const ChatPanel = () => {
         <Flex justify="space-between">
           Chat
           <Flex gap="md" align="center">
-            <Tooltip
-              label={
-                <Box m="sm">
-                  <Text>Open chat in a popout window</Text>
-                </Box>
-              }
-            >
-              <ActionIcon
-                onClick={() => {
-                  const qs = new URLSearchParams()
-                  qs.append('isChat', 'true')
-                  qs.append('theme', searchParams.get('theme') || 'dark')
+            <Menu>
+              <Menu.Target>
+                <ActionIcon>
+                  <IconDotsVertical size={22} />
+                </ActionIcon>
+              </Menu.Target>
 
-                  if (chatConfig?.tiktok?.username) {
-                    qs.append('tiktokChat', chatConfig.tiktok.username)
+              <Menu.Dropdown>
+                {menuItems.map((item, i) => {
+                  if (item === null) {
+                    return <Menu.Divider key={i} />
                   }
 
-                  if (chatConfig?.twitch?.username) {
-                    qs.append('twitchChat', chatConfig.twitch.username)
-                  }
-
-                  if (chatConfig?.youtube?.channel) {
-                    qs.append('youtubeChat', chatConfig.youtube.channel)
-                  }
-
-                  window.open(
-                    `/chat?${qs.toString()}`,
-                    'sharer',
-                    'toolbar=0,status=0,width=350,height=550'
+                  return (
+                    <Menu.Item
+                      key={i}
+                      icon={<item.icon size={22} />}
+                      onClick={item.onClick}
+                    >
+                      {item.element}
+                    </Menu.Item>
                   )
-                }}
-              >
-                <IconExternalLink size={22} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip
-              label={
-                <Box m="sm">
-                  <Text>Show chat poll</Text>
-                </Box>
-              }
-            >
-              <ActionIcon
-                onClick={() => {
-                  setShowPollModal(true)
-                }}
-              >
-                <IconChartBar size={22} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip
-              label={
-                <Box m="sm">
-                  <Text>Open Word Rank</Text>
-                </Box>
-              }
-            >
-              <ActionIcon
-                onClick={() => {
-                  setShowWordRankPanel(!showWordRankPanel)
-                }}
-              >
-                <IconListNumbers size={22} />
-              </ActionIcon>
-            </Tooltip>
+                })}
+              </Menu.Dropdown>
+            </Menu>
           </Flex>
         </Flex>
       </PanelHead>
+      {nextUp.nextUpTimestamp && (
+        <Box h="44px" w="100%" px={isMedium ? '24px' : '32px'}>
+          <Flex justify="space-between" align="center">
+            <Box>
+              Lives
+              <Text display="inline" weight="bold" ml="md">
+                {nextUp.lives}
+              </Text>
+            </Box>
+            <Box>
+              Checkpoint
+              <Text
+                display="inline"
+                weight="bold"
+                ml="md"
+                style={{
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
+                {nextUpClock}
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+      )}
       <Box style={{ flex: '1 1 auto' }}>
         {showWordRankPanel && <WordRank />}
         <ChatLog

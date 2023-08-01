@@ -3,6 +3,7 @@ import {
   DonationProvider,
   GpsProvider,
   HopProvider,
+  NextUpProvider,
   StatProvider,
 } from 'components/Providers'
 import LanyardProvider from 'components/Providers/LanyardProvider'
@@ -34,20 +35,22 @@ const Home = () => {
               <StatProvider>
                 <PhoenixProvider>
                   <PollProvider>
-                    <Layout showStats>
-                      <Flex h="100%">
-                        <TagSEO title="Streamaze | Dashboard" />
-                        <Flex direction="column" w="50%" align="center">
-                          <DonationPanel />
-                          <Box w="100%" maw="725px">
-                            <ControlPanel />
-                          </Box>
+                    <NextUpProvider>
+                      <Layout showStats>
+                        <Flex h="100%">
+                          <TagSEO title="Streamaze | Dashboard" />
+                          <Flex direction="column" w="50%" align="center">
+                            <DonationPanel />
+                            <Box w="100%" maw="725px">
+                              <ControlPanel />
+                            </Box>
+                          </Flex>
+                          <Flex direction="column" w="50%">
+                            <ChatPanel />
+                          </Flex>
                         </Flex>
-                        <Flex direction="column" w="50%">
-                          <ChatPanel />
-                        </Flex>
-                      </Flex>
-                    </Layout>
+                      </Layout>
+                    </NextUpProvider>
                   </PollProvider>
                 </PhoenixProvider>
               </StatProvider>

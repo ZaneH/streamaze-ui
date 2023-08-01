@@ -33,6 +33,7 @@ import { ReactComponent as KickBroadcasterBadge } from 'assets/kick-broadcaster-
 import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
+import { NextUpContext } from 'components/Providers/NextUpProvider'
 
 const Item = styled.div`
   margin: 0;
@@ -134,6 +135,7 @@ const ChatLog = ({
     useContext(WordRankContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isConnected, setIsConnected] = useState(false)
+  const { setFrameVotes, handleNextUpMessage } = useContext(NextUpContext)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -278,6 +280,11 @@ const ChatLog = ({
           userId: payload.sender,
           content: payload.message,
         })
+
+        handleNextUpMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'youtube') {
         setChatData((prev) => [
           ...prev,
@@ -303,6 +310,11 @@ const ChatLog = ({
           userId: payload.sender,
           content: payload.message,
         })
+
+        handleNextUpMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'twitch') {
         setChatData((prev) => [
           ...prev,
@@ -320,6 +332,11 @@ const ChatLog = ({
         })
 
         handleWordRankMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
+
+        handleNextUpMessage({
           userId: payload.sender,
           content: payload.message,
         })
@@ -350,6 +367,11 @@ const ChatLog = ({
         })
 
         handleWordRankMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
+
+        handleNextUpMessage({
           userId: payload.sender,
           content: payload.message,
         })
