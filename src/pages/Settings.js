@@ -470,7 +470,7 @@ const Settings = () => {
                 subtitle="See your YouTube and Twitch donations live!"
               >
                 <PasswordInput
-                  label={<FieldLabel>Stream Token</FieldLabel>}
+                  label={<FieldLabel>Streamlabs Token</FieldLabel>}
                   placeholder="eykdjbnn2mnzb.bemMNjgknwli..."
                   defaultValue={slobsForm.values.streamToken}
                   onChange={(e) => {
