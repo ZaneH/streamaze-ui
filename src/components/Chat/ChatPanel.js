@@ -26,6 +26,7 @@ import ChatLog from './ChatLog'
 import WordRank from './WordRank'
 import { NextUpContext } from 'components/Providers/NextUpProvider'
 import NextUpModal from 'components/Modals/NextUpModal'
+import NextUpGameOverModal from 'components/Modals/NextUpGameOverModal'
 
 const ChatPanel = () => {
   const { chatConfig } = useContext(ConfigContext)
@@ -100,6 +101,7 @@ const ChatPanel = () => {
         onClose={() => setShowPollModal(false)}
       />
       <NextUpModal />
+      <NextUpGameOverModal />
       <PanelHead
         style={{
           flex: '0 1 auto',

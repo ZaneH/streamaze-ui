@@ -20,15 +20,18 @@ const DEFAULT_FRAME_LENGTH = 1000 * 60 * 1 // 1 minute
 const NextUpProvider = ({ children }) => {
   const { updateKV } = useContext(LanyardContext)
   const [showNextUpModal, setShowNextUpModal] = useState(false)
+  const [showGameOverModal, setShowGameOverModal] = useState(false)
   const [nextUpClock, setNextUpClock] = useState(null)
   const [userIds, setUserIds] = useState([])
 
   const [nextUp, setNextUp] = useLocalStorage({
     key: 'next-up-data',
     defaultValue: {
+      startLives: 20,
       lives: 20,
       nextUpTimestamp: null,
       frameLength: DEFAULT_FRAME_LENGTH,
+      totalTime: 0,
       frameVotes: {
         good: 0,
         bad: 0,
@@ -38,18 +41,28 @@ const NextUpProvider = ({ children }) => {
 
   const clockInterval = useInterval(() => {
     // Next Up Clock will be a timer formatted HH:MM:SS
-    const timeLeft = parseInt(nextUp.nextUpTimestamp) - Date.now()
+    let timeLeft = parseInt(nextUp.nextUpTimestamp) - Date.now()
+    if (isNaN(timeLeft)) {
+      timeLeft = 0
+    }
+
+    setNextUpClock(secondsToHHMMSS(timeLeft / 1000))
     if (timeLeft <= 0) {
       clockInterval.stop()
       checkNextUp()
     }
-
-    setNextUpClock(secondsToHHMMSS(timeLeft / 1000))
   }, 1000)
 
   useEffect(() => {
     clockInterval.stop()
     clockInterval.start()
+
+    let timeLeft = parseInt(nextUp.nextUpTimestamp) - Date.now()
+    if (isNaN(timeLeft)) {
+      timeLeft = 0
+    }
+
+    setNextUpClock(secondsToHHMMSS(timeLeft / 1000))
   }, [nextUp.nextUpTimestamp])
 
   useEffect(() => {
@@ -69,16 +82,6 @@ const NextUpProvider = ({ children }) => {
       return
     }
 
-    setNextUp((prev) => {
-      return {
-        ...prev,
-        frameVotes: {
-          good: 0,
-          bad: 0,
-        },
-      }
-    })
-
     setUserIds([])
 
     updateLanyard()
@@ -94,35 +97,53 @@ const NextUpProvider = ({ children }) => {
       return
     }
 
-    let newLives = nextUp.lives
-    if (nextUp.frameVotes.good < nextUp.frameVotes.bad) {
-      if (nextUp.lives > 0) {
-        newLives = nextUp.lives - 1
+    setNextUp((prev) => {
+      let newLives = prev.lives
+      if (prev.frameVotes.good < prev.frameVotes.bad) {
+        if (prev.lives > 1) {
+          newLives = prev.lives - 1
+        } else {
+          setShowGameOverModal(true)
+          return {
+            ...prev,
+            lives: 0,
+            totalTime: prev.totalTime + prev.frameLength / 1000,
+            nextUpTimestamp: null,
+            frameVotes: {
+              good: 0,
+              bad: 0,
+            },
+          }
+        }
       }
-    }
 
-    setNextUp((prev) => ({
-      ...prev,
-      lives: newLives,
-      nextUpTimestamp: Date.now() + prev.frameLength,
-    }))
+      return {
+        ...prev,
+        lives: newLives,
+        totalTime: prev.totalTime + prev.frameLength / 1000,
+        nextUpTimestamp: Date.now() + prev.frameLength,
+        frameVotes: {
+          good: 0,
+          bad: 0,
+        },
+      }
+    })
   }, [nextUp.frameVotes, nextUp.lives, nextUp.nextUpTimestamp])
 
   const startNextUp = ({ lives, frameLength = DEFAULT_FRAME_LENGTH }) => {
     const newTimestamp = Date.now() + frameLength
     setUserIds([])
     setNextUp({
+      startLives: lives,
       lives,
       nextUpTimestamp: newTimestamp,
       frameLength,
+      totalTime: 0,
       frameVotes: {
         good: 0,
         bad: 0,
       },
     })
-
-    const timeLeft = parseInt(newTimestamp) - Date.now()
-    setNextUpClock(secondsToHHMMSS(timeLeft / 1000))
 
     updateLanyard()
 
@@ -190,6 +211,8 @@ const NextUpProvider = ({ children }) => {
         endNextUp,
         showNextUpModal,
         setShowNextUpModal,
+        showGameOverModal,
+        setShowGameOverModal,
         nextUpClock,
       }}
     >
