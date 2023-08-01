@@ -37,6 +37,7 @@ const WordRankProvider = ({ children }) => {
         )
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showWordRankPanel])
 
   const updateWordRankKV = useCallback(
@@ -65,7 +66,7 @@ const WordRankProvider = ({ children }) => {
             .trim()
             .replace(/[^a-zA-Z0-9 ]/g, '')
             .toLowerCase()
-          const words = strippedMessage.split(' ')
+          const words = [...new Set(strippedMessage.split(' '))]
 
           setWordRankData((prev) => {
             const newValue = Object.assign({}, prev)
