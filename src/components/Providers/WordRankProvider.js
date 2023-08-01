@@ -24,6 +24,19 @@ const WordRankProvider = ({ children }) => {
 
   useEffect(() => {
     setIsWordRankActive(showWordRankPanel)
+    if (!showWordRankPanel) {
+      // hide OBS overlay by emptying the word ranks data
+      updateKV('word_ranks', JSON.stringify([]))
+    } else {
+      updateKV(
+        'word_ranks',
+        JSON.stringify(
+          Object.entries(wordRankData)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10)
+        )
+      )
+    }
   }, [showWordRankPanel])
 
   const updateWordRankKV = useCallback(
