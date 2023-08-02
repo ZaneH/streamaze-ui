@@ -147,12 +147,28 @@ export const PricingSection = () => {
         <Grid grow>
           <PricingCol
             title="Free"
-            subtext="Create an account &rarr;"
+            subtext={
+              <a
+                href="https://my.streamaze.live/account/settings"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Create an account &rarr;
+              </a>
+            }
             includes={['Chat features']}
           />
           <PricingCol
             title="Subscriber"
-            subtext="$8.99/mo. &rarr;"
+            subtext={
+              <a
+                href="https://my.streamaze.live/account/upgrade"
+                target="_blank"
+                rel="noreferrer"
+              >
+                $8.99/mo. &rarr;
+              </a>
+            }
             includes={[
               'Chat features',
               'Donation + TTS features',
@@ -163,7 +179,15 @@ export const PricingSection = () => {
           />
           <PricingCol
             title="Premium"
-            subtext="$14.99/mo. &rarr;"
+            subtext={
+              <a
+                href="https://my.streamaze.live/account/upgrade"
+                target="_blank"
+                rel="noreferrer"
+              >
+                $14.99/mo. &rarr;
+              </a>
+            }
             includes={[
               'Everything',
               'OBS plugins',
