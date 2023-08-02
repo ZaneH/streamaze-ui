@@ -135,7 +135,7 @@ const ChatLog = ({
     useContext(WordRankContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isConnected, setIsConnected] = useState(false)
-  const { setFrameVotes, handleNextUpMessage } = useContext(NextUpContext)
+  const { handleNextUpMessage } = useContext(NextUpContext)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -377,7 +377,12 @@ const ChatLog = ({
         })
       }
     }
-  }, [lastChatJsonMessage, handlePollResponse])
+  }, [
+    lastChatJsonMessage,
+    handlePollResponse,
+    handleWordRankMessage,
+    handleNextUpMessage,
+  ])
 
   useEffect(() => {
     if (autorefresh > 0) {

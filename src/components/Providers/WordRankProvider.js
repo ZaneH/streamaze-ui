@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react'
 import { LanyardContext } from './LanyardProvider'
+import { FILLER_WORDS } from 'utils/strings'
 export const WordRankContext = createContext()
 
 const WordRankProvider = ({ children }) => {
@@ -54,10 +55,11 @@ const WordRankProvider = ({ children }) => {
 
   // 1. Check if word rank is active
   // 2. Split the message into words, and remove any punctuation
-  // 3. Check if the word is in the word rank data
-  // 4. If it is, increment the count
-  // 5. If it isn't, add it to the word rank data
-  // 6. Update the word rank KV
+  // 3. Remove filler words "the", "a", "and" etc.
+  // 4. Check if the word is in the word rank data
+  // 5. If it is, increment the count
+  // 6. If it isn't, add it to the word rank data
+  // 7. Update the word rank KV
   const handleIncomingWord = useCallback(
     (message) => {
       if (isWordRankActive) {
@@ -66,7 +68,10 @@ const WordRankProvider = ({ children }) => {
             .trim()
             .replace(/[^a-zA-Z0-9 ]/g, '')
             .toLowerCase()
-          const words = [...new Set(strippedMessage.split(' '))]
+
+          const words = [...new Set(strippedMessage.split(' '))].filter(
+            (word) => !FILLER_WORDS.includes(word)
+          )
 
           setWordRankData((prev) => {
             const newValue = Object.assign({}, prev)

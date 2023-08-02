@@ -63,6 +63,7 @@ const NextUpProvider = ({ children }) => {
     }
 
     setNextUpClock(secondsToHHMMSS(timeLeft / 1000))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextUp.nextUpTimestamp])
 
   useEffect(() => {
@@ -73,6 +74,7 @@ const NextUpProvider = ({ children }) => {
     return () => {
       clockInterval.stop()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -85,6 +87,7 @@ const NextUpProvider = ({ children }) => {
     setUserIds([])
 
     updateLanyard()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextUp.nextUpTimestamp])
 
   const updateLanyard = () => {
@@ -128,6 +131,7 @@ const NextUpProvider = ({ children }) => {
         },
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextUp.frameVotes, nextUp.lives, nextUp.nextUpTimestamp])
 
   const startNextUp = ({ lives, frameLength = DEFAULT_FRAME_LENGTH }) => {
@@ -199,6 +203,7 @@ const NextUpProvider = ({ children }) => {
         setUserIds([...userIds, userId])
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [nextUp.nextUpTimestamp, userIds]
   )
 
