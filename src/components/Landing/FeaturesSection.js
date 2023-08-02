@@ -205,7 +205,11 @@ export const FeaturesSection = () => {
             title="Track Profits"
             description="Keep track of every donation (or expense) and add it to the stream overlay automagically."
             subtext={
-              <a href="#" target="_blank" rel="noreferrer">
+              <a
+                href="https://docs.streamaze.live/features/track-profits"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Box className={classes.featureSubtext}>
                   OBS widget provided
                 </Box>
