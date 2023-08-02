@@ -26,7 +26,7 @@ const WordRankProvider = ({ children }) => {
     setIsWordRankActive(showWordRankPanel)
     if (!showWordRankPanel) {
       // hide OBS overlay by emptying the word ranks data
-      updateKV('word_ranks', JSON.stringify([]))
+      updateKV('word_ranks', '')
     } else {
       updateKV(
         'word_ranks',
