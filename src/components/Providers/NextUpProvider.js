@@ -173,7 +173,7 @@ const NextUpProvider = ({ children }) => {
       // console.log(content)
 
       let didRespond = false
-      if (content === '[emote:778243:samPepperHypers]') {
+      if (content === '[emote:1631438:samContent]') {
         setNextUp((prev) => ({
           ...prev,
           frameVotes: {
@@ -183,7 +183,7 @@ const NextUpProvider = ({ children }) => {
         }))
 
         didRespond = true
-      } else if (content === '[emote:755487:emojiAngry]') {
+      } else if (content === '[emote:1631440:samNontent]') {
         setNextUp((prev) => ({
           ...prev,
           frameVotes: {
