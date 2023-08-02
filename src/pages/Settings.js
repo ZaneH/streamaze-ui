@@ -205,7 +205,7 @@ const Settings = () => {
               >
                 <TextInput
                   label={<FieldLabel>TikTok Username</FieldLabel>}
-                  placeholder="sampepper"
+                  placeholder="john.smith"
                   defaultValue={chatForm.values.tiktok}
                   onChange={(e) => {
                     chatForm.setFieldValue('tiktok', e.target.value)
@@ -213,7 +213,7 @@ const Settings = () => {
                 />
                 <TextInput
                   label={<FieldLabel>YouTube Channel URL</FieldLabel>}
-                  placeholder="https://youtube.com/c/sam"
+                  placeholder="https://youtube.com/c/john.smith"
                   defaultValue={chatForm.values.youtube}
                   onChange={(e) => {
                     chatForm.setFieldValue('youtube', e.target.value)
@@ -238,7 +238,7 @@ const Settings = () => {
                 />
                 <TextInput
                   label={<FieldLabel>Kick Channel Name</FieldLabel>}
-                  placeholder="sam"
+                  placeholder="johnsmith"
                   defaultValue={chatForm.values.kickChannelName}
                   onChange={(e) => {
                     chatForm.setFieldValue('kickChannelName', e.target.value)
@@ -295,7 +295,7 @@ const Settings = () => {
                 />
                 <TextInput
                   label={<FieldLabel>YouTube Channel URL</FieldLabel>}
-                  placeholder="https://youtube.com/c/sam"
+                  placeholder="https://youtube.com/c/john.smith"
                   defaultValue={clipForm.values.youtubeChannel}
                   onChange={(e) => {
                     clipForm.setFieldValue('youtubeChannel', e.target.value)
@@ -393,7 +393,7 @@ const Settings = () => {
               >
                 <TextInput
                   label={<FieldLabel>TikTok Username</FieldLabel>}
-                  placeholder="sampepper"
+                  placeholder="john.smith"
                   defaultValue={statsForm.values.tiktok}
                   onChange={(e) => {
                     statsForm.setFieldValue('tiktok', e.target.value)
@@ -401,7 +401,7 @@ const Settings = () => {
                 />
                 <TextInput
                   label={<FieldLabel>YouTube Channel URL</FieldLabel>}
-                  placeholder="https://youtube.com/c/sam"
+                  placeholder="https://youtube.com/c/john.smith"
                   defaultValue={statsForm.values.youtube}
                   onChange={(e) => {
                     statsForm.setFieldValue('youtube', e.target.value)
@@ -409,7 +409,7 @@ const Settings = () => {
                 />
                 <TextInput
                   label={<FieldLabel>Kick Channel Name</FieldLabel>}
-                  placeholder="sam"
+                  placeholder="johnsmith"
                   defaultValue={statsForm.values.kick}
                   onChange={(e) => {
                     statsForm.setFieldValue('kick', e.target.value)
@@ -479,7 +479,7 @@ const Settings = () => {
                 />
                 <TextInput
                   label={<FieldLabel>TikTok Username</FieldLabel>}
-                  placeholder="sampepper"
+                  placeholder="john.smith"
                   defaultValue={slobsForm.values.tiktokUsername}
                   onChange={(e) => {
                     slobsForm.setFieldValue('tiktokUsername', e.target.value)
