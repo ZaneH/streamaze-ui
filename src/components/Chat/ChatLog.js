@@ -108,7 +108,7 @@ const { REACT_APP_API_2_WS_URL } = process.env
 const PX_BEFORE_AUTOSCROLL = 100
 
 const ChatLog = ({
-  twitchUsername,
+  twitchChannel,
   tiktokUsername,
   youtubeChannel,
   kickChannelId,
@@ -139,7 +139,7 @@ const ChatLog = ({
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
-  const _twitchUsername = twitchUsername || chatConfig?.twitch?.username
+  const _twitchChannel = twitchChannel || chatConfig?.twitch?.channel
   const _kickChannelId = kickChannelId || chatConfig?.kick?.channelId
   const _kickChatroomId = kickChatroomId || chatConfig?.kick?.chatroomId
   const _kickChannelName = kickChannelName || chatConfig?.kick?.channelName
@@ -163,7 +163,7 @@ const ChatLog = ({
       },
       !!_tiktokUsername ||
         !!_youtubeChannel ||
-        !!_twitchUsername ||
+        !!_twitchChannel ||
         !!_kickChannelName ||
         !!streamer
     )
@@ -185,10 +185,9 @@ const ChatLog = ({
       params['youtubeChat'] = _youtubeChannel
     }
 
-    // TODO: Not implemented in the new API yet
-    // if (_twitchUsername) {
-    //   params['twitchChat'] = _twitchUsername
-    // }
+    if (_twitchChannel) {
+      params['twitchChannelName'] = _twitchChannel
+    }
 
     if (_kickChannelId) {
       params['kickChannelId'] = _kickChannelId
@@ -214,7 +213,14 @@ const ChatLog = ({
     chatSendMessage(params)
     setIsConnected(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_kickChannelId, _kickChatroomId, _kickChannelName, streamer, isConnected])
+  }, [
+    _kickChannelId,
+    _kickChatroomId,
+    _kickChannelName,
+    _twitchChannel,
+    streamer,
+    isConnected,
+  ])
 
   // Useful for testing the Poll functionality
   // const [fakeInterval, setFakeInterval] = useState(null)
@@ -322,7 +328,8 @@ const ChatLog = ({
             message: payload.message,
             sender: payload.sender,
             origin: payload.origin,
-            emotes: [],
+            isMember: payload.is_member,
+            isMod: payload.is_mod,
           },
         ])
 
@@ -406,7 +413,7 @@ const ChatLog = ({
   }, [chatData.length])
 
   if (
-    !_twitchUsername &&
+    !_twitchChannel &&
     !_tiktokUsername &&
     !_youtubeChannel &&
     (!_kickChannelId || !_kickChatroomId || !_kickChannelName)

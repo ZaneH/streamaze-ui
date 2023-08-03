@@ -18,7 +18,7 @@ const ConfigProvider = ({ children }) => {
       configName: 'example',
       twitch: {
         enabled: false,
-        username: '',
+        channel: '',
       },
       tiktok: {
         enabled: false,

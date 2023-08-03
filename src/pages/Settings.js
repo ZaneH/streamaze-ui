@@ -61,9 +61,9 @@ const Settings = () => {
 
   const chatForm = useForm({
     initialValues: {
-      tiktok: chatConfig.tiktok.username,
-      youtube: chatConfig.youtube.channel,
-      twitch: chatConfig.twitch.username,
+      tiktok: chatConfig?.tiktok?.username,
+      youtube: chatConfig?.youtube?.channel,
+      twitch: chatConfig?.twitch?.channel,
       kickChannelName: chatConfig?.kick?.channelName,
       kickChannelId: chatConfig?.kick?.channelId,
       kickChatroomId: chatConfig?.kick?.chatroomId,
@@ -72,8 +72,8 @@ const Settings = () => {
 
   const clipForm = useForm({
     initialValues: {
-      discordChannelId: timestampConfig.discordChannelId,
-      youtubeChannel: timestampConfig.youtubeChannel,
+      discordChannelId: timestampConfig?.discordChannelId,
+      youtubeChannel: timestampConfig?.youtubeChannel,
     },
   })
 
@@ -169,6 +169,10 @@ const Settings = () => {
                     chatroomId: chatForm.values.kickChatroomId,
                     channelName: chatForm.values.kickChannelName,
                   },
+                  twitch: {
+                    ...prev.twitch,
+                    channel: chatForm.values.twitch,
+                  },
                 }))
 
                 wretch(
@@ -181,6 +185,7 @@ const Settings = () => {
                       kick_channel_id: chatForm.values.kickChannelId,
                       kick_chatroom_id: chatForm.values.kickChatroomId,
                       kick_channel_name: chatForm.values.kickChannelName,
+                      twitch_channel: chatForm.values.twitch,
                     },
                   })
                   .res((res) => {
@@ -217,6 +222,14 @@ const Settings = () => {
                   defaultValue={chatForm.values.youtube}
                   onChange={(e) => {
                     chatForm.setFieldValue('youtube', e.target.value)
+                  }}
+                />
+                <TextInput
+                  label={<FieldLabel>Twitch Channel Name</FieldLabel>}
+                  placeholder="johnsmith"
+                  defaultValue={chatForm.values.twitch}
+                  onChange={(e) => {
+                    chatForm.setFieldValue('twitch', e.target.value)
                   }}
                 />
                 <Divider />
@@ -763,7 +776,7 @@ const Settings = () => {
                 },
                 twitch: {
                   ...prev.twitch,
-                  username: chatForm.values.twitch,
+                  channel: chatForm.values.twitch,
                 },
                 kick: {
                   ...prev.kick,
@@ -827,6 +840,7 @@ const Settings = () => {
                     kick_channel_id: chatForm.values.kickChannelId,
                     kick_chatroom_id: chatForm.values.kickChatroomId,
                     kick_channel_name: chatForm.values.kickChannelName,
+                    twitch_channel: chatForm.values.twitch,
                   },
                   clip_config: {
                     discord_channel_id: clipForm.values.discordChannelId,

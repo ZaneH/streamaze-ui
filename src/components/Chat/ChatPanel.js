@@ -173,7 +173,7 @@ const ChatPanel = () => {
           px={isMedium ? '24px' : '32px'}
           tiktokUsername={chatConfig.tiktok.username}
           youtubeChannel={chatConfig.youtube.channel}
-          twitchUsername={chatConfig.twitch.username}
+          twitchChannel={chatConfig.twitch.channel}
         />
       </Box>
       <Box style={{ flex: '0 1 0px' }} />
