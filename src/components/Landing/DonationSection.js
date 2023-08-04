@@ -163,7 +163,7 @@ const PopupText = ({ children }) => {
   const ref = useRef()
   const isInView = useInView(ref, {
     amount: 'all',
-    margin: '0px 0px -100px 0px',
+    margin: '100% 0px -10% 0px',
   })
 
   return (
