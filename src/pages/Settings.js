@@ -9,11 +9,11 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { showNotification } from '@mantine/notifications'
+import { notifications, showNotification } from '@mantine/notifications'
 import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import useElevenLabs from 'hooks/useElevenLabs'
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import wretch from 'wretch'
 import { ConfigContext } from '../components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from '../components/Settings'
@@ -52,6 +52,9 @@ const Settings = () => {
 
   const { currentStreamer } = useContext(PhoenixContext)
   const { allVoices } = useElevenLabs(userConfig?.streamazeKey)
+  const kickChannelNameRef = useRef(null)
+  const kickChannelIdRef = useRef(null)
+  const kickChatroomIdRef = useRef(null)
 
   const userForm = useForm({
     initialValues: {
@@ -234,6 +237,54 @@ const Settings = () => {
                 />
                 <Divider />
                 <TextInput
+                  ref={kickChannelNameRef}
+                  label={<FieldLabel>Kick Channel Name</FieldLabel>}
+                  placeholder="johnsmith"
+                  defaultValue={chatForm.values.kickChannelName}
+                  onChange={(e) => {
+                    chatForm.setFieldValue('kickChannelName', e.target.value)
+                  }}
+                />
+                <Button
+                  w="min-content"
+                  variant="outline"
+                  mb="sm"
+                  onClick={() => {
+                    showNotification({
+                      loading: true,
+                      title: 'Fetching Kick IDs...',
+                      message: 'This may take a few seconds',
+                      color: 'blue',
+                      id: 'kick-id-loading',
+                    })
+
+                    wretch(
+                      `${process.env.REACT_APP_API_2_URL}/kick/ids/${kickChannelNameRef.current.value}`
+                    )
+                      .post()
+                      .json()
+                      .then((res) => {
+                        const { ids } = res || {}
+                        const { channel, chatrooms } = ids || {}
+
+                        kickChannelIdRef.current.value = channel
+                        kickChatroomIdRef.current.value = chatrooms
+
+                        notifications.hide('kick-id-loading')
+                      })
+                      .catch((err) => {
+                        showNotification({
+                          title: 'Error fetching Kick IDs',
+                          message: err.message,
+                          color: 'red',
+                        })
+                      })
+                  }}
+                >
+                  Fetch IDs from Channel Name
+                </Button>
+                <TextInput
+                  ref={kickChannelIdRef}
                   label={<FieldLabel>Kick Channel ID</FieldLabel>}
                   placeholder="123456"
                   defaultValue={chatForm.values.kickChannelId}
@@ -242,19 +293,12 @@ const Settings = () => {
                   }}
                 />
                 <TextInput
+                  ref={kickChatroomIdRef}
                   label={<FieldLabel>Kick Chatroom ID</FieldLabel>}
                   placeholder="123459"
                   defaultValue={chatForm.values.kickChatroomId}
                   onChange={(e) => {
                     chatForm.setFieldValue('kickChatroomId', e.target.value)
-                  }}
-                />
-                <TextInput
-                  label={<FieldLabel>Kick Channel Name</FieldLabel>}
-                  placeholder="johnsmith"
-                  defaultValue={chatForm.values.kickChannelName}
-                  onChange={(e) => {
-                    chatForm.setFieldValue('kickChannelName', e.target.value)
                   }}
                 />
               </FormSection>
