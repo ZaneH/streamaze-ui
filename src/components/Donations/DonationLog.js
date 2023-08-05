@@ -9,7 +9,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { useCallback, useContext, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 import { DonationContext } from '../Providers/DonationProvider'
 import MediaCard from './MediaCard'
@@ -81,24 +81,40 @@ const DonationLog = () => {
   const { sendJsonMessage } = useWebSocket(
     `${process.env.REACT_APP_API_2_WS_URL}`,
     {
-      onOpen: () => {
-        sendJsonMessage({
-          streamerId: streamer?.id,
-          streamToken: streamer?.donations_config?.streamlabs_token,
-          ttsService: slobsConfig?.ttsService || 'streamlabs',
-          streamazeKey: userConfig?.streamazeKey,
-        })
-      },
       shouldReconnect: () => true,
       reconnectInterval: 3000,
     },
-    !!streamer?.donations_config?.streamlabs_token &&
-      !!streamer?.id &&
-      !!userConfig?.streamazeKey
+    // don't open if
+    !!streamer?.id ||
+      (!!slobsConfig?.streamToken &&
+        !!slobsConfig?.tiktokUsername &&
+        !!userConfig?.streamazeKey)
   )
 
   // TODO: Add voice back
   // const ttsVoice = slobsConfig?.ttsVoice
+
+  const [hasMessaged, setHasMessaged] = useState(false)
+  useEffect(() => {
+    if (!streamer?.id) {
+      return
+    }
+
+    if (hasMessaged) {
+      return
+    }
+
+    sendJsonMessage({
+      streamerId: streamer?.id,
+      streamToken: slobsConfig?.streamToken,
+      ttsService: slobsConfig?.ttsService || 'streamlabs',
+      streamazeKey: userConfig?.streamazeKey,
+      tiktokDonos: slobsConfig?.tiktokUsername,
+    })
+
+    setHasMessaged(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streamer?.id])
 
   const inactivityInterval = useInterval(() => {
     if (isScrolling) {
@@ -171,8 +187,8 @@ const DonationLog = () => {
             gift_name: giftName,
             // gift_cost: giftCost,
             gift_repeat_count: giftRepeatCount,
-            name: senderName,
-          } = data
+          } = data.metadata
+          const { name: senderName } = data
 
           return (
             <AnimatedDiv key={eventId} isAnimated={i === 0}>
@@ -180,7 +196,7 @@ const DonationLog = () => {
                 <Flex align="center" justify="space-between">
                   <Title size="h3">{senderName}</Title>
                   <Text size="lg" weight={700} align="right">
-                    {giftRepeatCount ?? 1}x {giftName}
+                    x{giftRepeatCount ?? 1} {giftName}
                     {giftRepeatCount > 0}
                   </Text>
                 </Flex>
