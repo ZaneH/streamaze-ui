@@ -23,7 +23,8 @@ const { REACT_APP_API_2_URL } = process.env
 const PhoenixProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
   const [streamerChannel, setStreamerChannel] = useState(null)
-  const { setDonations, setDonationIndex } = useContext(DonationContext)
+  const { setDonations, setDonationIndex, setDonationAlertUrl } =
+    useContext(DonationContext)
   const { setTimeRemaining, setActiveStreamId, setIsSubathonActive } =
     useContext(SubathonContext)
   const { pathname } = useLocation()
@@ -294,6 +295,7 @@ const PhoenixProvider = ({ children }) => {
       }
 
       setNetProfit(streamerNetProfit)
+      setDonationAlertUrl(payload.donation_alert_url)
       setDonationIndex(last10Donations.length)
       setActiveStreamId(currentStream.id)
       setStreamStartTime(currentStream.start_time)

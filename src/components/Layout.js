@@ -106,7 +106,7 @@ const Layout = ({ children }) => {
               <ChatLog
                 fullHeight
                 isDark={themeConfig?.name === 'dark'}
-                isBig={themeConfig?.name === 'overlay-impact'}
+                isBig={themeConfig?.name === 'impact'}
                 twitchUsername={twitchUsername}
                 tiktokUsername={tiktokUsername}
                 youtubeChannel={youtubeChannel}

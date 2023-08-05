@@ -3,10 +3,12 @@ import {
   Checkbox,
   Container,
   Divider,
+  FileInput,
   Flex,
   PasswordInput,
   Select,
   TextInput,
+  rem,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications, showNotification } from '@mantine/notifications'
@@ -15,10 +17,12 @@ import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import useElevenLabs from 'hooks/useElevenLabs'
 import { useContext, useRef } from 'react'
 import wretch from 'wretch'
+import FormDataAddon from 'wretch/addons/formData'
 import { ConfigContext } from '../components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from '../components/Settings'
 import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
+import { IconFileMusic } from '@tabler/icons'
 
 const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
 
@@ -680,6 +684,81 @@ const Settings = () => {
                     />
                   </>
                 ) : null}
+                <Divider />
+                <FileInput
+                  name="file"
+                  label={<FieldLabel>Default Alert Sound</FieldLabel>}
+                  placeholder="Upload MP3 file (10MB max)"
+                  accept="audio/mp3"
+                  icon={<IconFileMusic size={rem(14)} />}
+                  onChange={(f) => {
+                    const jsonResp = (json) => {
+                      if (json?.success) {
+                        showNotification({
+                          title: 'Success!',
+                          message: 'Alert sound uploaded successfully.',
+                          color: 'green',
+                        })
+                      } else {
+                        showNotification({
+                          title: 'Error!',
+                          message: 'Something went wrong.',
+                          color: 'red',
+                        })
+                      }
+                    }
+
+                    if (f) {
+                      wretch(
+                        `${process.env.REACT_APP_API_3_URL}/api/upload/alert?api_key=${userConfig?.streamazeKey}`
+                      )
+                        .addon(FormDataAddon)
+                        .headers({
+                          'Content-Type': 'multipart/form-data',
+                        })
+                        .formData({ file: f })
+                        .post()
+                        .json(jsonResp)
+                        .catch(() => {
+                          showNotification({
+                            title: 'Error!',
+                            message: 'Something went wrong.',
+                            color: 'red',
+                          })
+                        })
+                    }
+                  }}
+                />
+                <Button
+                  variant="subtle"
+                  onClick={() => {
+                    wretch(
+                      `${process.env.REACT_APP_API_3_URL}/api/upload/alert?api_key=${userConfig?.streamazeKey}`
+                    )
+                      .headers({
+                        'Content-Type': 'multipart/form-data',
+                      })
+                      .post()
+                      .json((json) => {
+                        if (json?.success) {
+                          showNotification({
+                            title: 'Success!',
+                            message: 'Alert sound removed. Using default.',
+                            color: 'green',
+                          })
+                        }
+                      })
+                      .catch(() => {
+                        showNotification({
+                          title: 'Error!',
+                          message: 'Something went wrong.',
+                          color: 'red',
+                        })
+                      })
+                  }}
+                >
+                  Use default sound
+                </Button>
               </FormSection>
             </form>
 

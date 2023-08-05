@@ -208,8 +208,8 @@ const ChatCard = ({ title = 'n/a', config = {} }) => {
                     label: 'Dark',
                   },
                   {
-                    value: 'overlay-impact',
-                    label: 'Overlay Impact',
+                    value: 'impact',
+                    label: 'Impact',
                   },
                 ]}
               />

@@ -145,7 +145,7 @@ const ChatLog = ({
   const _kickChannelName = kickChannelName || chatConfig?.kick?.channelName
 
   if (isBig === undefined) {
-    isBig = searchParams.get('theme') === 'overlay-impact'
+    isBig = searchParams.get('theme') === 'impact'
   }
 
   if (isDark === undefined) {
