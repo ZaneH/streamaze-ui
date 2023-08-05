@@ -267,10 +267,21 @@ const Settings = () => {
                         const { ids } = res || {}
                         const { channel, chatrooms } = ids || {}
 
-                        kickChannelIdRef.current.value = channel
-                        kickChatroomIdRef.current.value = chatrooms
+                        if (channel) {
+                          kickChannelIdRef.current.value = channel
+                          chatForm.setFieldValue('kickChannelId', channel)
+                        }
+
+                        if (chatrooms) {
+                          kickChatroomIdRef.current.value = chatrooms
+                          chatForm.setFieldValue('kickChatroomId', chatrooms)
+                        }
 
                         notifications.hide('kick-id-loading')
+                        showNotification({
+                          title: 'Kick IDs fetched!',
+                          color: 'teal',
+                        })
                       })
                       .catch((err) => {
                         showNotification({
