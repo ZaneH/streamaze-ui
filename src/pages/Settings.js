@@ -12,6 +12,7 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications, showNotification } from '@mantine/notifications'
+import { IconFileMusic } from '@tabler/icons'
 import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import useElevenLabs from 'hooks/useElevenLabs'
@@ -22,7 +23,6 @@ import { ConfigContext } from '../components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from '../components/Settings'
 import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
-import { IconFileMusic } from '@tabler/icons'
 
 const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
 
@@ -687,7 +687,7 @@ const Settings = () => {
                 <Divider />
                 <FileInput
                   name="file"
-                  label={<FieldLabel>Default Alert Sound</FieldLabel>}
+                  label={<FieldLabel>Alert Sound</FieldLabel>}
                   placeholder="Upload MP3 file (10MB max)"
                   accept="audio/mp3"
                   icon={<IconFileMusic size={rem(14)} />}
@@ -730,7 +730,9 @@ const Settings = () => {
                   }}
                 />
                 <Button
-                  variant="subtle"
+                  variant="outline"
+                  color="red"
+                  w="min-content"
                   onClick={() => {
                     wretch(
                       `${process.env.REACT_APP_API_3_URL}/api/upload/alert?api_key=${userConfig?.streamazeKey}`
@@ -757,8 +759,9 @@ const Settings = () => {
                       })
                   }}
                 >
-                  Use default sound
+                  Reset to Default Sound
                 </Button>
+                <Divider />
               </FormSection>
             </form>
 
