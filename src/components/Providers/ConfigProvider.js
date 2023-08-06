@@ -150,6 +150,16 @@ const ConfigProvider = ({ children }) => {
     },
   })
 
+  // Admin config
+  const [adminConfig, setAdminConfig] = useLocalStorage({
+    key: 'admin-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      role: '',
+      streamers: [],
+    },
+  })
+
   const [searchParams] = useSearchParams()
   const isChat = isPositiveString(searchParams.get('isChat'))
   const isObs = isPositiveString(searchParams.get('isObs'))
@@ -398,6 +408,9 @@ const ConfigProvider = ({ children }) => {
           theme: theme ? theme : themeConfig.theme,
         },
         setThemeConfig,
+        // don't load admin config from URL
+        adminConfig,
+        setAdminConfig,
       }}
     >
       {children}

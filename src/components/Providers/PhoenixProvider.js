@@ -47,6 +47,7 @@ const PhoenixProvider = ({ children }) => {
     setTimestampConfig,
     setStatsConfig,
     setGpsConfig,
+    setAdminConfig,
   } = useContext(ConfigContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
 
@@ -116,6 +117,12 @@ const PhoenixProvider = ({ children }) => {
       youtubeChannel: streamer?.viewers_config?.youtube_channel,
       kickChannelName: streamer?.viewers_config?.kick_channel_name,
     }))
+
+    setAdminConfig((prev) => ({
+      ...prev,
+      role: streamer?.admin_config?.role,
+      streamers: streamer?.admin_config?.streamers,
+    }))
   }, [
     streamer,
     setLanyardConfig,
@@ -125,6 +132,7 @@ const PhoenixProvider = ({ children }) => {
     setTimestampConfig,
     setStatsConfig,
     setGpsConfig,
+    setAdminConfig,
   ])
 
   useEffect(() => {

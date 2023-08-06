@@ -52,6 +52,7 @@ const Settings = () => {
     setLanyardConfig,
     gpsConfig,
     setGpsConfig,
+    adminConfig,
   } = useContext(ConfigContext)
 
   const { currentStreamer } = useContext(PhoenixContext)
@@ -59,6 +60,7 @@ const Settings = () => {
   const kickChannelNameRef = useRef(null)
   const kickChannelIdRef = useRef(null)
   const kickChatroomIdRef = useRef(null)
+  const streamazeKeyRef = useRef(null)
 
   const userForm = useForm({
     initialValues: {
@@ -143,15 +145,30 @@ const Settings = () => {
           }}
         >
           <FormSection title="Streamaze Key" subtitle="Sign in to Streamaze">
-            <TextInput
+            <PasswordInput
+              ref={streamazeKeyRef}
               label="Streamaze Key"
               placeholder="api-xxxxxxxxxxxx"
-              type="password"
               defaultValue={userForm.values.streamazeKey}
               onChange={(e) => {
                 userForm.setFieldValue('streamazeKey', e.target.value)
               }}
             />
+            {adminConfig.role === 'admin' && (
+              <Select
+                label={<FieldLabel>Account Switcher</FieldLabel>}
+                defaultValue={userForm.values.streamazeKey}
+                value={userForm.values.streamazeKey}
+                data={adminConfig?.streamers?.map((streamer) => ({
+                  value: streamer?.api_key,
+                  label: streamer?.name,
+                }))}
+                onChange={(e) => {
+                  userForm.setFieldValue('streamazeKey', e)
+                  streamazeKeyRef.current.value = e
+                }}
+              />
+            )}
           </FormSection>
         </form>
 
