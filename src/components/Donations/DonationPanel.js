@@ -1,6 +1,8 @@
 import {
   ActionIcon,
   Box,
+  Button,
+  Divider,
   Flex,
   Popover,
   Select,
@@ -13,20 +15,26 @@ import { IconDotsVertical } from '@tabler/icons'
 import { DonationContext } from 'components/Providers/DonationProvider'
 import { HopContext } from 'components/Providers/HopProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { DonationLog } from '.'
 import { ReactComponent as IconWarning } from '../../assets/warning-icon.svg'
 import { PanelHead } from '../document'
 import BlankAudio from './BlankAudio'
+import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
 
 const DonationPanel = () => {
   const isLarge = useMediaQuery('(min-width: 1440px)')
   const { isAutoplay } = useContext(DonationContext)
   const { currentProfile, availableProfiles } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
+  const [showChangeFTextModal, setShowChangeFTextModal] = useState(false)
 
   return (
     <Flex direction="column" h="100%" style={{ alignSelf: 'stretch' }}>
+      <ChangeFTextModal
+        isOpen={showChangeFTextModal}
+        onClose={() => setShowChangeFTextModal(false)}
+      />
       <PanelHead
         style={{
           flex: '0 1 auto',
@@ -97,6 +105,14 @@ const DonationPanel = () => {
                       })
                     }}
                   />
+                  <Divider />
+                  <Button
+                    onClick={() => {
+                      setShowChangeFTextModal(true)
+                    }}
+                  >
+                    Change F Text
+                  </Button>
                 </Flex>
               </Popover.Dropdown>
             </Popover>
