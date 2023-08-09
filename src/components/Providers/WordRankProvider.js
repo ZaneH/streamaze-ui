@@ -13,37 +13,31 @@ export const WordRankContext = createContext()
 
 const WordRankProvider = ({ children }) => {
   const { updateKV } = useContext(LanyardContext)
-  const [showWordRankModal, setShowWordRankModal] = useState(false)
   const [isWordRankActive, setIsWordRankActive] = useState(true)
   // formatted: {"test": 2, "test2": 15, ...}
   const [wordRankData, setWordRankData] = useState({})
   const [showWordRankPanel, setShowWordRankPanel] = useState(false)
 
   useEffect(() => {
-    setIsWordRankActive(showWordRankModal)
-  }, [showWordRankModal])
-
-  useEffect(() => {
     setIsWordRankActive(showWordRankPanel)
-    if (!showWordRankPanel) {
-      // hide OBS overlay by emptying the word ranks data
-      updateKV('word_ranks', '')
-    } else {
-      updateKV(
-        'word_ranks',
-        JSON.stringify(
-          Object.entries(wordRankData)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 10)
-        )
-      )
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showWordRankPanel])
 
+  useEffect(() => {
+    if (!showWordRankPanel) {
+      updateKV('word_ranks', '[]')
+    } else {
+      updateKVWithDebounce(
+        Object.entries(wordRankData)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 10)
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wordRankData, showWordRankPanel])
+
   const updateWordRankKV = useCallback(
     (wordData) => {
-      // TODO: Convert to lanyard data
       updateKV('word_ranks', JSON.stringify(wordData))
     },
     [updateKV]
@@ -84,12 +78,6 @@ const WordRankProvider = ({ children }) => {
               }
             }
 
-            updateKVWithDebounce(
-              Object.entries(prev)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10)
-            )
-
             return newValue
           })
         } catch (error) {
@@ -97,20 +85,17 @@ const WordRankProvider = ({ children }) => {
         }
       }
     },
-    [isWordRankActive, updateKVWithDebounce]
+    [isWordRankActive]
   )
 
   return (
     <WordRankContext.Provider
       value={{
-        showWordRankModal,
-        setShowWordRankModal,
         isWordRankActive,
         setIsWordRankActive,
         wordRankData,
         setWordRankData,
         handleIncomingWord,
-        updateWordRankKV,
         showWordRankPanel,
         setShowWordRankPanel,
       }}
