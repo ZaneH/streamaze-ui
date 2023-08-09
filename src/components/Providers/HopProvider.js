@@ -17,6 +17,8 @@ const HopProvider = ({ children }) => {
   const { state: meIrlState } = useReadChannelState('me_irl:sam')
 
   const serverState = state?.server?.state ?? 'error'
+  const currentProfile = state?.server?.profiles?.currentProfileName ?? ''
+  const availableProfiles = state?.server?.profiles?.profiles ?? []
   const isLive = state?.stream_live === true
   const isError = error || serverState === 'error'
   const streamScenes = state?.server?.scenes ?? []
@@ -93,6 +95,8 @@ const HopProvider = ({ children }) => {
     <HopContext.Provider
       value={{
         serverState,
+        currentProfile,
+        availableProfiles,
         hopError: isError,
         isLive,
         streamScenes,
