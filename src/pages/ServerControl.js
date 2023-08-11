@@ -25,6 +25,7 @@ import { useContext } from 'react'
 import { HopContext } from '../components/Providers/HopProvider'
 import { Layout } from '../components/document'
 import { capitalizeFirstLetter } from '../utils/strings'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const LiveContainer = styled(Paper)`
   border: 1px solid #495057;
@@ -46,6 +47,7 @@ const ServerControl = () => {
   const { serverState, hopError } = useContext(HopContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
   const { streamerChannel } = useContext(PhoenixContext)
+  const { adminConfig } = useContext(ConfigContext)
 
   const isStopped = serverState === 'stopped'
   const isStarting = serverState === 'starting'
@@ -97,7 +99,10 @@ const ServerControl = () => {
               fullWidth
               color="red"
               onClick={() => {
-                const resp = streamerChannel.push('stop_server', {})
+                const resp = streamerChannel.push('stop_server', {
+                  obs_key: adminConfig?.obs_key,
+                })
+
                 resp.receive('ok', () => {
                   showNotification({
                     title: 'Success',
@@ -122,6 +127,7 @@ const ServerControl = () => {
               color="green"
               onClick={() => {
                 const resp = streamerChannel.push('start_server', {
+                  obs_key: adminConfig?.obs_key,
                   service: 'youtube',
                 })
 
@@ -189,7 +195,10 @@ const ServerControl = () => {
               fullWidth
               color="red"
               onClick={() => {
-                const resp = streamerChannel.push('stop_server', {})
+                const resp = streamerChannel.push('stop_server', {
+                  obs_key: adminConfig?.obs_key,
+                })
+
                 resp.receive('ok', () => {
                   showNotification({
                     title: 'Success',
@@ -214,6 +223,7 @@ const ServerControl = () => {
               color="green"
               onClick={() => {
                 const resp = streamerChannel.push('start_server', {
+                  obs_key: adminConfig?.obs_key,
                   service: 'tiktok',
                 })
 

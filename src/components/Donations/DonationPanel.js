@@ -21,6 +21,7 @@ import { ReactComponent as IconWarning } from '../../assets/warning-icon.svg'
 import { PanelHead } from '../document'
 import BlankAudio from './BlankAudio'
 import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const DonationPanel = () => {
   const isLarge = useMediaQuery('(min-width: 1440px)')
@@ -28,6 +29,7 @@ const DonationPanel = () => {
   const { currentProfile, availableProfiles } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const [showChangeFTextModal, setShowChangeFTextModal] = useState(false)
+  const { adminConfig } = useContext(ConfigContext)
 
   return (
     <Flex direction="column" h="100%" style={{ alignSelf: 'stretch' }}>
@@ -85,6 +87,7 @@ const DonationPanel = () => {
                     }))}
                     onChange={(e) => {
                       const resp = streamerChannel?.push('switch_profile', {
+                        obs_key: adminConfig?.obs_key,
                         profile: e,
                       })
 

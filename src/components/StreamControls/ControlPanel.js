@@ -8,6 +8,7 @@ import { useContext } from 'react'
 import { DonationContext } from '../Providers/DonationProvider'
 import { HopContext } from '../Providers/HopProvider'
 import StreamButton from './StreamButton'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const ControlPanel = () => {
   const { hopError, streamActiveScene, streamScenes } = useContext(HopContext)
@@ -26,6 +27,7 @@ const ControlPanel = () => {
     audioElement,
     blankAudio,
   } = useContext(DonationContext)
+  const { adminConfig } = useContext(ConfigContext)
 
   return (
     <Flex direction="column">
@@ -89,7 +91,11 @@ const ControlPanel = () => {
               requireConfirmation
               color={isActive ? 'disabled' : i % 2 === 0 ? 'red' : 'purple'}
               onClick={() => {
-                const resp = streamerChannel.push('switch_scene', { scene })
+                const resp = streamerChannel.push('switch_scene', {
+                  obs_key: adminConfig?.obs_key,
+                  scene,
+                })
+
                 resp.receive('ok', () => {
                   showNotification({
                     title: 'Success',

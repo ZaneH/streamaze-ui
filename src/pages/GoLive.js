@@ -20,6 +20,7 @@ import SubathonProvider from 'components/Providers/SubathonProvider'
 import { useContext } from 'react'
 import HopProvider, { HopContext } from '../components/Providers/HopProvider'
 import { Layout } from '../components/document'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const LiveContainer = styled(Paper)`
   border: 1px solid #495057;
@@ -58,6 +59,7 @@ const GoLive = () => {
   const { isLive } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const isSmall = useMediaQuery('(max-width: 600px)')
+  const { adminConfig } = useContext(ConfigContext)
 
   let statusMessage = 'You are Offline'
   if (isLive) {
@@ -87,7 +89,10 @@ const GoLive = () => {
                 fullWidth
                 color="green"
                 onClick={() => {
-                  const resp = streamerChannel.push('start_broadcast', {})
+                  const resp = streamerChannel.push('start_broadcast', {
+                    obs_key: adminConfig?.obs_key,
+                  })
+
                   resp.receive('ok', () => {
                     showNotification({
                       title: 'Success',
@@ -111,7 +116,9 @@ const GoLive = () => {
                 fullWidth
                 color="red"
                 onClick={() => {
-                  const resp = streamerChannel.push('stop_broadcast', {})
+                  const resp = streamerChannel.push('stop_broadcast', {
+                    obs_key: adminConfig?.obs_key,
+                  })
 
                   resp.receive('ok', () => {
                     showNotification({

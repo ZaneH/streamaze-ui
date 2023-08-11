@@ -6,6 +6,7 @@ import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { useContext } from 'react'
 import { Layout } from '../components/document'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const LiveContainer = styled(Paper)`
   border: 1px solid #495057;
@@ -25,6 +26,7 @@ const ProvidersWrapper = () => {
 const RaspberryPi = () => {
   const isSmall = useMediaQuery('(max-width: 600px)')
   const { streamerChannel } = useContext(PhoenixContext)
+  const { adminConfig } = useContext(ConfigContext)
 
   return (
     <Layout>
@@ -45,7 +47,10 @@ const RaspberryPi = () => {
                 fullWidth
                 color="red"
                 onClick={() => {
-                  const resp = streamerChannel.push('stop_pi', {})
+                  const resp = streamerChannel.push('stop_pi', {
+                    obs_key: adminConfig?.obs_key,
+                  })
+
                   resp.receive('ok', (resp) => {
                     showNotification({
                       title: 'Success',
