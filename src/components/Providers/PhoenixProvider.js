@@ -122,6 +122,7 @@ const PhoenixProvider = ({ children }) => {
       ...prev,
       role: streamer?.admin_config?.role,
       streamers: streamer?.admin_config?.streamers,
+      obs_key: streamer?.admin_config?.obs_key,
     }))
   }, [
     streamer,

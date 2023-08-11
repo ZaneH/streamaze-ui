@@ -157,6 +157,7 @@ const ConfigProvider = ({ children }) => {
     defaultValue: {
       role: '',
       streamers: [],
+      obs_key: '',
     },
   })
 
