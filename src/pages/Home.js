@@ -38,7 +38,7 @@ const Home = () => {
                     <NextUpProvider>
                       <Layout showStats>
                         <Flex h="100%">
-                          <TagSEO title="Streamaze | Dashboard" />
+                          <TagSEO title="Streamer Dash | Dashboard" />
                           <Flex direction="column" w="50%" align="center">
                             <DonationPanel />
                             <Box w="100%" maw="725px">
