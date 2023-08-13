@@ -21,6 +21,10 @@ svg {
   min-width: auto !important;
 }
 
+.roulette-pro-regular-design-top {
+  top: 10rem;
+}
+
 .roulette-pro-regular-image-wrapper {
   display: none;
 }
