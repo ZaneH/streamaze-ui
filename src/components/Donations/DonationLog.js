@@ -110,6 +110,7 @@ const DonationLog = () => {
       ttsService: slobsConfig?.ttsService || 'streamlabs',
       streamazeKey: userConfig?.streamazeKey,
       tiktokDonos: slobsConfig?.tiktokUsername,
+      excludeFromProfits: slobsConfig?.excludeFromProfits,
     })
 
     setHasMessaged(true)

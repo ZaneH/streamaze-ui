@@ -39,7 +39,7 @@ const ChangeFTextModal = ({ isOpen, onClose }) => {
             fullWidth
             color="green"
             onClick={() => {
-              updateKV('f_text', textInputRef.current?.value || '')
+              updateKV('f_text', textInputRef.current?.value?.trim() || '')
               showNotification({
                 title: 'Success',
                 message: 'F screen text updated successfully',

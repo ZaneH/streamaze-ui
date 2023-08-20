@@ -110,6 +110,7 @@ const Settings = () => {
       tiktokUsername: slobsConfig?.tiktokUsername,
       silentAudioInterval: slobsConfig?.silentAudioInterval,
       ttsDollarMin: slobsConfig?.ttsDollarMin,
+      excludeFromProfits: slobsConfig?.excludeFromProfits,
     },
   })
 
@@ -520,6 +521,7 @@ const Settings = () => {
                   tiktokUsername: slobsForm.values.tiktokUsername,
                   silentAudioInterval: slobsForm.values.silentAudioInterval,
                   ttsDollarMin: slobsForm.values.ttsDollarMin,
+                  excludeFromProfits: slobsForm.values.excludeFromProfits,
                 }))
 
                 wretch(
@@ -536,6 +538,7 @@ const Settings = () => {
                       silent_audio_interval:
                         slobsForm.values.silentAudioInterval,
                       tts_dollar_min: slobsForm.values.ttsDollarMin,
+                      exclude_from_profits: slobsForm.values.excludeFromProfits,
                     },
                   })
                   .res((res) => {
@@ -779,6 +782,16 @@ const Settings = () => {
                   Reset to Default Sound
                 </Button>
                 <Divider />
+                <Checkbox
+                  label="Don't add donations to profit"
+                  checked={slobsForm.values.excludeFromProfits}
+                  onChange={(e) => {
+                    slobsForm.setFieldValue(
+                      'excludeFromProfits',
+                      e.target.checked
+                    )
+                  }}
+                />
               </FormSection>
             </form>
 
@@ -1016,6 +1029,7 @@ const Settings = () => {
                     tiktok_username: slobsForm.values.tiktokUsername,
                     silent_audio_interval: slobsForm.values.silentAudioInterval,
                     tts_dollar_min: slobsForm.values.ttsDollarMin,
+                    exclude_from_profits: slobsForm.values.excludeFromProfits,
                   },
                   lanyard_config: {
                     discord_user_id: lanyardForm.values.discordUserId,
