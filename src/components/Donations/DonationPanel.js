@@ -11,7 +11,7 @@ import {
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconDotsVertical } from '@tabler/icons'
+import { IconDotsVertical, IconLayoutSidebarLeftCollapse } from '@tabler/icons'
 import { DonationContext } from 'components/Providers/DonationProvider'
 import { HopContext } from 'components/Providers/HopProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
@@ -29,7 +29,7 @@ const DonationPanel = () => {
   const { currentProfile, availableProfiles } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const [showChangeFTextModal, setShowChangeFTextModal] = useState(false)
-  const { adminConfig } = useContext(ConfigContext)
+  const { adminConfig, setLayoutConfig } = useContext(ConfigContext)
 
   return (
     <Flex direction="column" h="100%" style={{ alignSelf: 'stretch' }}>
@@ -68,58 +68,80 @@ const DonationPanel = () => {
               </Tooltip>
             )}
           </Box>
-          {availableProfiles?.length > 0 ? (
-            <Popover width={200} position="bottom" withArrow shadow="md">
-              <Popover.Target>
-                <ActionIcon style={{ alignSelf: 'center' }}>
-                  <IconDotsVertical size={22} />
-                </ActionIcon>
-              </Popover.Target>
-              <Popover.Dropdown>
-                <Flex gap="sm" direction="column">
-                  <Text size="sm">Change OBS profiles.</Text>
-                  <Select
-                    size="sm"
-                    value={currentProfile}
-                    data={availableProfiles?.map((p) => ({
-                      value: p,
-                      label: p,
-                    }))}
-                    onChange={(e) => {
-                      const resp = streamerChannel?.push('switch_profile', {
-                        obs_key: adminConfig?.obs_key,
-                        profile: e,
-                      })
-
-                      resp?.receive('ok', () => {
-                        showNotification({
-                          title: 'Success',
-                          message: 'Profile switched successfully',
-                          color: 'green',
+          <Flex gap="sm" align="center">
+            <Tooltip
+              withinPortal
+              position="right"
+              label={
+                <Box m="sm">
+                  <Text>Collapse donations panel.</Text>
+                </Box>
+              }
+            >
+              <ActionIcon
+                onClick={() => {
+                  setLayoutConfig((prev) => ({
+                    ...prev,
+                    isDonationPanelOpen: !prev.isDonationPanelOpen,
+                  }))
+                }}
+              >
+                <IconLayoutSidebarLeftCollapse size={22} />
+              </ActionIcon>
+            </Tooltip>
+            {availableProfiles?.length > 0 ? (
+              <Popover width={200} position="bottom" withArrow shadow="md">
+                <Popover.Target>
+                  <ActionIcon>
+                    <IconDotsVertical size={22} />
+                  </ActionIcon>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Flex gap="sm" direction="column">
+                    <Text size="sm">Change OBS profiles.</Text>
+                    <Select
+                      size="sm"
+                      value={currentProfile}
+                      data={availableProfiles?.map((p) => ({
+                        value: p,
+                        label: p,
+                      }))}
+                      onChange={(e) => {
+                        const resp = streamerChannel?.push('switch_profile', {
+                          obs_key: adminConfig?.obs_key,
+                          profile: e,
                         })
-                      })
 
-                      resp?.receive('error', (msg) => {
-                        showNotification({
-                          title: 'Error',
-                          message: msg?.reason,
-                          color: 'red',
+                        resp?.receive('ok', () => {
+                          showNotification({
+                            title: 'Success',
+                            message: 'Profile switched successfully',
+                            color: 'green',
+                          })
                         })
-                      })
-                    }}
-                  />
-                  <Divider />
-                  <Button
-                    onClick={() => {
-                      setShowChangeFTextModal(true)
-                    }}
-                  >
-                    Change F Text
-                  </Button>
-                </Flex>
-              </Popover.Dropdown>
-            </Popover>
-          ) : null}
+
+                        resp?.receive('error', (msg) => {
+                          showNotification({
+                            title: 'Error',
+                            message: msg?.reason,
+                            color: 'red',
+                          })
+                        })
+                      }}
+                    />
+                    <Divider />
+                    <Button
+                      onClick={() => {
+                        setShowChangeFTextModal(true)
+                      }}
+                    >
+                      Change F Text
+                    </Button>
+                  </Flex>
+                </Popover.Dropdown>
+              </Popover>
+            ) : null}
+          </Flex>
         </Flex>
       </PanelHead>
       <Box

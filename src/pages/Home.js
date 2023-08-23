@@ -10,12 +10,13 @@ import LanyardProvider from 'components/Providers/LanyardProvider'
 import PhoenixProvider from 'components/Providers/PhoenixProvider'
 import PollProvider from 'components/Providers/PollProvider'
 import SubathonProvider from 'components/Providers/SubathonProvider'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { ChatPanel } from '../components/Chat'
 import { DonationPanel } from '../components/Donations'
 import { ControlPanel } from '../components/StreamControls'
 import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 
 const Home = () => {
   useEffect(() => {
@@ -24,6 +25,9 @@ const Home = () => {
       document.body.style.overflow = 'auto'
     }
   }, [])
+
+  const { layoutConfig } = useContext(ConfigContext)
+  const { isDonationPanelOpen } = layoutConfig || {}
 
   return (
     <LanyardProvider>
@@ -37,15 +41,20 @@ const Home = () => {
                   <PollProvider>
                     <NextUpProvider>
                       <Layout showStats>
+                        <TagSEO title="Streamer Dash | Dashboard" />
                         <Flex h="100%">
-                          <TagSEO title="Streamer Dash | Dashboard" />
-                          <Flex direction="column" w="50%" align="center">
-                            <DonationPanel />
-                            <Box w="100%" maw="725px">
-                              <ControlPanel />
-                            </Box>
-                          </Flex>
-                          <Flex direction="column" w="50%">
+                          {isDonationPanelOpen && (
+                            <Flex direction="column" w="50%" align="center">
+                              <DonationPanel />
+                              <Box w="100%" maw="725px">
+                                <ControlPanel />
+                              </Box>
+                            </Flex>
+                          )}
+                          <Flex
+                            direction="column"
+                            w={isDonationPanelOpen ? '50%' : '100%'}
+                          >
                             <ChatPanel />
                           </Flex>
                         </Flex>

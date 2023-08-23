@@ -4,6 +4,7 @@ import {
   Flex,
   Menu,
   Text,
+  Tooltip,
   useMantineTheme,
 } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
@@ -12,9 +13,13 @@ import {
   IconDotsVertical,
   IconExternalLink,
   IconHeartMinus,
+  IconLayoutSidebarRightExpand,
   IconListNumbers,
 } from '@tabler/icons'
+import NextUpGameOverModal from 'components/Modals/NextUpGameOverModal'
+import NextUpModal from 'components/Modals/NextUpModal'
 import PollModal from 'components/Modals/PollModal/PollModal'
+import { NextUpContext } from 'components/Providers/NextUpProvider'
 import { PollContext } from 'components/Providers/PollProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
 import { StatPanel } from 'components/StreamStats'
@@ -24,12 +29,15 @@ import { ConfigContext } from '../Providers/ConfigProvider'
 import { PanelHead } from '../document'
 import ChatLog from './ChatLog'
 import WordRank from './WordRank'
-import { NextUpContext } from 'components/Providers/NextUpProvider'
-import NextUpModal from 'components/Modals/NextUpModal'
-import NextUpGameOverModal from 'components/Modals/NextUpGameOverModal'
+
+const statPanelOffsets = {
+  mt: '-78px',
+  ml: '-10px',
+}
 
 const ChatPanel = () => {
-  const { chatConfig } = useContext(ConfigContext)
+  const { chatConfig, layoutConfig, setLayoutConfig } =
+    useContext(ConfigContext)
   const { showPollModal, setShowPollModal } = useContext(PollContext)
   const { showWordRankPanel, setShowWordRankPanel } =
     useContext(WordRankContext)
@@ -37,6 +45,7 @@ const ChatPanel = () => {
   const isMedium = useMediaQuery('(max-width: 768px)')
   const [searchParams] = useSearchParams()
   const { colors } = useMantineTheme()
+  const { isDonationPanelOpen } = layoutConfig || {}
 
   const menuItems = [
     {
@@ -93,7 +102,14 @@ const ChatPanel = () => {
 
   return (
     <Flex direction="column" h="100%">
-      <Flex w="100%" bg={colors.dark[9]} px="lg" py="md" mt="-78px" ml="-10px">
+      <Flex
+        w="100%"
+        bg={colors.dark[9]}
+        px="lg"
+        py="md"
+        mt={isDonationPanelOpen ? statPanelOffsets.mt : 0}
+        ml={isDonationPanelOpen ? statPanelOffsets.ml : 0}
+      >
         <StatPanel />
       </Flex>
       <PollModal
@@ -109,7 +125,29 @@ const ChatPanel = () => {
       >
         <Flex justify="space-between">
           Chat
-          <Flex gap="md" align="center">
+          <Flex gap="sm" align="center">
+            {!isDonationPanelOpen && (
+              <Tooltip
+                withinPortal
+                position="right"
+                label={
+                  <Box m="sm">
+                    <Text>Open donations panel.</Text>
+                  </Box>
+                }
+              >
+                <ActionIcon
+                  onClick={() => {
+                    setLayoutConfig((prev) => ({
+                      ...prev,
+                      isDonationPanelOpen: !prev.isDonationPanelOpen,
+                    }))
+                  }}
+                >
+                  <IconLayoutSidebarRightExpand size={22} />
+                </ActionIcon>
+              </Tooltip>
+            )}
             <Menu>
               <Menu.Target>
                 <ActionIcon>

@@ -1,5 +1,5 @@
 import { useLocalStorage } from '@mantine/hooks'
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 export const ConfigContext = createContext()
 
@@ -149,6 +149,11 @@ const ConfigProvider = ({ children }) => {
     defaultValue: {
       theme: 'dark',
     },
+  })
+
+  // Layout config
+  const [layoutConfig, setLayoutConfig] = useState({
+    isDonationPanelOpen: true,
   })
 
   // Admin config
@@ -410,6 +415,8 @@ const ConfigProvider = ({ children }) => {
           theme: theme ? theme : themeConfig.theme,
         },
         setThemeConfig,
+        layoutConfig,
+        setLayoutConfig,
         // don't load admin config from URL
         adminConfig,
         setAdminConfig,
