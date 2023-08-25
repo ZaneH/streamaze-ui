@@ -57,6 +57,7 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
               })
             }}
             data={[
+              { label: 'New Zealand Dollar ($)', value: 'nzd' },
               { label: 'Japanese Yen (¥)', value: 'jpy' },
               { label: 'South Korean Won (₩)', value: 'krw' },
               { label: 'Nepalese Rupee (रू)', value: 'npr' },
