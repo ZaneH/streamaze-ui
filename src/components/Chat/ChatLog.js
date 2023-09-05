@@ -25,6 +25,7 @@ import { ReactComponent as KickGifted200Badge } from 'assets/kick-gifted-200-bad
 import { ReactComponent as KickGiftedBadge } from 'assets/kick-gifted-badge.svg'
 import { ReactComponent as KickOGBadge } from 'assets/kick-og-badge.svg'
 import { ReactComponent as KickVIPBadge } from 'assets/kick-vip-badge.svg'
+import { ReactComponent as KickStaffBadge } from 'assets/kick-staff-badge.svg'
 import { ReactComponent as ModChatIcon } from 'assets/mod-chat-icon.svg'
 import { ReactComponent as VerifiedChatIcon } from 'assets/verified-chat-icon.svg'
 import { ReactComponent as KickVerifiedBadge } from 'assets/kick-verified-badge.svg'
@@ -636,6 +637,16 @@ const ChatLog = ({
                       )}
                       {badges.includes('founder') && (
                         <KickFoundersBadge
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginRight: '4px',
+                          }}
+                        />
+                      )}
+                      {badges.includes('staff') && (
+                        <KickStaffBadge
                           style={{
                             width: '16px',
                             height: '16px',
