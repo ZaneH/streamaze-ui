@@ -15,7 +15,7 @@ import wretch from 'wretch'
 
 const { REACT_APP_API_3_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
-const ExpenseModal = ({ isOpen = false, onClose }) => {
+const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
   const {
     userConfig,
     setCurrencyConfig,
@@ -45,6 +45,10 @@ const ExpenseModal = ({ isOpen = false, onClose }) => {
               })
               .replace('.00', '')}
           </Text>
+          <Space h={8} />
+          <Button color="blue" variant="gradient" onClick={onOpenBank}>
+            Open Bank
+          </Button>
           <Space h="16px" />
           <Select
             withinPortal

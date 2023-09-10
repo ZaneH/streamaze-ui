@@ -15,6 +15,7 @@ import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
 import StatInfo from './StatInfo'
 import StreamTime from './StreamTime'
+import BankModal from 'components/Modals/BankModal'
 
 const StatPanel = () => {
   const {
@@ -30,6 +31,7 @@ const StatPanel = () => {
   const { subathonConfig } = useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const [showSubathonModal, setShowSubathonModal] = useState(false)
+  const [showBankModal, setShowBankModal] = useState(false)
   const { netProfit } = useContext(StatContext)
   const matches = useMediaQuery('(max-width: 768px)')
 
@@ -131,6 +133,15 @@ const StatPanel = () => {
         onClose={() => {
           setShowMoneyModal(false)
         }}
+        onOpenBank={() => {
+          setShowBankModal(true)
+          setShowMoneyModal(false)
+        }}
+      />
+
+      <BankModal
+        isOpen={showBankModal}
+        onClose={() => setShowBankModal(false)}
       />
 
       <SubathonModal

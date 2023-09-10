@@ -98,7 +98,7 @@ const DonationPanel = () => {
                 </Popover.Target>
                 <Popover.Dropdown>
                   <Flex gap="sm" direction="column">
-                    <Text size="sm">Change OBS profiles.</Text>
+                    <Text size="sm">Change OBS profiles</Text>
                     <Select
                       size="sm"
                       value={currentProfile}
@@ -129,7 +129,9 @@ const DonationPanel = () => {
                         })
                       }}
                     />
+
                     <Divider />
+
                     <Button
                       onClick={() => {
                         setShowChangeFTextModal(true)

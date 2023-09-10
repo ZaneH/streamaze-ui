@@ -19,14 +19,16 @@ const WordRankProvider = ({ children }) => {
   const [showWordRankPanel, setShowWordRankPanel] = useState(false)
 
   useEffect(() => {
+    if (!showWordRankPanel) {
+      updateKV('word_ranks', '[]')
+    }
+
     setIsWordRankActive(showWordRankPanel)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showWordRankPanel])
 
   useEffect(() => {
-    if (!showWordRankPanel) {
-      updateKV('word_ranks', '[]')
-    } else {
+    if (showWordRankPanel) {
       updateKVWithDebounce(
         Object.entries(wordRankData)
           .sort((a, b) => b[1] - a[1])
