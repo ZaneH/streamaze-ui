@@ -22,10 +22,12 @@ import { PanelHead } from '../document'
 import BlankAudio from './BlankAudio'
 import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 
 const DonationPanel = () => {
   const isLarge = useMediaQuery('(min-width: 1440px)')
   const { isAutoplay } = useContext(DonationContext)
+  const { updateKV } = useContext(LanyardContext)
   const { currentProfile, availableProfiles } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
   const [showChangeFTextModal, setShowChangeFTextModal] = useState(false)
@@ -138,6 +140,14 @@ const DonationPanel = () => {
                       }}
                     >
                       Change F Text
+                    </Button>
+                    <Button
+                      color="red"
+                      onClick={() => {
+                        updateKV('f_text', '')
+                      }}
+                    >
+                      Clear F Text
                     </Button>
                   </Flex>
                 </Popover.Dropdown>
