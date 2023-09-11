@@ -22,6 +22,7 @@ const CurrencySelect = () => {
         })
       }}
       data={[
+        { label: 'Australian Dollar ($)', value: 'aud' },
         { label: 'New Zealand Dollar ($)', value: 'nzd' },
         { label: 'Japanese Yen (¥)', value: 'jpy' },
         { label: 'South Korean Won (₩)', value: 'krw' },
