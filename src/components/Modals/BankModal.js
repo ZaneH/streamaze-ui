@@ -100,7 +100,6 @@ const BankModal = ({ isOpen = false, onClose }) => {
         if (value === undefined) return
 
         const updatedValue = parseInt(value) + (parseFloat(amount) || 0) * 100
-        console.log('hi', updatedValue)
 
         updateKV('bank_balance', updatedValue.toString())
         bankInputRef.current.value = ''
@@ -110,6 +109,33 @@ const BankModal = ({ isOpen = false, onClose }) => {
     },
     [kv, updateKV]
   )
+
+  const toggleFanOverlay = useCallback(() => {
+    try {
+      const value = kv?.fan_balance_visible || 'false'
+
+      const updatedValue = value === 'true' ? 'false' : 'true'
+
+      updateKV('fan_balance_visible', updatedValue)
+    } catch (e) {
+      console.log(e)
+    }
+  }, [kv, updateKV])
+
+  const toggleBankOverlay = useCallback(() => {
+    try {
+      const value = kv?.bank_balance_visible || 'false'
+
+      const updatedValue = value === 'true' ? 'false' : 'true'
+
+      updateKV('bank_balance_visible', updatedValue)
+    } catch (e) {
+      console.log(e)
+    }
+  }, [kv, updateKV])
+
+  const isFanOverlayVisible = kv?.fan_balance_visible === 'true'
+  const isBankOverlayVisible = kv?.bank_balance_visible === 'true'
 
   return (
     <Modal title="Bank" centered size="md" opened={isOpen} onClose={onClose}>
@@ -182,6 +208,27 @@ const BankModal = ({ isOpen = false, onClose }) => {
             }}
           >
             Add +
+          </Button>
+        </Button.Group>
+
+        <Divider />
+
+        <Button.Group>
+          <Button
+            fullWidth
+            color={isFanOverlayVisible ? 'green' : 'blue'}
+            variant={isFanOverlayVisible ? 'light' : 'filled'}
+            onClick={toggleFanOverlay}
+          >
+            {isFanOverlayVisible ? 'Hide fan overlay' : 'Show fan overlay'}
+          </Button>
+          <Button
+            fullWidth
+            color={isBankOverlayVisible ? 'green' : 'blue'}
+            variant={isBankOverlayVisible ? 'light' : 'filled'}
+            onClick={toggleBankOverlay}
+          >
+            {isBankOverlayVisible ? 'Hide bank overlay' : 'Show bank overlay'}
           </Button>
         </Button.Group>
       </Flex>
