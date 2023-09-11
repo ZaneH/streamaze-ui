@@ -47,10 +47,6 @@ const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
               .replace('.00', '')}
           </Text>
           <Space h={8} />
-          <Button color="blue" variant="gradient" onClick={onOpenBank}>
-            Open Bank
-          </Button>
-          <Space h="16px" />
           <CurrencySelect />
         </Box>
         <TextInput

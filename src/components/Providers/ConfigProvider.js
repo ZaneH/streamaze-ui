@@ -152,8 +152,14 @@ const ConfigProvider = ({ children }) => {
   })
 
   // Layout config
-  const [layoutConfig, setLayoutConfig] = useState({
-    isDonationPanelOpen: true,
+  const [layoutConfig, setLayoutConfig] = useLocalStorage({
+    key: 'layout-config',
+    getInitialValueInEffect: false,
+    defaultValue: {
+      isDonationPanelOpen: true,
+      isToggleInfoModalOpen: false,
+      hiddenInfo: [],
+    },
   })
 
   // Admin config

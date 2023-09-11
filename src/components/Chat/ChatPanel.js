@@ -12,6 +12,7 @@ import {
   IconChartBar,
   IconDotsVertical,
   IconExternalLink,
+  IconGridDots,
   IconHeartMinus,
   IconLayoutSidebarRightExpand,
   IconListNumbers,
@@ -96,6 +97,17 @@ const ChatPanel = () => {
       icon: IconHeartMinus,
       onClick: () => {
         setShowNextUpModal(true)
+      },
+    },
+    null,
+    {
+      element: 'Toggle information',
+      icon: IconGridDots,
+      onClick: () => {
+        setLayoutConfig((prev) => ({
+          ...prev,
+          isToggleInfoModalOpen: !prev.isToggleInfoModalOpen,
+        }))
       },
     },
   ]
