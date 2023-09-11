@@ -12,6 +12,7 @@ import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { StatContext } from 'components/Providers/StatProvider'
 import { useContext, useRef } from 'react'
 import wretch from 'wretch'
+import CurrencySelect from './CurrencySelect'
 
 const { REACT_APP_API_3_URL, REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
@@ -50,28 +51,7 @@ const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
             Open Bank
           </Button>
           <Space h="16px" />
-          <Select
-            withinPortal
-            label="Choose Currency"
-            value={currencyConfig?.currency}
-            onChange={(value) => {
-              setCurrencyConfig({
-                ...currencyConfig,
-                currency: value,
-              })
-            }}
-            data={[
-              { label: 'New Zealand Dollar ($)', value: 'nzd' },
-              { label: 'Japanese Yen (¥)', value: 'jpy' },
-              { label: 'South Korean Won (₩)', value: 'krw' },
-              { label: 'Nepalese Rupee (रू)', value: 'npr' },
-              { label: 'Indian Rupee (₹)', value: 'inr' },
-              { label: 'Hong Kong Dollar (HKD)', value: 'hkd' },
-              { label: 'Philippine Peso (₱)', value: 'php' },
-              { label: 'Thai Baht (฿)', value: 'thb' },
-              { label: 'US Dollar ($)', value: 'usd' },
-            ]}
-          />
+          <CurrencySelect />
         </Box>
         <TextInput
           label={`Amount (${currencyConfig?.currency?.toUpperCase()})`}

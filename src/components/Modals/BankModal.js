@@ -7,12 +7,75 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
+import wretch from 'wretch'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { useCallback, useContext, useRef } from 'react'
+import CurrencySelect from './CurrencySelect'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { showNotification } from '@mantine/notifications'
+
+const { REACT_APP_EXCHANGE_RATE_API_URL } = process.env
 
 const BankModal = ({ isOpen = false, onClose }) => {
   const { kv, updateKV } = useContext(LanyardContext)
   const bankInputRef = useRef(null)
+  const {
+    currencyConfig = {
+      currency: 'usd',
+    },
+  } = useContext(ConfigContext)
+
+  const amountToUSD = useCallback(
+    async (amount) => {
+      try {
+        const currency = currencyConfig?.currency?.toUpperCase()
+
+        if (currency === 'USD') return parseFloat(amount)
+
+        let usdConversionRate
+        let convertedValue = 0
+
+        await wretch(
+          `${REACT_APP_EXCHANGE_RATE_API_URL}/v1/rates/${currencyConfig?.currency}`
+        )
+          .get()
+          .json()
+          .then((res) => {
+            if (res) {
+              try {
+                usdConversionRate = parseFloat(
+                  res?.data?.[currencyConfig?.currency]
+                )
+              } catch (err) {
+                console.error("Couldn't parse the exchange rate response", err)
+              }
+            }
+          })
+          .catch(() => {
+            showNotification({
+              title: 'Error',
+              message: 'There was an error getting the exchange rate',
+              color: 'red',
+            })
+          })
+          .finally(() => {
+            let numericInput = bankInputRef.current.value
+            numericInput = numericInput.replace(/[^0-9.]/g, '')
+
+            if (isNaN(numericInput)) {
+              throw new Error('Invalid input')
+            }
+
+            convertedValue = parseFloat(numericInput) / usdConversionRate
+          })
+
+        return convertedValue
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    [currencyConfig]
+  )
 
   const updateFanBalance = useCallback(
     (amount) => {
@@ -37,6 +100,7 @@ const BankModal = ({ isOpen = false, onClose }) => {
         if (value === undefined) return
 
         const updatedValue = parseInt(value) + (parseFloat(amount) || 0) * 100
+        console.log('hi', updatedValue)
 
         updateKV('bank_balance', updatedValue.toString())
         bankInputRef.current.value = ''
@@ -85,9 +149,10 @@ const BankModal = ({ isOpen = false, onClose }) => {
               currency: 'USD',
             })
             .replace('.00', '')}
+          <CurrencySelect />
         </Text>
         <TextInput
-          label={`Amount (USD)`}
+          label={`Amount (${currencyConfig?.currency?.toUpperCase()})`}
           placeholder="Enter an amount"
           required
           style={{ width: '100%' }}
@@ -95,18 +160,26 @@ const BankModal = ({ isOpen = false, onClose }) => {
           data-autofocus
           inputMode="decimal"
         />
+        <Space />
         <Button.Group>
           <Button
             fullWidth
             color="red"
-            onClick={() => updateBankBalance(-bankInputRef.current.value)}
+            onClick={async () => {
+              const usdValue = await amountToUSD(bankInputRef.current.value)
+              console.log(usdValue)
+              updateBankBalance(-usdValue)
+            }}
           >
             Subtract -
           </Button>
           <Button
             fullWidth
             color="green"
-            onClick={() => updateBankBalance(bankInputRef.current.value)}
+            onClick={async () => {
+              const usdValue = await amountToUSD(bankInputRef.current.value)
+              updateBankBalance(usdValue)
+            }}
           >
             Add +
           </Button>
