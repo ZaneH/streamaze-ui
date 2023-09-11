@@ -3,6 +3,8 @@ import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { ReactComponent as BitRateIcon } from 'assets/bit-rate-icon.svg'
 import { ReactComponent as DollarSignIcon } from 'assets/dollar-sign-icon.svg'
+import { ReactComponent as DollarFanIcon } from 'assets/dollar-fan-icon.svg'
+import { ReactComponent as DollarBankIcon } from 'assets/dollar-bank-icon.svg'
 import { ReactComponent as FlagIcon } from 'assets/flag-icon.svg'
 import { ReactComponent as KickIcon } from 'assets/kick-logo-icon.svg'
 import BankModal from 'components/Modals/BankModal'
@@ -116,7 +118,7 @@ const StatPanel = () => {
               onClick={() => {
                 setShowBankModal(true)
               }}
-              image={<DollarSignIcon style={{ width: 26, height: 26 }} />}
+              image={<DollarFanIcon style={{ width: 26, height: 26 }} />}
               label={(parseInt(kv?.fan_balance || 0) / 100)
                 .toLocaleString('en-US', {
                   style: 'currency',
@@ -131,7 +133,7 @@ const StatPanel = () => {
               onClick={() => {
                 setShowBankModal(true)
               }}
-              image={<DollarSignIcon style={{ width: 26, height: 26 }} />}
+              image={<DollarBankIcon style={{ width: 26, height: 26 }} />}
               label={(parseInt(kv?.bank_balance || 0) / 100)
                 .toLocaleString('en-US', {
                   style: 'currency',
