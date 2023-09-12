@@ -19,6 +19,9 @@ import SubathonModal from '../Modals/SubathonModal'
 import { HopContext } from '../Providers/HopProvider'
 import { StatContext } from '../Providers/StatProvider'
 import StatInfo from './StatInfo'
+import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
+import WifiModal from 'components/Modals/WifiModal'
+import { WifiProvider } from 'components/Providers'
 
 const StatPanel = () => {
   const {
@@ -32,8 +35,13 @@ const StatPanel = () => {
   const { bitrate, isLive, rtt, uptime } = useContext(HopContext)
   const { kv } = useContext(LanyardContext)
   const { timeRemaining } = useContext(SubathonContext)
-  const { subathonConfig, layoutConfig, setLayoutConfig } =
-    useContext(ConfigContext)
+  const {
+    subathonConfig,
+    layoutConfig,
+    setLayoutConfig,
+    layoutState,
+    setLayoutState,
+  } = useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const [showSubathonModal, setShowSubathonModal] = useState(false)
   const [showBankModal, setShowBankModal] = useState(false)
@@ -211,6 +219,27 @@ const StatPanel = () => {
           }))
         }}
       />
+
+      <ChangeFTextModal
+        isOpen={layoutState?.isChangeFTextModalOpen}
+        onClose={() =>
+          setLayoutState((prev) => ({
+            ...prev,
+            isChangeFTextModalOpen: false,
+          }))
+        }
+      />
+      <WifiProvider>
+        <WifiModal
+          isOpen={layoutState?.isWiFiModalOpen}
+          onClose={() =>
+            setLayoutState((prev) => ({
+              ...prev,
+              isWiFiModalOpen: false,
+            }))
+          }
+        />
+      </WifiProvider>
     </>
   )
 }

@@ -156,10 +156,15 @@ const ConfigProvider = ({ children }) => {
     key: 'layout-config',
     getInitialValueInEffect: false,
     defaultValue: {
-      isDonationPanelOpen: true,
-      isToggleInfoModalOpen: false,
       hiddenInfo: [],
     },
+  })
+
+  const [layoutState, setLayoutState] = useState({
+    isDonationPanelOpen: true,
+    isToggleInfoModalOpen: false,
+    isWifiModalOpen: false,
+    isChangeFTextModalOpen: false,
   })
 
   // Admin config
@@ -426,6 +431,8 @@ const ConfigProvider = ({ children }) => {
         // don't load admin config from URL
         adminConfig,
         setAdminConfig,
+        layoutState,
+        setLayoutState,
       }}
     >
       {children}

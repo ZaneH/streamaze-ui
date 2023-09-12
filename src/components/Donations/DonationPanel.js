@@ -12,17 +12,16 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { IconDotsVertical, IconLayoutSidebarLeftCollapse } from '@tabler/icons'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { DonationContext } from 'components/Providers/DonationProvider'
 import { HopContext } from 'components/Providers/HopProvider'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { DonationLog } from '.'
 import { ReactComponent as IconWarning } from '../../assets/warning-icon.svg'
 import { PanelHead } from '../document'
 import BlankAudio from './BlankAudio'
-import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
-import { ConfigContext } from 'components/Providers/ConfigProvider'
-import { LanyardContext } from 'components/Providers/LanyardProvider'
 
 const DonationPanel = () => {
   const isLarge = useMediaQuery('(min-width: 1440px)')
@@ -30,15 +29,11 @@ const DonationPanel = () => {
   const { updateKV } = useContext(LanyardContext)
   const { currentProfile, availableProfiles } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
-  const [showChangeFTextModal, setShowChangeFTextModal] = useState(false)
-  const { adminConfig, setLayoutConfig } = useContext(ConfigContext)
+  const { adminConfig, setLayoutConfig, setLayoutState } =
+    useContext(ConfigContext)
 
   return (
     <Flex direction="column" h="100%" style={{ alignSelf: 'stretch' }}>
-      <ChangeFTextModal
-        isOpen={showChangeFTextModal}
-        onClose={() => setShowChangeFTextModal(false)}
-      />
       <PanelHead
         style={{
           flex: '0 1 auto',
@@ -136,7 +131,10 @@ const DonationPanel = () => {
 
                     <Button
                       onClick={() => {
-                        setShowChangeFTextModal(true)
+                        setLayoutState((prev) => ({
+                          ...prev,
+                          isChangeFTextModalOpen: true,
+                        }))
                       }}
                     >
                       Change F Text
@@ -148,6 +146,22 @@ const DonationPanel = () => {
                       }}
                     >
                       Clear F Text
+                    </Button>
+
+                    <Divider />
+
+                    <Text size="sm">Network</Text>
+                    <Button
+                      fullWidth
+                      color="blue"
+                      onClick={() => {
+                        setLayoutState((prev) => ({
+                          ...prev,
+                          isWiFiModalOpen: true,
+                        }))
+                      }}
+                    >
+                      Select Wi-Fi
                     </Button>
                   </Flex>
                 </Popover.Dropdown>

@@ -13,7 +13,7 @@ export const HopContext = createContext()
 const HopProvider = ({ children }) => {
   const { obsConfig } = useContext(ConfigContext)
   const { audioElement } = useContext(DonationContext)
-  const { state, error } = useReadChannelState(obsConfig.streamChannelId)
+  const { state, error } = useReadChannelState(obsConfig?.streamChannelId)
   const { state: meIrlState } = useReadChannelState('me_irl:sam')
 
   const serverState = state?.server?.state ?? 'error'
@@ -94,6 +94,7 @@ const HopProvider = ({ children }) => {
   return (
     <HopContext.Provider
       value={{
+        bondState: state,
         serverState,
         currentProfile,
         availableProfiles,
