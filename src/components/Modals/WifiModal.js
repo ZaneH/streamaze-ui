@@ -1,10 +1,9 @@
+import { showNotification } from '@mantine/notifications'
 import { IconRefresh } from '@tabler/icons'
-import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { WifiContext } from 'components/Providers/WifiProvider'
 import moment from 'moment'
-import wretch from 'wretch'
 import { useContext } from 'react'
-import { showNotification } from '@mantine/notifications'
+import wretch from 'wretch'
 const {
   Modal,
   Table,
@@ -39,7 +38,7 @@ const WifiModal = ({ isOpen, onClose }) => {
     wretch(`${REACT_APP_API_2_URL}/wifi/scan`)
       .post()
       .res((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           showNotification({
             title: 'Scan requested...',
             color: 'green',
