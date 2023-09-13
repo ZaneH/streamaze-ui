@@ -1,5 +1,6 @@
 import { showNotification } from '@mantine/notifications'
 import { IconRefresh } from '@tabler/icons'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { WifiContext } from 'components/Providers/WifiProvider'
 import moment from 'moment'
 import { useContext } from 'react'
@@ -12,12 +13,15 @@ const {
   Divider,
   Flex,
   Box,
+  TextInput,
 } = require('@mantine/core')
 
 const { REACT_APP_API_2_URL } = process.env
 
 const WifiModal = ({ isOpen, onClose }) => {
-  const { networks, lastScannedAt, needsToScan } = useContext(WifiContext) || {}
+  const { networks, lastScannedAt, needsToScan, setConnectingNetwork } =
+    useContext(WifiContext) || {}
+  const { setLayoutState } = useContext(ConfigContext)
 
   const rows = networks
     ?.filter((n) => {
@@ -25,7 +29,20 @@ const WifiModal = ({ isOpen, onClose }) => {
     })
     ?.map((network) => {
       return (
-        <tr>
+        <tr
+          style={{
+            cursor: 'pointer',
+          }}
+          onClick={() => {
+            setConnectingNetwork(network)
+            setLayoutState((prev) => ({
+              ...prev,
+              isWifiPasswordModalOpen: true,
+            }))
+
+            onClose()
+          }}
+        >
           <td>{network?.ssid}</td>
           <td>{network?.signal_level}</td>
           <td>{network?.security}</td>

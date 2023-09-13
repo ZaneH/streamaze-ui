@@ -23,6 +23,7 @@ import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
 import WifiModal from 'components/Modals/WifiModal'
 import { WifiProvider } from 'components/Providers'
 import ToggleOverlaysModal from 'components/Modals/ToggleOverlaysModal'
+import WifiPasswordModal from 'components/Modals/WifiPasswordModal'
 
 const StatPanel = () => {
   const {
@@ -249,6 +250,16 @@ const StatPanel = () => {
               isWiFiModalOpen: false,
             }))
           }
+        />
+
+        <WifiPasswordModal
+          isOpen={layoutState?.isWifiPasswordModalOpen}
+          onClose={() => {
+            setLayoutState((prev) => ({
+              ...prev,
+              isWifiPasswordModalOpen: false,
+            }))
+          }}
         />
       </WifiProvider>
     </>

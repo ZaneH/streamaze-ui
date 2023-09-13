@@ -164,6 +164,7 @@ const ConfigProvider = ({ children }) => {
     isDonationPanelOpen: true,
     isToggleInfoModalOpen: false,
     isWifiModalOpen: false,
+    isWifiPasswordModalOpen: false,
     isChangeFTextModalOpen: false,
     isToggleOverlaysModalOpen: false,
   })
