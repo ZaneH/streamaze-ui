@@ -26,8 +26,8 @@ const Home = () => {
     }
   }, [])
 
-  const { layoutConfig } = useContext(ConfigContext)
-  const { isDonationPanelOpen } = layoutConfig || {}
+  const { layoutState } = useContext(ConfigContext)
+  const { isDonationPanelOpen } = layoutState || {}
 
   return (
     <LanyardProvider>

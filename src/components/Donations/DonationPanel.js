@@ -29,8 +29,7 @@ const DonationPanel = () => {
   const { updateKV } = useContext(LanyardContext)
   const { currentProfile, availableProfiles } = useContext(HopContext)
   const { streamerChannel } = useContext(PhoenixContext)
-  const { adminConfig, setLayoutConfig, setLayoutState } =
-    useContext(ConfigContext)
+  const { adminConfig, setLayoutState } = useContext(ConfigContext)
 
   return (
     <Flex direction="column" h="100%" style={{ alignSelf: 'stretch' }}>
@@ -77,7 +76,7 @@ const DonationPanel = () => {
             >
               <ActionIcon
                 onClick={() => {
-                  setLayoutConfig((prev) => ({
+                  setLayoutState((prev) => ({
                     ...prev,
                     isDonationPanelOpen: !prev.isDonationPanelOpen,
                   }))

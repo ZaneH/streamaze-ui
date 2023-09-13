@@ -37,13 +37,8 @@ const StatPanel = () => {
   const { bitrate, isLive, rtt, uptime } = useContext(HopContext)
   const { kv } = useContext(LanyardContext)
   const { timeRemaining } = useContext(SubathonContext)
-  const {
-    subathonConfig,
-    layoutConfig,
-    setLayoutConfig,
-    layoutState,
-    setLayoutState,
-  } = useContext(ConfigContext)
+  const { subathonConfig, layoutConfig, layoutState, setLayoutState } =
+    useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const [showSubathonModal, setShowSubathonModal] = useState(false)
   const [showBankModal, setShowBankModal] = useState(false)

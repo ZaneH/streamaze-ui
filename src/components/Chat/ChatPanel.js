@@ -38,8 +38,7 @@ const statPanelOffsets = {
 }
 
 const ChatPanel = () => {
-  const { chatConfig, layoutConfig, setLayoutConfig, setLayoutState } =
-    useContext(ConfigContext)
+  const { chatConfig, setLayoutState, layoutState } = useContext(ConfigContext)
   const { showPollModal, setShowPollModal } = useContext(PollContext)
   const { showWordRankPanel, setShowWordRankPanel } =
     useContext(WordRankContext)
@@ -47,7 +46,7 @@ const ChatPanel = () => {
   const isMedium = useMediaQuery('(max-width: 768px)')
   const [searchParams] = useSearchParams()
   const { colors } = useMantineTheme()
-  const { isDonationPanelOpen } = layoutConfig || {}
+  const { isDonationPanelOpen } = layoutState || {}
 
   const menuItems = [
     {
@@ -161,7 +160,7 @@ const ChatPanel = () => {
               >
                 <ActionIcon
                   onClick={() => {
-                    setLayoutConfig((prev) => ({
+                    setLayoutState((prev) => ({
                       ...prev,
                       isDonationPanelOpen: !prev.isDonationPanelOpen,
                     }))
