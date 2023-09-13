@@ -16,6 +16,7 @@ import {
   IconHeartMinus,
   IconLayoutSidebarRightExpand,
   IconListNumbers,
+  IconScreenShare,
 } from '@tabler/icons'
 import NextUpGameOverModal from 'components/Modals/NextUpGameOverModal'
 import NextUpModal from 'components/Modals/NextUpModal'
@@ -37,7 +38,7 @@ const statPanelOffsets = {
 }
 
 const ChatPanel = () => {
-  const { chatConfig, layoutConfig, setLayoutConfig } =
+  const { chatConfig, layoutConfig, setLayoutConfig, setLayoutState } =
     useContext(ConfigContext)
   const { showPollModal, setShowPollModal } = useContext(PollContext)
   const { showWordRankPanel, setShowWordRankPanel } =
@@ -104,9 +105,19 @@ const ChatPanel = () => {
       element: 'Toggle information',
       icon: IconGridDots,
       onClick: () => {
-        setLayoutConfig((prev) => ({
+        setLayoutState((prev) => ({
           ...prev,
           isToggleInfoModalOpen: !prev.isToggleInfoModalOpen,
+        }))
+      },
+    },
+    {
+      element: 'Toggle overlays',
+      icon: IconScreenShare,
+      onClick: () => {
+        setLayoutState((prev) => ({
+          ...prev,
+          isToggleOverlaysModalOpen: !prev.isToggleOverlaysModalOpen,
         }))
       },
     },

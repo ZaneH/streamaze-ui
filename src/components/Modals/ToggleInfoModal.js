@@ -2,7 +2,7 @@ import { Checkbox, Flex, Modal } from '@mantine/core'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { useContext } from 'react'
 
-const InfoToggleModal = ({ isOpen, onClose }) => {
+const ToggleInfoModal = ({ isOpen, onClose }) => {
   const { layoutConfig, setLayoutConfig } = useContext(ConfigContext)
 
   const toggleInfo = (infoKey) => {
@@ -24,7 +24,7 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
       <Flex direction="column" gap="sm">
         <Checkbox
           label="Hide viewer stats"
-          value={layoutConfig?.hiddenInfo?.includes('viewers')}
+          checked={layoutConfig?.hiddenInfo?.includes('viewers')}
           onChange={(e) => {
             toggleInfo('viewers')
           }}
@@ -32,7 +32,7 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
 
         <Checkbox
           label="Hide net profit"
-          value={layoutConfig?.hiddenInfo?.includes('profit')}
+          checked={layoutConfig?.hiddenInfo?.includes('profit')}
           onChange={(e) => {
             toggleInfo('profit')
           }}
@@ -40,7 +40,7 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
 
         <Checkbox
           label="Hide fan balance"
-          value={layoutConfig?.hiddenInfo?.includes('fan_balance')}
+          checked={layoutConfig?.hiddenInfo?.includes('fan_balance')}
           onChange={(e) => {
             toggleInfo('fan_balance')
           }}
@@ -48,7 +48,7 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
 
         <Checkbox
           label="Hide bank balance"
-          value={layoutConfig?.hiddenInfo?.includes('bank_balance')}
+          checked={layoutConfig?.hiddenInfo?.includes('bank_balance')}
           onChange={(e) => {
             toggleInfo('bank_balance')
           }}
@@ -56,7 +56,7 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
 
         <Checkbox
           label="Hide livestream info"
-          value={layoutConfig?.hiddenInfo?.includes('livestream_info')}
+          checked={layoutConfig?.hiddenInfo?.includes('livestream_info')}
           onChange={(e) => {
             toggleInfo('livestream_info')
           }}
@@ -64,7 +64,7 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
 
         <Checkbox
           label="Hide subathon info"
-          value={layoutConfig?.hiddenInfo?.includes('subathon')}
+          checked={layoutConfig?.hiddenInfo?.includes('subathon')}
           onChange={(e) => {
             toggleInfo('subathon')
           }}
@@ -74,4 +74,4 @@ const InfoToggleModal = ({ isOpen, onClose }) => {
   )
 }
 
-export default InfoToggleModal
+export default ToggleInfoModal

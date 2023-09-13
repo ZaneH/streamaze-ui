@@ -165,6 +165,7 @@ const ConfigProvider = ({ children }) => {
     isToggleInfoModalOpen: false,
     isWifiModalOpen: false,
     isChangeFTextModalOpen: false,
+    isToggleOverlaysModalOpen: false,
   })
 
   // Admin config

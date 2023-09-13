@@ -8,7 +8,7 @@ import { ReactComponent as DollarBankIcon } from 'assets/dollar-bank-icon.svg'
 import { ReactComponent as FlagIcon } from 'assets/flag-icon.svg'
 import { ReactComponent as KickIcon } from 'assets/kick-logo-icon.svg'
 import BankModal from 'components/Modals/BankModal'
-import InfoToggleModal from 'components/Modals/InfoToggleModal'
+import ToggleInfoModal from 'components/Modals/ToggleInfoModal'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { SubathonContext } from 'components/Providers/SubathonProvider'
@@ -22,6 +22,7 @@ import StatInfo from './StatInfo'
 import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
 import WifiModal from 'components/Modals/WifiModal'
 import { WifiProvider } from 'components/Providers'
+import ToggleOverlaysModal from 'components/Modals/ToggleOverlaysModal'
 
 const StatPanel = () => {
   const {
@@ -210,12 +211,22 @@ const StatPanel = () => {
         }}
       />
 
-      <InfoToggleModal
-        isOpen={layoutConfig?.isToggleInfoModalOpen}
+      <ToggleInfoModal
+        isOpen={layoutState?.isToggleInfoModalOpen}
         onClose={() => {
-          setLayoutConfig((prev) => ({
+          setLayoutState((prev) => ({
             ...prev,
             isToggleInfoModalOpen: false,
+          }))
+        }}
+      />
+
+      <ToggleOverlaysModal
+        isOpen={layoutState?.isToggleOverlaysModalOpen}
+        onClose={() => {
+          setLayoutState((prev) => ({
+            ...prev,
+            isToggleOverlaysModalOpen: false,
           }))
         }}
       />

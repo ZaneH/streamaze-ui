@@ -21,6 +21,7 @@ const LanyardProvider = ({ children }) => {
     (key, value) => {
       return new Promise((resolve, reject) => {
         if (!discordUserId || !apiKey) {
+          console.error('Missing discordUserId or apiKey')
           reject()
           return
         }
@@ -36,6 +37,7 @@ const LanyardProvider = ({ children }) => {
             if (res.ok) {
               resolve()
             } else {
+              console.error(res)
               reject()
             }
           })
