@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import {
-  ActionIcon,
   Avatar,
   Box,
   Burger,
@@ -12,32 +11,32 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
-import { IconArrowRight, IconGitMerge, IconSettings } from '@tabler/icons'
+import { IconArrowRight, IconSettings } from '@tabler/icons'
+import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
+import IceBadge from 'assets/ice-badge.png'
+import { ReactComponent as KickBroadcasterBadge } from 'assets/kick-broadcaster-badge.svg'
+import { ReactComponent as KickFoundersBadge } from 'assets/kick-founders-badge.svg'
+import { ReactComponent as KickGifted100Badge } from 'assets/kick-gifted-100-badge.svg'
+import { ReactComponent as KickGifted200Badge } from 'assets/kick-gifted-200-badge.svg'
+import { ReactComponent as KickGifted25Badge } from 'assets/kick-gifted-25-badge.svg'
+import { ReactComponent as KickGifted50Badge } from 'assets/kick-gifted-50-badge.svg'
+import { ReactComponent as KickGiftedBadge } from 'assets/kick-gifted-badge.svg'
+import { ReactComponent as KickModBadge } from 'assets/kick-mod-badge.svg'
+import { ReactComponent as KickOGBadge } from 'assets/kick-og-badge.svg'
+import { ReactComponent as KickStaffBadge } from 'assets/kick-staff-badge.svg'
+import { ReactComponent as KickVerifiedBadge } from 'assets/kick-verified-badge.svg'
+import { ReactComponent as KickVIPBadge } from 'assets/kick-vip-badge.svg'
+import { ReactComponent as ModChatIcon } from 'assets/mod-chat-icon.svg'
+import { ReactComponent as VerifiedChatIcon } from 'assets/verified-chat-icon.svg'
+import { NextUpContext } from 'components/Providers/NextUpProvider'
 import { PollContext } from 'components/Providers/PollProvider'
+import { WordRankContext } from 'components/Providers/WordRankProvider'
 import useStreamer from 'hooks/useStreamer'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
-import { ReactComponent as KickFoundersBadge } from 'assets/kick-founders-badge.svg'
-import { ReactComponent as KickGifted25Badge } from 'assets/kick-gifted-25-badge.svg'
-import { ReactComponent as KickGifted50Badge } from 'assets/kick-gifted-50-badge.svg'
-import { ReactComponent as KickGifted100Badge } from 'assets/kick-gifted-100-badge.svg'
-import { ReactComponent as KickGifted200Badge } from 'assets/kick-gifted-200-badge.svg'
-import { ReactComponent as KickGiftedBadge } from 'assets/kick-gifted-badge.svg'
-import { ReactComponent as KickOGBadge } from 'assets/kick-og-badge.svg'
-import { ReactComponent as KickVIPBadge } from 'assets/kick-vip-badge.svg'
-import { ReactComponent as KickStaffBadge } from 'assets/kick-staff-badge.svg'
-import { ReactComponent as ModChatIcon } from 'assets/mod-chat-icon.svg'
-import { ReactComponent as VerifiedChatIcon } from 'assets/verified-chat-icon.svg'
-import { ReactComponent as KickVerifiedBadge } from 'assets/kick-verified-badge.svg'
-import { ReactComponent as KickModBadge } from 'assets/kick-mod-badge.svg'
-import { ReactComponent as KickBroadcasterBadge } from 'assets/kick-broadcaster-badge.svg'
-import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
-import { WordRankContext } from 'components/Providers/WordRankProvider'
-import { NextUpContext } from 'components/Providers/NextUpProvider'
-import IceBadge from 'assets/ice-badge.png'
 
 const Item = styled.div`
   margin: 0;
@@ -477,6 +476,7 @@ const ChatLog = ({
             chatSendMessage({
               addChannelId: '145224',
               addChatroomId: '145222',
+              kickChannelName: _kickChannelName,
             })
           }}
         >
