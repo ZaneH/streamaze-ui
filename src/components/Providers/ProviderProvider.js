@@ -5,17 +5,20 @@ import PhoenixProvider from './PhoenixProvider'
 import StatProvider from './StatProvider'
 import SubathonProvider from './SubathonProvider'
 
-const ProviderProvider = ({ children }) => {
+const ConditionalWrapper = ({ condition, wrapper, children }) =>
+  condition ? wrapper(children) : children
+
+const ProviderProvider = ({ children, hasHop = true }) => {
   return (
     <LanyardProvider>
       <DonationProvider>
-        <HopProvider>
+        <ConditionalWrapper condition={hasHop} wrapper={HopProvider}>
           <SubathonProvider>
             <StatProvider>
               <PhoenixProvider>{children}</PhoenixProvider>
             </StatProvider>
           </SubathonProvider>
-        </HopProvider>
+        </ConditionalWrapper>
       </DonationProvider>
     </LanyardProvider>
   )

@@ -19,7 +19,7 @@ const TickerContainer = styled.div`
 
 const ProvidersWrapper = () => {
   return (
-    <ProviderProvider>
+    <ProviderProvider hasHop={false}>
       <TickerWidget />
     </ProviderProvider>
   )
