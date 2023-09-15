@@ -12,7 +12,10 @@ const ProviderProvider = ({ children, hasHop = true }) => {
   return (
     <LanyardProvider>
       <DonationProvider>
-        <ConditionalWrapper condition={hasHop} wrapper={HopProvider}>
+        <ConditionalWrapper
+          condition={hasHop}
+          wrapper={(child) => <HopProvider>{child}</HopProvider>}
+        >
           <SubathonProvider>
             <StatProvider>
               <PhoenixProvider>{children}</PhoenixProvider>
