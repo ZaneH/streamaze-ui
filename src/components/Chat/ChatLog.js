@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
 import {
+  ActionIcon,
   Avatar,
   Box,
   Burger,
+  Button,
   Center,
   Flex,
   Loader,
@@ -10,7 +12,7 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
-import { IconArrowRight, IconSettings } from '@tabler/icons'
+import { IconArrowRight, IconGitMerge, IconSettings } from '@tabler/icons'
 import { PollContext } from 'components/Providers/PollProvider'
 import useStreamer from 'hooks/useStreamer'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -35,6 +37,7 @@ import { ReactComponent as ArrowReplyIcon } from 'assets/arrow-reply-icon.svg'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
 import { NextUpContext } from 'components/Providers/NextUpProvider'
+import IceBadge from 'assets/ice-badge.png'
 
 const Item = styled.div`
   margin: 0;
@@ -366,6 +369,7 @@ const ChatLog = ({
             badges: payload.badges,
             giftedCount: payload.gifted_count,
             metadata: payload?.metadata,
+            chatroomId: payload?.chatroomId,
           },
         ])
 
@@ -467,6 +471,18 @@ const ChatLog = ({
         height: fullHeight ? '100%' : height,
       }}
     >
+      <Box px="md" py="sm">
+        <Button
+          onClick={() => {
+            chatSendMessage({
+              addChannelId: '145224',
+              addChatroomId: '145222',
+            })
+          }}
+        >
+          Merge Ice's chat
+        </Button>
+      </Box>
       <Virtuoso
         style={{
           minHeight: fullHeight ? '100%' : height,
@@ -515,6 +531,7 @@ const ChatLog = ({
             badges = [],
             giftedCount,
             metadata = {},
+            chatroomId,
           } = chatEvent || {}
 
           let newMessageString = message || ''
@@ -615,6 +632,18 @@ const ChatLog = ({
                       shadow={fluid ? 'true' : undefined}
                       origin={origin}
                     >
+                      {chatroomId === 145222 && (
+                        <img
+                          src={IceBadge}
+                          alt="Ice Badge"
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            verticalAlign: 'middle',
+                            marginRight: '4px',
+                          }}
+                        />
+                      )}
                       {badges.includes('og') && (
                         <KickOGBadge
                           style={{
