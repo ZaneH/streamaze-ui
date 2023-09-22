@@ -16,13 +16,14 @@ import { IconFileMusic } from '@tabler/icons'
 import { ProviderProvider } from 'components/Providers'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import useElevenLabs from 'hooks/useElevenLabs'
-import { useContext, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import wretch from 'wretch'
 import FormDataAddon from 'wretch/addons/formData'
 import { ConfigContext } from '../components/Providers/ConfigProvider'
 import { FieldLabel, FormSection } from '../components/Settings'
 import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 
 const { REACT_APP_LANYARD_API_ENDPOINT } = process.env
 
@@ -57,6 +58,7 @@ const Settings = () => {
 
   const { currentStreamer } = useContext(PhoenixContext)
   const { allVoices } = useElevenLabs(userConfig?.streamazeKey)
+  const { updateKV, kv } = useContext(LanyardContext)
   const kickChannelNameRef = useRef(null)
   const kickChannelIdRef = useRef(null)
   const kickChatroomIdRef = useRef(null)
@@ -111,6 +113,7 @@ const Settings = () => {
       silentAudioInterval: slobsConfig?.silentAudioInterval,
       ttsDollarMin: slobsConfig?.ttsDollarMin,
       excludeFromProfits: slobsConfig?.excludeFromProfits,
+      badWords: kv?.bad_words,
     },
   })
 
@@ -126,6 +129,10 @@ const Settings = () => {
       isGpsEnabled: gpsConfig?.isGpsEnabled,
     },
   })
+
+  useEffect(() => {
+    slobsForm.setFieldValue('badWords', kv?.bad_words)
+  }, [kv?.bad_words])
 
   return (
     <Layout>
@@ -522,6 +529,7 @@ const Settings = () => {
                   silentAudioInterval: slobsForm.values.silentAudioInterval,
                   ttsDollarMin: slobsForm.values.ttsDollarMin,
                   excludeFromProfits: slobsForm.values.excludeFromProfits,
+                  badWords: slobsForm.values.badWords,
                 }))
 
                 wretch(
@@ -543,6 +551,8 @@ const Settings = () => {
                   })
                   .res((res) => {
                     if (res.ok) {
+                      updateKV('bad_words', slobsForm.values.badWords)
+
                       showNotification({
                         title: 'Donation Settings saved!',
                         color: 'teal',
@@ -594,6 +604,15 @@ const Settings = () => {
                       'silentAudioInterval',
                       e.target.value
                     )
+                  }}
+                />
+                <Divider />
+                <TextInput
+                  label={<FieldLabel>Censored Words</FieldLabel>}
+                  defaultValue={slobsForm.values.badWords}
+                  placeholder="comma,separated,list,carefully spaced"
+                  onChange={(e) => {
+                    slobsForm.setFieldValue('badWords', e.target.value)
                   }}
                 />
                 <Divider />

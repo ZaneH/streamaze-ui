@@ -82,6 +82,7 @@ const ConfigProvider = ({ children }) => {
       silentAudioInterval: '10',
       ttsDollarMin: '0',
       excludeFromProfits: false,
+      badWords: '',
     },
   })
 

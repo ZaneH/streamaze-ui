@@ -18,6 +18,7 @@ import useWebSocket from 'react-use-websocket'
 import useStreamer from 'hooks/useStreamer'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { useInterval } from '@mantine/hooks'
+import { LanyardContext } from 'components/Providers/LanyardProvider'
 
 const Item = styled.div`
   margin: 12px 32px;
@@ -75,6 +76,7 @@ const DonationLog = () => {
   const { donations, donationIndex, setDonationIndex, setPrevDonationIndex } =
     useContext(DonationContext)
   const { userConfig, slobsConfig } = useContext(ConfigContext)
+  const { kv } = useContext(LanyardContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isScrolling, setIsScrolling] = useState(false)
   const virtuosoRef = useRef(null)
@@ -111,6 +113,7 @@ const DonationLog = () => {
       streamazeKey: userConfig?.streamazeKey,
       tiktokDonos: slobsConfig?.tiktokUsername,
       excludeFromProfits: slobsConfig?.excludeFromProfits,
+      badWords: slobsConfig?.badWords,
     })
 
     setHasMessaged(true)
