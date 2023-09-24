@@ -38,7 +38,7 @@ const ToggleInfoModal = ({ isOpen, onClose }) => {
           }}
         />
 
-        <Checkbox
+        {/* <Checkbox
           label="Hide fan balance"
           checked={layoutConfig?.hiddenInfo?.includes('fan_balance')}
           onChange={(e) => {
@@ -51,6 +51,14 @@ const ToggleInfoModal = ({ isOpen, onClose }) => {
           checked={layoutConfig?.hiddenInfo?.includes('bank_balance')}
           onChange={(e) => {
             toggleInfo('bank_balance')
+          }}
+        /> */}
+
+        <Checkbox
+          label="Hide cash balance"
+          checked={layoutConfig?.hiddenInfo?.includes('cash_balance')}
+          onChange={(e) => {
+            toggleInfo('cash_balance')
           }}
         />
 
