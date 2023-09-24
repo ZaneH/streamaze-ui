@@ -24,6 +24,7 @@ import WifiModal from 'components/Modals/WifiModal'
 import { WifiProvider } from 'components/Providers'
 import ToggleOverlaysModal from 'components/Modals/ToggleOverlaysModal'
 import WifiPasswordModal from 'components/Modals/WifiPasswordModal'
+import CashBalModal from 'components/Modals/CashBalModal'
 
 const StatPanel = () => {
   const {
@@ -41,7 +42,8 @@ const StatPanel = () => {
     useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const [showSubathonModal, setShowSubathonModal] = useState(false)
-  const [showBankModal, setShowBankModal] = useState(false)
+  // const [showBankModal, setShowBankModal] = useState(false)
+  const [showCashBalModal, setShowCashBalModal] = useState(false)
   const { netProfit } = useContext(StatContext)
   const matches = useMediaQuery('(max-width: 768px)')
 
@@ -120,7 +122,7 @@ const StatPanel = () => {
           {!isCashBalanceHidden ? (
             <StatInfo
               onClick={() => {
-                setShowBankModal(true)
+                setShowCashBalModal(true)
               }}
               image={<DollarBankIcon style={{ width: 26, height: 26 }} />}
               label={(parseInt(kv?.cash_balance || 0) / 100)
@@ -173,15 +175,22 @@ const StatPanel = () => {
         onClose={() => {
           setShowMoneyModal(false)
         }}
-        onOpenBank={() => {
-          setShowBankModal(true)
-          setShowMoneyModal(false)
-        }}
+        // onOpenBank={() => {
+        //   setShowBankModal(true)
+        //   setShowMoneyModal(false)
+        // }}
       />
 
-      <BankModal
+      {/* <BankModal
         isOpen={showBankModal}
         onClose={() => setShowBankModal(false)}
+      /> */}
+
+      <CashBalModal
+        isOpen={showCashBalModal}
+        onClose={() => {
+          setShowCashBalModal(false)
+        }}
       />
 
       <SubathonModal
