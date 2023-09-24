@@ -106,6 +106,10 @@ const DonationLog = () => {
       return
     }
 
+    if (!kv) {
+      return
+    }
+
     sendJsonMessage({
       streamerId: streamer?.id,
       streamToken: slobsConfig?.streamToken,
@@ -113,12 +117,12 @@ const DonationLog = () => {
       streamazeKey: userConfig?.streamazeKey,
       tiktokDonos: slobsConfig?.tiktokUsername,
       excludeFromProfits: slobsConfig?.excludeFromProfits,
-      badWords: slobsConfig?.badWords,
+      badWords: kv?.bad_words || [],
     })
 
     setHasMessaged(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streamer?.id])
+  }, [streamer?.id, kv])
 
   const inactivityInterval = useInterval(() => {
     if (isScrolling) {
