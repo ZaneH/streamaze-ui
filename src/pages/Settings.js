@@ -139,10 +139,8 @@ const Settings = () => {
               streamazeKey: userForm.values.streamazeKey,
             }))
 
-            showNotification({
-              title: 'Streamaze Key saved!',
-              color: 'teal',
-            })
+            // refresh the page to update the fields
+            window.location.reload()
           }}
         >
           <FormSection title="Streamaze Key" subtitle="Sign in to Streamaze">
