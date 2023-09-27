@@ -135,7 +135,11 @@ export default function SuperChatCard({ donation, isAnimated, onClick }) {
         </Flex>
         {message && (
           <Box py="md" px="16px">
-            <Text color={textColor} weight={500}>
+            <Text
+              color={textColor}
+              weight={500}
+              style={{ overflowWrap: 'anywhere' }}
+            >
               {message}
             </Text>
           </Box>

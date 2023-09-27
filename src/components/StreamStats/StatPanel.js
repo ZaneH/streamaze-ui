@@ -24,6 +24,7 @@ import WifiModal from 'components/Modals/WifiModal'
 import { WifiProvider } from 'components/Providers'
 import ToggleOverlaysModal from 'components/Modals/ToggleOverlaysModal'
 import WifiPasswordModal from 'components/Modals/WifiPasswordModal'
+import CashBalModal from 'components/Modals/CashBalModal'
 
 const StatPanel = () => {
   const {
@@ -41,14 +42,14 @@ const StatPanel = () => {
     useContext(ConfigContext)
   const [showMoneyModal, setShowMoneyModal] = useState(false)
   const [showSubathonModal, setShowSubathonModal] = useState(false)
-  const [showBankModal, setShowBankModal] = useState(false)
+  // const [showBankModal, setShowBankModal] = useState(false)
+  const [showCashBalModal, setShowCashBalModal] = useState(false)
   const { netProfit } = useContext(StatContext)
   const matches = useMediaQuery('(max-width: 768px)')
 
   const isViewersHidden = layoutConfig?.hiddenInfo?.includes('viewers')
   const isProfitHidden = layoutConfig?.hiddenInfo?.includes('profit')
-  const isFanBalanceHidden = layoutConfig?.hiddenInfo?.includes('fan_balance')
-  const isBankBalanceHidden = layoutConfig?.hiddenInfo?.includes('bank_balance')
+  const isCashBalanceHidden = layoutConfig?.hiddenInfo?.includes('cash_balance')
   const isLivestreamInfoHidden =
     layoutConfig?.hiddenInfo?.includes('livestream_info')
   const isSubathonHidden = layoutConfig?.hiddenInfo?.includes('subathon')
@@ -118,28 +119,13 @@ const StatPanel = () => {
             />
           ) : null}
 
-          {!isFanBalanceHidden ? (
+          {!isCashBalanceHidden ? (
             <StatInfo
               onClick={() => {
-                setShowBankModal(true)
-              }}
-              image={<DollarFanIcon style={{ width: 26, height: 26 }} />}
-              label={(parseInt(kv?.fan_balance || 0) / 100)
-                .toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                })
-                .replace('.00', '')}
-            />
-          ) : null}
-
-          {!isBankBalanceHidden ? (
-            <StatInfo
-              onClick={() => {
-                setShowBankModal(true)
+                setShowCashBalModal(true)
               }}
               image={<DollarBankIcon style={{ width: 26, height: 26 }} />}
-              label={(parseInt(kv?.bank_balance || 0) / 100)
+              label={(parseInt(kv?.cash_balance || 0) / 100)
                 .toLocaleString('en-US', {
                   style: 'currency',
                   currency: 'USD',
@@ -189,15 +175,22 @@ const StatPanel = () => {
         onClose={() => {
           setShowMoneyModal(false)
         }}
-        onOpenBank={() => {
-          setShowBankModal(true)
-          setShowMoneyModal(false)
-        }}
+        // onOpenBank={() => {
+        //   setShowBankModal(true)
+        //   setShowMoneyModal(false)
+        // }}
       />
 
-      <BankModal
+      {/* <BankModal
         isOpen={showBankModal}
         onClose={() => setShowBankModal(false)}
+      /> */}
+
+      <CashBalModal
+        isOpen={showCashBalModal}
+        onClose={() => {
+          setShowCashBalModal(false)
+        }}
       />
 
       <SubathonModal
