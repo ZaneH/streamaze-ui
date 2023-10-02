@@ -37,6 +37,7 @@ import { useSearchParams } from 'react-router-dom'
 import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
 import { ConfigContext } from '../Providers/ConfigProvider'
+import { MazeContext } from 'components/Providers/MazeProvider'
 
 const Item = styled.div`
   margin: 0;
@@ -136,6 +137,7 @@ const ChatLog = ({
   const { handlePollResponse } = useContext(PollContext)
   const { handleIncomingWord: handleWordRankMessage } =
     useContext(WordRankContext)
+  const { handleMazeResponse } = useContext(MazeContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isConnected, setIsConnected] = useState(false)
   const { handleNextUpMessage } = useContext(NextUpContext)
@@ -383,6 +385,11 @@ const ChatLog = ({
         })
 
         handleNextUpMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
+
+        handleMazeResponse({
           userId: payload.sender,
           content: payload.message,
         })

@@ -17,6 +17,7 @@ import Keypad from './pages/Keypad'
 import RaspberryPi from './pages/RaspberryPi'
 import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
+import MazeWidget from 'pages/MazeWidget'
 
 const App = () => {
   return (
@@ -65,6 +66,8 @@ const App = () => {
                   path="/widget/subs/:platform"
                   element={<SubscriberCountWidget />}
                 />
+
+                <Route path="/widget/maze/:id" element={<MazeWidget />} />
 
                 <Route path="/giveaway/slots" element={<SlotMachine />} />
 

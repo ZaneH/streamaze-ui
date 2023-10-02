@@ -46,3 +46,38 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+:root {
+  --hsl-primary: 211, 100%, 60%;
+  --color-primary: hsl(var(--hsl-primary));
+
+  --hsl-bg: 0, 100%, 100%;
+  --color-bg: hsl(var(--hsl-bg));
+
+  --hsl-inverse: 0, 100%, 100%;
+  --color-inverse: hsl(var(--hsl-inverse));
+
+  --hsl-text: 211, 5%, 45%;
+  --color-text: hsl(var(--hsl-text));
+
+  --hsl-dark: 211, 0%, 1%;
+  --color-dark: hsl(var--hsl-dark);
+
+  --hsl-success: 100, 70%, 60%;
+  --color-success: hsl(var(--hsl-success));
+  --hsl-info: 211, 100%, 60%;
+  --color-info: hsl(var(--hsl-info));
+  --hsl-danger: 20, 100%, 50%;
+  --color-danger: hsl(var(--hsl-danger));
+  --hsl-warning: 40, 100%, 50%;
+  --color-warning: hsl(var(--hsl-warning));
+
+  --width-header: 0fr;
+  --width-main: 1fr;
+  --width-aside: 0fr;
+
+  --z-index-header: 1000;
+  --z-index-tooltip: 1010;
+  --z-index-toast: 1020;
+  --z-index-modal: 1030;
+}

@@ -10,6 +10,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import {
   IconChartBar,
+  IconDeviceGamepad,
   IconDotsVertical,
   IconExternalLink,
   IconGridDots,
@@ -31,6 +32,7 @@ import { ConfigContext } from '../Providers/ConfigProvider'
 import { PanelHead } from '../document'
 import ChatLog from './ChatLog'
 import WordRank from './WordRank'
+import { MazeProvider } from 'components/Providers'
 
 const statPanelOffsets = {
   mt: '-78px',
@@ -97,6 +99,13 @@ const ChatPanel = () => {
       icon: IconHeartMinus,
       onClick: () => {
         setShowNextUpModal(true)
+      },
+    },
+    {
+      element: 'Play Maze game',
+      icon: IconDeviceGamepad,
+      onClick: () => {
+        console.log('hi')
       },
     },
     null,
@@ -225,16 +234,18 @@ const ChatPanel = () => {
       )}
       <Box style={{ flex: '1 1 auto' }}>
         {showWordRankPanel && <WordRank />}
-        <ChatLog
-          fullHeight={showWordRankPanel ? false : true}
-          height={showWordRankPanel ? '60%' : '100%'}
-          isDark
-          compact={isMedium ? true : false}
-          px={isMedium ? '24px' : '32px'}
-          tiktokUsername={chatConfig.tiktok.username}
-          youtubeChannel={chatConfig.youtube.channel}
-          twitchChannel={chatConfig.twitch.channel}
-        />
+        <MazeProvider>
+          <ChatLog
+            fullHeight={showWordRankPanel ? false : true}
+            height={showWordRankPanel ? '60%' : '100%'}
+            isDark
+            compact={isMedium ? true : false}
+            px={isMedium ? '24px' : '32px'}
+            tiktokUsername={chatConfig.tiktok.username}
+            youtubeChannel={chatConfig.youtube.channel}
+            twitchChannel={chatConfig.twitch.channel}
+          />
+        </MazeProvider>
       </Box>
       <Box style={{ flex: '0 1 0px' }} />
     </Flex>
