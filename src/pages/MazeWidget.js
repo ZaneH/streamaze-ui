@@ -18,7 +18,7 @@ const ProvidersWrapper = () => {
 }
 
 const MazeWidget = () => {
-  const { chatInput, maze, generateMaze, size, setSize, cursorIdx } =
+  const { chatInput, maze, generateMaze, size, setSize } =
     useContext(MazeContext) || {}
   const { id } = useParams()
 
@@ -26,7 +26,7 @@ const MazeWidget = () => {
   const kv = data?.kv
 
   const mazeMap = JSON.parse(kv?.maze_map || '[]')
-  console.log(mazeMap)
+  const cursorIdx = parseInt(kv?.maze_cursor_idx) || 0
 
   return (
     <Box>

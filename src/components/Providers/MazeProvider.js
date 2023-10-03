@@ -29,6 +29,8 @@ const MazeProvider = ({ children }) => {
     right: 0,
   })
 
+  const [userIds, setUserIds] = useState({})
+
   const timerInterval = useInterval(() => {
     commitMove()
   }, MAZE_FRAME_DURATION)
@@ -41,28 +43,31 @@ const MazeProvider = ({ children }) => {
     }
   }, [])
 
-  const handleMazeResponse = useCallback(
-    ({ userId, content }) => {
-      if (!userId) {
-        console.error('[ERROR] Missing authorId for maze response')
-        return
-      }
+  const handleMazeResponse = ({ userId, content }) => {
+    if (!userId) {
+      console.error('[ERROR] Missing authorId for maze response')
+      return
+    }
 
-      const sanitizedMessage = content.toLowerCase().trim()
-      const foundDirection = ['up', 'down', 'left', 'right'].find(
-        (dir) => dir === sanitizedMessage
-      )
+    const sanitizedMessage = content.toLowerCase().trim()
+    const foundDirection = ['up', 'down', 'left', 'right'].find(
+      (dir) => dir === sanitizedMessage
+    )
 
-      if (!foundDirection) {
-        return
-      }
+    if (!foundDirection) {
+      return
+    }
 
-      const newChatInput = { ...chatInput }
-      newChatInput[foundDirection] = chatInput[foundDirection] + 1
-      setChatInput(newChatInput)
-    },
-    [chatInput, updateKV]
-  )
+    console.log('found', foundDirection)
+
+    const newChatInput = { ...chatInput }
+    newChatInput[foundDirection] = chatInput[foundDirection] + 1
+    setChatInput(newChatInput)
+
+    const newUsers = { ...userIds }
+    newUsers[userId] = true
+    setUserIds(newUsers)
+  }
 
   const moveCursor = useCallback(
     (dir) => {
@@ -92,7 +97,9 @@ const MazeProvider = ({ children }) => {
         },
       }
 
-      if (keys[dir].check) setCursorIdx((prev) => prev + keys[dir].move)
+      if (keys[dir].check) {
+        setCursorIdx((prev) => prev + keys[dir].move)
+      }
     },
     [cursorIdx, maze, size]
   )
