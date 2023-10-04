@@ -40,9 +40,11 @@ const WordRankProvider = ({ children }) => {
 
   const updateWordRankKV = useCallback(
     (wordData) => {
-      updateKV('word_ranks', JSON.stringify(wordData))
+      if (showWordRankPanel) {
+        updateKV('word_ranks', JSON.stringify(wordData))
+      }
     },
-    [updateKV]
+    [updateKV, showWordRankPanel]
   )
 
   const updateKVWithDebounce = useMemo(() => {
