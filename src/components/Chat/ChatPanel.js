@@ -10,6 +10,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import {
   IconChartBar,
+  IconDeviceGamepad,
   IconDotsVertical,
   IconExternalLink,
   IconGridDots,
@@ -18,9 +19,11 @@ import {
   IconListNumbers,
   IconScreenShare,
 } from '@tabler/icons'
+import MazeModal from 'components/Modals/MazeModal'
 import NextUpGameOverModal from 'components/Modals/NextUpGameOverModal'
 import NextUpModal from 'components/Modals/NextUpModal'
 import PollModal from 'components/Modals/PollModal/PollModal'
+import { MazeProvider } from 'components/Providers'
 import { NextUpContext } from 'components/Providers/NextUpProvider'
 import { PollContext } from 'components/Providers/PollProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
@@ -97,6 +100,16 @@ const ChatPanel = () => {
       icon: IconHeartMinus,
       onClick: () => {
         setShowNextUpModal(true)
+      },
+    },
+    {
+      element: 'Play Maze game',
+      icon: IconDeviceGamepad,
+      onClick: () => {
+        setLayoutState((prev) => ({
+          ...prev,
+          isMazeModalOpen: !prev.isMazeModalOpen,
+        }))
       },
     },
     null,
@@ -225,16 +238,28 @@ const ChatPanel = () => {
       )}
       <Box style={{ flex: '1 1 auto' }}>
         {showWordRankPanel && <WordRank />}
-        <ChatLog
-          fullHeight={showWordRankPanel ? false : true}
-          height={showWordRankPanel ? '60%' : '100%'}
-          isDark
-          compact={isMedium ? true : false}
-          px={isMedium ? '24px' : '32px'}
-          tiktokUsername={chatConfig.tiktok.username}
-          youtubeChannel={chatConfig.youtube.channel}
-          twitchChannel={chatConfig.twitch.channel}
-        />
+        <MazeProvider isController={true}>
+          <ChatLog
+            fullHeight={showWordRankPanel ? false : true}
+            height={showWordRankPanel ? '60%' : '100%'}
+            isDark
+            compact={isMedium ? true : false}
+            px={isMedium ? '24px' : '32px'}
+            tiktokUsername={chatConfig.tiktok.username}
+            youtubeChannel={chatConfig.youtube.channel}
+            twitchChannel={chatConfig.twitch.channel}
+          />
+
+          <MazeModal
+            isOpen={layoutState.isMazeModalOpen}
+            onClose={() => {
+              setLayoutState((prev) => ({
+                ...prev,
+                isMazeModalOpen: false,
+              }))
+            }}
+          />
+        </MazeProvider>
       </Box>
       <Box style={{ flex: '0 1 0px' }} />
     </Flex>

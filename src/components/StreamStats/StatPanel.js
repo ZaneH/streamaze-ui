@@ -21,10 +21,11 @@ import { StatContext } from '../Providers/StatProvider'
 import StatInfo from './StatInfo'
 import ChangeFTextModal from 'components/Modals/ChangeFTextModal'
 import WifiModal from 'components/Modals/WifiModal'
-import { WifiProvider } from 'components/Providers'
+import { MazeProvider, WifiProvider } from 'components/Providers'
 import ToggleOverlaysModal from 'components/Modals/ToggleOverlaysModal'
 import WifiPasswordModal from 'components/Modals/WifiPasswordModal'
 import CashBalModal from 'components/Modals/CashBalModal'
+import MazeModal from 'components/Modals/MazeModal'
 
 const StatPanel = () => {
   const {
