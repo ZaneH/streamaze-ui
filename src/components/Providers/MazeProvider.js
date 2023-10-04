@@ -7,13 +7,22 @@ import {
 } from 'react'
 import { LanyardContext } from './LanyardProvider'
 import { useInterval } from '@mantine/hooks'
+import { HopContext } from './HopProvider'
 export const MazeContext = createContext()
 
 const MAZE_FRAME_SIZE = 3 // Amount of votes to buffer before saving to KV
 const MAZE_FRAME_DURATION = 10_000 // Time in ms to wait before moving cursor
 
+const DIRECTIONS = {
+  u: 'up',
+  d: 'down',
+  l: 'left',
+  r: 'right',
+}
+
 const MazeProvider = ({ children, isController }) => {
   const { kv, updateKV } = useContext(LanyardContext)
+  const { isLive, bitrate } = useContext(HopContext)
   const isMazeEnabled = kv?.maze_enabled === 'true'
   const [cursorIdx, setCursorIdx] = useState(0)
   const [size, setSize] = useState({
@@ -93,6 +102,17 @@ const MazeProvider = ({ children, isController }) => {
   }, [lastCommitTs])
 
   useEffect(() => {
+    /// Enable Maze if bitrate is below 0 and we're live
+    if (isLive && bitrate <= 0) {
+      updateKV('maze_enabled', 'true')
+    } else {
+      if (kv?.maze_enabled === 'true') {
+        updateKV('maze_enabled', 'false')
+      }
+    }
+  }, [bitrate, isLive])
+
+  useEffect(() => {
     setMaze(JSON.parse(kv?.maze_map || '[]'))
   }, [kv?.maze_map])
 
@@ -129,21 +149,14 @@ const MazeProvider = ({ children, isController }) => {
       (dir) => dir === sanitizedMessage
     )
 
-    const directions = {
-      u: 'up',
-      d: 'down',
-      l: 'left',
-      r: 'right',
-    }
-
     if (!foundDirection) {
       return
     }
 
     setChatInput((prev) => {
       const newChatInput = { ...prev }
-      newChatInput[directions[foundDirection]] =
-        chatInput[directions[foundDirection]] + 1
+      newChatInput[DIRECTIONS[foundDirection]] =
+        chatInput[DIRECTIONS[foundDirection]] + 1
 
       return newChatInput
     })
