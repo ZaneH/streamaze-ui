@@ -83,6 +83,9 @@ const MazeProvider = ({ children, isController }) => {
 
     // reset KV
     updateKV('maze_chat_input', JSON.stringify({}))
+
+    // reset user ids
+    setUserIds({})
   }, [lastCommitTs])
 
   useEffect(() => {
@@ -114,9 +117,16 @@ const MazeProvider = ({ children, isController }) => {
     }
 
     const sanitizedMessage = content.toLowerCase().trim()
-    const foundDirection = ['up', 'down', 'left', 'right'].find(
+    const foundDirection = ['u', 'd', 'l', 'r'].find(
       (dir) => dir === sanitizedMessage
     )
+
+    const directions = {
+      u: 'up',
+      d: 'down',
+      l: 'left',
+      r: 'right',
+    }
 
     if (!foundDirection) {
       return
@@ -124,7 +134,8 @@ const MazeProvider = ({ children, isController }) => {
 
     setChatInput((prev) => {
       const newChatInput = { ...prev }
-      newChatInput[foundDirection] = chatInput[foundDirection] + 1
+      newChatInput[directions[foundDirection]] =
+        chatInput[directions[foundDirection]] + 1
 
       return newChatInput
     })
