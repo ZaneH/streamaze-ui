@@ -19,9 +19,11 @@ import {
   IconListNumbers,
   IconScreenShare,
 } from '@tabler/icons'
+import MazeModal from 'components/Modals/MazeModal'
 import NextUpGameOverModal from 'components/Modals/NextUpGameOverModal'
 import NextUpModal from 'components/Modals/NextUpModal'
 import PollModal from 'components/Modals/PollModal/PollModal'
+import { MazeProvider } from 'components/Providers'
 import { NextUpContext } from 'components/Providers/NextUpProvider'
 import { PollContext } from 'components/Providers/PollProvider'
 import { WordRankContext } from 'components/Providers/WordRankProvider'
@@ -32,7 +34,6 @@ import { ConfigContext } from '../Providers/ConfigProvider'
 import { PanelHead } from '../document'
 import ChatLog from './ChatLog'
 import WordRank from './WordRank'
-import { MazeProvider } from 'components/Providers'
 
 const statPanelOffsets = {
   mt: '-78px',
@@ -105,7 +106,10 @@ const ChatPanel = () => {
       element: 'Play Maze game',
       icon: IconDeviceGamepad,
       onClick: () => {
-        console.log('hi')
+        setLayoutState((prev) => ({
+          ...prev,
+          isMazeModalOpen: !prev.isMazeModalOpen,
+        }))
       },
     },
     null,
@@ -234,7 +238,7 @@ const ChatPanel = () => {
       )}
       <Box style={{ flex: '1 1 auto' }}>
         {showWordRankPanel && <WordRank />}
-        <MazeProvider>
+        <MazeProvider isController={true}>
           <ChatLog
             fullHeight={showWordRankPanel ? false : true}
             height={showWordRankPanel ? '60%' : '100%'}
@@ -244,6 +248,16 @@ const ChatPanel = () => {
             tiktokUsername={chatConfig.tiktok.username}
             youtubeChannel={chatConfig.youtube.channel}
             twitchChannel={chatConfig.twitch.channel}
+          />
+
+          <MazeModal
+            isOpen={layoutState.isMazeModalOpen}
+            onClose={() => {
+              setLayoutState((prev) => ({
+                ...prev,
+                isMazeModalOpen: false,
+              }))
+            }}
           />
         </MazeProvider>
       </Box>

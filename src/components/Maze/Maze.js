@@ -1,6 +1,6 @@
-import { Box, Button, Input, createStyles, keyframes } from '@mantine/core'
-import useMaze from 'hooks/useMaze'
-import { useEffect, useState } from 'react'
+import { Box, createStyles, keyframes } from '@mantine/core'
+import { MazeContext } from 'components/Providers/MazeProvider'
+import { useContext, useEffect, useState } from 'react'
 
 const revealAnimation = ({ width, height }) => keyframes`
   from {
@@ -79,6 +79,7 @@ const useStyles = createStyles(
 )
 
 const MazeCell = ({
+  key,
   borderTopWidth,
   borderRightWidth,
   borderBottomWidth,
@@ -92,11 +93,12 @@ const MazeCell = ({
     borderLeftWidth,
   })
 
-  return <li className={classes.mazeCell} style={style} />
+  return <li key={key} className={classes.mazeCell} style={style} />
 }
 
-const Maze = ({ maze = [], size = {}, setSize, cursorIdx, setCursorIdx }) => {
+const Maze = ({ maze = [], size = {}, cursorIdx }) => {
   const [isTransition, setIsTransition] = useState(false)
+  const { setCursorIdx } = useContext(MazeContext)
 
   useEffect(() => {
     if (cursorIdx === size.width * size.height - 1) {
@@ -134,15 +136,18 @@ const Maze = ({ maze = [], size = {}, setSize, cursorIdx, setCursorIdx }) => {
             margin: '0',
             padding: '0',
 
-            '--border-width': '4px',
+            '--border-width': '6px',
           }}
         >
           {maze?.map(({ top, right, bottom, left }, idx) => {
             function getBackgroundColor() {
-              if (cursorIdx === idx) return 'hsla(var(--hsl-primary), 0.5)'
-              if (idx === maze.length - 1)
-                return 'hsla(var(--hsl-success),0.25)'
-              return null
+              if (cursorIdx === idx) {
+                return 'hsla(var(--hsl-primary), 0.5)'
+              } else if (idx === maze.length - 1) {
+                return 'hsla(var(--hsl-success), 0.25)'
+              }
+
+              return 'transparent'
             }
 
             return (
@@ -153,7 +158,7 @@ const Maze = ({ maze = [], size = {}, setSize, cursorIdx, setCursorIdx }) => {
                 borderBottomWidth={bottom ? 'var(--border-width)' : 0}
                 borderLeftWidth={left ? 'var(--border-width)' : 0}
                 style={{
-                  position: `relative`,
+                  position: 'relative',
                   background: `${getBackgroundColor()}`,
                   zIndex: `${cursorIdx === idx && '-1'}`,
                 }}
