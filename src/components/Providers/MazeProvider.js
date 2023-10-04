@@ -103,10 +103,10 @@ const MazeProvider = ({ children, isController }) => {
 
   useEffect(() => {
     /// Enable Maze if bitrate is below 0 and we're live
-    if (isLive && bitrate <= 0) {
+    if (isLive && bitrate <= 0 && kv?.maze_enabled !== 'true') {
       updateKV('maze_enabled', 'true')
     } else {
-      if (kv?.maze_enabled === 'true') {
+      if (kv?.maze_enabled !== 'false') {
         updateKV('maze_enabled', 'false')
       }
     }
