@@ -42,50 +42,54 @@ const MazeProvider = ({ children, isController }) => {
     timerInterval.stop()
     timerInterval.start()
 
-    const kvVotes = JSON.parse(kv?.maze_chat_input || '{}')
+    try {
+      const kvVotes = JSON.parse(kv?.maze_chat_input || '{}')
 
-    const mergedVotes = {
-      up: (kvVotes?.up || 0) + (chatInput?.up || 0),
-      down: (kvVotes?.down || 0) + (chatInput?.down || 0),
-      left: (kvVotes?.left || 0) + (chatInput?.left || 0),
-      right: (kvVotes?.right || 0) + (chatInput?.right || 0),
+      const mergedVotes = {
+        up: (kvVotes?.up || 0) + (chatInput?.up || 0),
+        down: (kvVotes?.down || 0) + (chatInput?.down || 0),
+        left: (kvVotes?.left || 0) + (chatInput?.left || 0),
+        right: (kvVotes?.right || 0) + (chatInput?.right || 0),
+      }
+
+      // find the winning vote
+      const winningVote = Object.keys(mergedVotes).reduce((a, b) =>
+        mergedVotes[a] > mergedVotes[b] ? a : b
+      )
+
+      // tell widget about time remaining
+      updateKV('maze_last_commit_ts', lastCommitTs)
+
+      if (mergedVotes[winningVote] === 0) {
+        console.log('No winning vote')
+        return
+      }
+
+      // verify there isn't a tie
+      const winningVoteCount = Object.values(mergedVotes).filter(
+        (vote) => vote === mergedVotes[winningVote]
+      ).length
+
+      if (winningVoteCount === 1) {
+        moveCursor(winningVote)
+      }
+
+      // reset chat input
+      setChatInput({
+        up: 0,
+        down: 0,
+        left: 0,
+        right: 0,
+      })
+
+      // reset KV
+      updateKV('maze_chat_input', JSON.stringify({}))
+
+      // reset user ids
+      setUserIds({})
+    } catch (e) {
+      console.error(e)
     }
-
-    // find the winning vote
-    const winningVote = Object.keys(mergedVotes).reduce((a, b) =>
-      mergedVotes[a] > mergedVotes[b] ? a : b
-    )
-
-    // tell widget about time remaining
-    updateKV('maze_last_commit_ts', lastCommitTs)
-
-    if (mergedVotes[winningVote] === 0) {
-      console.log('No winning vote')
-      return
-    }
-
-    // verify there isn't a tie
-    const winningVoteCount = Object.values(mergedVotes).filter(
-      (vote) => vote === mergedVotes[winningVote]
-    ).length
-
-    if (winningVoteCount === 1) {
-      moveCursor(winningVote)
-    }
-
-    // reset chat input
-    setChatInput({
-      up: 0,
-      down: 0,
-      left: 0,
-      right: 0,
-    })
-
-    // reset KV
-    updateKV('maze_chat_input', JSON.stringify({}))
-
-    // reset user ids
-    setUserIds({})
   }, [lastCommitTs])
 
   useEffect(() => {
@@ -107,6 +111,10 @@ const MazeProvider = ({ children, isController }) => {
   }, [])
 
   const handleMazeResponse = ({ userId, content }) => {
+    if (!isMazeEnabled) {
+      return
+    }
+
     if (!userId) {
       console.error('[ERROR] Missing authorId for maze response')
       return
