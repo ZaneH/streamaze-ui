@@ -65,7 +65,7 @@ const MazeWidget = () => {
   // }
 
   return (
-    <Box>
+    <Box mx="16px">
       <Flex justify="space-between" style={{ maxWidth: '80vh' }}>
         {/* <Flex gap="md" p="lg">
           <Flex gap="6px">
