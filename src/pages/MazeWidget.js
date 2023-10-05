@@ -66,7 +66,7 @@ const MazeWidget = () => {
 
   return (
     <Box>
-      <Flex justify="end" style={{ maxWidth: '80vh' }}>
+      <Flex justify="start" style={{ maxWidth: '80vh' }}>
         {/* <Flex gap="md" p="lg">
           <Flex gap="6px">
             <Text weight={700}>Up:</Text> <Text>{chatInput?.up || '0'}</Text>
