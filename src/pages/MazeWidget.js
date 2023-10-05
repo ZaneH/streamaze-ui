@@ -60,9 +60,9 @@ const MazeWidget = () => {
     return textInterval.stop
   }, [])
 
-  if (!isMazeEnabled) {
-    return null
-  }
+  // if (!isMazeEnabled) {
+  //   return null
+  // }
 
   return (
     <Box>
