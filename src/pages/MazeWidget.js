@@ -20,7 +20,7 @@ const ProvidersWrapper = () => {
 }
 
 const MazeTimeLabel = styled.div`
-  font-size: 3em;
+  font-size: 6vh;
   font-family: 'Inter';
   font-variant-numeric: tabular-nums;
   color: #fff;
@@ -84,7 +84,7 @@ const MazeWidget = () => {
             <Text>{chatInput?.right || '0'}</Text>
           </Flex>
         </Flex> */}
-        <Flex gap="16px" align="center" style={{ fontSize: '2rem' }}>
+        <Flex gap="16px" align="center" style={{ fontSize: '3vh' }}>
           <Flex>
             <Text fw={700}>U</Text> - Up
           </Flex>
