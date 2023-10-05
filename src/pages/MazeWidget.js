@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Box, Flex } from '@mantine/core'
+import { Box, Flex, Text } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
 import Maze from 'components/Maze/Maze'
 import { ProviderProvider } from 'components/Providers'
@@ -66,7 +66,7 @@ const MazeWidget = () => {
 
   return (
     <Box>
-      <Flex justify="start" style={{ maxWidth: '80vh' }}>
+      <Flex justify="space-between" style={{ maxWidth: '80vh' }}>
         {/* <Flex gap="md" p="lg">
           <Flex gap="6px">
             <Text weight={700}>Up:</Text> <Text>{chatInput?.up || '0'}</Text>
@@ -84,6 +84,20 @@ const MazeWidget = () => {
             <Text>{chatInput?.right || '0'}</Text>
           </Flex>
         </Flex> */}
+        <Flex gap="16px" align="center" style={{ fontSize: '2rem' }}>
+          <Flex>
+            <Text fw={700}>U</Text> - Up
+          </Flex>
+          <Flex>
+            <Text fw={700}>D</Text> - Down
+          </Flex>
+          <Flex>
+            <Text fw={700}>L</Text> - Left
+          </Flex>
+          <Flex>
+            <Text fw={700}>R</Text> - Right
+          </Flex>
+        </Flex>
         <MazeTimeLabel>
           {/* Time left in current frame */}
           {timeRemainingText}
