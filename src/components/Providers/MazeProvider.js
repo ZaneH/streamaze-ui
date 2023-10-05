@@ -101,20 +101,20 @@ const MazeProvider = ({ children, isController }) => {
     }
   }, [lastCommitTs])
 
-  useEffect(() => {
-    /// Enable Maze if bitrate is below 0 and we're live
-    if (
-      isLive &&
-      (bitrate <= 0 || bitrate === null) &&
-      kv?.maze_enabled !== 'true'
-    ) {
-      updateKV('maze_enabled', 'true')
-    } else {
-      if (kv?.maze_enabled !== 'false') {
-        updateKV('maze_enabled', 'false')
-      }
-    }
-  }, [bitrate, isLive])
+  // useEffect(() => {
+  //   /// Enable Maze if bitrate is below 0 and we're live
+  //   if (
+  //     isLive &&
+  //     (bitrate <= 0 || bitrate === null) &&
+  //     kv?.maze_enabled !== 'true'
+  //   ) {
+  //     updateKV('maze_enabled', 'true')
+  //   } else {
+  //     if (kv?.maze_enabled !== 'false') {
+  //       updateKV('maze_enabled', 'false')
+  //     }
+  //   }
+  // }, [bitrate, isLive])
 
   useEffect(() => {
     setMaze(JSON.parse(kv?.maze_map || '[]'))
@@ -246,13 +246,14 @@ const MazeProvider = ({ children, isController }) => {
     }
   }, [cursorIdx, size])
 
-  useEffect(() => {
-    if (isMazeEnabled) {
-      timerInterval.start()
-    } else {
-      timerInterval.stop()
-    }
-  }, [isMazeEnabled, timerInterval])
+  // useEffect(() => {
+  //   console.log('YUH ', isMazeEnabled)
+  //   if (isMazeEnabled) {
+  //     timerInterval.start()
+  //   } else {
+  //     timerInterval.stop()
+  //   }
+  // }, [isMazeEnabled, timerInterval])
 
   return (
     <MazeContext.Provider
