@@ -39,7 +39,7 @@ const MazeWidget = () => {
   // const chatInput = JSON.parse(kv?.maze_chat_input || '{}')
   const [timeRemainingText, setTimeRemainingText] = useState()
   const lastCommitTs = new Date(parseInt(kv?.maze_last_commit_ts) || 0)
-  const isMazeEnabled = kv?.maze_enabled === 'true'
+  const isMazeEnabled = true // kv?.maze_enabled === 'true'
 
   const textInterval = useInterval(() => {
     setTimeRemainingText(

@@ -23,7 +23,7 @@ const DIRECTIONS = {
 const MazeProvider = ({ children, isController }) => {
   const { kv, updateKV } = useContext(LanyardContext)
   const { isLive, bitrate } = useContext(HopContext) || {}
-  const isMazeEnabled = kv?.maze_enabled === 'true'
+  const isMazeEnabled = true // kv?.maze_enabled === 'true'
   const [cursorIdx, setCursorIdx] = useState(0)
   const [size, setSize] = useState({
     width: 10,
