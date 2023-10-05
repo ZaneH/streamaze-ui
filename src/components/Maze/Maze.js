@@ -1,6 +1,8 @@
 import { Box, createStyles, keyframes } from '@mantine/core'
 import { MazeContext } from 'components/Providers/MazeProvider'
 import { useContext, useEffect, useState } from 'react'
+import CameraMazeIcon from 'assets/cam-maze-icon.png'
+import WifiMazeIcon from 'assets/wifi-maze-icon.png'
 
 const revealAnimation = ({ width, height }) => keyframes`
   from {
@@ -143,9 +145,9 @@ const Maze = ({ maze = [], size = {}, cursorIdx }) => {
           {maze?.map(({ top, right, bottom, left }, idx) => {
             function getBackgroundColor() {
               if (cursorIdx === idx) {
-                return 'hsla(var(--hsl-primary), 0.5)'
+                return `url(${CameraMazeIcon}) center center / 100% no-repeat`
               } else if (idx === maze.length - 1) {
-                return 'hsla(var(--hsl-success), 0.25)'
+                return `url(${WifiMazeIcon}) center center / 82% no-repeat`
               }
 
               return 'transparent'
