@@ -98,7 +98,7 @@ const MazeCell = ({
 
 const Maze = ({ maze = [], size = {}, cursorIdx }) => {
   const [isTransition, setIsTransition] = useState(false)
-  const { setCursorIdx } = useContext(MazeContext)
+  const { setCursorIdx, generateMaze } = useContext(MazeContext)
 
   useEffect(() => {
     if (cursorIdx === size.width * size.height - 1) {
@@ -108,6 +108,7 @@ const Maze = ({ maze = [], size = {}, cursorIdx }) => {
       }, 500)
       setTimeout(() => {
         setIsTransition(false)
+        generateMaze()
       }, 1000)
     }
   }, [cursorIdx, size])

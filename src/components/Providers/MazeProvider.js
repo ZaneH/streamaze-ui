@@ -8,6 +8,7 @@ import {
 import { LanyardContext } from './LanyardProvider'
 import { useInterval } from '@mantine/hooks'
 import { HopContext } from './HopProvider'
+import useMaze from 'hooks/useMaze'
 export const MazeContext = createContext()
 
 const MAZE_FRAME_SIZE = 3 // Amount of votes to buffer before saving to KV
@@ -30,7 +31,7 @@ const MazeProvider = ({ children, isController }) => {
     height: 10,
   })
 
-  // const [maze, generateMaze] = useMaze(size.width, size.height)
+  const [_generatedMaze, _generateMaze] = useMaze(size.width, size.height)
   const [maze, setMaze] = useState([])
   const [lastCommitTs, setLastCommitTs] = useState(0)
   const [chatInput, setChatInput] = useState({
@@ -41,6 +42,29 @@ const MazeProvider = ({ children, isController }) => {
   })
 
   const [userIds, setUserIds] = useState({})
+
+  const generateMaze = () => {
+    _generateMaze()
+
+    setCursorIdx(0)
+    setMaze(_generatedMaze)
+
+    // reset chat input
+    const newChatInput = {
+      up: 0,
+      down: 0,
+      left: 0,
+      right: 0,
+    }
+
+    setChatInput(newChatInput)
+
+    // reset KV
+    updateKV('maze_chat_input', JSON.stringify(newChatInput))
+    updateKV('maze_cursor_idx', '0')
+    updateKV('maze_last_commit_ts', '0')
+    updateKV('maze_map', JSON.stringify(_generatedMaze))
+  }
 
   useEffect(() => {
     if (!isController) {
@@ -268,6 +292,7 @@ const MazeProvider = ({ children, isController }) => {
         lastCommitTs,
         MAZE_FRAME_DURATION,
         isMazeEnabled,
+        generateMaze,
       }}
     >
       {children}
