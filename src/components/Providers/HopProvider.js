@@ -11,7 +11,7 @@ import { DonationContext } from './DonationProvider'
 export const HopContext = createContext()
 
 const HopProvider = ({ children }) => {
-  const { obsConfig } = useContext(ConfigContext)
+  const { obsConfig, chatConfig } = useContext(ConfigContext)
   const { audioElement } = useContext(DonationContext)
   const { state, error } = useReadChannelState(obsConfig?.streamChannelId)
   const { state: meIrlState } = useReadChannelState('me_irl:sam')
@@ -61,7 +61,9 @@ const HopProvider = ({ children }) => {
   useEffect(() => {
     if (bitrate <= 500 && isLive && pathname === '/dashboard') {
       if (state?.server?.active_scene?.toLowerCase() !== 'news') {
-        playChimeWithDebounce()
+        if (chatConfig?.kick?.channelName !== 'hanridge') {
+          playChimeWithDebounce()
+        }
       }
     } else {
       if (showDisconnectedModal) {
