@@ -28,8 +28,14 @@ const MazeTimeLabel = styled.div`
   white-space: pre-wrap;
 `
 
+const MazeInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+`
+
 const MazeWidget = () => {
-  const { maze, size, MAZE_FRAME_DURATION } = useContext(MazeContext) || {}
+  const { maze, size } = useContext(MazeContext) || {}
   const { id } = useParams()
 
   const data = useLanyardWS(id)
@@ -37,28 +43,28 @@ const MazeWidget = () => {
 
   const cursorIdx = parseInt(kv?.maze_cursor_idx) || 0
   // const chatInput = JSON.parse(kv?.maze_chat_input || '{}')
-  const [timeRemainingText, setTimeRemainingText] = useState()
-  const lastCommitTs = new Date(parseInt(kv?.maze_last_commit_ts) || 0)
-  const isMazeEnabled = true // kv?.maze_enabled === 'true'
+  // const [timeRemainingText, setTimeRemainingText] = useState()
+  // const lastCommitTs = new Date(parseInt(kv?.maze_last_commit_ts) || 0)
+  // const isMazeEnabled = true // kv?.maze_enabled === 'true'
 
-  const textInterval = useInterval(() => {
-    setTimeRemainingText(
-      secondsToHHMMSS(
-        (MAZE_FRAME_DURATION - (Date.now() - lastCommitTs)) / 1000
-      )
-    )
-  }, 250)
+  // const textInterval = useInterval(() => {
+  //   setTimeRemainingText(
+  //     secondsToHHMMSS(
+  //       (MAZE_FRAME_DURATION - (Date.now() - lastCommitTs)) / 1000
+  //     )
+  //   )
+  // }, 250)
 
-  useEffect(() => {
-    textInterval.start()
-    textInterval.stop()
-  }, [lastCommitTs])
+  // useEffect(() => {
+  //   textInterval.start()
+  //   textInterval.stop()
+  // }, [lastCommitTs])
 
-  useEffect(() => {
-    textInterval.start()
+  // useEffect(() => {
+  //   textInterval.start()
 
-    return textInterval.stop
-  }, [])
+  //   return textInterval.stop
+  // }, [])
 
   // if (!isMazeEnabled) {
   //   return null
@@ -67,41 +73,23 @@ const MazeWidget = () => {
   return (
     <Box mx="16px">
       <Flex justify="space-between" style={{ maxWidth: '80vh' }}>
-        {/* <Flex gap="md" p="lg">
-          <Flex gap="6px">
-            <Text weight={700}>Up:</Text> <Text>{chatInput?.up || '0'}</Text>
-          </Flex>
-          <Flex gap="6px">
-            <Text weight={700}>Down:</Text>{' '}
-            <Text>{chatInput?.down || '0'}</Text>
-          </Flex>
-          <Flex gap="6px">
-            <Text weight={700}>Left:</Text>{' '}
-            <Text>{chatInput?.left || '0'}</Text>
-          </Flex>
-          <Flex gap="6px">
-            <Text weight={700}>Right:</Text>{' '}
-            <Text>{chatInput?.right || '0'}</Text>
-          </Flex>
-        </Flex> */}
-        <Flex gap="16px" align="center" style={{ fontSize: '3vh' }}>
-          <Flex>
+        <Flex gap="16px" align="center" style={{ fontSize: '3vh' }} my="sm">
+          <MazeInfo>
             <Text fw={700}>U</Text> - Up
-          </Flex>
-          <Flex>
+          </MazeInfo>
+          <MazeInfo>
             <Text fw={700}>D</Text> - Down
-          </Flex>
-          <Flex>
+          </MazeInfo>
+          <MazeInfo>
             <Text fw={700}>L</Text> - Left
-          </Flex>
-          <Flex>
+          </MazeInfo>
+          <MazeInfo>
             <Text fw={700}>R</Text> - Right
-          </Flex>
+          </MazeInfo>
         </Flex>
-        <MazeTimeLabel>
-          {/* Time left in current frame */}
-          {timeRemainingText}
-        </MazeTimeLabel>
+        {/* <MazeTimeLabel>
+          {timeRemainingText || '00:00'}
+        </MazeTimeLabel> */}
       </Flex>
       <Maze cursorIdx={cursorIdx} maze={maze} size={size} />
     </Box>

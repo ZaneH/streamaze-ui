@@ -11,8 +11,9 @@ import { HopContext } from './HopProvider'
 import useMaze from 'hooks/useMaze'
 export const MazeContext = createContext()
 
-const MAZE_FRAME_SIZE = 3 // Amount of votes to buffer before saving to KV
-const MAZE_FRAME_DURATION = 10_000 // Time in ms to wait before moving cursor
+// const MAZE_FRAME_SIZE = 3 // Amount of votes to buffer before saving to KV
+const MAZE_WIN_THRESHOLD = 3 // Amount of votes required to qualify as "winning"
+// const MAZE_FRAME_DURATION = 250 // Game loop duration in ms
 
 const DIRECTIONS = {
   u: 'up',
@@ -23,8 +24,8 @@ const DIRECTIONS = {
 
 const MazeProvider = ({ children, isController }) => {
   const { kv, updateKV } = useContext(LanyardContext)
-  const { isLive, bitrate } = useContext(HopContext) || {}
   const isMazeEnabled = true // kv?.maze_enabled === 'true'
+  const [mazeWinThreshold, setMazeWinThreshold] = useState(MAZE_WIN_THRESHOLD)
   const [cursorIdx, setCursorIdx] = useState(0)
   const [size, setSize] = useState({
     width: 10,
@@ -40,6 +41,18 @@ const MazeProvider = ({ children, isController }) => {
     left: 0,
     right: 0,
   })
+
+  useEffect(() => {
+    try {
+      const _mazeWinThreshold = parseInt(kv?.maze_win_threshold)
+      if (_mazeWinThreshold) {
+        setMazeWinThreshold(_mazeWinThreshold)
+      }
+    } catch (e) {
+      setMazeWinThreshold(MAZE_WIN_THRESHOLD)
+      console.error(e)
+    }
+  }, [kv?.maze_win_threshold])
 
   const [userIds, setUserIds] = useState({})
 
@@ -60,7 +73,6 @@ const MazeProvider = ({ children, isController }) => {
     setChatInput(newChatInput)
 
     // reset KV
-    updateKV('maze_chat_input', JSON.stringify(newChatInput))
     updateKV('maze_cursor_idx', '0')
     updateKV('maze_last_commit_ts', '0')
     updateKV('maze_map', JSON.stringify(_generatedMaze))
@@ -71,41 +83,16 @@ const MazeProvider = ({ children, isController }) => {
       return
     }
 
-    // reset timer
-    timerInterval.stop()
-    timerInterval.start()
-
     try {
-      const kvVotes = JSON.parse(kv?.maze_chat_input || '{}')
-
-      const mergedVotes = {
-        up: (kvVotes?.up || 0) + (chatInput?.up || 0),
-        down: (kvVotes?.down || 0) + (chatInput?.down || 0),
-        left: (kvVotes?.left || 0) + (chatInput?.left || 0),
-        right: (kvVotes?.right || 0) + (chatInput?.right || 0),
-      }
-
       // find the winning vote
-      const winningVote = Object.keys(mergedVotes).reduce((a, b) =>
-        mergedVotes[a] > mergedVotes[b] ? a : b
+      const winningVote = Object.keys(chatInput).reduce((a, b) =>
+        chatInput[a] > chatInput[b] ? a : b
       )
 
-      // tell widget about time remaining
+      moveCursor(winningVote)
+
+      // tell widget when the last move was
       updateKV('maze_last_commit_ts', lastCommitTs)
-
-      if (mergedVotes[winningVote] === 0) {
-        console.log('No winning vote')
-        return
-      }
-
-      // verify there isn't a tie
-      const winningVoteCount = Object.values(mergedVotes).filter(
-        (vote) => vote === mergedVotes[winningVote]
-      ).length
-
-      if (winningVoteCount === 1) {
-        moveCursor(winningVote)
-      }
 
       // reset chat input
       setChatInput({
@@ -115,48 +102,17 @@ const MazeProvider = ({ children, isController }) => {
         right: 0,
       })
 
-      // reset KV
-      updateKV('maze_chat_input', JSON.stringify({}))
-
       // reset user ids
       setUserIds({})
     } catch (e) {
       console.error(e)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastCommitTs])
-
-  // useEffect(() => {
-  //   /// Enable Maze if bitrate is below 0 and we're live
-  //   if (
-  //     isLive &&
-  //     (bitrate <= 0 || bitrate === null) &&
-  //     kv?.maze_enabled !== 'true'
-  //   ) {
-  //     updateKV('maze_enabled', 'true')
-  //   } else {
-  //     if (kv?.maze_enabled !== 'false') {
-  //       updateKV('maze_enabled', 'false')
-  //     }
-  //   }
-  // }, [bitrate, isLive])
 
   useEffect(() => {
     setMaze(JSON.parse(kv?.maze_map || '[]'))
   }, [kv?.maze_map])
-
-  const timerInterval = useInterval(() => {
-    if (isController) {
-      setLastCommitTs(Date.now())
-    }
-  }, MAZE_FRAME_DURATION)
-
-  useEffect(() => {
-    timerInterval.start()
-
-    return () => {
-      timerInterval.stop()
-    }
-  }, [])
 
   const handleMazeResponse = ({ userId, content }) => {
     if (!isMazeEnabled) {
@@ -164,13 +120,13 @@ const MazeProvider = ({ children, isController }) => {
     }
 
     if (!userId) {
-      console.error('[ERROR] Missing authorId for maze response')
+      console.error('[ERROR] Missing userId for maze response')
       return
     }
 
-    if (userIds[userId]) {
-      return
-    }
+    // if (userIds[userId]) {
+    //   return
+    // }
 
     const sanitizedMessage = content.toLowerCase().trim()
     const foundDirection = ['u', 'd', 'l', 'r'].find(
@@ -196,23 +152,14 @@ const MazeProvider = ({ children, isController }) => {
     })
   }
 
-  const updateChatInputKV = useCallback(() => {
-    // save current chat input to KV
-    updateKV('maze_chat_input', JSON.stringify(chatInput))
-    setChatInput({
-      up: 0,
-      down: 0,
-      left: 0,
-      right: 0,
-    })
-  }, [chatInput])
-
   useEffect(() => {
-    // check if MAZE_FRAME_SIZE has been reached
-    const totalVotes = Object.values(chatInput).reduce((a, b) => a + b)
-    if (totalVotes >= MAZE_FRAME_SIZE) {
-      // save current chat input to KV
-      updateChatInputKV()
+    // check if the winning vote has been reached
+    const winningVote = Object.keys(chatInput).reduce((a, b) =>
+      chatInput[a] > chatInput[b] ? a : b
+    )
+
+    if (chatInput[winningVote] >= mazeWinThreshold) {
+      setLastCommitTs(Date.now())
     }
   }, [chatInput])
 
@@ -270,15 +217,6 @@ const MazeProvider = ({ children, isController }) => {
     }
   }, [cursorIdx, size])
 
-  // useEffect(() => {
-  //   console.log('YUH ', isMazeEnabled)
-  //   if (isMazeEnabled) {
-  //     timerInterval.start()
-  //   } else {
-  //     timerInterval.stop()
-  //   }
-  // }, [isMazeEnabled, timerInterval])
-
   return (
     <MazeContext.Provider
       value={{
@@ -290,7 +228,6 @@ const MazeProvider = ({ children, isController }) => {
         size,
         setSize,
         lastCommitTs,
-        MAZE_FRAME_DURATION,
         isMazeEnabled,
         generateMaze,
       }}
