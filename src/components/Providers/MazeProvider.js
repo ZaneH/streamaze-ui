@@ -1,3 +1,5 @@
+import MazeWinChime from 'assets/maze_win_chime.mp3'
+import useMaze from 'hooks/useMaze'
 import {
   createContext,
   useCallback,
@@ -6,9 +8,6 @@ import {
   useState,
 } from 'react'
 import { LanyardContext } from './LanyardProvider'
-import { useInterval } from '@mantine/hooks'
-import { HopContext } from './HopProvider'
-import useMaze from 'hooks/useMaze'
 export const MazeContext = createContext()
 
 // const MAZE_FRAME_SIZE = 3 // Amount of votes to buffer before saving to KV
@@ -26,6 +25,7 @@ const MazeProvider = ({ children, isController }) => {
   const { kv, updateKV } = useContext(LanyardContext)
   const isMazeEnabled = true // kv?.maze_enabled === 'true'
   const [mazeWinThreshold, setMazeWinThreshold] = useState(MAZE_WIN_THRESHOLD)
+  const [winAudio] = useState(new Audio(MazeWinChime))
   const [cursorIdx, setCursorIdx] = useState(0)
   const [size, setSize] = useState({
     width: 10,
@@ -230,6 +230,7 @@ const MazeProvider = ({ children, isController }) => {
         lastCommitTs,
         isMazeEnabled,
         generateMaze,
+        winAudio,
       }}
     >
       {children}

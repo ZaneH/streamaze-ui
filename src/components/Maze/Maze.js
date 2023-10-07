@@ -100,10 +100,14 @@ const MazeCell = ({
 
 const Maze = ({ maze = [], size = {}, cursorIdx }) => {
   const [isTransition, setIsTransition] = useState(false)
-  const { setCursorIdx, generateMaze } = useContext(MazeContext)
+  const { setCursorIdx, generateMaze, winAudio } = useContext(MazeContext)
 
   useEffect(() => {
     if (cursorIdx === size.width * size.height - 1) {
+      if (winAudio) {
+        winAudio.play()
+      }
+
       setIsTransition(true)
       setTimeout(() => {
         setCursorIdx(0)
