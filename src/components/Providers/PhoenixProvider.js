@@ -20,9 +20,15 @@ import wretch from 'wretch'
 export const PhoenixContext = createContext()
 const { REACT_APP_API_2_URL } = process.env
 
-const PhoenixProvider = ({ children }) => {
+const PhoenixProvider = ({
+  children,
+  options = {
+    hasMazeConnection: false,
+  },
+}) => {
   const [socket, setSocket] = useState(null)
   const [streamerChannel, setStreamerChannel] = useState(null)
+  const [mazeChannel, setMazeChannel] = useState(null)
   const { setDonations, setDonationIndex, setDonationAlertUrl } =
     useContext(DonationContext)
   const { setTimeRemaining, setActiveStreamId, setIsSubathonActive } =
@@ -201,8 +207,13 @@ const PhoenixProvider = ({ children }) => {
           streamerChannel.leave()
         }
 
+        if (mazeChannel) {
+          mazeChannel.leave()
+        }
+
         setSocket(null)
         setStreamerChannel(null)
+        setMazeChannel(null)
 
         kickInterval.stop()
       }
@@ -230,6 +241,16 @@ const PhoenixProvider = ({ children }) => {
     const ch = socket.channel(`streamer:${streamer?.id}`, {
       userToken: userConfig?.streamazeKey,
     })
+
+    if (options?.hasMazeConnection) {
+      const mazeCh = socket.channel(`maze:${streamer?.id}`, {
+        userToken: userConfig?.streamazeKey,
+      })
+
+      mazeCh.join().receive('ok', (_resp) => {
+        setMazeChannel(mazeCh)
+      })
+    }
 
     ch.join().receive('ok', (_resp) => {
       setStreamerChannel(ch)
@@ -343,6 +364,7 @@ const PhoenixProvider = ({ children }) => {
       value={{
         socket,
         streamerChannel,
+        mazeChannel,
         currentStreamer: streamer,
       }}
     >

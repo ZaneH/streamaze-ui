@@ -1,21 +1,37 @@
 import styled from '@emotion/styled'
 import { Box, Flex, Text } from '@mantine/core'
-import { useInterval } from '@mantine/hooks'
 import Maze from 'components/Maze/Maze'
-import { ProviderProvider } from 'components/Providers'
+import { DonationProvider, StatProvider } from 'components/Providers'
+import LanyardProvider from 'components/Providers/LanyardProvider'
 import MazeProvider, { MazeContext } from 'components/Providers/MazeProvider'
-import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useLanyardWS } from 'use-lanyard'
-import { secondsToHHMMSS } from 'utils/time'
+import PhoenixProvider from 'components/Providers/PhoenixProvider'
+import SubathonProvider from 'components/Providers/SubathonProvider'
+import { useContext } from 'react'
 
 const ProvidersWrapper = () => {
   return (
-    <ProviderProvider hasHop={false}>
-      <MazeProvider>
-        <MazeWidget />
-      </MazeProvider>
-    </ProviderProvider>
+    // <ProviderProvider hasHop={false}>
+    //   <MazeProvider >
+    //     <MazeWidget />
+    //   </MazeProvider>
+    // </ProviderProvider>
+    <LanyardProvider>
+      <DonationProvider>
+        <SubathonProvider>
+          <StatProvider>
+            <PhoenixProvider
+              options={{
+                hasMazeConnection: true,
+              }}
+            >
+              <MazeProvider>
+                <MazeWidget />
+              </MazeProvider>
+            </PhoenixProvider>
+          </StatProvider>
+        </SubathonProvider>
+      </DonationProvider>
+    </LanyardProvider>
   )
 }
 
@@ -35,13 +51,13 @@ const MazeInfo = styled.div`
 `
 
 const MazeWidget = () => {
-  const { maze, size } = useContext(MazeContext) || {}
-  const { id } = useParams()
+  const { maze, size, cursorIdx } = useContext(MazeContext) || {}
+  // const { id } = useParams()
 
-  const data = useLanyardWS(id)
-  const kv = data?.kv
+  // const data = useLanyardWS(id)
+  // const kv = data?.kv
 
-  const cursorIdx = parseInt(kv?.maze_cursor_idx) || 0
+  // const cursorIdx = parseInt(kv?.maze_cursor_idx) || 0
   // const chatInput = JSON.parse(kv?.maze_chat_input || '{}')
   // const [timeRemainingText, setTimeRemainingText] = useState()
   // const lastCommitTs = new Date(parseInt(kv?.maze_last_commit_ts) || 0)

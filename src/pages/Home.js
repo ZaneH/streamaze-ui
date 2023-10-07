@@ -37,7 +37,11 @@ const Home = () => {
           <GpsProvider>
             <SubathonProvider>
               <StatProvider>
-                <PhoenixProvider>
+                <PhoenixProvider
+                  options={{
+                    hasMazeConnection: true,
+                  }}
+                >
                   <PollProvider>
                     <NextUpProvider>
                       <Layout showStats>

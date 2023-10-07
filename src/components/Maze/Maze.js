@@ -117,6 +117,7 @@ const Maze = ({ maze = [], size = {}, cursorIdx }) => {
         generateMaze()
       }, 1000)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursorIdx, size])
 
   return (

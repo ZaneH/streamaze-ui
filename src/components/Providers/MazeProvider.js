@@ -8,11 +8,14 @@ import {
   useState,
 } from 'react'
 import { LanyardContext } from './LanyardProvider'
+import { PhoenixContext } from './PhoenixProvider'
+import { useInterval } from '@mantine/hooks'
 export const MazeContext = createContext()
 
 // const MAZE_FRAME_SIZE = 3 // Amount of votes to buffer before saving to KV
 const MAZE_WIN_THRESHOLD = 3 // Amount of votes required to qualify as "winning"
 // const MAZE_FRAME_DURATION = 250 // Game loop duration in ms
+const MAZE_KV_UPDATE_INTERVAL = 6_000 // KV update interval in ms
 
 const DIRECTIONS = {
   u: 'up',
@@ -23,6 +26,7 @@ const DIRECTIONS = {
 
 const MazeProvider = ({ children, isController }) => {
   const { kv, updateKV } = useContext(LanyardContext)
+  const { mazeChannel } = useContext(PhoenixContext)
   const isMazeEnabled = true // kv?.maze_enabled === 'true'
   const [mazeWinThreshold, setMazeWinThreshold] = useState(MAZE_WIN_THRESHOLD)
   const [winAudio] = useState(new Audio(MazeWinChime))
@@ -34,13 +38,62 @@ const MazeProvider = ({ children, isController }) => {
 
   const [_generatedMaze, _generateMaze] = useMaze(size.width, size.height)
   const [maze, setMaze] = useState([])
+  const [userIds, setUserIds] = useState({})
   const [lastCommitTs, setLastCommitTs] = useState(0)
+  const [lastKvCommitTs, setLastKvCommitTs] = useState(0)
   const [chatInput, setChatInput] = useState({
     up: 0,
     down: 0,
     left: 0,
     right: 0,
   })
+
+  const [hasRegisteredCursorListener, setHasRegisteredCursorListener] =
+    useState(false)
+
+  useEffect(() => {
+    if (!mazeChannel) {
+      return
+    }
+
+    if (hasRegisteredCursorListener) {
+      return
+    }
+
+    setHasRegisteredCursorListener(true)
+
+    mazeChannel?.on('cursor', (payload) => {
+      try {
+        const { cursor_idx } = payload || {}
+        const _cursorIdx = parseInt(cursor_idx)
+
+        if (_cursorIdx > -1) {
+          setCursorIdx(_cursorIdx)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mazeChannel])
+
+  const [hasLoadedCursorIdx, setHasLoadedCursorIdx] = useState(false)
+  useEffect(() => {
+    if (hasLoadedCursorIdx) {
+      return
+    }
+
+    try {
+      const _cursorIdx = parseInt(kv?.maze_cursor_idx)
+      if (_cursorIdx) {
+        setCursorIdx(_cursorIdx)
+        setHasLoadedCursorIdx(true)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }, [kv])
 
   useEffect(() => {
     try {
@@ -54,7 +107,27 @@ const MazeProvider = ({ children, isController }) => {
     }
   }, [kv?.maze_win_threshold])
 
-  const [userIds, setUserIds] = useState({})
+  const kvInterval = useInterval(() => {
+    setLastKvCommitTs(Date.now())
+  }, MAZE_KV_UPDATE_INTERVAL)
+
+  useEffect(() => {
+    if (!isController) {
+      return
+    }
+
+    if (kv?.maze_cursor_idx !== cursorIdx?.toString()) {
+      updateKV('maze_cursor_idx', cursorIdx)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastKvCommitTs])
+
+  useEffect(() => {
+    kvInterval.start()
+
+    return kvInterval.stop
+  }, [])
 
   const generateMaze = () => {
     _generateMaze()
@@ -77,38 +150,6 @@ const MazeProvider = ({ children, isController }) => {
     updateKV('maze_last_commit_ts', '0')
     updateKV('maze_map', JSON.stringify(_generatedMaze))
   }
-
-  useEffect(() => {
-    if (!isController) {
-      return
-    }
-
-    try {
-      // find the winning vote
-      const winningVote = Object.keys(chatInput).reduce((a, b) =>
-        chatInput[a] > chatInput[b] ? a : b
-      )
-
-      moveCursor(winningVote)
-
-      // tell widget when the last move was
-      updateKV('maze_last_commit_ts', lastCommitTs)
-
-      // reset chat input
-      setChatInput({
-        up: 0,
-        down: 0,
-        left: 0,
-        right: 0,
-      })
-
-      // reset user ids
-      setUserIds({})
-    } catch (e) {
-      console.error(e)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastCommitTs])
 
   useEffect(() => {
     setMaze(JSON.parse(kv?.maze_map || '[]'))
@@ -137,13 +178,7 @@ const MazeProvider = ({ children, isController }) => {
       return
     }
 
-    setChatInput((prev) => {
-      const newChatInput = { ...prev }
-      newChatInput[DIRECTIONS[foundDirection]] =
-        chatInput[DIRECTIONS[foundDirection]] + 1
-
-      return newChatInput
-    })
+    moveCursor(DIRECTIONS[foundDirection])
 
     setUserIds((prev) => {
       const newUsers = { ...prev }
@@ -161,13 +196,15 @@ const MazeProvider = ({ children, isController }) => {
     if (chatInput[winningVote] >= mazeWinThreshold) {
       setLastCommitTs(Date.now())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatInput])
 
-  useEffect(() => {
-    if (cursorIdx !== parseInt(kv?.maze_cursor_idx)) {
-      updateKV('maze_cursor_idx', cursorIdx)
-    }
-  }, [cursorIdx])
+  // useEffect(() => {
+  //   // if (cursorIdx !== parseInt(kv?.maze_cursor_idx)) {
+  //   //   updateKV('maze_cursor_idx', cursorIdx)
+  //   // }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [cursorIdx])
 
   const moveCursor = useCallback(
     (dir) => {
@@ -203,10 +240,15 @@ const MazeProvider = ({ children, isController }) => {
       }
 
       if (keys[dir].check) {
-        setCursorIdx((prev) => prev + keys[dir].move)
+        setCursorIdx((prev) => {
+          const newIdx = prev + keys[dir].move
+          mazeChannel?.push('update_cursor', { cursor_idx: newIdx })
+
+          return newIdx
+        })
       }
     },
-    [cursorIdx, maze, size]
+    [cursorIdx, maze, size, mazeChannel]
   )
 
   useEffect(() => {

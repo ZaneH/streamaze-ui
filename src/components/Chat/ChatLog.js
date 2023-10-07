@@ -210,6 +210,10 @@ const ChatLog = ({
       params['streamerId'] = streamer?.id
     }
 
+    if (userConfig?.streamazeKey) {
+      params['streamazeKey'] = userConfig?.streamazeKey
+    }
+
     if (_kickChannelId && _kickChatroomId && _kickChannelName && !streamer) {
       // TODO: Perform this check on the server-side instead
       return
