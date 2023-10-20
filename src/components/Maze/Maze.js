@@ -81,7 +81,6 @@ const useStyles = createStyles(
 )
 
 const MazeCell = ({
-  key,
   borderTopWidth,
   borderRightWidth,
   borderBottomWidth,
@@ -95,7 +94,7 @@ const MazeCell = ({
     borderLeftWidth,
   })
 
-  return <li key={key} className={classes.mazeCell} style={style} />
+  return <li className={classes.mazeCell} style={style} />
 }
 
 const Maze = ({ maze = [], size = {}, cursorIdx }) => {

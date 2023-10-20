@@ -80,20 +80,26 @@ const MazeProvider = ({ children, isController }) => {
 
   const [hasLoadedCursorIdx, setHasLoadedCursorIdx] = useState(false)
   useEffect(() => {
+    if (!isController) {
+      return
+    }
+
     if (hasLoadedCursorIdx) {
       return
     }
 
     try {
       const _cursorIdx = parseInt(kv?.maze_cursor_idx)
-      if (_cursorIdx) {
+      // check if maze_cursor_idx is different from cursorIdx and >= 0
+      if (_cursorIdx > -1) {
         setCursorIdx(_cursorIdx)
         setHasLoadedCursorIdx(true)
       }
     } catch (e) {
       console.error(e)
     }
-  }, [kv])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kv?.maze_cursor_idx])
 
   useEffect(() => {
     try {
@@ -116,7 +122,14 @@ const MazeProvider = ({ children, isController }) => {
       return
     }
 
-    if (kv?.maze_cursor_idx !== cursorIdx?.toString()) {
+    if (!hasLoadedCursorIdx) {
+      return
+    }
+
+    if (
+      kv?.maze_cursor_idx !== cursorIdx?.toString() &&
+      kv?.maze_cursor_idx !== undefined
+    ) {
       updateKV('maze_cursor_idx', cursorIdx)
     }
 
