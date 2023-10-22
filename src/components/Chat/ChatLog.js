@@ -300,6 +300,11 @@ const ChatLog = ({
           userId: payload.sender,
           content: payload.message,
         })
+
+        handleMazeResponse({
+          userId: payload.sender,
+          content: payload.message,
+        })
       } else if (payload?.origin === 'youtube') {
         setChatData((prev) => [
           ...prev,
@@ -353,6 +358,11 @@ const ChatLog = ({
         })
 
         handleNextUpMessage({
+          userId: payload.sender,
+          content: payload.message,
+        })
+
+        handleMazeResponse({
           userId: payload.sender,
           content: payload.message,
         })

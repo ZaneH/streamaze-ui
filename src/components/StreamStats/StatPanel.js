@@ -71,7 +71,7 @@ const StatPanel = () => {
                   }
                 />
               ) : null}
-              {/* TODO: Implement Twitch /viewers endpoint */}
+              {/* TODO: Implement Twitch /viewers endpoint (requires OAuth) */}
               {/* <StatInfo network="twitch" label="661" /> */}
               {tiktokViewers || isTikTokLoading ? (
                 <StatInfo
