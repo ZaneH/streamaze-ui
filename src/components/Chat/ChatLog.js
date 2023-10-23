@@ -484,6 +484,8 @@ const ChatLog = ({
     )
   }
 
+  const isStreamerId1 = `${streamer?.id}` === '1'
+
   return (
     <Box
       style={{
@@ -491,19 +493,21 @@ const ChatLog = ({
         height: fullHeight ? '100%' : height,
       }}
     >
-      <Box px="md" py="sm">
-        <Button
-          onClick={() => {
-            chatSendMessage({
-              addChannelId: '145224',
-              addChatroomId: '145222',
-              kickChannelName: _kickChannelName,
-            })
-          }}
-        >
-          Merge Ice's chat
-        </Button>
-      </Box>
+      {isStreamerId1 && (
+        <Box px="md" py="sm">
+          <Button
+            onClick={() => {
+              chatSendMessage({
+                addChannelId: '145224',
+                addChatroomId: '145222',
+                kickChannelName: _kickChannelName,
+              })
+            }}
+          >
+            Merge Ice's chat
+          </Button>
+        </Box>
+      )}
       <Virtuoso
         style={{
           minHeight: fullHeight ? '100%' : height,
