@@ -49,6 +49,8 @@ const Item = styled.div`
 const ItemContent = styled.div`
   font-size: ${({ isbig }) => (isbig ? '2.1em' : '1.12em')};
   color: ${({ isbig }) => (isbig ? '#efeff1' : '#000')};
+  padding-left: ${({ paddingX }) => paddingX || '0'};
+  padding-right: ${({ paddingX }) => paddingX || '0'};
 
   .chat-outline,
     display: inline-block;
@@ -126,6 +128,10 @@ const ChatLog = ({
   isDark = undefined,
   isBig = undefined,
   autorefresh = -1,
+  hideIceButton = false,
+  paddingX,
+  isFiltered = false,
+  usernameFilter,
   ...props
 }) => {
   const [searchParams] = useSearchParams()
@@ -134,13 +140,13 @@ const ChatLog = ({
   const virtuosoRef = useRef(null)
   const { colors } = useMantineTheme()
   const { chatConfig, userConfig } = useContext(ConfigContext)
-  const { handlePollResponse } = useContext(PollContext)
+  const { handlePollResponse } = useContext(PollContext) || {}
   const { handleIncomingWord: handleWordRankMessage } =
-    useContext(WordRankContext)
-  const { handleMazeResponse } = useContext(MazeContext)
+    useContext(WordRankContext) || {}
+  const { handleMazeResponse } = useContext(MazeContext) || {}
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isConnected, setIsConnected] = useState(false)
-  const { handleNextUpMessage } = useContext(NextUpContext)
+  const { handleNextUpMessage } = useContext(NextUpContext) || {}
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -255,7 +261,7 @@ const ChatLog = ({
   //         },
   //       ])
 
-  //       handlePollResponse({
+  //       handlePollResponse?.({
   //         userId: payload.sender,
   //         content: payload.message,
   //       })
@@ -286,22 +292,22 @@ const ChatLog = ({
           },
         ])
 
-        handlePollResponse({
+        handlePollResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleWordRankMessage({
+        handleWordRankMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleNextUpMessage({
+        handleNextUpMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleMazeResponse({
+        handleMazeResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
@@ -321,17 +327,17 @@ const ChatLog = ({
           },
         ])
 
-        handlePollResponse({
+        handlePollResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleWordRankMessage({
+        handleWordRankMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleNextUpMessage({
+        handleNextUpMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
@@ -347,26 +353,31 @@ const ChatLog = ({
           },
         ])
 
-        handlePollResponse({
+        handlePollResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleWordRankMessage({
+        handleWordRankMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleNextUpMessage({
+        handleNextUpMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleMazeResponse({
+        handleMazeResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
       } else if (payload?.origin === 'kick') {
+        console.log(isFiltered, payload.sender, usernameFilter)
+        if (isFiltered && payload.sender !== usernameFilter) {
+          return
+        }
+
         setChatData((prev) => [
           ...prev,
           {
@@ -388,22 +399,22 @@ const ChatLog = ({
           },
         ])
 
-        handlePollResponse({
+        handlePollResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleWordRankMessage({
+        handleWordRankMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleNextUpMessage({
+        handleNextUpMessage?.({
           userId: payload.sender,
           content: payload.message,
         })
 
-        handleMazeResponse({
+        handleMazeResponse?.({
           userId: payload.sender,
           content: payload.message,
         })
@@ -414,6 +425,7 @@ const ChatLog = ({
     handlePollResponse,
     handleWordRankMessage,
     handleNextUpMessage,
+    usernameFilter,
   ])
 
   useEffect(() => {
@@ -491,9 +503,10 @@ const ChatLog = ({
       style={{
         background: isDark ? '#18181C' : 'transparent',
         height: fullHeight ? '100%' : height,
+        width: props?.width || '100%',
       }}
     >
-      {isStreamerId1 && (
+      {isStreamerId1 && !hideIceButton && (
         <Box px="md" py="sm">
           <Button
             onClick={() => {
@@ -586,6 +599,7 @@ const ChatLog = ({
               isbig={isBig ? 'true' : undefined}
               compact={compact}
               fluid={fluid}
+              paddingX={paddingX}
             >
               <Flex direction="column" {...props} gap="4px">
                 {type === 'reply' && (

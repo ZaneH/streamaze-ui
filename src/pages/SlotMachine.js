@@ -11,6 +11,7 @@ import { ProviderProvider } from 'components/Providers'
 import { Layout } from 'components/document'
 import 'react-roulette-pro/dist/index.css'
 import TagSEO from 'components/TagSEO'
+import { ChatLog } from 'components/Chat'
 
 const ProvidersWrapper = () => {
   return (
@@ -72,7 +73,7 @@ const SlotMachine = () => {
     const prizes = names?.map((name) => ({
       entryId: name.id,
       text: `Stake: ${name.username}\nKick: ${name.chatName}`,
-      image: name.chatName,
+      chatName: name.chatName,
     }))
 
     const reproducedArray = [
@@ -203,6 +204,18 @@ const SlotMachine = () => {
             Reset All
           </Button>
         </Flex>
+      </Center>
+
+      <Center m="md">
+        <ChatLog
+          height="400px"
+          width="80%"
+          fluid
+          hideIceButton={true}
+          paddingX="12px"
+          isFiltered
+          usernameFilter={previousWinner?.chatName}
+        />
       </Center>
 
       <ResetGiveawayModal
