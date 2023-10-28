@@ -14,6 +14,8 @@ const ToggleOverlaysModal = ({ isOpen, onClose }) => {
   const isHidingFanBalance = kv?.fan_balance_visible === 'false'
   const isHidingBankBalance = kv?.bank_balance_visible === 'false'
 
+  const isHidingPlinko = kv?.plinko_visible === 'false'
+
   return (
     <Modal title="Toggle Overlays" opened={isOpen} centered onClose={onClose}>
       <Flex direction="column" gap="sm">
@@ -74,6 +76,17 @@ const ToggleOverlaysModal = ({ isOpen, onClose }) => {
           onChange={(e) => {
             const val = e.currentTarget.checked
             updateKV('bank_balance_visible', val ? 'false' : 'true')
+          }}
+        />
+
+        <Divider />
+
+        <Checkbox
+          label="Hide Plinko"
+          checked={isHidingPlinko}
+          onChange={(e) => {
+            const val = e.currentTarget.checked
+            updateKV('plinko_visible', val ? 'false' : 'true')
           }}
         />
       </Flex>
