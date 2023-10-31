@@ -1,7 +1,9 @@
 import styled from '@emotion/styled'
 import { Box, Flex, Text } from '@mantine/core'
+import { ChatLog } from 'components/Chat'
 import Maze from 'components/Maze/Maze'
 import { DonationProvider, StatProvider } from 'components/Providers'
+import { ConfigContext } from 'components/Providers/ConfigProvider'
 import LanyardProvider from 'components/Providers/LanyardProvider'
 import MazeProvider, { MazeContext } from 'components/Providers/MazeProvider'
 import PhoenixProvider from 'components/Providers/PhoenixProvider'
@@ -24,7 +26,7 @@ const ProvidersWrapper = () => {
                 hasMazeConnection: true,
               }}
             >
-              <MazeProvider>
+              <MazeProvider isController={true}>
                 <MazeWidget />
               </MazeProvider>
             </PhoenixProvider>
@@ -51,6 +53,7 @@ const MazeInfo = styled.div`
 `
 
 const MazeWidget = () => {
+  const { chatConfig } = useContext(ConfigContext)
   const { maze, size, cursorIdx } = useContext(MazeContext) || {}
 
   return (
@@ -72,6 +75,18 @@ const MazeWidget = () => {
         </Flex>
       </Flex>
       <Maze cursorIdx={cursorIdx} maze={maze} size={size} />
+
+      <Box opacity={0}>
+        <ChatLog
+          height="100%"
+          isDark
+          compact={false}
+          px={'32px'}
+          tiktokUsername={chatConfig.tiktok.username}
+          youtubeChannel={chatConfig.youtube.channel}
+          twitchChannel={chatConfig.twitch.channel}
+        />
+      </Box>
     </Box>
   )
 }

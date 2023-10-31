@@ -238,7 +238,7 @@ const ChatPanel = () => {
       )}
       <Box style={{ flex: '1 1 auto' }}>
         {showWordRankPanel && <WordRank />}
-        <MazeProvider isController={true}>
+        <MazeProvider isController={false}>
           <ChatLog
             fullHeight={showWordRankPanel ? false : true}
             height={showWordRankPanel ? '60%' : '100%'}

@@ -168,6 +168,10 @@ const MazeProvider = ({ children, isController }) => {
       return
     }
 
+    if (!isController) {
+      return
+    }
+
     if (!userId) {
       console.error('[ERROR] Missing userId for maze response')
       return
@@ -188,11 +192,11 @@ const MazeProvider = ({ children, isController }) => {
 
     moveCursor(DIRECTIONS[foundDirection])
 
-    setUserIds((prev) => {
-      const newUsers = { ...prev }
-      newUsers[userId] = true
-      return newUsers
-    })
+    // setUserIds((prev) => {
+    //   const newUsers = { ...prev }
+    //   newUsers[userId] = true
+    //   return newUsers
+    // })
   }
 
   // useEffect(() => {
