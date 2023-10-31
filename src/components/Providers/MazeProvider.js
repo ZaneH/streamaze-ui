@@ -39,7 +39,7 @@ const MazeProvider = ({ children, isController }) => {
   const [_generatedMaze, _generateMaze] = useMaze(size.width, size.height)
   const [maze, setMaze] = useState([])
   const [userIds, setUserIds] = useState({})
-  const [lastCommitTs, setLastCommitTs] = useState(0)
+  // const [lastCommitTs, setLastCommitTs] = useState(0)
   const [lastKvCommitTs, setLastKvCommitTs] = useState(0)
   const [chatInput, setChatInput] = useState({
     up: 0,
@@ -80,17 +80,12 @@ const MazeProvider = ({ children, isController }) => {
 
   const [hasLoadedCursorIdx, setHasLoadedCursorIdx] = useState(false)
   useEffect(() => {
-    if (!isController) {
-      return
-    }
-
     if (hasLoadedCursorIdx) {
       return
     }
 
     try {
       const _cursorIdx = parseInt(kv?.maze_cursor_idx)
-      // check if maze_cursor_idx is different from cursorIdx and >= 0
       if (_cursorIdx > -1) {
         setCursorIdx(_cursorIdx)
         setHasLoadedCursorIdx(true)
@@ -200,17 +195,17 @@ const MazeProvider = ({ children, isController }) => {
     })
   }
 
-  useEffect(() => {
-    // check if the winning vote has been reached
-    const winningVote = Object.keys(chatInput).reduce((a, b) =>
-      chatInput[a] > chatInput[b] ? a : b
-    )
+  // useEffect(() => {
+  //   // check if the winning vote has been reached
+  //   const winningVote = Object.keys(chatInput).reduce((a, b) =>
+  //     chatInput[a] > chatInput[b] ? a : b
+  //   )
 
-    if (chatInput[winningVote] >= mazeWinThreshold) {
-      setLastCommitTs(Date.now())
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatInput])
+  //   if (chatInput[winningVote] >= mazeWinThreshold) {
+  //     setLastCommitTs(Date.now())
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [chatInput])
 
   // useEffect(() => {
   //   // if (cursorIdx !== parseInt(kv?.maze_cursor_idx)) {
@@ -282,7 +277,7 @@ const MazeProvider = ({ children, isController }) => {
         maze,
         size,
         setSize,
-        lastCommitTs,
+        // lastCommitTs,
         isMazeEnabled,
         generateMaze,
         winAudio,

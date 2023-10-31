@@ -52,39 +52,6 @@ const MazeInfo = styled.div`
 
 const MazeWidget = () => {
   const { maze, size, cursorIdx } = useContext(MazeContext) || {}
-  // const { id } = useParams()
-
-  // const data = useLanyardWS(id)
-  // const kv = data?.kv
-
-  // const cursorIdx = parseInt(kv?.maze_cursor_idx) || 0
-  // const chatInput = JSON.parse(kv?.maze_chat_input || '{}')
-  // const [timeRemainingText, setTimeRemainingText] = useState()
-  // const lastCommitTs = new Date(parseInt(kv?.maze_last_commit_ts) || 0)
-  // const isMazeEnabled = true // kv?.maze_enabled === 'true'
-
-  // const textInterval = useInterval(() => {
-  //   setTimeRemainingText(
-  //     secondsToHHMMSS(
-  //       (MAZE_FRAME_DURATION - (Date.now() - lastCommitTs)) / 1000
-  //     )
-  //   )
-  // }, 250)
-
-  // useEffect(() => {
-  //   textInterval.start()
-  //   textInterval.stop()
-  // }, [lastCommitTs])
-
-  // useEffect(() => {
-  //   textInterval.start()
-
-  //   return textInterval.stop
-  // }, [])
-
-  // if (!isMazeEnabled) {
-  //   return null
-  // }
 
   return (
     <Box mx="16px">
@@ -103,9 +70,6 @@ const MazeWidget = () => {
             <Text fw={700}>R</Text> - Right
           </MazeInfo>
         </Flex>
-        {/* <MazeTimeLabel>
-          {timeRemainingText || '00:00'}
-        </MazeTimeLabel> */}
       </Flex>
       <Maze cursorIdx={cursorIdx} maze={maze} size={size} />
     </Box>
