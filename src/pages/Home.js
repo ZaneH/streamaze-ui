@@ -17,6 +17,7 @@ import { ControlPanel } from '../components/StreamControls'
 import TagSEO from '../components/TagSEO'
 import { Layout } from '../components/document'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 const Home = () => {
   useEffect(() => {
@@ -46,22 +47,40 @@ const Home = () => {
                     <NextUpProvider>
                       <Layout showStats>
                         <TagSEO title="Streamer Dash | Dashboard" />
-                        <Flex h="100%">
+                        <PanelGroup
+                          direction="horizontal"
+                          autoSaveId="home-layout"
+                          style={{
+                            overflow: 'visible',
+                          }}
+                        >
                           {isDonationPanelOpen && (
-                            <Flex direction="column" w="50%" align="center">
-                              <DonationPanel />
-                              <Box w="100%" maw="725px">
-                                <ControlPanel />
-                              </Box>
-                            </Flex>
+                            <Panel minSize={30}>
+                              <Flex direction="column" align="center" h="100%">
+                                <DonationPanel />
+                                <Box w="100%" maw="725px">
+                                  <ControlPanel />
+                                </Box>
+                              </Flex>
+                            </Panel>
                           )}
-                          <Flex
-                            direction="column"
-                            w={isDonationPanelOpen ? '50%' : '100%'}
+
+                          <PanelResizeHandle
+                            style={{
+                              width: '4px',
+                              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            }}
+                          />
+
+                          <Panel
+                            minSize={30}
+                            style={{
+                              overflow: 'visible',
+                            }}
                           >
                             <ChatPanel />
-                          </Flex>
-                        </Flex>
+                          </Panel>
+                        </PanelGroup>
                       </Layout>
                     </NextUpProvider>
                   </PollProvider>

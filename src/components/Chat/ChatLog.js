@@ -373,7 +373,6 @@ const ChatLog = ({
           content: payload.message,
         })
       } else if (payload?.origin === 'kick') {
-        console.log(isFiltered, payload.sender, usernameFilter)
         if (isFiltered && payload.sender !== usernameFilter) {
           return
         }

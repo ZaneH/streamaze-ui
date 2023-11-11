@@ -37,7 +37,7 @@ import WordRank from './WordRank'
 
 const statPanelOffsets = {
   mt: '-78px',
-  ml: '-10px',
+  ml: '-6px',
 }
 
 const ChatPanel = () => {
@@ -137,6 +137,12 @@ const ChatPanel = () => {
 
   return (
     <Flex direction="column" h="100%">
+      <PollModal
+        isOpen={showPollModal}
+        onClose={() => setShowPollModal(false)}
+      />
+      <NextUpModal />
+      <NextUpGameOverModal />
       <Flex
         w="100%"
         bg={colors.dark[9]}
@@ -147,12 +153,6 @@ const ChatPanel = () => {
       >
         <StatPanel />
       </Flex>
-      <PollModal
-        isOpen={showPollModal}
-        onClose={() => setShowPollModal(false)}
-      />
-      <NextUpModal />
-      <NextUpGameOverModal />
       <PanelHead
         style={{
           flex: '0 1 auto',
