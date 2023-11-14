@@ -59,7 +59,7 @@ const Sidebar = () => {
         active={pathname === '/settings'}
         icon={<IconSettings size={28} />}
         onClick={() => {
-          navigate('/settings')
+          window.open('/settings')
         }}
       />
       <Divider my="sm" />
