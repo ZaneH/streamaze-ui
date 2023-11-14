@@ -18,6 +18,7 @@ import RaspberryPi from './pages/RaspberryPi'
 import ServerControl from './pages/ServerControl'
 import Settings from './pages/Settings'
 import MazeWidget from 'pages/MazeWidget'
+import SettingsGrid from 'pages/SettingsGrid'
 
 const App = () => {
   return (
@@ -32,7 +33,8 @@ const App = () => {
 
                 <Route path="/" element={<Navigate to="/dashboard" />} />
 
-                <Route path="/settings" element={<Settings />} />
+                <Route path="/settings2" element={<Settings />} />
+                <Route path="/settings" element={<SettingsGrid />} />
 
                 <Route path="/dashboard" element={<Home />} />
 
