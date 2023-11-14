@@ -312,6 +312,12 @@ const ChatLog = ({
         }
 
         setPinnedMessageId(messageId)
+
+        return
+      } else if (payload?.type === 'kickPinDeleted') {
+        setPinnedMessageId(undefined)
+
+        return
       }
 
       // Chat messages
