@@ -9,17 +9,17 @@ import {
   TextInput,
   rem,
 } from '@mantine/core'
-import FormDataAddon from 'wretch/addons/formData'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
+import { IconFileMusic } from '@tabler/icons'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 import { FieldLabel, FormSection } from 'components/Settings'
 import useElevenLabs from 'hooks/useElevenLabs'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import wretch from 'wretch'
-import { IconFileMusic } from '@tabler/icons'
+import FormDataAddon from 'wretch/addons/formData'
 
 const DonationsModal = ({ isOpen, onClose }) => {
   const { slobsConfig, setSlobsConfig, userConfig } = useContext(ConfigContext)
@@ -40,6 +40,10 @@ const DonationsModal = ({ isOpen, onClose }) => {
       badWords: kv?.bad_words,
     },
   })
+
+  useEffect(() => {
+    slobsForm.setFieldValue('badWords', kv?.bad_words)
+  }, [kv?.bad_words])
 
   return (
     <Modal

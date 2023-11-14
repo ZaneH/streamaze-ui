@@ -47,7 +47,11 @@ const DonationPanel = () => {
                 withinPortal
                 label={
                   <Box m="sm">
-                    <Text>Donations are paused.</Text>
+                    <Text>
+                      Donations are <b>paused</b>.
+                      <br />
+                      Press the Play button below.
+                    </Text>
                   </Box>
                 }
               >
