@@ -43,6 +43,7 @@ const DonationsModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     slobsForm.setFieldValue('badWords', kv?.bad_words)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kv?.bad_words])
 
   return (
