@@ -3,6 +3,7 @@
  */
 
 import styled from '@emotion/styled'
+import { ProviderProvider } from 'components/Providers'
 import { StatContext } from 'components/Providers/StatProvider'
 import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
@@ -16,6 +17,14 @@ const NumberWidget = styled.div`
   white-space: pre-wrap;
   letter-spacing: -0.04em;
 `
+
+const ProvidersWrapper = () => {
+  return (
+    <ProviderProvider>
+      <SubscriberCountWidget />
+    </ProviderProvider>
+  )
+}
 
 const SubscriberCountWidget = () => {
   const { platform } = useParams()
@@ -48,4 +57,4 @@ const SubscriberCountWidget = () => {
   )
 }
 
-export default SubscriberCountWidget
+export default ProvidersWrapper
