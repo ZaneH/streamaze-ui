@@ -42,6 +42,7 @@ import useWebSocket from 'react-use-websocket'
 import { Virtuoso } from 'react-virtuoso'
 import { ConfigContext } from '../Providers/ConfigProvider'
 import { MazeContext } from 'components/Providers/MazeProvider'
+import { showNotification } from '@mantine/notifications'
 
 const Item = styled.div`
   margin: 0;
@@ -154,6 +155,7 @@ const ChatLog = ({
   const [pinnedMessageId, setPinnedMessageId] = useState()
   const [pinnedMessageTimeout, setPinnedMessageTimeout] = useState()
   const [pinDuration, setPinDuration] = useState(20)
+  const [shouldAttemptReconnect, setShouldAttemptReconnect] = useState(true)
 
   const _tiktokUsername = tiktokUsername || chatConfig?.tiktok?.username
   const _youtubeChannel = youtubeChannel || chatConfig?.youtube?.channel
@@ -177,13 +179,9 @@ const ChatLog = ({
         retryOnError: true,
         reconnectInterval: 10000,
         reconnectAttempts: Infinity,
-        shouldReconnect: () => true,
+        shouldReconnect: () => shouldAttemptReconnect,
       },
-      !!_tiktokUsername ||
-        !!_youtubeChannel ||
-        !!_twitchChannel ||
-        !!_kickChannelName ||
-        !!streamer
+      !!userConfig?.streamazeKey
     )
 
   const autorefreshInterval = useInterval(() => {
@@ -194,55 +192,18 @@ const ChatLog = ({
   useEffect(() => {
     if (isConnected) return
 
-    const params = {}
-    if (_tiktokUsername) {
-      params['tiktokChat'] = _tiktokUsername
-    }
-
-    if (_youtubeChannel) {
-      params['youtubeChat'] = _youtubeChannel
-    }
-
-    if (_twitchChannel) {
-      params['twitchChannelName'] = _twitchChannel
-    }
-
-    if (_kickChannelId) {
-      params['kickChannelId'] = _kickChannelId
-    }
-
-    if (_kickChatroomId) {
-      params['kickChatroomId'] = _kickChatroomId
-    }
-
-    if (_kickChannelName) {
-      params['kickChannelName'] = _kickChannelName
-    }
-
-    if (streamer) {
-      params['streamerId'] = streamer?.id
+    const params = {
+      function: 'chat',
     }
 
     if (userConfig?.streamazeKey) {
       params['streamazeKey'] = userConfig?.streamazeKey
+      chatSendMessage(params)
     }
 
-    if (_kickChannelId && _kickChatroomId && _kickChannelName && !streamer) {
-      // TODO: Perform this check on the server-side instead
-      return
-    }
-
-    chatSendMessage(params)
     setIsConnected(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    _kickChannelId,
-    _kickChatroomId,
-    _kickChannelName,
-    _twitchChannel,
-    streamer,
-    isConnected,
-  ])
+  }, [userConfig?.streamazeKey, isConnected])
 
   // Useful for testing the Poll functionality
   // const [fakeInterval, setFakeInterval] = useState(null)
@@ -305,7 +266,15 @@ const ChatLog = ({
       const payload = JSON.parse(lastChatJsonMessage.data)
 
       // Non-chat events
-      if (payload?.type === 'kickPin') {
+      if (payload?.error === 'invalid_subscription') {
+        setShouldAttemptReconnect(false)
+
+        showNotification({
+          title: 'Chat is disabled',
+          message: 'Please subscribe to enable chat',
+          color: 'yellow',
+        })
+      } else if (payload?.type === 'kickPin') {
         const { data } = payload || {}
         const { messageId, duration } = data || {}
 

@@ -23,6 +23,7 @@ import useStreamer from 'hooks/useStreamer'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { useInterval } from '@mantine/hooks'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
+import { showNotification } from '@mantine/notifications'
 
 const Item = styled.div`
   margin: 12px 32px;
@@ -83,18 +84,17 @@ const DonationLog = () => {
   const { kv } = useContext(LanyardContext)
   const streamer = useStreamer(userConfig?.streamazeKey)
   const [isScrolling, setIsScrolling] = useState(false)
+  const [shouldAttemptReconnect, setShouldAttemptReconnect] = useState(true)
+
   const virtuosoRef = useRef(null)
-  const { sendJsonMessage } = useWebSocket(
+  const { lastJsonMessage, sendJsonMessage } = useWebSocket(
     `${process.env.REACT_APP_API_2_WS_URL}`,
     {
-      shouldReconnect: () => true,
+      shouldReconnect: () => shouldAttemptReconnect,
       reconnectInterval: 3000,
     },
     // don't open if
-    !!streamer?.id ||
-      (!!slobsConfig?.streamToken &&
-        !!slobsConfig?.tiktokUsername &&
-        !!userConfig?.streamazeKey)
+    !!userConfig?.streamazeKey
   )
 
   // TODO: Add voice back
@@ -102,31 +102,38 @@ const DonationLog = () => {
 
   const [hasMessaged, setHasMessaged] = useState(false)
   useEffect(() => {
-    if (!streamer?.id) {
-      return
-    }
-
     if (hasMessaged) {
       return
     }
 
-    if (!kv) {
-      return
+    const params = {
+      function: 'donations',
     }
 
-    sendJsonMessage({
-      streamerId: streamer?.id,
-      streamToken: slobsConfig?.streamToken,
-      ttsService: slobsConfig?.ttsService || 'streamlabs',
-      streamazeKey: userConfig?.streamazeKey,
-      tiktokDonos: slobsConfig?.tiktokUsername,
-      excludeFromProfits: slobsConfig?.excludeFromProfits,
-      badWords: kv?.bad_words || [],
-    })
+    if (kv?.bad_words) {
+      params['badWords'] = kv.bad_words
+    }
+
+    if (userConfig?.streamazeKey) {
+      params['streamazeKey'] = userConfig?.streamazeKey
+      sendJsonMessage(params)
+    }
 
     setHasMessaged(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streamer?.id, kv])
+  }, [userConfig?.streamazeKey, hasMessaged])
+
+  useEffect(() => {
+    if (lastJsonMessage?.error === 'invalid_subscription') {
+      setShouldAttemptReconnect(false)
+
+      showNotification({
+        title: 'Donations are disabled',
+        message: 'Please subscribe to use this feature.',
+        color: 'yellow',
+      })
+    }
+  }, [lastJsonMessage])
 
   const inactivityInterval = useInterval(() => {
     if (isScrolling) {

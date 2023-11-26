@@ -241,13 +241,21 @@ const SlotMachine = () => {
 
               setShowResetModal(false)
             })
-            .catch(() => {
-              showNotification({
-                title: 'Error',
-                message:
-                  'There was an error resetting the giveaway. Please try again later.',
-                color: 'red',
-              })
+            .catch((err) => {
+              if (err.status === 401) {
+                showNotification({
+                  title: 'Giveaways disabled',
+                  message: 'Please subscribe to use this feature.',
+                  color: 'yellow',
+                })
+              } else {
+                showNotification({
+                  title: 'Error',
+                  message:
+                    'There was an error resetting the giveaway. Please try again later.',
+                  color: 'red',
+                })
+              }
             })
         }}
       />
