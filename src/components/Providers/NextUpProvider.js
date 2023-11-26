@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 // Next Up is a game provided for live streamers.
 // It starts with X amout of lives and if viewers vote more
 // bad than good, the streamer loses a life.

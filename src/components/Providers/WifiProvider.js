@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { createContext, useContext, useState } from 'react'
 import moment from 'moment'
 import { HopContext } from './HopProvider'

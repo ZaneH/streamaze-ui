@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import styled from '@emotion/styled'
 import { Text } from '@mantine/core'
 

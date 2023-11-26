@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }

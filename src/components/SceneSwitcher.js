@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import wretch from 'wretch'
 import { SimpleGrid, Button } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'

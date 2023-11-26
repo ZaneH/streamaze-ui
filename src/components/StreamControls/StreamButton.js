@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Button, Flex, Modal, Text, Title, UnstyledButton } from '@mantine/core'

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { showNotification } from '@mantine/notifications'
 import { useReadChannelState } from '@onehop/react'
 import { IconMusic } from '@tabler/icons'

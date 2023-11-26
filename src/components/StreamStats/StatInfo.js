@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Flex, Text } from '@mantine/core'
 import { SocialIcon } from 'react-social-icons'
 

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Button, Modal } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { StatContext } from 'components/Providers/StatProvider'

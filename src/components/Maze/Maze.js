@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, createStyles, keyframes } from '@mantine/core'
 import { MazeContext } from 'components/Providers/MazeProvider'
 import { useContext, useEffect, useState } from 'react'

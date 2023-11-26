@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Button, Flex, Modal, PasswordInput, Text } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { WifiContext } from 'components/Providers/WifiProvider'

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import styled from '@emotion/styled'
 import { useInterval } from '@mantine/hooks'
 import { ProviderProvider } from 'components/Providers'

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Button, Flex, Modal, Text } from '@mantine/core'
 import { PollContext } from 'components/Providers/PollProvider'
 import { useContext } from 'react'

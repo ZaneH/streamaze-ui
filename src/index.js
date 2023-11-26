@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { hop } from '@onehop/client'
 import React from 'react'
 import ReactDOM from 'react-dom/client'

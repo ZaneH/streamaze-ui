@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import DonationProvider from './DonationProvider'
 import HopProvider from './HopProvider'
 import LanyardProvider from './LanyardProvider'

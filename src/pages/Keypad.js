@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Button, Container, Flex, SimpleGrid, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconLock } from '@tabler/icons'

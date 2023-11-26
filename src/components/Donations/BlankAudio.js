@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { useInterval } from '@mantine/hooks'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { DonationContext } from 'components/Providers/DonationProvider'

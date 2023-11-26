@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Button, Flex, Modal, Text, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { LanyardContext } from 'components/Providers/LanyardProvider'

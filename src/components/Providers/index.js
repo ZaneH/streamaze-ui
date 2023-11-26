@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 export { default as ConfigProvider } from './ConfigProvider'
 export { default as HopProvider } from './HopProvider'
 export { default as DonationProvider } from './DonationProvider'

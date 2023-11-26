@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import styled from '@emotion/styled'
 import { Box, Container, Text, createStyles, px, rem } from '@mantine/core'
 import { useParallax } from 'react-scroll-parallax'

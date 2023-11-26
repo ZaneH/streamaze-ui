@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Button, Group, createStyles, px, rem } from '@mantine/core'
 import { motion } from 'framer-motion'
 import { ReactComponent as BasicIllustration } from 'assets/streamaze-basic-illustration.svg'

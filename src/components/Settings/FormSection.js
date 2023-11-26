@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import styled from '@emotion/styled'
 import { Box, Button, Flex, Paper, Text, Title } from '@mantine/core'
 

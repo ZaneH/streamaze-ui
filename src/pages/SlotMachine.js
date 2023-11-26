@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Button, Center, Flex, Text } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ConfigContext } from 'components/Providers/ConfigProvider'

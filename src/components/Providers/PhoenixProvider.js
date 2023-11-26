@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { showNotification } from '@mantine/notifications'
 import useStreamer from 'hooks/useStreamer'
 import { Socket } from 'phoenix'

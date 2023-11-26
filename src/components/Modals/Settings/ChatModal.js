@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Button, Divider, Modal, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications, showNotification } from '@mantine/notifications'

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { useMantineTheme } from '@mantine/core'
 import { PollContext } from 'components/Providers/PollProvider'
 import ReactECharts from 'echarts-for-react'

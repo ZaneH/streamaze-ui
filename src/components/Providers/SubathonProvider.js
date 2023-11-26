@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { useInterval } from '@mantine/hooks'
 import { createContext, useEffect, useState } from 'react'
 import wretch from 'wretch'

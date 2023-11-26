@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Helmet } from 'react-helmet-async'
 
 const TagSEO = ({

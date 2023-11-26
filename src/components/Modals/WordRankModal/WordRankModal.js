@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import styled from '@emotion/styled'
 import { Box, Modal, Text } from '@mantine/core'
 import { WordRankContext } from 'components/Providers/WordRankProvider'

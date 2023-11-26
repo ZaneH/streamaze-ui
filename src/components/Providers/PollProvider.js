@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { createContext, useCallback, useContext, useState } from 'react'
 import { LanyardContext } from './LanyardProvider'
 import WordRankProvider from './WordRankProvider'

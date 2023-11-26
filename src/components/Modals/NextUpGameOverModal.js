@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Modal, Text } from '@mantine/core'
 import { NextUpContext } from 'components/Providers/NextUpProvider'
 import { useContext } from 'react'

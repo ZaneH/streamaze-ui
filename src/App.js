@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Notifications } from '@mantine/notifications'
 import Countdown from 'pages/Countdown'
 import Landing from 'pages/Landing'

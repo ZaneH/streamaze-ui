@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { useInterval } from '@mantine/hooks'
 import { ReactComponent as ClockIcon } from 'assets/clock-icon.svg'
 import { StatContext } from 'components/Providers/StatProvider'

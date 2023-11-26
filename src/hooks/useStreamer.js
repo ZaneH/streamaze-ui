@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import wretch from 'wretch'
 import { useEffect, useState } from 'react'
 import { showNotification } from '@mantine/notifications'

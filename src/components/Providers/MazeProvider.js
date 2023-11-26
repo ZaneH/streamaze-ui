@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import MazeWinChime from 'assets/maze_win_chime.mp3'
 import useMaze from 'hooks/useMaze'
 import {

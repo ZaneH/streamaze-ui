@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ConfigContext } from './ConfigProvider'

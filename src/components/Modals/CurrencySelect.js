@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Select } from '@mantine/core'
 import { ConfigContext } from 'components/Providers/ConfigProvider'
 import { useContext } from 'react'

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Flex, Modal, Title } from '@mantine/core'
 
 const ListeningToModal = ({ isOpen, onClose, listeningTo }) => {

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Flex } from '@mantine/core'
 import {
   DonationProvider,

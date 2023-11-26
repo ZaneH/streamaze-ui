@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { showNotification } from '@mantine/notifications'
 import { IconRefresh } from '@tabler/icons'
 import { ConfigContext } from 'components/Providers/ConfigProvider'

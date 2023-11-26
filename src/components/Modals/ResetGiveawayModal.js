@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Button, Modal, Space, Text } from '@mantine/core'
 
 const ResetGiveawayModal = ({ isOpen = false, onClose, onConfirm }) => {

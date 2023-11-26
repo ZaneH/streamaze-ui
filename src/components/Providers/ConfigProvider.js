@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { useLocalStorage } from '@mantine/hooks'
 import { createContext, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'

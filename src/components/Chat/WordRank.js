@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Button, Flex, Text } from '@mantine/core'
 import { WordRankCard } from 'components/Modals/WordRankModal/WordRankModal'
 import { WordRankContext } from 'components/Providers/WordRankProvider'

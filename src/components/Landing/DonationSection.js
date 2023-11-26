@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Box, Container, Grid, createStyles, px, rem } from '@mantine/core'
 import { SuperChatCard } from 'components/Donations'
 import { useInView } from 'framer-motion'

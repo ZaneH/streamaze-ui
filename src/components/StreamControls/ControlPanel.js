@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Flex, Space } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { ReactComponent as IconPause } from 'assets/pause-icon.svg'

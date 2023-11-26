@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 const { MantineProvider } = require('@mantine/core')
 const { useContext } = require('react')
 const { ConfigContext } = require('./ConfigProvider')

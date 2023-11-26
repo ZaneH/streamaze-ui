@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Flex, Text, Title } from '@mantine/core'
 
 const Container = ({ children, onClick }) => {

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2023, Zane Helton, All rights reserved.
+ */
+
 import { Button, Modal } from '@mantine/core'
 import { LanyardContext } from 'components/Providers/LanyardProvider'
 import { MazeContext } from 'components/Providers/MazeProvider'
