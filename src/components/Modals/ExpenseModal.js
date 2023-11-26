@@ -151,8 +151,6 @@ const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
               let usdConversionRate
               let numericInput = expenseRef.current.value
 
-              onClose()
-
               // get exchange rate
               wretch(
                 `${REACT_APP_EXCHANGE_RATE_API_URL}/v1/rates/${currencyConfig?.currency}`
@@ -175,7 +173,7 @@ const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
                 .catch((err) => {
                   console.error('Error fetching the exchange rate: ', err)
                 })
-                .finally(() => {
+                .then(() => {
                   numericInput = numericInput.replace(/[^0-9.]/g, '')
 
                   if (isNaN(numericInput)) {
@@ -196,6 +194,8 @@ const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
                     })
                     .res((res) => {
                       if (res.ok) {
+                        onClose()
+
                         showNotification({
                           title: 'Expense Added',
                           message: 'Net profit was updated successfully',
@@ -205,11 +205,20 @@ const ExpenseModal = ({ isOpen = false, onClose, onOpenBank }) => {
                     })
                     .catch((err) => {
                       console.error(err)
-                      showNotification({
-                        title: 'Error',
-                        message: 'There was an error adding the expense',
-                        color: 'red',
-                      })
+
+                      if (err?.status === 401) {
+                        showNotification({
+                          title: 'You must subscribe to add expenses',
+                          message: 'Go to my.streamerdash.com to upgrade',
+                          color: 'yellow',
+                        })
+                      } else {
+                        showNotification({
+                          title: 'Error',
+                          message: 'There was an error adding the expense',
+                          color: 'red',
+                        })
+                      }
                     })
                 })
                 .catch((err) => {

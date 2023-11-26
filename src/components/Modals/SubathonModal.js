@@ -67,12 +67,20 @@ const SubathonModal = ({ isOpen = false, onClose }) => {
 
               onClose()
             })
-            .catch((e) => {
-              showNotification({
-                title: 'Error',
-                message: 'There was an error starting your subathon.',
-                color: 'red',
-              })
+            .catch((err) => {
+              if (err?.status === 401) {
+                showNotification({
+                  title: 'You must subscribe to use subathons',
+                  message: 'Go to my.streamerdash.com to upgrade',
+                  color: 'yellow',
+                })
+              } else {
+                showNotification({
+                  title: 'Error',
+                  message: 'There was an error starting your subathon.',
+                  color: 'red',
+                })
+              }
             })
         }}
       >
