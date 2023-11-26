@@ -20,7 +20,7 @@ const NumberWidget = styled.div`
 
 const ProvidersWrapper = () => {
   return (
-    <ProviderProvider>
+    <ProviderProvider hasHop={false}>
       <SubscriberCountWidget />
     </ProviderProvider>
   )

@@ -19,7 +19,7 @@ const PollLabel = styled.div`
 
 const ProvidersWrapper = () => {
   return (
-    <ProviderProvider>
+    <ProviderProvider hasHop={false}>
       <PollWidget />
     </ProviderProvider>
   )
