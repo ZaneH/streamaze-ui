@@ -6,6 +6,7 @@ import {
   AppShell,
   Box,
   Burger,
+  Button,
   ColorSwatch,
   Flex,
   MediaQuery,
@@ -19,12 +20,16 @@ import { HopContext } from '../Providers/HopProvider'
 import { SidebarContext } from '../Providers/SidebarProvider'
 import Sidebar from './Sidebar'
 import TagSEO from 'components/TagSEO'
+import { PhoenixContext } from 'components/Providers/PhoenixProvider'
 
 const SplitHeader = () => {
   const { colors } = useMantineTheme()
   const { setIsSidebarOpen } = useContext(SidebarContext)
+  const { currentStreamer } = useContext(PhoenixContext)
   const { isLive } = useContext(HopContext) || {}
   const navigate = useNavigate()
+
+  const isUpgraded = currentStreamer?.has_valid_subscription ?? false
 
   return (
     <Box height={78}>
@@ -54,6 +59,18 @@ const SplitHeader = () => {
               </Title>
             </Flex>
           </MediaQuery>
+          <Space w="lg" />
+          {!isUpgraded && (
+            <Button
+              variant="gradient"
+              style={{ alignSelf: 'center' }}
+              onClick={() => {
+                window.open('https://my.streamerdash.com/account/upgrade')
+              }}
+            >
+              Upgrade
+            </Button>
+          )}
         </Flex>
       </Flex>
     </Box>
