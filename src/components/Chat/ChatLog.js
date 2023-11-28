@@ -509,7 +509,7 @@ const ChatLog = ({
     )
   }
 
-  const isStreamerId1 = `${streamer?.id}` === '1'
+  const isStreamerId100 = `${streamer?.id}` === '100'
 
   const ChatItem = ({ data, isPinned }) => {
     const {
@@ -837,7 +837,7 @@ const ChatLog = ({
         width: props?.width || '100%',
       }}
     >
-      {isStreamerId1 && !hideIceButton && (
+      {isStreamerId100 && !hideIceButton && (
         <Box px="md" py="sm">
           <Button
             onClick={() => {
