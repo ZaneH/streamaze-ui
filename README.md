@@ -31,6 +31,7 @@ REACT_APP_MAILCHIMP_URL=<mailchimp url for landing page> # not required
 ## Preview
 
 View the landing page for a full overview here: https://streamaze.xyz/landing
+
 Or maybe checkout the guide here: https://guide.streamaze.xyz
 
 <img width="1075" alt="image" src="https://github.com/ZaneH/streamaze-ui/assets/8400251/d0d455c3-f39b-41c7-9cf6-dd2eeec181d1">
