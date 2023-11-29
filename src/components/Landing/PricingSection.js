@@ -153,7 +153,7 @@ export const PricingSection = () => {
             title="Free"
             subtext={
               <a
-                href="https://my.streamaze.live/account/settings"
+                href="https://my.streamaze.xyz/account/settings"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -166,7 +166,7 @@ export const PricingSection = () => {
             title="Subscriber"
             subtext={
               <a
-                href="https://my.streamaze.live/account/upgrade"
+                href="https://my.streamaze.xyz/account/upgrade"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -185,7 +185,7 @@ export const PricingSection = () => {
             title="Premium"
             subtext={
               <a
-                href="https://my.streamaze.live/account/upgrade"
+                href="https://my.streamaze.xyz/account/upgrade"
                 target="_blank"
                 rel="noreferrer"
               >

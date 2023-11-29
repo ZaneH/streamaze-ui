@@ -224,10 +224,10 @@ const Landing = () => {
         links={[
           { label: 'Discord', link: 'https://discord.gg/c3RetD5r5Y' },
           null,
-          { label: 'Login', link: 'https://my.streamaze.live/account/login' },
+          { label: 'Login', link: 'https://my.streamaze.xyz/account/login' },
           {
             label: 'Register',
-            link: 'https://my.streamaze.live/account/register',
+            link: 'https://my.streamaze.xyz/account/register',
           },
         ]}
       />

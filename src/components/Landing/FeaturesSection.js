@@ -148,7 +148,7 @@ export const FeaturesSection = () => {
             description="Press 1 if you’ve ever ran a poll. View every response to your poll here."
             subtext={
               <a
-                href="https://docs.streamaze.live/widgets/polls"
+                href="https://guide.streamaze.xyz/widgets/polls"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -163,7 +163,7 @@ export const FeaturesSection = () => {
             description="Turn on the GPS to share your live location on stream."
             subtext={
               <a
-                href="https://docs.streamaze.live/widgets/gps"
+                href="https://guide.streamaze.xyz/widgets/gps"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -178,7 +178,7 @@ export const FeaturesSection = () => {
             description="Switch OBS scenes, start your stream and end it straight from the dashboard."
             subtext={
               <a
-                href="https://docs.streamaze.live/connections/obs-ctrl"
+                href="https://guide.streamaze.xyz/connections/obs-ctrl"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -197,7 +197,7 @@ export const FeaturesSection = () => {
             description="Type !enter in chat and spin the wheel! We also provide a Stake.com plugin to make affiliate giveaways easier."
             subtext={
               <a
-                href="https://docs.streamaze.live/features/giveaways"
+                href="https://guide.streamaze.xyz/features/giveaways"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -210,7 +210,7 @@ export const FeaturesSection = () => {
             description="Keep track of every donation (or expense) and add it to the stream overlay automagically."
             subtext={
               <a
-                href="https://docs.streamaze.live/features/track-profits"
+                href="https://guide.streamaze.xyz/features/track-profits"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -225,7 +225,7 @@ export const FeaturesSection = () => {
             description="Built for one of the greatest subathons of all time. We have everything you need to keep the clock going!"
             subtext={
               <a
-                href="https://docs.streamaze.live/widgets/subathon"
+                href="https://guide.streamaze.xyz/widgets/subathon"
                 target="_blank"
                 rel="noreferrer"
               >

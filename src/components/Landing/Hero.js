@@ -116,7 +116,7 @@ export const Hero = () => {
               scale: 1.035,
             }}
           >
-            <a href="https://my.streamaze.live/account/register">
+            <a href="https://my.streamaze.xyz/account/register">
               <Button
                 size="xl"
                 className={classes.control}
@@ -135,7 +135,7 @@ export const Hero = () => {
 
           <Button
             component="a"
-            href="https://docs.streamaze.live/"
+            href="https://guide.streamaze.xyz/"
             size="xl"
             variant="white"
             className={classes.control}
