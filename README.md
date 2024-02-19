@@ -1,5 +1,11 @@
 # Streamaze UI – Dashboard
 
+This is the individual React component for Streamaze. It relies on other components to function well.
+
+Use [ZaneH/streamaze-full](https://github.com/zaneh/streamaze-full) for the easiest setup experience.
+
+- YouTube setup series: https://www.youtube.com/playlist?list=PLFWEDfSyl7h81oskDbnkEI9MODtKDXGcW
+
 ## Depends On
 
 - [ZaneH/streamaze-donation-service](https://github.com/ZaneH/streamaze-donation-service)
